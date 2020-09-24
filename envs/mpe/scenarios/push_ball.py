@@ -100,11 +100,11 @@ class Scenario(BaseScenario):
         #     if min(dists) < world.landmarks[0].size + world.agents[-1].size:
         #         rew += 1/self.num_people
 
-        # if agent.collide and not agent.adversary:
-        #     for a in world.agents:
-        #         if self.is_collision(a, agent) and not a.adversary:
-        #             rew -= 1.0/self.num_people
-        #             break
+        if agent.collide and not agent.adversary:
+            for a in world.agents:
+                if self.is_collision(a, agent) and not a.adversary:
+                    rew -= 1.0
+                    break
         return 0.1*rew
     
     def reset_radius(self,sample_radius):
