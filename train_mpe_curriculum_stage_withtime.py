@@ -633,7 +633,7 @@ def main():
                         rollouts_now[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
                         rollouts_now[agent_id].recurrent_hidden_states = np.zeros(rollouts_now[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                         rollouts_now[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts_now[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
-                step_cover_rate = np.zeros(shape=(one_length_now,now_episode_length))
+                step_cover_rate = np.zeros(shape=(starts_length_now,now_episode_length))
 
                 start1 = time.time()
                 for step in range(now_episode_length):

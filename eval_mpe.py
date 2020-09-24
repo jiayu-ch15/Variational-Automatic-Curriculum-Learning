@@ -49,7 +49,7 @@ def produce_good_case(num_case, start_boundary, now_agent_num, now_box_num):
         one_starts_box = []
     return archive
 
-def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
+def produce_good_case_grid(num_case, start_boundary, now_agent_num):
     # agent_size=0.1
     cell_size = 0.2
     grid_num = int(start_boundary * 2 / cell_size)
@@ -137,6 +137,8 @@ def main():
     num_boxes = 4
     all_frames = []
     cover_rate = 0
+    random.seed(args.seed)
+    np.random.seed(args.seed)
     # starts = produce_good_case(num_case=1, start_boundary=0.3, now_agent_num=2, now_box_num=2)
     # archive 159
     # model_dir = '/home/chenjy/mappo-sc/node/MPE/simple_spread/stage95_warmup_3M_mean_8agents_big_batch/run1'
@@ -154,7 +156,8 @@ def main():
     #         if data[i].shape[0]>5:
     #             data_true.append(data[i])
     # starts = data_true
-    starts = produce_hard_case(500,3,num_agents)
+    starts = produce_good_case_grid(500,0.3,num_agents)
+    pdb.set_trace()
     for eval_episode in range(args.eval_episodes):
         print(eval_episode)
         eval_env = MPEEnv(args)

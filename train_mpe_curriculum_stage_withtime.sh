@@ -4,9 +4,9 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-algo="check"
+# algo="check"
 # algo='stage99_4agent_large_penalty_no_success_bonus_largeoptimizerstep'
-# algo='stage95_12agent'
+algo='occupy_reward_withtime'
 seed_max=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"
