@@ -80,6 +80,7 @@ class Scenario(BaseScenario):
                 if self.is_collision(a, agent):
                     # rew -= 1/len(world.agents)
                     rew -= 1
+                    break
         return 0.1*rew
 
     def info_coverage_rate(self, world):

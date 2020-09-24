@@ -108,7 +108,8 @@ class node_buffer():
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
             for k in indices:
-                epsilon = -2 * 0.01 * random.random() + 0.01
+                epsilons = np.array([[-0.15,0],[0.15,0],[0,-0.15],[0,0.15],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
+                epsilon = epsilons[np.random.randint(0,8)]
                 one_starts_landmark.append(copy.deepcopy(one_starts_agent[k]+epsilon))
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_landmark)
@@ -508,14 +509,14 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 1.0
+    start_boundary = 0.3
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.95
+    upper_bound = 0.99
     target_num = 64
     last_agent_num = 0
-    now_agent_num = 12
+    now_agent_num = 4
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 3
@@ -524,7 +525,7 @@ def main():
     historical_length = 5
     next_stage_flag = 0
     frozen_epoch = 3
-    frozen_count = 0
+    frozen_count = 3
     initial_optimizer = False
     eval_flag = False # 只用evaluate
     use_uniform = False # 用uniform train

@@ -49,7 +49,7 @@ def produce_good_case(num_case, start_boundary, now_agent_num, now_box_num):
         one_starts_box = []
     return archive
 
-def produce_good_case_grid(num_case, start_boundary, now_agent_num):
+def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
     # agent_size=0.1
     cell_size = 0.2
     grid_num = int(start_boundary * 2 / cell_size)
@@ -70,7 +70,8 @@ def produce_good_case_grid(num_case, start_boundary, now_agent_num):
                     break
         indices = random.sample(range(now_agent_num), now_agent_num)
         for k in indices:
-            epsilon = -2 * 0.01 * random.random() + 0.01
+            epsilons = np.array([[-0.15,0],[0.15,0],[0,-0.15],[0,0.15],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
+            epsilon = epsilons[np.random.randint(0,8)]
             one_starts_landmark.append(copy.deepcopy(one_starts_agent[k]+epsilon))
         # select_starts.append(one_starts_agent+one_starts_landmark)
         archive.append(one_starts_agent+one_starts_landmark)
