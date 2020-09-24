@@ -54,7 +54,7 @@ class node_buffer():
         self.agent_num = agent_num
         self.box_num = box_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num, self.box_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -89,6 +89,51 @@ class node_buffer():
                 epsilon = -2 * 0.01 * random.random() + 0.01
                 one_starts_agent.append(copy.deepcopy(one_starts_box[k]+epsilon))
             archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
+            one_starts_agent = []
+            one_starts_landmark = []
+            one_starts_box = []
+        return archive
+
+    def produce_good_case_grid(self, num_case, start_boundary, now_agent_num, now_box_num):
+        # agent_size=0.2, ball_size=0.2,landmark_size=0.3
+        cell_size = 0.3
+        grid_num = int(start_boundary * 2 / cell_size)
+        grid = np.zeros(shape=(grid_num,grid_num))
+        one_starts_landmark = []
+        one_starts_agent = []
+        one_starts_box = []
+        archive = [] 
+        for j in range(num_case):
+            for i in range(now_agent_num):
+                while 1:
+                    agent_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                    if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                        continue
+                    else:
+                        grid[agent_location_grid[0],agent_location_grid[1]] = 1
+                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
+                        one_starts_agent.append(copy.deepcopy(agent_location))
+                        break
+            for i in range(now_box_num):
+                while 1:
+                    box_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                    if grid[box_location_grid[0],box_location_grid[1]]==1:
+                        continue
+                    else:
+                        grid[box_location_grid[0],box_location_grid[1]] = 1
+                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
+                        one_starts_box.append(copy.deepcopy(box_location))
+                        break
+            indices = random.sample(range(now_box_num), now_box_num)
+            indices_agent = random.sample(range(now_agent_num), now_box_num)
+            for k in indices:
+                epsilons = np.array([[-0.3,0],[0.3,0],[0,-0.3],[0,0.3],[0.3,0.3],[0.3,-0.3],[-0.3,0.3],[-0.3,-0.3]])
+                epsilon = epsilons[np.random.randint(0,8)]
+                noise = -2 * 0.01 * random.random() + 0.01
+                one_starts_landmark.append(copy.deepcopy(one_starts_box[k]+epsilon+noise))
+            # select_starts.append(one_starts_agent+one_starts_landmark)
+            archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
+            grid = np.zeros(shape=(grid_num,grid_num))
             one_starts_agent = []
             one_starts_landmark = []
             one_starts_box = []
@@ -489,8 +534,8 @@ def main():
     child_novelty_threshold = 0.5
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 150
-    N_archive = 300
+    N_child = 300
+    N_archive = 150
     N_parent = 50
     max_step = 0.1
     TB = 1
@@ -502,10 +547,10 @@ def main():
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.95
+    upper_bound = 0.99
     target_num = 12
     last_box_num = 0
-    now_box_num = 4
+    now_box_num = 2
     now_agent_num = now_box_num
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
@@ -515,7 +560,7 @@ def main():
     historical_length = 5
     next_stage_flag = 0
     frozen_epoch = 3
-    frozen_count = 0
+    frozen_count = 3
     initial_optimizer = False
     eval_flag = False
     random.seed(args.seed)
@@ -537,9 +582,9 @@ def main():
     one_length_now = args.n_rollout_threads
     starts_length_now = args.n_rollout_threads
 
-    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_warmup_3iter_pb/run1/models/2box_model.pt')['model'].to(device)
-    actor_critic.boxes_num = now_node.box_num
-    actor_critic.agents_num = now_node.agent_num
+    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_warmup_3iter_pb/run1/models/2box_model.pt')['model'].to(device)
+    # actor_critic.boxes_num = now_node.box_num
+    # actor_critic.agents_num = now_node.agent_num
     agents.actor_critic = actor_critic
     for episode in range(episodes):
         if not eval_flag:
