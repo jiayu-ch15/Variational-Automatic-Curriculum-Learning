@@ -103,8 +103,9 @@ class Scenario(BaseScenario):
         if agent.collide and not agent.adversary:
             for a in world.agents:
                 if self.is_collision(a, agent) and not a.adversary:
-                    rew -= 1.0
-                    break
+                    if a!=agent:
+                        rew -= 1.0
+                        break
         return 0.1*rew
     
     def reset_radius(self,sample_radius):

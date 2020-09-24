@@ -77,7 +77,7 @@ class Scenario(BaseScenario):
         rew = 0
         if agent.collide:
             for a in world.agents:
-                if self.is_collision(a, agent):
+                if self.is_collision(a, agent) and a!=agent:
                     # rew -= 1/len(world.agents)
                     rew -= 1
                     break
@@ -119,5 +119,5 @@ class Scenario(BaseScenario):
                 rew += 8/len(world.agents)
                 cover_num += 1
         # if cover_num == len(world.agents):
-        #     rew += 1
+        #     rew += 5
         return 0.1*rew

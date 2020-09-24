@@ -108,7 +108,7 @@ class node_buffer():
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
             for k in indices:
-                epsilons = np.array([[-0.15,0],[0.15,0],[0,-0.15],[0,0.15],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
+                epsilons = np.array([[-0.2,0],[0.2,0],[0,-0.2],[0,0.2],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
                 epsilon = epsilons[np.random.randint(0,8)]
                 noise = -2 * 0.01 * random.random() + 0.01
                 one_starts_landmark.append(copy.deepcopy(one_starts_agent[k]+epsilon+noise))
@@ -515,7 +515,7 @@ def main():
     N_child = 300
     N_archive = 150
     N_parent = 50
-    max_step = 0.3
+    max_step = 0.6
     TB = 1
     M = N_child
     Rmin = 0.5
@@ -562,7 +562,7 @@ def main():
     starts_length_now = args.n_rollout_threads
 
     # good model
-    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/stage95_warmup_3iter/run1/models/8agent_model.pt')['model'].to(device)
+    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/occupy_reward_without_grad_clip/run1/models/8agent_model.pt')['model'].to(device)
     # actor_critic.agents_num = now_node.agent_num
     # agents.actor_critic = actor_critic
     # pdb.set_trace()

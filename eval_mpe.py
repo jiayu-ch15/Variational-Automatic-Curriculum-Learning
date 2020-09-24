@@ -70,7 +70,7 @@ def produce_good_case_grid(num_case, start_boundary, now_agent_num):
                     break
         indices = random.sample(range(now_agent_num), now_agent_num)
         for k in indices:
-            epsilons = np.array([[-0.15,0],[0.15,0],[0,-0.15],[0,0.15],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
+            epsilons = np.array([[-0.2,0],[0.2,0],[0,-0.2],[0,0.2],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
             epsilon = epsilons[np.random.randint(0,8)]
             one_starts_landmark.append(copy.deepcopy(one_starts_agent[k]+epsilon))
         # select_starts.append(one_starts_agent+one_starts_landmark)
@@ -86,12 +86,12 @@ def produce_hard_case(num_case, boundary, now_agent_num):
     archive = [] 
     for j in range(num_case):
         for i in range(now_agent_num-1):
-            landmark_location = np.random.uniform(-boundary, -0.8*boundary, 2)  
+            landmark_location = np.random.uniform(-boundary, -0.5*boundary, 2)  
             one_starts_landmark.append(copy.deepcopy(landmark_location))
         landmark_location = np.random.uniform(0.8*boundary,boundary, 2)
         one_starts_landmark.append(copy.deepcopy(landmark_location))
         for i in range(now_agent_num):
-            agent_location = np.random.uniform(-boundary, -0.8*boundary, 2)
+            agent_location = np.random.uniform(-boundary, -0.5*boundary, 2)
             one_starts_agent.append(copy.deepcopy(agent_location))
         archive.append(one_starts_agent+one_starts_landmark)
         one_starts_agent = []
@@ -175,12 +175,12 @@ def main():
     #         ac = torch.load(str(args.model_dir) + 'run' + str(args.seed) + "/models/agent" + str(agent_id) + "_model.pt")['model'].to(device)
     #         actor_critic.append(ac)
    
-    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/stage95_warmup_3iter' + '/run1' + "/models/4agent_model.pt")['model'].to(device)
-    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_shaped_reward' + '/run2' + "/models/agent_model.pt")['model'].to(device)
-    actor_critic.agents_num = 2
-    actor_critic.boxes_num = 2
-    num_agents = 2
-    num_boxes = 2
+    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/occupy_reward_without_grad_clip' + '/run1' + "/models/4agent_model.pt")['model'].to(device)
+    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_shaped_reward' + '/run2' + "/models/agent_model.pt")['model'].to(device)
+    actor_critic.agents_num = 16
+    actor_critic.boxes_num = 16
+    num_agents = 16
+    num_boxes = 8
     all_frames = []
     cover_rate = 0
     random.seed(args.seed)
@@ -202,7 +202,9 @@ def main():
     #         if data[i].shape[0]>5:
     #             data_true.append(data[i])
     # starts = data_true
-    starts = produce_good_case_grid_pb(500,0.3,num_agents,num_boxes)
+    # starts = produce_good_case_grid_pb(500,0.3,num_agents,num_boxes)
+    starts = produce_good_case_grid(500,1.0,num_agents)
+    # starts = produce_hard_case(500,3,16)
     for eval_episode in range(args.eval_episodes):
         print(eval_episode)
         eval_env = MPEEnv(args)
@@ -212,8 +214,8 @@ def main():
         
         # eval_obs, _ = eval_env.reset(num_agents,num_boxes)
         # eval_obs, _ = eval_env.reset(num_agents)
-        # eval_obs = eval_env.new_starts_obs(starts[eval_episode],num_agents)
-        eval_obs = eval_env.new_starts_obs_pb(starts[eval_episode],num_agents,num_boxes)
+        eval_obs = eval_env.new_starts_obs(starts[1],num_agents)
+        # eval_obs = eval_env.new_starts_obs_pb(starts[eval_episode],num_agents,num_boxes)
         eval_obs = np.array(eval_obs)       
         eval_share_obs = eval_obs.reshape(1, -1)
         eval_recurrent_hidden_states = np.zeros((num_agents,args.hidden_size)).astype(np.float32)
@@ -258,6 +260,7 @@ def main():
                     
             # Obser reward and next obs
             eval_obs, eval_rewards, eval_dones, eval_infos, _ = eval_env.step(eval_actions_env)
+            print('reward: ', eval_rewards)
             eval_obs = np.array(eval_obs)
             eval_share_obs = eval_obs.reshape(1, -1)
             
