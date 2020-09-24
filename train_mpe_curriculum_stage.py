@@ -110,7 +110,8 @@ class node_buffer():
             for k in indices:
                 epsilons = np.array([[-0.15,0],[0.15,0],[0,-0.15],[0,0.15],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
                 epsilon = epsilons[np.random.randint(0,8)]
-                one_starts_landmark.append(copy.deepcopy(one_starts_agent[k]+epsilon))
+                noise = -2 * 0.01 * random.random() + 0.01
+                one_starts_landmark.append(copy.deepcopy(one_starts_agent[k]+epsilon+noise))
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
@@ -132,7 +133,7 @@ class node_buffer():
 
     def novelty_sort(self, buffer, buffer_novelty):
         zipped = zip(buffer,buffer_novelty)
-        sort_zipped = sorted(zipped,key=lambda x:(x[1],x[0]))
+        sort_zipped = sorted(zipped,key=lambda x:(x[1],np.mean(x[0])))
         result = zip(*sort_zipped)
         buffer_new, buffer_novelty_new = [list(x) for x in result]
         return buffer_new, buffer_novelty_new
@@ -211,20 +212,30 @@ class node_buffer():
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
 
-    def sample_starts(self, N_child, N_archive):
+    def sample_starts(self, N_child, N_archive, N_parent=0):
         self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
-        self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_child + N_archive - len(self.choose_child_index)))
+        self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
+        self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_child + N_archive + N_parent - len(self.choose_child_index)-len(self.choose_parent_index)))
         if len(self.choose_archive_index) < N_archive:
-            self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child + N_archive - len(self.choose_archive_index)))
+            self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child + N_archive + N_parent - len(self.choose_archive_index)-len(self.choose_parent_index)))
+        if len(self.choose_child_index) < N_child:
+            self.choose_parent_index = random.sample(range(len(self.parent_all)), min(len(self.parent_all), N_child + N_archive + N_parent - len(self.choose_archive_index)-len(self.choose_child_index)))
         self.choose_child_index = np.sort(self.choose_child_index)
         self.choose_archive_index = np.sort(self.choose_archive_index)
-        one_length = len(self.choose_child_index) + len(self.choose_archive_index)
+        self.choose_parent_index = np.sort(self.choose_parent_index)
+        one_length = len(self.choose_child_index) + len(self.choose_archive_index) # 需要搬运的点个数
+        starts_length = len(self.choose_child_index) + len(self.choose_archive_index) + len(self.choose_parent_index)
         starts = []
         for i in range(len(self.choose_child_index)):
             starts.append(self.childlist[self.choose_child_index[i]])
         for i in range(len(self.choose_archive_index)):
             starts.append(self.archive[self.choose_archive_index[i]])
-        return starts, one_length
+        for i in range(len(self.choose_parent_index)):
+            starts.append(self.parent_all[self.choose_parent_index[i]])
+        print('sample_archive: ', len(self.choose_archive_index))
+        print('sample_childlist: ', len(self.choose_child_index))
+        print('sample_parent: ', len(self.choose_parent_index))
+        return starts, one_length, starts_length
     
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
@@ -496,13 +507,14 @@ def main():
     use_parent_novelty = True
     use_child_novelty = False
     use_novelty_sample = True
+    use_parent_sample = True
     del_switch = 'novelty'
     child_novelty_threshold = 5.0 
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 350
+    N_child = 300
     N_archive = 150
-    # N_parent = 50
+    N_parent = 50
     max_step = 0.6
     TB = 1
     M = N_child
@@ -547,11 +559,12 @@ def main():
     curriculum_episode = 0
     current_timestep = 0
     one_length_now = args.n_rollout_threads
+    starts_length_now = args.n_rollout_threads
 
     # good model
-    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/stage95_warmup_3iter/run1/models/8agent_model.pt')['model'].to(device)
-    actor_critic.agents_num = now_node.agent_num
-    agents.actor_critic = actor_critic
+    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/stage95_warmup_3iter/run1/models/8agent_model.pt')['model'].to(device)
+    # actor_critic.agents_num = now_node.agent_num
+    # agents.actor_critic = actor_critic
     # pdb.set_trace()
 
     for episode in range(episodes):
@@ -576,7 +589,10 @@ def main():
             
             # reset env 
             # one length = now_process_num
-            starts_now, one_length_now = now_node.sample_starts(N_child,N_archive)
+            if use_parent_sample:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive,N_parent)
+            else:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive)
             now_node.eval_score = np.zeros(shape=one_length_now)   
             actor_critic.agents_num = now_node.agent_num  
 
@@ -585,20 +601,21 @@ def main():
                 if use_uniform:
                     obs, _ = envs.reset(now_node.agent_num)
                     one_length_now = args.n_rollout_threads 
+                    starts_length_now = args.n_rollout_threads
                 else:    
-                    obs = envs.new_starts_obs(starts_now, now_node.agent_num, one_length_now)
+                    obs = envs.new_starts_obs(starts_now, now_node.agent_num, starts_length_now)
                 # 500 [agent * dim]
 
                 #replay buffer
                 rollouts_now = RolloutStorage_share(now_node.agent_num,
                             now_episode_length, 
-                            one_length_now,
+                            starts_length_now,
                             envs.observation_space[0], 
                             envs.action_space[0],
                             args.hidden_size) 
                 # replay buffer init
                 if args.share_policy: 
-                    share_obs = obs.reshape(one_length_now, -1)        
+                    share_obs = obs.reshape(starts_length_now, -1)        
                     # share_obs = np.expand_dims(share_obs,1).repeat(now_node.agent_num,axis=1)    
                     rollouts_now.share_obs[0] = share_obs.copy() 
                     rollouts_now.obs[0] = obs.copy()               
@@ -658,7 +675,7 @@ def main():
 
                     # rearrange action
                     actions_env = []
-                    for i in range(one_length_now):
+                    for i in range(starts_length_now):
                         one_hot_action_env = []
                         for agent_id in range(now_node.agent_num):
                             if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
@@ -680,7 +697,7 @@ def main():
                     
                     # Obser reward and next obs
                     # start1 = time.time()
-                    obs, rewards, dones, infos, _ = envs.step(actions_env, one_length_now, now_node.agent_num)
+                    obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length_now, now_node.agent_num)
 
                     # end1 = time.time()
                     # print('step: ',end1-start1)
@@ -701,7 +718,7 @@ def main():
                         masks.append(mask)
                                     
                     if args.share_policy: 
-                        share_obs = obs.reshape(one_length_now, -1)        
+                        share_obs = obs.reshape(starts_length_now, -1)        
                         # share_obs = np.expand_dims(share_obs,1).repeat(now_node.agent_num,axis=1)    
                         
                         rollouts_now.insert(share_obs, 
@@ -732,12 +749,12 @@ def main():
                 if use_uniform:
                     mean_cover_rate = np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))
                     logger.add_scalars('agent/traing_cover_rate',{'training_cover_rate': mean_cover_rate}, current_timestep)
-                    current_timestep += now_episode_length * one_length_now
+                    current_timestep += now_episode_length * starts_length_now
                     curriculum_episode += 1
                 else:
                     logger.add_scalars('agent/traing_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
                     print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
-                    current_timestep += now_episode_length * one_length_now
+                    current_timestep += now_episode_length * starts_length_now
                     curriculum_episode += 1
                     now_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
                 end1 = time.time()
