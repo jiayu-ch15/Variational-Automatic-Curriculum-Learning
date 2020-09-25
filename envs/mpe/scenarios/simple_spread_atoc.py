@@ -94,8 +94,8 @@ class Scenario(BaseScenario):
                 entity_cover_state.append(1)
             else:
                 entity_cover_state.append(0)
-        info['cover_rate'] = num/len(world.landmarks)
-        info['cover_state'] = entity_cover_state
+        infos['cover_rate'] = num/len(world.landmarks)
+        infos['cover_state'] = entity_cover_state
         return infos
 
     def observation(self, agent, world):

@@ -571,7 +571,7 @@ def main():
     upper_bound = 0.99
     target_num = 64
     last_agent_num = 0
-    now_agent_num = 16
+    now_agent_num = 4
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 3
@@ -740,11 +740,16 @@ def main():
                     # Obser reward and next obs
                     # start1 = time.time()
                     obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length_now, now_node.agent_num)
-                    infos_cover_rate = infos['cover_rate']
-                    infos_cover_state = infos['cover_state']
+                    info_cover_rate = []
+                    info_cover_state = []
+                    for env_id in range(len(infos)):
+                        info_cover_rate.append(infos[env_id][0]['cover_rate'])
+                        info_cover_state.append(infos[env_id][0]['cover_state'])
+                    landmark_cover_obs = (np.expand_dims(np.array(info_cover_state),axis=1).repeat(now_node.agent_num,axis=1))[0]
+                    pdb.set_trace()
                     # end1 = time.time()
                     # print('step: ',end1-start1)
-                    step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
+                    step_cover_rate[:,step] = np.array(info_cover_rate)
 
                     # If done then clean the history of observations.
                     # insert data in buffer
