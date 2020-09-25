@@ -104,19 +104,6 @@ class Scenario(BaseScenario):
             else:
                 entity_cover_state.append(0)
         return num/len(world.landmarks)
-        # infos['cover_rate'] = num/len(world.landmarks)
-        # infos['cover_state'] = entity_cover_state
-        # return infos
-    
-    # def share_landmark_obs(self, world):
-    #     entity_cover_state = []
-    #     for l in world.landmarks:
-    #         dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents]
-    #         if min(dists) <= world.agents[0].size + world.landmarks[0].size:
-    #             entity_cover_state.append(1)
-    #         else:
-    #             entity_cover_state.append(0)
-    #     return entity_cover_state
 
     def observation(self, agent, world):
         # get positions of all entities in this agent's reference frame
@@ -148,5 +135,5 @@ class Scenario(BaseScenario):
                 rew += 8/len(world.agents)
                 cover_num += 1
         if cover_num == len(world.agents):
-            rew += 2
+            rew += 1
         return 0.1*rew

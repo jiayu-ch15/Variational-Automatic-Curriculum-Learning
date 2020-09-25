@@ -580,11 +580,11 @@ def main():
     historical_length = 5
     next_stage_flag = 0
     frozen_epoch = 9
-    frozen_count = 0
+    frozen_count = 9
     initial_optimizer = False
     eval_flag = False # 只用evaluate
     use_uniform = False # 用uniform train
-    fix_init_set = True
+    fix_init_set = False
     random.seed(args.seed)
     np.random.seed(args.seed)
     now_node = node_buffer(now_agent_num,buffer_length,
