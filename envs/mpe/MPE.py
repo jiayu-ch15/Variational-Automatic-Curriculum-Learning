@@ -30,5 +30,6 @@ def MPEEnv(args, benchmark=False):
     else:
         env = MultiAgentEnv(world, scenario.reset_world, scenario.make_world, scenario.reward, scenario.observation, 
                             info_callback=scenario.info_coverage_rate,
-                            share_callback=scenario.share_reward)
+                            share_callback=scenario.share_reward,
+                            landmark_cover_callback=scenario.landmark_cover_state)
     return env

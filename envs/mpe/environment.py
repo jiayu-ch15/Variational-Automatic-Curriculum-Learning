@@ -17,7 +17,7 @@ class MultiAgentEnv(gym.Env):
 
     def __init__(self, world, reset_callback=None, make_callback=None, reward_callback=None,
                  observation_callback=None, info_callback=None,
-                 share_callback=None,
+                 share_callback=None, landmark_cover_callback=None,
                  done_callback=None, post_step_callback=None,
                  shared_viewer=True, discrete_action=True):
 
@@ -32,6 +32,7 @@ class MultiAgentEnv(gym.Env):
         self.observation_callback = observation_callback
         self.info_callback = info_callback
         self.share_callback = share_callback
+        self.landmark_cover_callback = landmark_cover_callback
         self.done_callback = done_callback
                
         self.post_step_callback = post_step_callback
@@ -117,6 +118,8 @@ class MultiAgentEnv(gym.Env):
         # record observation for each agent
         info = self._get_info()
         shared_reward = self._get_share()
+        
+        self.landmark_cover_callback(self.world)
         for i,agent in enumerate(self.agents):
             obs_n.append(self._get_obs(agent))
             reward_n.append([shared_reward+self._get_reward(agent)])
@@ -195,8 +198,12 @@ class MultiAgentEnv(gym.Env):
             agent.action.c = np.zeros(self.world.dim_c)
 
         # record observations for each agent
+        # landmark_cover_obs 1*landmark_num
+        # set landmark.cover
+        self.landmark_cover_callback(self.world)
         obs_n = []
-        for agent in self.agents:
+        for i,agent in enumerate(self.agents):
+            # tmp_obs 4+2*landmark+2*(agent-1)+comm
             obs_n.append(self._get_obs(agent))
         available_action = [[None]] * self.n
         
@@ -265,6 +272,8 @@ class MultiAgentEnv(gym.Env):
             landmark.state.p_pos = starts_one[i+now_agent_num]
             landmark.state.p_vel = np.zeros(self.world.dim_p)
         self._reset_render()
+
+        self.landmark_cover_callback(self.world)
         obs_n = []
         for agent in self.agents:
             obs_n.append(self._get_obs(agent))
@@ -386,6 +395,11 @@ class MultiAgentEnv(gym.Env):
         if self.share_callback is None:
             return 0.0
         return self.share_callback(self.world)
+
+    # def _get_share_landmark_obs(self):
+    #     if self.share_landmark_obs_callback is None:
+    #         return None
+    #     return self.share_landmark_obs_callback(self.world)
 
     # set env action for a particular agent
     def _set_action(self, action, agent, action_space, time=None):

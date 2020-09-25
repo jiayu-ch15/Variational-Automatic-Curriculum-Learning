@@ -28,7 +28,8 @@ class Scenario(BaseScenario):
             landmark.name = 'landmark %d' % i
             landmark.collide = False
             landmark.movable = False
-            landmark.size = 0.12
+            landmark.cover = 0
+            landmark.size = 0.15
         # make initial conditions
         self.reset_world(world)
         return world
@@ -46,6 +47,14 @@ class Scenario(BaseScenario):
         for i, landmark in enumerate(world.landmarks):
             landmark.state.p_pos = np.random.uniform(-3, +3, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
+    
+    def landmark_cover_state(self, world):
+        for l in world.landmarks:
+            dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents]
+            if min(dists) <= world.agents[0].size + world.landmarks[0].size:
+                l.cover = 1
+            else:
+                l.cover = 0
 
     def benchmark_data(self, agent, world):
         rew = 0
@@ -94,15 +103,27 @@ class Scenario(BaseScenario):
                 entity_cover_state.append(1)
             else:
                 entity_cover_state.append(0)
-        infos['cover_rate'] = num/len(world.landmarks)
-        infos['cover_state'] = entity_cover_state
-        return infos
+        return num/len(world.landmarks)
+        # infos['cover_rate'] = num/len(world.landmarks)
+        # infos['cover_state'] = entity_cover_state
+        # return infos
+    
+    # def share_landmark_obs(self, world):
+    #     entity_cover_state = []
+    #     for l in world.landmarks:
+    #         dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents]
+    #         if min(dists) <= world.agents[0].size + world.landmarks[0].size:
+    #             entity_cover_state.append(1)
+    #         else:
+    #             entity_cover_state.append(0)
+    #     return entity_cover_state
 
     def observation(self, agent, world):
         # get positions of all entities in this agent's reference frame
         entity_pos = []
         for entity in world.landmarks:  # world.entities:
-            entity_pos.append(entity.state.p_pos - agent.state.p_pos)
+            tmp_pos = np.insert((entity.state.p_pos - agent.state.p_pos),0,entity.cover)
+            entity_pos.append(tmp_pos) # 是否被cover
         # entity colors
         entity_color = []
         for entity in world.landmarks:  # world.entities:

@@ -1,7 +1,7 @@
 #!/usr/bin/python
 ulimit -n 4096 
 env="MPE"
-scenario="simple_spread_atoc"
+scenario="simple_spread"
 num_landmarks=4
 num_agents=4
 algo="check"

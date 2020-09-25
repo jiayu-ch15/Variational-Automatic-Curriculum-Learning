@@ -606,9 +606,9 @@ def main():
 
     # good model
     # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/occupy_reward_true_penalty_without_grad_clip/run1/models/4agent_model.pt')['model'].to(device)
-    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/big_penalty_big_success/run1/models/8agent_model.pt')['model'].to(device)
-    actor_critic.agents_num = now_node.agent_num
-    agents.actor_critic = actor_critic
+    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/big_penalty_big_success/run1/models/8agent_model.pt')['model'].to(device)
+    # actor_critic.agents_num = now_node.agent_num
+    # agents.actor_critic = actor_critic
     # pdb.set_trace()
 
     for episode in range(episodes):

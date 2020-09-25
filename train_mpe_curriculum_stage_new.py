@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO, PPO2
-from algorithm.model import Policy, Policy2, ATTBase_actor, ATTBase_critic
+from algorithm.model import Policy, Policy2, ATTBase_actor_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -121,7 +121,7 @@ class node_buffer():
 
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
-        cell_size = 0.2
+        cell_size = 0.3
         grid_num = int(start_boundary * 2 / cell_size)
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
@@ -441,8 +441,8 @@ def main():
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:
-        actor_base = ATTBase_actor(envs.observation_space[0].shape[0], num_agents)
-        critic_base = ATTBase_critic(envs.observation_space[0].shape[0], num_agents)
+        actor_base = ATTBase_actor_add(envs.observation_space[0].shape[0], num_agents)
+        critic_base = ATTBase_critic_add(envs.observation_space[0].shape[0], num_agents)
         actor_critic = Policy2(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
@@ -564,7 +564,7 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 1.0
+    start_boundary = 0.6
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -606,9 +606,9 @@ def main():
 
     # good model
     # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/occupy_reward_true_penalty_without_grad_clip/run1/models/4agent_model.pt')['model'].to(device)
-    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/big_penalty_big_success/run1/models/8agent_model.pt')['model'].to(device)
-    actor_critic.agents_num = now_node.agent_num
-    agents.actor_critic = actor_critic
+    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/big_penalty_big_success/run1/models/8agent_model.pt')['model'].to(device)
+    # actor_critic.agents_num = now_node.agent_num
+    # agents.actor_critic = actor_critic
     # pdb.set_trace()
 
     for episode in range(episodes):
@@ -646,10 +646,9 @@ def main():
                     obs, _ = envs.reset(now_node.agent_num)
                     one_length_now = args.n_rollout_threads 
                     starts_length_now = args.n_rollout_threads
-                else:    
+                else:   
                     obs = envs.new_starts_obs(starts_now, now_node.agent_num, starts_length_now)
                 # 500 [agent * dim]
-
                 #replay buffer
                 rollouts_now = RolloutStorage_share(now_node.agent_num,
                             now_episode_length, 
@@ -740,16 +739,9 @@ def main():
                     # Obser reward and next obs
                     # start1 = time.time()
                     obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length_now, now_node.agent_num)
-                    info_cover_rate = []
-                    info_cover_state = []
-                    for env_id in range(len(infos)):
-                        info_cover_rate.append(infos[env_id][0]['cover_rate'])
-                        info_cover_state.append(infos[env_id][0]['cover_state'])
-                    landmark_cover_obs = (np.expand_dims(np.array(info_cover_state),axis=1).repeat(now_node.agent_num,axis=1))[0]
-                    pdb.set_trace()
                     # end1 = time.time()
                     # print('step: ',end1-start1)
-                    step_cover_rate[:,step] = np.array(info_cover_rate)
+                    step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
 
                     # If done then clean the history of observations.
                     # insert data in buffer
@@ -1061,7 +1053,7 @@ def main():
                     torch.save({'model': actor_critic}, str(save_dir) + "/%iagent_model.pt"%now_node.agent_num)
         if next_stage_flag==1:
             next_stage_flag = 0
-            start_boundary = 1.0
+            start_boundary = 1.5
             max_step=0.6
             frozen_count = 0
             actor_critic.agents_num = now_node.agent_num
