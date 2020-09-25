@@ -21,7 +21,7 @@ class Scenario(BaseScenario):
             agent.collide = True
             agent.silent = True
             # agent.size = 0.15
-            agent.size = 0.1 
+            agent.size = 0.1
         # add landmarks
         world.landmarks = [Landmark() for i in range(num_landmarks)]
         for i, landmark in enumerate(world.landmarks):
@@ -78,8 +78,8 @@ class Scenario(BaseScenario):
         if agent.collide:
             for a in world.agents:
                 if self.is_collision(a, agent) and a!=agent:
-                    # rew -= 1/len(world.agents)
                     rew -= 1
+                    # rew -= 1
                     break
         return 0.1*rew
 
@@ -119,5 +119,5 @@ class Scenario(BaseScenario):
                 rew += 8/len(world.agents)
                 cover_num += 1
         if cover_num == len(world.agents):
-            rew += 5
+            rew += 2
         return 0.1*rew

@@ -56,6 +56,7 @@ def produce_good_case_grid(num_case, start_boundary, now_agent_num):
     grid = np.zeros(shape=(grid_num,grid_num))
     one_starts_landmark = []
     one_starts_agent = []
+    one_starts_agent_grid = []
     archive = [] 
     for j in range(num_case):
         for i in range(now_agent_num):
@@ -65,18 +66,29 @@ def produce_good_case_grid(num_case, start_boundary, now_agent_num):
                     continue
                 else:
                     grid[agent_location_grid[0],agent_location_grid[1]] = 1
+                    one_starts_agent_grid.append(copy.deepcopy(agent_location_grid))
                     agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
                     one_starts_agent.append(copy.deepcopy(agent_location))
                     break
         indices = random.sample(range(now_agent_num), now_agent_num)
         for k in indices:
-            epsilons = np.array([[-0.2,0],[0.2,0],[0,-0.2],[0,0.2],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
-            epsilon = epsilons[np.random.randint(0,8)]
-            one_starts_landmark.append(copy.deepcopy(one_starts_agent[k]+epsilon))
+            epsilons = np.array([[-1,0],[1,0],[0,1],[0,1],[1,1],[1,-1],[-1,1],[-1,-1]])
+            epsilon = epsilons[random.sample(range(8),8)]
+            for epsilon_id in range(epsilon.shape[0]):
+                landmark_location_grid = one_starts_agent_grid[k] + epsilon[epsilon_id]
+                if landmark_location_grid[0] > grid.shape[0]-1 or landmark_location_grid[1] > grid.shape[1]-1 \
+                    or landmark_location_grid[0] <0 or landmark_location_grid[1] < 0:
+                    continue
+                if grid[landmark_location_grid[0],landmark_location_grid[1]]!=2:
+                    grid[landmark_location_grid[0],landmark_location_grid[1]]=2
+                    break
+            landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary
+            one_starts_landmark.append(copy.deepcopy(landmark_location))
         # select_starts.append(one_starts_agent+one_starts_landmark)
         archive.append(one_starts_agent+one_starts_landmark)
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_agent = []
+        one_starts_agent_grid = []
         one_starts_landmark = []
     return archive
 
@@ -86,12 +98,12 @@ def produce_hard_case(num_case, boundary, now_agent_num):
     archive = [] 
     for j in range(num_case):
         for i in range(now_agent_num-1):
-            landmark_location = np.random.uniform(-boundary, -0.5*boundary, 2)  
+            landmark_location = np.random.uniform(-boundary, -0.2*boundary, 2)  
             one_starts_landmark.append(copy.deepcopy(landmark_location))
         landmark_location = np.random.uniform(0.8*boundary,boundary, 2)
         one_starts_landmark.append(copy.deepcopy(landmark_location))
         for i in range(now_agent_num):
-            agent_location = np.random.uniform(-boundary, -0.5*boundary, 2)
+            agent_location = np.random.uniform(-boundary, -0.3*boundary, 2)
             one_starts_agent.append(copy.deepcopy(agent_location))
         archive.append(one_starts_agent+one_starts_landmark)
         one_starts_agent = []
@@ -142,6 +154,22 @@ def produce_good_case_grid_pb(num_case, start_boundary, now_agent_num, now_box_n
         one_starts_box = []
     return archive
 
+def produce_uniform_case(num_case, boundary, now_agent_num):
+    one_starts_landmark = []
+    one_starts_agent = []
+    archive = [] 
+    for j in range(num_case):
+        for i in range(now_agent_num):
+            landmark_location = np.random.uniform(-boundary, +boundary, 2)  
+            one_starts_landmark.append(copy.deepcopy(landmark_location))
+        for i in range(now_agent_num):
+            agent_location = np.random.uniform(-boundary, +boundary, 2)
+            one_starts_agent.append(copy.deepcopy(agent_location))
+        archive.append(one_starts_agent+one_starts_landmark)
+        one_starts_agent = []
+        one_starts_landmark = []
+    return archive
+
 
 def main():
     args = get_config()
@@ -175,7 +203,7 @@ def main():
     #         ac = torch.load(str(args.model_dir) + 'run' + str(args.seed) + "/models/agent" + str(agent_id) + "_model.pt")['model'].to(device)
     #         actor_critic.append(ac)
    
-    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/occupy_reward_without_grad_clip' + '/run1' + "/models/4agent_model.pt")['model'].to(device)
+    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/occupy_reward_true_penalty_without_grad_clip' + '/run1' + "/models/4agent_model.pt")['model'].to(device)
     # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_shaped_reward' + '/run2' + "/models/agent_model.pt")['model'].to(device)
     actor_critic.agents_num = 16
     actor_critic.boxes_num = 16
@@ -203,8 +231,9 @@ def main():
     #             data_true.append(data[i])
     # starts = data_true
     # starts = produce_good_case_grid_pb(500,0.3,num_agents,num_boxes)
-    starts = produce_good_case_grid(500,1.0,num_agents)
+    # starts = produce_good_case_grid(500,1.0,num_agents)
     # starts = produce_hard_case(500,3,16)
+    starts = produce_uniform_case(500,3,16)
     for eval_episode in range(args.eval_episodes):
         print(eval_episode)
         eval_env = MPEEnv(args)
@@ -214,7 +243,7 @@ def main():
         
         # eval_obs, _ = eval_env.reset(num_agents,num_boxes)
         # eval_obs, _ = eval_env.reset(num_agents)
-        eval_obs = eval_env.new_starts_obs(starts[1],num_agents)
+        eval_obs = eval_env.new_starts_obs(starts[0],num_agents)
         # eval_obs = eval_env.new_starts_obs_pb(starts[eval_episode],num_agents,num_boxes)
         eval_obs = np.array(eval_obs)       
         eval_share_obs = eval_obs.reshape(1, -1)
@@ -260,7 +289,7 @@ def main():
                     
             # Obser reward and next obs
             eval_obs, eval_rewards, eval_dones, eval_infos, _ = eval_env.step(eval_actions_env)
-            print('reward: ', eval_rewards)
+            # print('reward: ', eval_rewards)
             eval_obs = np.array(eval_obs)
             eval_share_obs = eval_obs.reshape(1, -1)
             

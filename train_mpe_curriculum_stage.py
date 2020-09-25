@@ -87,6 +87,38 @@ class node_buffer():
             one_starts_landmark = []
         return archive
 
+    # def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
+    #     # agent_size=0.1
+    #     cell_size = 0.2
+    #     grid_num = int(start_boundary * 2 / cell_size)
+    #     grid = np.zeros(shape=(grid_num,grid_num))
+    #     one_starts_landmark = []
+    #     one_starts_agent = []
+    #     archive = [] 
+    #     for j in range(num_case):
+    #         for i in range(now_agent_num):
+    #             while 1:
+    #                 agent_location_grid = np.random.randint(0, grid.shape[0], 2) 
+    #                 if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+    #                     continue
+    #                 else:
+    #                     grid[agent_location_grid[0],agent_location_grid[1]] = 1
+    #                     agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
+    #                     one_starts_agent.append(copy.deepcopy(agent_location))
+    #                     break
+    #         indices = random.sample(range(now_agent_num), now_agent_num)
+    #         for k in indices:
+    #             epsilons = np.array([[-0.2,0],[0.2,0],[0,-0.2],[0,0.2],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
+    #             epsilon = epsilons[np.random.randint(0,8)]
+    #             noise = -2 * 0.01 * random.random() + 0.01
+    #             one_starts_landmark.append(copy.deepcopy(one_starts_agent[k]+epsilon+noise))
+    #         # select_starts.append(one_starts_agent+one_starts_landmark)
+    #         archive.append(one_starts_agent+one_starts_landmark)
+    #         grid = np.zeros(shape=(grid_num,grid_num))
+    #         one_starts_agent = []
+    #         one_starts_landmark = []
+    #     return archive
+
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
@@ -94,6 +126,7 @@ class node_buffer():
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_agent = []
+        one_starts_agent_grid = []
         archive = [] 
         for j in range(num_case):
             for i in range(now_agent_num):
@@ -103,19 +136,29 @@ class node_buffer():
                         continue
                     else:
                         grid[agent_location_grid[0],agent_location_grid[1]] = 1
+                        one_starts_agent_grid.append(copy.deepcopy(agent_location_grid))
                         agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
                         one_starts_agent.append(copy.deepcopy(agent_location))
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
             for k in indices:
-                epsilons = np.array([[-0.2,0],[0.2,0],[0,-0.2],[0,0.2],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
-                epsilon = epsilons[np.random.randint(0,8)]
-                noise = -2 * 0.01 * random.random() + 0.01
-                one_starts_landmark.append(copy.deepcopy(one_starts_agent[k]+epsilon+noise))
+                epsilons = np.array([[-1,0],[1,0],[0,1],[0,1],[1,1],[1,-1],[-1,1],[-1,-1]])
+                epsilon = epsilons[random.sample(range(8),8)]
+                for epsilon_id in range(epsilon.shape[0]):
+                    landmark_location_grid = one_starts_agent_grid[k] + epsilon[epsilon_id]
+                    if landmark_location_grid[0] > grid.shape[0]-1 or landmark_location_grid[1] > grid.shape[1]-1 \
+                        or landmark_location_grid[0] <0 or landmark_location_grid[1] < 0:
+                        continue
+                    if grid[landmark_location_grid[0],landmark_location_grid[1]]!=2:
+                        grid[landmark_location_grid[0],landmark_location_grid[1]]=2
+                        break
+                landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary
+                one_starts_landmark.append(copy.deepcopy(landmark_location))
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
             one_starts_agent = []
+            one_starts_agent_grid = []
             one_starts_landmark = []
         return archive
 
@@ -521,7 +564,7 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 1.0
+    start_boundary = 2.0
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -536,12 +579,12 @@ def main():
     save_node_flag = True
     historical_length = 5
     next_stage_flag = 0
-    frozen_epoch = 12
+    frozen_epoch = 9
     frozen_count = 0
     initial_optimizer = False
     eval_flag = False # 只用evaluate
     use_uniform = False # 用uniform train
-    fix_init_set = False
+    fix_init_set = True
     random.seed(args.seed)
     np.random.seed(args.seed)
     now_node = node_buffer(now_agent_num,buffer_length,
@@ -656,8 +699,6 @@ def main():
                                     torch.FloatTensor(rollouts_now.recurrent_hidden_states[step,:,agent_id]), 
                                     torch.FloatTensor(rollouts_now.recurrent_hidden_states_critic[step,:,agent_id]),
                                     torch.FloatTensor(rollouts_now.masks[step,:,agent_id]))
-                                    # None,
-                                    # deterministic=True)
                             else:
                                 actor_critic[agent_id].eval()
                                 value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic[agent_id].act(agent_id,
@@ -870,7 +911,7 @@ def main():
                 if now_node.agent_num == 4:
                     episode_length = 70
                 else:
-                    episode_length = 200
+                    episode_length = 300
                 #replay buffer
                 rollouts = RolloutStorage_share(now_node.agent_num,
                             episode_length, 
