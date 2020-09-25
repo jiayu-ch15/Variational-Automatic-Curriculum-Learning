@@ -740,6 +740,8 @@ def main():
                     # Obser reward and next obs
                     # start1 = time.time()
                     obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length_now, now_node.agent_num)
+                    infos_cover_rate = infos['cover_rate']
+                    infos_cover_state = infos['cover_state']
                     # end1 = time.time()
                     # print('step: ',end1-start1)
                     step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
