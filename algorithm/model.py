@@ -1329,6 +1329,56 @@ class ATTBase(NNBase):
 
         return value, hidden_actor, rnn_hxs, rnn_hxs
 
+class ATTBase_add(NNBase):
+    def __init__(self, num_inputs, agent_num, recurrent=False, assign_id=False, hidden_size=64):
+        super(ATTBase_add, self).__init__(num_inputs, agent_num)
+        if recurrent:
+            num_inputs = hidden_size
+
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+
+        self.agent_num = agent_num
+        self.actor = ObsEncoder_add(hidden_size=hidden_size)
+        #self.encoder = init_(nn.Linear(num_inputs, hidden_size))
+        self.encoder = ObsEncoder_add(hidden_size=hidden_size)
+
+        self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
+        #self.correlation_mat.data.fill_(0.25)
+        nn.init.orthogonal_(self.correlation_mat.data, gain=1)
+
+        self.critic_linear = nn.Sequential(
+                init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
+                nn.LayerNorm(hidden_size),
+                init_(nn.Linear(hidden_size, 1)))
+
+        # self.inputs_norm = nn.LayerNorm(hidden_size)
+        # self.share_inputs_norm = nn.LayerNorm(hidden_size)
+        # self.train()
+
+    def forward(self, share_inputs, inputs, agent_num, rnn_hxs, masks):
+        """
+        share_inputs: [batch_size, obs_dim*agent_num]
+        inputs: [batch_size, obs_dim]
+        """
+        batch_size = inputs.shape[0]
+        obs_dim = inputs.shape[-1]
+        hidden_actor = self.actor(inputs, agent_num)
+        f_ii = self.encoder(inputs, agent_num)
+        obs_beta_ij = torch.matmul(f_ii.view(batch_size,1,-1), self.correlation_mat) # (batch,1,hidden_size)
+        
+        # 矩阵f_ij
+        f_ij = self.encoder(share_inputs.reshape(-1,obs_dim),agent_num)
+        obs_encoder = f_ij.reshape(batch_size,agent_num,-1) # (batch_size, nagents, hidden_size)
+              
+        beta = torch.matmul(obs_beta_ij, obs_encoder.permute(0,2,1)).squeeze(1) # (batch_size,nagents)
+        alpha = F.softmax(beta,dim = 1).unsqueeze(2) # (batch_size,nagents,1)
+        vi = torch.mul(alpha,obs_encoder)
+        vi = torch.sum(vi,dim = 1)
+        value = self.critic_linear(vi)
+
+        return value, hidden_actor, rnn_hxs, rnn_hxs
+
 class ATTBase_pb(NNBase):
     def __init__(self, num_inputs, agent_num, box_num, recurrent=False, assign_id=False, hidden_size=64):
         super(ATTBase_pb, self).__init__(num_inputs, agent_num)

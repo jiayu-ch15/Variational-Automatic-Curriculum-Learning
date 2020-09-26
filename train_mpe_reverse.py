@@ -56,6 +56,7 @@ class node_buffer():
         self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
+        self.add_archive = [] # 上次更新成为archive的点
         self.childlist = []
         self.hardlist = []
         self.parent = []
@@ -249,6 +250,36 @@ class node_buffer():
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
     
+    def sample_starts_reverse(self, N_new, N_old):
+        if len(self.childlist) < N_new:
+            self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new -len(self.childlist)))
+        else:
+            self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old))
+        one_length = len(self.childlist) + len(self.choose_archive_index) # 需要搬运的点个数
+        starts_length = len(self.childlist) + len(self.choose_archive_index)
+        starts = []
+        starts += self.childlist
+        for i in range(len(self.choose_archive_index)):
+            starts.append(self.archive[self.choose_archive_index[i]])
+        
+        return starts, one_length, starts_length
+
+    def move_nodes_reverse(self, one_length, Rmax, Rmin):
+        self.add_archive = []
+        del_archive_num = 0
+        for i in range(one_length):
+            if i < len(self.childlist): # 保留的点
+                if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
+                    self.add_archive.append(copy.deepcopy(self.childlist[self.childlist[i]]))
+            else:
+                if self.eval_score[i]>Rmax or self.eval_score[i]<Rmin:
+                    del self.archive[self.choose_archive_index[i-len(self.childlist)]-del_archive_num]
+                    del_archive_num += 1
+                else:
+                    self.add_archive.append(copy.deepcopy(self.archive[self.choose_archive_index[i-len(self.childlist)]-del_archive_num]))
+        self.childlist = copy.deepcopy(self.add_archive)
+        self.archive += self.childlist
+
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
         del_archive_num = 0
@@ -520,20 +551,21 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-    use_parent_novelty = True
+    use_parent_novelty = False
     use_child_novelty = False
-    use_novelty_sample = True
-    use_parent_sample = True
+    use_novelty_sample = False
+    use_parent_sample = False
+    use_reverse_goal = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 300
-    N_archive = 150
-    N_parent = 50
+    N_new = 300
+    N_old = 200
+    # N_parent = 50
     max_step = 0.6
     TB = 1
-    M = N_child
+    M = N_new
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
@@ -577,17 +609,23 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction
-        if use_novelty_sample:
-            last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+        if use_reverse_goal:
+            last_node.childlist = last_node.SampleNearby(last_node.childlist)
         else:
-            last_node.childlist += last_node.SampleNearby(last_node.parent)
+            if use_novelty_sample:
+                last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+            else:
+                last_node.childlist += last_node.SampleNearby(last_node.parent)
         
         # reset env 
         # one length = now_process_num
-        if use_parent_sample:
-            starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)
+        if use_reverse_goal:
+            starts, one_length, starts_length = last_node.sample_starts_reverse(N_new,N_old)
         else:
-            starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive)
+            if use_parent_sample:
+                starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)
+            else:
+                starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive)
         last_node.eval_score = np.zeros(shape=one_length)
 
         for times in range(eval_frequency):
@@ -799,8 +837,7 @@ def main():
 
         # move nodes
         last_node.eval_score = last_node.eval_score / eval_frequency
-        last_node.move_nodes(one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, logger, current_timestep)
-        print('last_node_parent: ', len(last_node.parent))
+        last_node.move_nodes_reverse(one_length, Rmax, Rmin)
         # 需要改路径
         if (episode+1) % save_node_frequency ==0 and save_node_flag:
             last_node.save_node(save_node_dir, episode)

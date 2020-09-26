@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO
-from algorithm.model import Policy, ATTBase
+from algorithm.model import Policy, ATTBase_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -86,7 +86,7 @@ def main():
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:
-        share_base = ATTBase(envs.observation_space[0].shape[0], num_agents)
+        share_base = ATTBase_add(envs.observation_space[0].shape[0], num_agents)
         actor_critic = Policy(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,

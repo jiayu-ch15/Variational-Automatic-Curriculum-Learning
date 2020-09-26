@@ -757,11 +757,11 @@ def main():
                 # import pdb;pdb.set_trace()
                 if use_uniform:
                     mean_cover_rate = np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))
-                    logger.add_scalars('agent/traing_cover_rate',{'training_cover_rate': mean_cover_rate}, current_timestep)
+                    logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': mean_cover_rate}, current_timestep)
                     current_timestep += now_episode_length * starts_length_now
                     curriculum_episode += 1
                 else:
-                    logger.add_scalars('agent/traing_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                    logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
                     print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
                     current_timestep += now_episode_length * starts_length_now
                     curriculum_episode += 1
