@@ -344,6 +344,7 @@ class MultiAgentEnv(gym.Env):
             landmark.state.p_vel = np.zeros(self.world.dim_p)
 
         self._reset_render()
+        self.landmark_cover_callback(self.world)
         obs_n = []
         for agent in self.agents:
             obs_n.append(self._get_obs(agent))

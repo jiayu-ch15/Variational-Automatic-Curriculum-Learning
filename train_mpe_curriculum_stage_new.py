@@ -564,14 +564,14 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 0.6
+    start_boundary = 1.0
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.99
     target_num = 64
     last_agent_num = 0
-    now_agent_num = 4
+    now_agent_num = 32
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 3
@@ -580,7 +580,7 @@ def main():
     historical_length = 5
     next_stage_flag = 0
     frozen_epoch = 9
-    frozen_count = 9
+    frozen_count = 0
     initial_optimizer = False
     eval_flag = False # 只用evaluate
     use_uniform = False # 用uniform train
@@ -606,10 +606,10 @@ def main():
 
     # good model
     # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/occupy_reward_true_penalty_without_grad_clip/run1/models/4agent_model.pt')['model'].to(device)
-    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/big_penalty_big_success/run1/models/8agent_model.pt')['model'].to(device)
-    # actor_critic.agents_num = now_node.agent_num
-    # agents.actor_critic = actor_critic
-    # pdb.set_trace()
+    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread_atoc/zhang/run1/models/16agent_model.pt')['model'].to(device)
+    actor_critic.agents_num = now_node.agent_num
+    agents.actor_critic = actor_critic
+    pdb.set_trace()
 
     for episode in range(episodes):
         if not eval_flag:

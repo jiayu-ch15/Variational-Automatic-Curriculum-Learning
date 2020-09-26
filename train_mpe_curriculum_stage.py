@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO, PPO2
-from algorithm.model import Policy, Policy2, ATTBase_actor, ATTBase_critic
+from algorithm.model import Policy, Policy2, ATTBase_actor_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -87,42 +87,11 @@ class node_buffer():
             one_starts_landmark = []
         return archive
 
-    # def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
-    #     # agent_size=0.1
-    #     cell_size = 0.2
-    #     grid_num = int(start_boundary * 2 / cell_size)
-    #     grid = np.zeros(shape=(grid_num,grid_num))
-    #     one_starts_landmark = []
-    #     one_starts_agent = []
-    #     archive = [] 
-    #     for j in range(num_case):
-    #         for i in range(now_agent_num):
-    #             while 1:
-    #                 agent_location_grid = np.random.randint(0, grid.shape[0], 2) 
-    #                 if grid[agent_location_grid[0],agent_location_grid[1]]==1:
-    #                     continue
-    #                 else:
-    #                     grid[agent_location_grid[0],agent_location_grid[1]] = 1
-    #                     agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
-    #                     one_starts_agent.append(copy.deepcopy(agent_location))
-    #                     break
-    #         indices = random.sample(range(now_agent_num), now_agent_num)
-    #         for k in indices:
-    #             epsilons = np.array([[-0.2,0],[0.2,0],[0,-0.2],[0,0.2],[0.15,0.15],[0.15,-0.15],[-0.15,0.15],[-0.15,-0.15]])
-    #             epsilon = epsilons[np.random.randint(0,8)]
-    #             noise = -2 * 0.01 * random.random() + 0.01
-    #             one_starts_landmark.append(copy.deepcopy(one_starts_agent[k]+epsilon+noise))
-    #         # select_starts.append(one_starts_agent+one_starts_landmark)
-    #         archive.append(one_starts_agent+one_starts_landmark)
-    #         grid = np.zeros(shape=(grid_num,grid_num))
-    #         one_starts_agent = []
-    #         one_starts_landmark = []
-    #     return archive
-
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
         grid_num = int(start_boundary * 2 / cell_size)
+        assert grid_num ** 2 >= now_agent_num
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_agent = []
@@ -441,8 +410,8 @@ def main():
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:
-        actor_base = ATTBase_actor(envs.observation_space[0].shape[0], num_agents)
-        critic_base = ATTBase_critic(envs.observation_space[0].shape[0], num_agents)
+        actor_base = ATTBase_actor_add(envs.observation_space[0].shape[0], num_agents)
+        critic_base = ATTBase_critic_add(envs.observation_space[0].shape[0], num_agents)
         actor_critic = Policy2(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
@@ -571,7 +540,7 @@ def main():
     upper_bound = 0.99
     target_num = 64
     last_agent_num = 0
-    now_agent_num = 16
+    now_agent_num = 32
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 3
@@ -580,11 +549,11 @@ def main():
     historical_length = 5
     next_stage_flag = 0
     frozen_epoch = 9
-    frozen_count = 0
+    frozen_count = 9
     initial_optimizer = False
     eval_flag = False # 只用evaluate
     use_uniform = False # 用uniform train
-    fix_init_set = True
+    fix_init_set = False
     random.seed(args.seed)
     np.random.seed(args.seed)
     now_node = node_buffer(now_agent_num,buffer_length,
@@ -649,7 +618,6 @@ def main():
                 else:    
                     obs = envs.new_starts_obs(starts_now, now_node.agent_num, starts_length_now)
                 # 500 [agent * dim]
-
                 #replay buffer
                 rollouts_now = RolloutStorage_share(now_node.agent_num,
                             now_episode_length, 
@@ -1072,9 +1040,9 @@ def main():
             elif now_node.agent_num==16:
                 agents.num_mini_batch = 96
             elif now_node.agent_num==32:
-                agents.num_mini_batch = 256
+                agents.num_mini_batch = 512
             else:
-                agents.num_mini_batch = 640
+                agents.num_mini_batch = 2024
             # initial_optimizer = True
 
         total_num_steps = current_timestep

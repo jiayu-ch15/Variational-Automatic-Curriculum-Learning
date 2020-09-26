@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO, PPO2
-from algorithm.model import Policy, Policy_pb_2, ATTBase_actor_pb,ATTBase_critic_pb
+from algorithm.model import Policy, Policy_pb_2, ATTBase_actor_pb_add,ATTBase_critic_pb_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -94,10 +94,12 @@ class node_buffer():
             one_starts_box = []
         return archive
 
-    def produce_good_case_grid(self, num_case, start_boundary, now_agent_num, now_box_num):
+    def produce_good_case_grid(self, num_case, start_boundary,now_agent_num, now_box_num):
         # agent_size=0.2, ball_size=0.2,landmark_size=0.3
+        # box在内侧，agent在start_boundary和start_boundary_agent之间
         cell_size = 0.3
         grid_num = int(start_boundary * 2 / cell_size)
+        assert grid_num ** 2 >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_agent = []
@@ -125,7 +127,6 @@ class node_buffer():
                         one_starts_box.append(copy.deepcopy(box_location))
                         break
             indices = random.sample(range(now_box_num), now_box_num)
-            indices_agent = random.sample(range(now_agent_num), now_box_num)
             for k in indices:
                 epsilons = np.array([[-0.3,0],[0.3,0],[0,-0.3],[0,0.3],[0.3,0.3],[0.3,-0.3],[-0.3,0.3],[-0.3,-0.3]])
                 epsilon = epsilons[np.random.randint(0,8)]
@@ -419,8 +420,8 @@ def main():
     #Policy network
     if args.share_policy:
         # share_base = ATTBase_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
-        actor_base = ATTBase_actor_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
-        critic_base = ATTBase_critic_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
+        actor_base = ATTBase_actor_pb_add(envs.observation_space[0].shape[0],num_agents,num_boxes)
+        critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0],num_agents,num_boxes)
         actor_critic = Policy_pb_2(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
@@ -548,7 +549,7 @@ def main():
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.99
-    target_num = 12
+    target_num = 10
     last_box_num = 0
     now_box_num = 2
     now_agent_num = now_box_num

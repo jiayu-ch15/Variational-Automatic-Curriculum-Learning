@@ -1389,7 +1389,6 @@ class ATTBase_actor_pb(NNBase):
         self.box_num = box_num
         self.actor = ObsEncoder_pb(hidden_size=hidden_size)
 
-        self.encoder = ObsEncoder_pb(hidden_size=hidden_size)
         self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
         nn.init.orthogonal_(self.correlation_mat.data, gain=1)
         self.critic_linear = nn.Sequential(
@@ -1418,6 +1417,77 @@ class ATTBase_critic_pb(NNBase):
         self.agent_num = agent_num
         self.box_num = box_num
         self.encoder = ObsEncoder_pb(hidden_size=hidden_size)
+
+        self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
+        nn.init.orthogonal_(self.correlation_mat.data, gain=1)
+
+        self.critic_linear = nn.Sequential(
+                init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
+                nn.LayerNorm(hidden_size),
+                init_(nn.Linear(hidden_size, 1)))
+
+    def forward(self, share_inputs, inputs, agent_num, box_num, rnn_hxs, masks):
+        """
+        share_inputs: [batch_size, obs_dim*agent_num]
+        inputs: [batch_size, obs_dim]
+        """
+        batch_size = inputs.shape[0]
+        obs_dim = inputs.shape[-1]
+        f_ii = self.encoder(inputs, agent_num, box_num, box_num)
+        obs_beta_ij = torch.matmul(f_ii.view(batch_size,1,-1), self.correlation_mat) # (batch,1,hidden_size)
+        
+        # 矩阵f_ij
+        f_ij = self.encoder(share_inputs.reshape(-1,obs_dim),agent_num, box_num,box_num)
+        obs_encoder = f_ij.reshape(batch_size,agent_num,-1) # (batch_size, nagents, hidden_size)
+              
+        beta = torch.matmul(obs_beta_ij, obs_encoder.permute(0,2,1)).squeeze(1) # (batch_size,nagents)
+        alpha = F.softmax(beta,dim = 1).unsqueeze(2) # (batch_size,nagents,1)
+        vi = torch.mul(alpha,obs_encoder)
+        vi = torch.sum(vi,dim = 1)
+        value = self.critic_linear(vi)
+
+        return value, rnn_hxs, rnn_hxs
+
+class ATTBase_actor_pb_add(NNBase):
+    def __init__(self, num_inputs, agent_num, box_num, recurrent=False, assign_id=False, hidden_size=64):
+        super(ATTBase_actor_pb_add, self).__init__(num_inputs, agent_num)
+        if recurrent:
+            num_inputs = hidden_size
+
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+
+        self.agent_num = agent_num
+        self.box_num = box_num
+        self.actor = ObsEncoder_pb_add(hidden_size=hidden_size)
+        self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
+        nn.init.orthogonal_(self.correlation_mat.data, gain=1)
+        self.critic_linear = nn.Sequential(
+                init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
+                nn.LayerNorm(hidden_size),
+                init_(nn.Linear(hidden_size, 1)))
+    
+    def forward(self, inputs, agent_num, box_num):
+        """
+        share_inputs: [batch_size, obs_dim*agent_num]
+        inputs: [batch_size, obs_dim]
+        """
+        hidden_actor = self.actor(inputs, agent_num, box_num, box_num)
+
+        return hidden_actor
+
+class ATTBase_critic_pb_add(NNBase):
+    def __init__(self, num_inputs, agent_num, box_num, recurrent=False, assign_id=False, hidden_size=64):
+        super(ATTBase_critic_pb_add, self).__init__(num_inputs, agent_num)
+        if recurrent:
+            num_inputs = hidden_size
+
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+
+        self.agent_num = agent_num
+        self.box_num = box_num
+        self.encoder = ObsEncoder_pb_add(hidden_size=hidden_size)
 
         self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
         nn.init.orthogonal_(self.correlation_mat.data, gain=1)
@@ -1956,6 +2026,85 @@ class ObsEncoder_pb(nn.Module): # push ball
         landmark_offset = 4 + 2*(adv_num-1) + 2*good_num
         for i in range(landmark_num):
             emb_landmark.append(inputs[:, landmark_offset+2*i:landmark_offset+2*(i+1)])
+
+        emb_adv = torch.stack(emb_adv,dim = 1)    #(batch_size,n_agents-1,eb_dim)
+        emb_adv = self.adv_encoder(emb_adv)
+        beta_adv = torch.matmul(beta_adv_ij, emb_adv.permute(0,2,1)).squeeze(1)
+
+        emb_good = torch.stack(emb_good,dim = 1)    #(batch_size,n_agents-1,eb_dim)
+        emb_good = self.good_encoder(emb_good)
+        beta_good = torch.matmul(beta_good_ij, emb_good.permute(0,2,1)).squeeze(1)
+
+        emb_landmark = torch.stack(emb_landmark,dim = 1)    #(batch_size,n_agents-1,eb_dim)
+        emb_landmark = self.landmark_encoder(emb_landmark)
+        beta_landmark = torch.matmul(beta_landmark_ij, emb_landmark.permute(0,2,1)).squeeze(1)
+
+        alpha_adv = F.softmax(beta_adv,dim = 1).unsqueeze(2)   
+        alpha_good = F.softmax(beta_good,dim = 1).unsqueeze(2)   
+        alpha_landmark = F.softmax(beta_landmark,dim = 1).unsqueeze(2)
+        adv_vi = torch.mul(alpha_adv,emb_adv)
+        adv_vi = torch.sum(adv_vi,dim=1)
+        good_vi = torch.mul(alpha_good,emb_good)
+        good_vi = torch.sum(good_vi,dim=1)
+        landmark_vi = torch.mul(alpha_landmark,emb_landmark)
+        landmark_vi = torch.sum(landmark_vi,dim=1)
+
+        gi = self.fc(emb_self)
+        f = self.encoder_linear(torch.cat([gi, adv_vi, good_vi, landmark_vi], dim=1))
+        return f
+
+class ObsEncoder_pb_add(nn.Module): # push ball
+    def __init__(self, hidden_size=100):
+        super(ObsEncoder_pb_add, self).__init__()
+        
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+        self.self_encoder = nn.Sequential(
+                            init_(nn.Linear(4, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
+        self.landmark_encoder = nn.Sequential(
+                            init_(nn.Linear(3, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
+        self.adv_encoder = nn.Sequential(
+                            init_(nn.Linear(2, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
+        self.good_encoder = nn.Sequential(
+                            init_(nn.Linear(2, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
+
+        self.adv_correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
+        nn.init.orthogonal_(self.adv_correlation_mat.data, gain=1)
+        self.good_correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
+        nn.init.orthogonal_(self.good_correlation_mat.data, gain=1)
+        self.landmark_correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
+        nn.init.orthogonal_(self.landmark_correlation_mat.data, gain=1)
+        self.fc = nn.Sequential(
+                    init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
+        self.encoder_linear = nn.Sequential(
+                            init_(nn.Linear(hidden_size * 4, hidden_size)), nn.Tanh(),
+                            nn.LayerNorm(hidden_size),
+                            init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
+                            nn.LayerNorm(hidden_size))
+
+    def forward(self, inputs, adv_num, good_num, landmark_num):
+        batch_size = inputs.shape[0]
+        obs_dim = inputs.shape[-1]
+        emb_self = self.self_encoder(inputs[:, :4])
+      
+        emb_adv = []
+        beta_adv = []
+        emb_good = []
+        beta_good = []
+        emb_landmark = []
+        beta_landmark = []
+
+        beta_adv_ij = torch.matmul(emb_self.view(batch_size,1,-1), self.adv_correlation_mat)
+        beta_good_ij = torch.matmul(emb_self.view(batch_size,1,-1), self.good_correlation_mat)
+        beta_landmark_ij = torch.matmul(emb_self.view(batch_size,1,-1), self.landmark_correlation_mat) 
+        for i in range(adv_num-1):
+            emb_adv.append(inputs[:, 4+2*i:4+2*(i+1)])
+        good_offset = 4 + 2*(adv_num-1)
+        for i in range(good_num):
+            emb_good.append(inputs[:, good_offset+2*i:good_offset+2*(i+1)])
+        landmark_offset = 4 + 2*(adv_num-1) + 2*good_num
+        for i in range(landmark_num):
+            emb_landmark.append(inputs[:, landmark_offset+3*i:landmark_offset+3*(i+1)])
 
         emb_adv = torch.stack(emb_adv,dim = 1)    #(batch_size,n_agents-1,eb_dim)
         emb_adv = self.adv_encoder(emb_adv)

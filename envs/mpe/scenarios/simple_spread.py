@@ -28,7 +28,8 @@ class Scenario(BaseScenario):
             landmark.name = 'landmark %d' % i
             landmark.collide = False
             landmark.movable = False
-            # landmark.size = 0.12
+            landmark.cover = 0
+            # landmark.size = 0.15
         # make initial conditions
         self.reset_world(world)
         return world
@@ -46,6 +47,14 @@ class Scenario(BaseScenario):
         for i, landmark in enumerate(world.landmarks):
             landmark.state.p_pos = np.random.uniform(-3, +3, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
+    
+    def landmark_cover_state(self, world):
+        for l in world.landmarks:
+            dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents]
+            if min(dists) <= world.agents[0].size + world.landmarks[0].size:
+                l.cover = 1
+            else:
+                l.cover = 0
 
     def benchmark_data(self, agent, world):
         rew = 0
@@ -85,17 +94,23 @@ class Scenario(BaseScenario):
 
     def info_coverage_rate(self, world):
         num = 0
+        entity_cover_state = []
+        infos = {}
         for l in world.landmarks:
             dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents]
             if min(dists) <= world.agents[0].size + world.landmarks[0].size:
                 num = num + 1
+                entity_cover_state.append(1)
+            else:
+                entity_cover_state.append(0)
         return num/len(world.landmarks)
 
     def observation(self, agent, world):
         # get positions of all entities in this agent's reference frame
         entity_pos = []
         for entity in world.landmarks:  # world.entities:
-            entity_pos.append(entity.state.p_pos - agent.state.p_pos)
+            tmp_pos = np.insert((entity.state.p_pos - agent.state.p_pos),0,entity.cover)
+            entity_pos.append(tmp_pos) # 是否被cover
         # entity colors
         entity_color = []
         for entity in world.landmarks:  # world.entities:
@@ -108,7 +123,8 @@ class Scenario(BaseScenario):
             comm.append(other.state.c)
             other_pos.append(other.state.p_pos - agent.state.p_pos)
         return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos + comm)
-    
+
+
     def share_reward(self, world):
         # Agents are rewarded based on minimum agent distance to each landmark, penalized for collisions
         rew = 0
@@ -119,5 +135,5 @@ class Scenario(BaseScenario):
                 rew += 8/len(world.agents)
                 cover_num += 1
         if cover_num == len(world.agents):
-            rew += 2
+            rew += 1
         return 0.1*rew

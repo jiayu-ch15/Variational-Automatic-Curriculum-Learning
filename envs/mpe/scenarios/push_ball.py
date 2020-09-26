@@ -39,6 +39,7 @@ class Scenario(BaseScenario):
             landmark.collide = False
             landmark.movable = False
             landmark.size = 0.15
+            landmark.cover = 0
             # landmark.boundary = False
         # make initial conditions
         self.reset_world(world)
@@ -65,6 +66,14 @@ class Scenario(BaseScenario):
             agent.state.p_pos = np.random.uniform(-1.0, +1.0, world.dim_p)
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
+
+    def landmark_cover_state(self, world):
+        for l in world.landmarks:
+            dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents]
+            if min(dists) <= world.agents[0].size + world.landmarks[0].size:
+                l.cover = 1
+            else:
+                l.cover = 0
 
     def benchmark_data(self, agent, world):
         # returns data for benchmarking purposes
@@ -115,9 +124,9 @@ class Scenario(BaseScenario):
     def observation(self, agent, world):
         # get positions of all entities in this agent's reference frame
         landmark_pos = []
-        for entity in world.landmarks:
-            # if not entity.boundary:
-            landmark_pos.append(entity.state.p_pos - agent.state.p_pos)
+        for entity in world.landmarks:  # world.entities:
+            tmp_pos = np.insert((entity.state.p_pos - agent.state.p_pos),0,entity.cover)
+            landmark_pos.append(tmp_pos) # 是否被cover
         # communication of all other agents
         comm = []
         adv_pos = []
