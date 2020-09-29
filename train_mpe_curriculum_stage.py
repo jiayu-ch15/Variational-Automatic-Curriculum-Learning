@@ -90,44 +90,44 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size)
-        assert grid_num ** 2 >= now_agent_num
+        grid_num = int(start_boundary * 2 / cell_size)+1
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
+        one_starts_landmark_grid = []
         one_starts_agent = []
-        one_starts_agent_grid = []
         archive = [] 
         for j in range(num_case):
             for i in range(now_agent_num):
                 while 1:
-                    agent_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                    landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                    if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
                         continue
                     else:
-                        grid[agent_location_grid[0],agent_location_grid[1]] = 1
-                        one_starts_agent_grid.append(copy.deepcopy(agent_location_grid))
-                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
-                        one_starts_agent.append(copy.deepcopy(agent_location))
+                        grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
+                        one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary
+                        one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
             for k in indices:
-                epsilons = np.array([[-1,0],[1,0],[0,1],[0,1],[1,1],[1,-1],[-1,1],[-1,-1]])
+                epsilons = np.array([[-1,0],[1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]])
                 epsilon = epsilons[random.sample(range(8),8)]
+                # extra_room = -2 * 0.02 * random.random() + 0.02
                 for epsilon_id in range(epsilon.shape[0]):
-                    landmark_location_grid = one_starts_agent_grid[k] + epsilon[epsilon_id]
-                    if landmark_location_grid[0] > grid.shape[0]-1 or landmark_location_grid[1] > grid.shape[1]-1 \
-                        or landmark_location_grid[0] <0 or landmark_location_grid[1] < 0:
+                    agent_location_grid = one_starts_landmark_grid[k] + epsilons[epsilon_id]
+                    if agent_location_grid[0] > grid.shape[0]-1 or agent_location_grid[1] > grid.shape[1]-1 \
+                        or agent_location_grid[0] <0 or agent_location_grid[1] < 0:
                         continue
-                    if grid[landmark_location_grid[0],landmark_location_grid[1]]!=2:
-                        grid[landmark_location_grid[0],landmark_location_grid[1]]=2
+                    if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
+                        grid[agent_location_grid[0],agent_location_grid[1]]=2
                         break
-                landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary
-                one_starts_landmark.append(copy.deepcopy(landmark_location))
+                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary 
+                one_starts_agent.append(copy.deepcopy(agent_location))
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
             one_starts_agent = []
-            one_starts_agent_grid = []
+            one_starts_landmark_grid = []
             one_starts_landmark = []
         return archive
 
@@ -533,23 +533,23 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 1.0
+    start_boundary = 0.3
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.99
     target_num = 64
     last_agent_num = 0
-    now_agent_num = 32
+    now_agent_num = 4
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
-    check_frequency = 3
+    check_frequency = 1
     save_node_frequency = 1
     save_node_flag = True
     historical_length = 5
     next_stage_flag = 0
-    frozen_epoch = 9
-    frozen_count = 9
+    frozen_epoch = 6
+    frozen_count = 6
     initial_optimizer = False
     eval_flag = False # 只用evaluate
     use_uniform = False # 用uniform train
@@ -878,7 +878,7 @@ def main():
                 if now_node.agent_num == 4:
                     episode_length = 70
                 else:
-                    episode_length = 300
+                    episode_length = 200
                 #replay buffer
                 rollouts = RolloutStorage_share(now_node.agent_num,
                             episode_length, 
@@ -1027,7 +1027,7 @@ def main():
             frozen_count = 0
             actor_critic.agents_num = now_node.agent_num
             check_frequency = 1
-            now_episode_length = 150
+            now_episode_length = 120
             # agents.ppo_epoch = 5
             now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=args.n_rollout_threads,

@@ -132,8 +132,8 @@ class Scenario(BaseScenario):
         for l in world.landmarks:
             dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents]
             if min(dists) < world.agents[0].size + world.landmarks[0].size:
-                rew += 8/len(world.agents)
+                # rew += 8/len(world.agents)
                 cover_num += 1
         if cover_num == len(world.agents):
-            rew += 1
+            rew += 4
         return 0.1*rew

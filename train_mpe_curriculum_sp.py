@@ -90,44 +90,44 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size)
-        assert grid_num ** 2 >= now_agent_num
+        grid_num = int(start_boundary * 2 / cell_size)+1
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
+        one_starts_landmark_grid = []
         one_starts_agent = []
-        one_starts_agent_grid = []
         archive = [] 
         for j in range(num_case):
             for i in range(now_agent_num):
                 while 1:
-                    agent_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                    landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                    if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
                         continue
                     else:
-                        grid[agent_location_grid[0],agent_location_grid[1]] = 1
-                        one_starts_agent_grid.append(copy.deepcopy(agent_location_grid))
-                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
-                        one_starts_agent.append(copy.deepcopy(agent_location))
+                        grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
+                        one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary
+                        one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
             for k in indices:
-                epsilons = np.array([[-1,0],[1,0],[0,1],[0,1],[1,1],[1,-1],[-1,1],[-1,-1]])
+                epsilons = np.array([[-1,0],[1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]])
                 epsilon = epsilons[random.sample(range(8),8)]
+                # extra_room = -2 * 0.02 * random.random() + 0.02
                 for epsilon_id in range(epsilon.shape[0]):
-                    landmark_location_grid = one_starts_agent_grid[k] + epsilon[epsilon_id]
-                    if landmark_location_grid[0] > grid.shape[0]-1 or landmark_location_grid[1] > grid.shape[1]-1 \
-                        or landmark_location_grid[0] <0 or landmark_location_grid[1] < 0:
+                    agent_location_grid = one_starts_landmark_grid[k] + epsilons[epsilon_id]
+                    if agent_location_grid[0] > grid.shape[0]-1 or agent_location_grid[1] > grid.shape[1]-1 \
+                        or agent_location_grid[0] <0 or agent_location_grid[1] < 0:
                         continue
-                    if grid[landmark_location_grid[0],landmark_location_grid[1]]!=2:
-                        grid[landmark_location_grid[0],landmark_location_grid[1]]=2
+                    if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
+                        grid[agent_location_grid[0],agent_location_grid[1]]=2
                         break
-                landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary
-                one_starts_landmark.append(copy.deepcopy(landmark_location))
+                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary 
+                one_starts_agent.append(copy.deepcopy(agent_location))
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
             one_starts_agent = []
-            one_starts_agent_grid = []
+            one_starts_landmark_grid = []
             one_starts_landmark = []
         return archive
 

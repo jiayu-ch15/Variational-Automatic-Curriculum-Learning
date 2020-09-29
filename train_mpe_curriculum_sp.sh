@@ -4,7 +4,7 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-algo="check_true"
+algo="check_sp_true"
 seed_max=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"
