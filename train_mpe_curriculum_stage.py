@@ -535,14 +535,14 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 1.0
+    start_boundary = 0.3
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.99
     target_num = 64
     last_agent_num = 0
-    now_agent_num = 8
+    now_agent_num = 4
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
@@ -551,7 +551,7 @@ def main():
     historical_length = 5
     next_stage_flag = 0
     frozen_epoch = 6
-    frozen_count = 0
+    frozen_count = 6
     initial_optimizer = False
     eval_flag = False # 只用evaluate
     use_uniform = False # 用uniform train
@@ -576,10 +576,9 @@ def main():
     starts_length_now = args.n_rollout_threads
 
     # good model
-    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/occupy_reward_true_penalty_without_grad_clip/run1/models/4agent_model.pt')['model'].to(device)
-    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/ours/run2/models/agent_model.pt')['model'].to(device)
-    actor_critic.agents_num = now_node.agent_num
-    agents.actor_critic = actor_critic
+    # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run2/models/agent_model.pt')['model'].to(device)
+    # actor_critic.agents_num = now_node.agent_num
+    # agents.actor_critic = actor_critic
     # pdb.set_trace()
 
     for episode in range(episodes):
@@ -815,12 +814,6 @@ def main():
                 # update the network
                 if args.share_policy:
                     actor_critic.train()
-                    # value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, warm_up=False, initialize_optimizer=False)  
-                    # if initial_optimizer: # critic,actor同时更新
-                    #     value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, False, initial_optimizer=True)  
-                    #     initial_optimizer = False
-                    # else:
-                    #     value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, False, initial_optimizer=False)
                     if frozen_epoch==frozen_count: # critic,actor同时更新
                         value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, False, initial_optimizer=False) 
                         print('actor and critic update') 
@@ -837,6 +830,7 @@ def main():
                     logger.add_scalars('average_episode_reward',
                         {'average_episode_reward': np.mean(rew)},
                         current_timestep)
+                    print('average_episode_reward: ', np.mean(rew))
                     # clean the buffer and reset
                     rollouts_now.after_update()
                 else: # 需要修改成同时update的版本

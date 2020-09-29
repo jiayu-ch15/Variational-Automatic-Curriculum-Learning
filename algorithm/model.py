@@ -30,7 +30,7 @@ class Flatten(nn.Module):
 
 class Policy3(nn.Module): # actor critic分开，把dist放入actor
     def __init__(self, obs_space, action_space, num_agents, base = None, actor_base=None, critic_base=None, base_kwargs=None, device=torch.device("cpu")):
-        super(Policy2, self).__init__()
+        super(Policy3, self).__init__()
         self.mixed_obs = False
         self.mixed_action = False
         self.multi_discrete = False
@@ -161,6 +161,39 @@ class Policy3(nn.Module): # actor critic分开，把dist放入actor
         value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.agents_num, rnn_hxs_actor, masks)    
 
         return value, action_log_probs_out, dist_entropy_out, rnn_hxs_actor, rnn_hxs_critic
+
+class ATTBase_actor_dist_add(nn.module):
+    def __init__(self, num_inputs, action_space, agent_num, recurrent=False, assign_id=False, hidden_size=64):
+        super(ATTBase_actor_dist_add, self).__init__()
+        if recurrent:
+            num_inputs = hidden_size
+
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+
+        self.agent_num = agent_num
+        self.actor = ObsEncoder_add(hidden_size=hidden_size)
+        num_actions = action_space.n            
+        self.dist = Categorical(hidden_size, num_actions)
+
+    def forward(self, inputs, agent_num, deterministic=False):
+        """
+        inputs: [batch_size, obs_dim]
+        """
+        hidden_actor = self.actor(inputs, agent_num)
+        dist = self.dist(hidden_actor, None)
+        if deterministic:
+            action = dist.mode()
+        else:
+            action = dist.sample()
+        action_log_probs = dist.log_probs(action)
+        dist_entropy = dist.entropy()
+
+        action_out = action
+        action_log_probs_out = action_log_probs 
+        dist_entropy_out = dist_entropy.mean()
+
+        return action_out, action_log_probs_out, dist_entropy_out
 
 class Policy2(nn.Module): # actor critic分开
     def __init__(self, obs_space, action_space, num_agents, base = None, actor_base=None, critic_base=None, base_kwargs=None, device=torch.device("cpu")):
@@ -1857,39 +1890,6 @@ class ATTBase_actor_add(NNBase):
         hidden_actor = self.actor(inputs, agent_num)
 
         return hidden_actor
-
-class ATTBase_actor_dist_add(NNBase):
-    def __init__(self, num_inputs, action_space, agent_num, recurrent=False, assign_id=False, hidden_size=64):
-        super(ATTBase_actor_dist_add, self).__init__(num_inputs, agent_num)
-        if recurrent:
-            num_inputs = hidden_size
-
-        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-                               constant_(x, 0), np.sqrt(2))
-
-        self.agent_num = agent_num
-        self.actor = ObsEncoder_add(hidden_size=hidden_size)
-        num_actions = action_space.n            
-        self.dist = Categorical(self.base.output_size, num_actions)
-
-    def forward(self, inputs, agent_num, deterministic=False):
-        """
-        inputs: [batch_size, obs_dim]
-        """
-        hidden_actor = self.actor(inputs, agent_num)
-        dist = self.dist(hidden_actor, None)
-        if deterministic:
-            action = dist.mode()
-        else:
-            action = dist.sample()
-        action_log_probs = dist.log_probs(action)
-        dist_entropy = dist.entropy()
-
-        action_out = action
-        action_log_probs_out = action_log_probs 
-        dist_entropy_out = dist_entropy.mean()
-
-        return action_out, action_log_probs_out, dist_entropy_out
 
 class ATTBase_critic_add(NNBase):
     def __init__(self, num_inputs, agent_num, recurrent=False, assign_id=False, hidden_size=64):

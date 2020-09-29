@@ -1162,7 +1162,6 @@ class PPO3():
                         self.optimizer_critic.step()
                         if warm_up == False:
                             self.optimizer_actor.step()
-                            self.optimizer_dist.step()
                     count_stop_step += 1
                 else:
                     self.optimizer_actor.zero_grad()

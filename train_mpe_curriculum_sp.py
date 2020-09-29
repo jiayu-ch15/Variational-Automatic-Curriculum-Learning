@@ -13,8 +13,8 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO
-from algorithm.model import Policy, ATTBase_add
+from algorithm.ppo import PPO,PPO3
+from algorithm.model import Policy,Policy3, ATTBase_add, ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -411,11 +411,14 @@ def main():
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:
-        share_base = ATTBase_add(envs.observation_space[0].shape[0], num_agents)
-        actor_critic = Policy(envs.observation_space[0], 
+        actor_base = ATTBase_actor_dist_add(envs.observation_space[0].shape[0], envs.action_space[0], num_agents)
+        critic_base = ATTBase_critic_add(envs.observation_space[0].shape[0], num_agents)
+        actor_critic = Policy3(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
-                    base=share_base,
+                    base=None,
+                    actor_base=actor_base,
+                    critic_base=critic_base,
                     base_kwargs={'naive_recurrent': args.naive_recurrent_policy,
                                  'recurrent': args.recurrent_policy,
                                  'hidden_size': args.hidden_size,
@@ -435,7 +438,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO(actor_critic,
+        agents = PPO3(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
@@ -521,17 +524,20 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-    use_parent_novelty = True
+    use_parent_novelty = False
     use_child_novelty = False
     use_novelty_sample = True
-    use_parent_sample = True
-    del_switch = 'novelty'
+    use_parent_sample = False
+    del_switch = 'old'
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 300
+    if use_parent_sample:
+        N_parent = 50
+    else:
+        N_parent = 0
     N_archive = 150
-    N_parent = 50
+    N_child = args.n_rollout_threads - N_archive
     max_step = 0.6
     TB = 1
     M = N_child
@@ -549,7 +555,7 @@ def main():
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 1
-    save_node_flag = False
+    save_node_flag = True
     historical_length = 5
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -767,8 +773,10 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share(num_agents, rollouts)
-                            
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
+                logger.add_scalars('value_loss',
+                    {'value_loss': value_loss},
+                    current_timestep)
                 rew = []
                 for i in range(rollouts.rewards.shape[1]):
                     rew.append(np.sum(rollouts.rewards[:,i]))
@@ -940,8 +948,11 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            logger.add_scalars('%iagent/cover_rate' %last_node.agent_num,{'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
+            logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
+            if mean_cover_rate >= 0.9 and args.algorithm_name=='ours':
+                torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")
             print('test_agent_num: ', last_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
 

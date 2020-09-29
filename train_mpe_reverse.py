@@ -13,8 +13,8 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO
-from algorithm.model import Policy, ATTBase_add
+from algorithm.ppo import PPO,PPO3
+from algorithm.model import Policy,Policy3,ATTBase_actor_dist_add,ATTBase_critic_add, ATTBase_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -92,43 +92,44 @@ class node_buffer():
         # agent_size=0.1
         cell_size = 0.2
         grid_num = int(start_boundary * 2 / cell_size)
-        assert grid_num ** 2 >= now_agent_num
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
+        one_starts_landmark_grid = []
         one_starts_agent = []
-        one_starts_agent_grid = []
         archive = [] 
         for j in range(num_case):
             for i in range(now_agent_num):
                 while 1:
-                    agent_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                    landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                    extra_room = -2 * 0.05 * random.random() + 0.05
+                    if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
                         continue
                     else:
-                        grid[agent_location_grid[0],agent_location_grid[1]] = 1
-                        one_starts_agent_grid.append(copy.deepcopy(agent_location_grid))
-                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
-                        one_starts_agent.append(copy.deepcopy(agent_location))
+                        grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
+                        one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary+extra_room
+                        one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
             for k in indices:
-                epsilons = np.array([[-1,0],[1,0],[0,1],[0,1],[1,1],[1,-1],[-1,1],[-1,-1]])
+                epsilons = np.array([[-1,0],[1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]])
                 epsilon = epsilons[random.sample(range(8),8)]
+                # extra_room = -2 * 0.02 * random.random() + 0.02
                 for epsilon_id in range(epsilon.shape[0]):
-                    landmark_location_grid = one_starts_agent_grid[k] + epsilon[epsilon_id]
-                    if landmark_location_grid[0] > grid.shape[0]-1 or landmark_location_grid[1] > grid.shape[1]-1 \
-                        or landmark_location_grid[0] <0 or landmark_location_grid[1] < 0:
+                    agent_location_grid = one_starts_landmark_grid[k] + epsilons[epsilon_id]
+                    if agent_location_grid[0] > grid.shape[0]-1 or agent_location_grid[1] > grid.shape[1]-1 \
+                        or agent_location_grid[0] <0 or agent_location_grid[1] < 0:
                         continue
-                    if grid[landmark_location_grid[0],landmark_location_grid[1]]!=2:
-                        grid[landmark_location_grid[0],landmark_location_grid[1]]=2
+                    if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
+                        grid[agent_location_grid[0],agent_location_grid[1]]=2
                         break
-                landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary
-                one_starts_landmark.append(copy.deepcopy(landmark_location))
+                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary 
+                one_starts_agent.append(copy.deepcopy(agent_location))
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
             one_starts_agent = []
-            one_starts_agent_grid = []
+            one_starts_landmark_grid = []
             one_starts_landmark = []
         return archive
 
@@ -266,19 +267,21 @@ class node_buffer():
 
     def move_nodes_reverse(self, one_length, Rmax, Rmin):
         self.add_archive = []
+        self.add_child = []
         del_archive_num = 0
         for i in range(one_length):
             if i < len(self.childlist): # 保留的点
                 if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
-                    self.add_archive.append(copy.deepcopy(self.childlist[self.childlist[i]]))
+                    self.add_child.append(copy.deepcopy(self.childlist[i]))
+                    self.add_archive.append(copy.deepcopy(self.childlist[i]))
             else:
-                if self.eval_score[i]>Rmax or self.eval_score[i]<Rmin:
+                if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
+                    self.add_child.append(copy.deepcopy(self.archive[self.choose_archive_index[i-len(self.childlist)]-del_archive_num]))
+                elif self.eval_score[i]>Rmax:
                     del self.archive[self.choose_archive_index[i-len(self.childlist)]-del_archive_num]
                     del_archive_num += 1
-                else:
-                    self.add_archive.append(copy.deepcopy(self.archive[self.choose_archive_index[i-len(self.childlist)]-del_archive_num]))
-        self.childlist = copy.deepcopy(self.add_archive)
-        self.archive += self.childlist
+        self.childlist = copy.deepcopy(self.add_child)
+        self.archive += self.add_archive
 
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
@@ -441,11 +444,14 @@ def main():
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:
-        share_base = ATTBase_add(envs.observation_space[0].shape[0], num_agents)
-        actor_critic = Policy(envs.observation_space[0], 
+        actor_base = ATTBase_actor_dist_add(envs.observation_space[0].shape[0], envs.action_space[0], num_agents)
+        critic_base = ATTBase_critic_add(envs.observation_space[0].shape[0], num_agents)
+        actor_critic = Policy3(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
-                    base=share_base,
+                    base=None,
+                    actor_base=actor_base,
+                    critic_base=critic_base,
                     base_kwargs={'naive_recurrent': args.naive_recurrent_policy,
                                  'recurrent': args.recurrent_policy,
                                  'hidden_size': args.hidden_size,
@@ -465,7 +471,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO(actor_critic,
+        agents = PPO3(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
@@ -580,7 +586,7 @@ def main():
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 1
-    save_node_flag = False
+    save_node_flag = True
     historical_length = 5
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -804,7 +810,10 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share(num_agents, rollouts)
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
+                logger.add_scalars('value_loss',
+                    {'value_loss': value_loss},
+                    current_timestep)
                             
                 rew = []
                 for i in range(rollouts.rewards.shape[1]):
@@ -976,9 +985,10 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            logger.add_scalars('%iagent/cover_rate' %now_node.agent_num,{'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
+            logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
-            print('test_agent_num: ', now_node.agent_num)
+            print('test_agent_num: ', last_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
 
         total_num_steps = current_timestep
