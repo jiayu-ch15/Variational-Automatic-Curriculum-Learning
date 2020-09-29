@@ -90,7 +90,7 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size)+1
+        grid_num = int(start_boundary * 2 / cell_size)
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_landmark_grid = []
@@ -100,12 +100,13 @@ class node_buffer():
             for i in range(now_agent_num):
                 while 1:
                     landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                    extra_room = -2 * 0.05 * random.random() + 0.05
                     if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
                         continue
                     else:
                         grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
                         one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary+extra_room
                         one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
@@ -675,7 +676,7 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
-                step_cover_rate[:,step] = np.array(infos)[:,0]
+                step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -939,9 +940,9 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            logger.add_scalars('%iagent/cover_rate' %now_node.agent_num,{'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            logger.add_scalars('%iagent/cover_rate' %last_node.agent_num,{'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
-            print('test_agent_num: ', now_node.agent_num)
+            print('test_agent_num: ', last_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
 
         total_num_steps = current_timestep

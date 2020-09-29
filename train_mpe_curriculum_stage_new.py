@@ -145,7 +145,7 @@ class node_buffer():
                 epsilons = np.array([[-1,0],[1,0],[0,1],[0,1],[1,1],[1,-1],[-1,1],[-1,-1]])
                 epsilon = epsilons[random.sample(range(8),8)]
                 for epsilon_id in range(epsilon.shape[0]):
-                    landmark_location_grid = one_starts_agent_grid[k] + epsilon[epsilon_id]
+                    landmark_location_grid = one_starts_agent_grid[k] + epsilons[epsilon_id]
                     if landmark_location_grid[0] > grid.shape[0]-1 or landmark_location_grid[1] > grid.shape[1]-1 \
                         or landmark_location_grid[0] <0 or landmark_location_grid[1] < 0:
                         continue

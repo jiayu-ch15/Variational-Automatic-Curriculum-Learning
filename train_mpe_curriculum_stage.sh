@@ -4,7 +4,7 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-algo='check_true'
+algo='ours_warmup'
 # algo='check'
 seed_max=1
 

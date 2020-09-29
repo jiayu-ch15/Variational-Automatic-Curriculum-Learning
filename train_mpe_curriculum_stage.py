@@ -13,8 +13,8 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO, PPO2
-from algorithm.model import Policy, Policy2, ATTBase_actor_add, ATTBase_critic_add
+from algorithm.ppo import PPO, PPO2, PPO3
+from algorithm.model import Policy, Policy2, Policy3, ATTBase_actor_add, ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -90,7 +90,7 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size)+1
+        grid_num = int(start_boundary * 2 / cell_size)
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_landmark_grid = []
@@ -100,12 +100,13 @@ class node_buffer():
             for i in range(now_agent_num):
                 while 1:
                     landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                    extra_room = -2 * 0.05 * random.random() + 0.05
                     if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
                         continue
                     else:
                         grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
                         one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary+extra_room
                         one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
@@ -410,9 +411,10 @@ def main():
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:
-        actor_base = ATTBase_actor_add(envs.observation_space[0].shape[0], num_agents)
+        # actor_base = ATTBase_actor_add(envs.observation_space[0].shape[0], num_agents)
+        actor_base = ATTBase_actor_dist_add(envs.observation_space[0].shape[0], envs.action_space[0], num_agents)
         critic_base = ATTBase_critic_add(envs.observation_space[0].shape[0], num_agents)
-        actor_critic = Policy2(envs.observation_space[0], 
+        actor_critic = Policy3(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
                     base=None,
@@ -437,7 +439,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO2(actor_critic,
+        agents = PPO3(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
@@ -533,14 +535,14 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 0.3
+    start_boundary = 1.0
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.99
     target_num = 64
     last_agent_num = 0
-    now_agent_num = 4
+    now_agent_num = 8
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
@@ -549,7 +551,7 @@ def main():
     historical_length = 5
     next_stage_flag = 0
     frozen_epoch = 6
-    frozen_count = 6
+    frozen_count = 0
     initial_optimizer = False
     eval_flag = False # 只用evaluate
     use_uniform = False # 用uniform train
@@ -575,9 +577,9 @@ def main():
 
     # good model
     # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/occupy_reward_true_penalty_without_grad_clip/run1/models/4agent_model.pt')['model'].to(device)
-    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/big_penalty_big_success/run1/models/8agent_model.pt')['model'].to(device)
-    # actor_critic.agents_num = now_node.agent_num
-    # agents.actor_critic = actor_critic
+    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/ours/run2/models/agent_model.pt')['model'].to(device)
+    actor_critic.agents_num = now_node.agent_num
+    agents.actor_critic = actor_critic
     # pdb.set_trace()
 
     for episode in range(episodes):

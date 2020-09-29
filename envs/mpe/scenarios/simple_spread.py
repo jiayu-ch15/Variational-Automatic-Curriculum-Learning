@@ -88,7 +88,6 @@ class Scenario(BaseScenario):
             for a in world.agents:
                 if self.is_collision(a, agent) and a!=agent:
                     rew -= 1
-                    # rew -= 1
                     break
         return 0.1*rew
 
