@@ -90,7 +90,7 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size)
+        grid_num = int(start_boundary * 2 / cell_size) + 1
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_landmark_grid = []
@@ -526,8 +526,8 @@ def main():
     
     use_parent_novelty = False
     use_child_novelty = False
-    use_novelty_sample = True
-    use_parent_sample = False
+    use_novelty_sample = False
+    use_parent_sample = True
     del_switch = 'old'
     child_novelty_threshold = 0.8
     starts = []
@@ -537,7 +537,7 @@ def main():
     else:
         N_parent = 0
     N_archive = 150
-    N_child = args.n_rollout_threads - N_archive
+    N_child = args.n_rollout_threads - N_archive - N_parent
     max_step = 0.6
     TB = 1
     M = N_child

@@ -535,14 +535,14 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 0.3
+    start_boundary = 1.0
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.99
+    upper_bound = 0.97
     target_num = 64
     last_agent_num = 0
-    now_agent_num = 4
+    now_agent_num = 8
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
@@ -551,7 +551,7 @@ def main():
     historical_length = 5
     next_stage_flag = 0
     frozen_epoch = 6
-    frozen_count = 6
+    frozen_count = 0
     initial_optimizer = False
     eval_flag = False # 只用evaluate
     use_uniform = False # 用uniform train
@@ -576,9 +576,9 @@ def main():
     starts_length_now = args.n_rollout_threads
 
     # good model
-    # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run2/models/agent_model.pt')['model'].to(device)
-    # actor_critic.agents_num = now_node.agent_num
-    # agents.actor_critic = actor_critic
+    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/optimizer2_true/run1/models/agent_model.pt')['model'].to(device)
+    actor_critic.agents_num = now_node.agent_num
+    agents.actor_critic = actor_critic
     # pdb.set_trace()
 
     for episode in range(episodes):
@@ -1018,7 +1018,7 @@ def main():
                     torch.save({'model': actor_critic}, str(save_dir) + "/%iagent_model.pt"%now_node.agent_num)
         if next_stage_flag==1:
             next_stage_flag = 0
-            start_boundary = 1.0
+            start_boundary = 3.0
             max_step=0.6
             frozen_count = 0
             actor_critic.agents_num = now_node.agent_num

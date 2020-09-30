@@ -91,7 +91,7 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size)
+        grid_num = int(start_boundary * 2 / cell_size) + 1
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_landmark_grid = []
@@ -278,6 +278,7 @@ class node_buffer():
                 if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
                     self.add_child.append(copy.deepcopy(self.archive[self.choose_archive_index[i-len(self.childlist)]-del_archive_num]))
                 elif self.eval_score[i]>Rmax:
+                    print('output: ', self.choose_archive_index[i-len(self.childlist)]-del_archive_num)
                     del self.archive[self.choose_archive_index[i-len(self.childlist)]-del_archive_num]
                     del_archive_num += 1
         self.childlist = copy.deepcopy(self.add_child)
@@ -562,7 +563,7 @@ def main():
     use_novelty_sample = False
     use_parent_sample = False
     use_reverse_goal = True
-    del_switch = 'novelty'
+    del_switch = 'old'
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
