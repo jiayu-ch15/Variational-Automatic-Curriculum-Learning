@@ -548,14 +548,14 @@ def main():
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.99
-    target_num = 10
+    upper_bound = 0.95
+    target_num = 2
     last_box_num = 0
     now_box_num = 2
     now_agent_num = now_box_num
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
-    check_frequency = 1
+    check_frequency = 3
     save_node_frequency = 1
     save_node_flag = True
     historical_length = 5
@@ -577,7 +577,7 @@ def main():
     
     # run
     begin = time.time()
-    episodes = int(args.num_env_steps) // now_episode_length // args.n_rollout_threads
+    episodes = int(args.num_env_steps) // now_episode_length // args.n_rollout_threads // eval_frequency
     curriculum_episode = 0
     current_timestep = 0
     one_length_now = args.n_rollout_threads

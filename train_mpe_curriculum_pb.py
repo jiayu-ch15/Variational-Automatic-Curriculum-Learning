@@ -13,8 +13,8 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO
-from algorithm.model import Policy_pb, ATTBase_pb
+from algorithm.ppo import PPO, PPO3
+from algorithm.model import Policy_pb, Policy_pb_3, ATTBase_pb, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -94,6 +94,52 @@ class node_buffer():
             one_starts_box = []
         return archive
 
+    def produce_good_case_grid(self, num_case, start_boundary,now_agent_num, now_box_num):
+        # agent_size=0.2, ball_size=0.2,landmark_size=0.3
+        # box在内侧，agent在start_boundary和start_boundary_agent之间
+        cell_size = 0.3
+        grid_num = int(start_boundary * 2 / cell_size)
+        assert grid_num ** 2 >= now_agent_num + now_box_num
+        grid = np.zeros(shape=(grid_num,grid_num))
+        one_starts_landmark = []
+        one_starts_agent = []
+        one_starts_box = []
+        archive = [] 
+        for j in range(num_case):
+            for i in range(now_agent_num):
+                while 1:
+                    agent_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                    if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                        continue
+                    else:
+                        grid[agent_location_grid[0],agent_location_grid[1]] = 1
+                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
+                        one_starts_agent.append(copy.deepcopy(agent_location))
+                        break
+            for i in range(now_box_num):
+                while 1:
+                    box_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                    if grid[box_location_grid[0],box_location_grid[1]]==1:
+                        continue
+                    else:
+                        grid[box_location_grid[0],box_location_grid[1]] = 1
+                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
+                        one_starts_box.append(copy.deepcopy(box_location))
+                        break
+            indices = random.sample(range(now_box_num), now_box_num)
+            for k in indices:
+                epsilons = np.array([[-0.3,0],[0.3,0],[0,-0.3],[0,0.3],[0.3,0.3],[0.3,-0.3],[-0.3,0.3],[-0.3,-0.3]])
+                epsilon = epsilons[np.random.randint(0,8)]
+                noise = -2 * 0.01 * random.random() + 0.01
+                one_starts_landmark.append(copy.deepcopy(one_starts_box[k]+epsilon+noise))
+            # select_starts.append(one_starts_agent+one_starts_landmark)
+            archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
+            grid = np.zeros(shape=(grid_num,grid_num))
+            one_starts_agent = []
+            one_starts_landmark = []
+            one_starts_box = []
+        return archive
+
     def get_novelty(self,list1,list2):
         # list1是需要求novelty的
         topk=5
@@ -114,13 +160,13 @@ class node_buffer():
         return buffer_new, buffer_novelty_new
 
     def SampleNearby_novelty(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
-        # if len(self.parent_all) > self.topk + 1:
-        #     self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
-        #     self.parent_all, self.parent_all_novelty = self.novelty_sort(self.parent_all, self.parent_all_novelty)
-        #     novelty_threshold = np.mean(self.parent_all_novelty)
-        # else:
-        #     novelty_threshold = 0
-        novelty_threshold = child_novelty_threshold
+        if len(self.parent_all) > self.topk + 1:
+            self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
+            self.parent_all, self.parent_all_novelty = self.novelty_sort(self.parent_all, self.parent_all_novelty)
+            novelty_threshold = np.mean(self.parent_all_novelty)
+        else:
+            novelty_threshold = 0
+        # novelty_threshold = child_novelty_threshold
         writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
                 {'novelty_threshold': novelty_threshold},timestep)
         parents = parents + []
@@ -373,13 +419,16 @@ def main():
     num_boxes = args.num_landmarks
     #Policy network
     if args.share_policy:
-        # obs_shape = [envs.observation_space[0].shape[0],[num_agents-1,2],[num_box*2,2],[1,4]]
-        share_base = ATTBase_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
-        actor_critic = Policy_pb(envs.observation_space[0],
+        # share_base = ATTBase_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
+        actor_base = ATTBase_actor_dist_pb_add(envs.observation_space[0].shape[0], envs.action_space[0],num_agents,num_boxes)
+        critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0],num_agents,num_boxes)
+        actor_critic = Policy_pb_3(envs.observation_space[0],
                     envs.action_space[0],
                     num_agents = num_agents,
                     num_box = num_boxes,
-                    base=share_base,
+                    base=None,
+                    actor_base=actor_base,
+                    critic_base=critic_base,
                     base_kwargs={'naive_recurrent': args.naive_recurrent_policy,
                                  'recurrent': args.recurrent_policy,
                                  'hidden_size': args.hidden_size,
@@ -399,7 +448,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO(actor_critic,
+        agents = PPO3(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
@@ -485,8 +534,8 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-    use_parent_novelty = True
-    use_child_novelty = False # 无效
+    use_parent_novelty = False # 关闭
+    use_child_novelty = False # 关闭
     use_novelty_sample = True
     use_parent_sample = True
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
@@ -494,8 +543,8 @@ def main():
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 150
-    N_archive = 300
+    N_child = 300
+    N_archive = 150
     N_parent = 50
     max_step = 0.1
     TB = 1
@@ -508,13 +557,14 @@ def main():
     test_flag = 0
     reproduce_flag = 0
     last_agent_num = 2
-    last_box_num = 4
+    last_box_num = 2
     now_agent_num = num_agents
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
-    check_frequency = 5
-    save_node_frequency = 5
+    check_frequency = 1
+    save_node_frequency = 1
     save_node_flag = True
+    save_90_flag = True
     historical_length = 5
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -528,7 +578,7 @@ def main():
     
     # run
     begin = time.time()
-    episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads
+    episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads // eval_frequency
     curriculum_episode = 0
     one_length = args.n_rollout_threads
     starts_length = args.n_rollout_threads
@@ -544,7 +594,7 @@ def main():
         # reproduction
         if use_samplenearby:
             if use_novelty_sample:
-                last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, curriculum_episode * args.episode_length * starts_length)
+                last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
             else:
                 last_node.childlist += last_node.SampleNearby(last_node.parent)
         
@@ -689,8 +739,9 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            logger.add_scalars('agent/traing_cover_rate',{'training_cover_rate': np.mean(infos)}, curriculum_episode * args.episode_length * starts_length)
+            logger.add_scalars('agent/traing_cover_rate',{'training_cover_rate': np.mean(infos)}, current_timestep)
             curriculum_episode += 1
+            current_timestep += args.episode_length * starts_length
             last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
                                         
             with torch.no_grad():  # get value and compute return
@@ -732,16 +783,16 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share(num_agents, rollouts)
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
                 logger.add_scalars('value_loss',
                     {'value_loss': value_loss},
-                    curriculum_episode * args.episode_length * starts_length)      
+                    current_timestep)      
                 rew = []
                 for i in range(rollouts.rewards.shape[1]):
                     rew.append(np.sum(rollouts.rewards[:,i]))
                 logger.add_scalars('average_episode_reward',
                     {'average_episode_reward': np.mean(rew)},
-                    curriculum_episode * args.episode_length * starts_length)
+                    current_timestep)
                 # clean the buffer and reset
                 rollouts.after_update()
             else:
@@ -805,7 +856,7 @@ def main():
                     rollouts[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
                     rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                     rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
-            step_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
+            test_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
             for step in range(episode_length):
                 # Sample actions
                 values = []
@@ -863,7 +914,7 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
-                step_cover_rate[:,step] = np.array(infos)[:,0]
+                test_cover_rate[:,step] = np.array(infos)[:,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -908,9 +959,16 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            logger.add_scalars('agent/cover_rate',{'cover_rate': np.mean(infos)}, curriculum_episode * args.episode_length * starts_length)
+            logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
+            logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
+            if mean_cover_rate >= 0.9 and args.algorithm_name=='ours_pb' and save_90_flag:
+                torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")
+                save_90_flag = False
+            print('test_agent_num: ', last_node.agent_num)
+            print('test_mean_cover_rate: ', mean_cover_rate)
 
-        total_num_steps = curriculum_episode * args.episode_length * starts_length
+        total_num_steps = current_timestep
 
         if (episode % args.save_interval == 0 or episode == episodes - 1):# save for every interval-th episode or for the last epoch
             if args.share_policy:

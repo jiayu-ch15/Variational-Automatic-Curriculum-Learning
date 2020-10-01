@@ -406,7 +406,7 @@ class PPO():
 
         return value_loss_epoch, action_loss_epoch, dist_entropy_epoch
 
-    def update_share(self, num_agents, rollouts, turn_on=True):
+    def update_share(self, num_agents, rollouts, warm_up=False):
         advantages = []
         for agent_id in range(num_agents):
             if self.use_popart:
@@ -504,11 +504,11 @@ class PPO():
                 # if self.use_common_layer:
                 #     (value_loss * self.value_loss_coef + action_loss - dist_entropy * self.entropy_coef).backward()
                 # else:              
-                #     (value_loss * self.value_loss_coef).backward()
-                #     if turn_on == True:
-                #         (action_loss - dist_entropy * self.entropy_coef).backward()
+                (value_loss * self.value_loss_coef).backward()
+                if warm_up == False:
+                    (action_loss - dist_entropy * self.entropy_coef).backward()
                 
-                (value_loss * self.value_loss_coef + action_loss - dist_entropy * self.entropy_coef).backward()
+                # (value_loss * self.value_loss_coef + action_loss - dist_entropy * self.entropy_coef).backward()
                 
                 norm, grad_norm = get_p_and_g_mean_norm(self.actor_critic.parameters())
                        
@@ -1016,7 +1016,7 @@ class PPO3():
         self.clip_param = clip_param
         self.ppo_epoch = ppo_epoch
         self.num_mini_batch = num_mini_batch
-        self.use_no_optimize = True
+        self.use_no_optimize = False
         self.use_valueloss_average = False
         self.data_chunk_length = data_chunk_length
 

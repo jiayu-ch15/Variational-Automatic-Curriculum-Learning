@@ -101,13 +101,13 @@ class node_buffer():
             for i in range(now_agent_num):
                 while 1:
                     landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    extra_room = -2 * 0.05 * random.random() + 0.05
+                    extra_room = np.random.uniform(-0.05, +0.05, 2) 
                     if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
                         continue
                     else:
                         grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
                         one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary+extra_room
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + extra_room -start_boundary
                         one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
@@ -116,10 +116,11 @@ class node_buffer():
                 epsilon = epsilons[random.sample(range(8),8)]
                 # extra_room = -2 * 0.02 * random.random() + 0.02
                 for epsilon_id in range(epsilon.shape[0]):
-                    agent_location_grid = one_starts_landmark_grid[k] + epsilons[epsilon_id]
-                    if agent_location_grid[0] > grid.shape[0]-1 or agent_location_grid[1] > grid.shape[1]-1 \
-                        or agent_location_grid[0] <0 or agent_location_grid[1] < 0:
-                        continue
+                    agent_location_grid = one_starts_landmark_grid[k] + epsilon[epsilon_id]
+                    if agent_location_grid[0] >= grid.shape[0]:
+                        agent_location_grid[0] = grid.shape[0]-1
+                    if agent_location_grid[1] >= grid.shape[1]:
+                        agent_location_grid[1] = grid.shape[1]-1
                     if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
                         grid[agent_location_grid[0],agent_location_grid[1]]=2
                         break
@@ -226,6 +227,35 @@ class node_buffer():
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
 
+    def SampleNearby_reverse(self, starts):
+        starts_new = starts + []
+        len_start = len(starts_new)
+        if starts_new==[]:
+            return []
+        else:
+            add_num = 0
+            while add_num < self.reproduction_num:
+                for i in range(len_start):
+                    st = copy.deepcopy(starts[i])
+                    s_len = len(st)
+                    for i in range(s_len):
+                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                        st[i][0] = st[i][0] + epsilon_x
+                        st[i][1] = st[i][1] + epsilon_y
+                        if st[i][0] > self.boundary:
+                            st[i][0] = self.boundary - random.random()*0.01
+                        if st[i][0] < -self.boundary:
+                            st[i][0] = -self.boundary + random.random()*0.01
+                        if st[i][1] > self.boundary:
+                            st[i][1] = self.boundary - random.random()*0.01
+                        if st[i][1] < -self.boundary:
+                            st[i][1] = -self.boundary + random.random()*0.01
+                    starts_new.append(copy.deepcopy(st))
+                    add_num += 1
+            starts_new = random.sample(starts_new, self.reproduction_num)
+            return starts_new
+
     def sample_starts(self, N_child, N_archive, N_parent=0):
         self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
         self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
@@ -256,33 +286,27 @@ class node_buffer():
             self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new -len(self.childlist)))
         else:
             self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old))
+        self.choose_archive_index = np.sort(self.choose_archive_index)
         one_length = len(self.childlist) + len(self.choose_archive_index) # 需要搬运的点个数
         starts_length = len(self.childlist) + len(self.choose_archive_index)
         starts = []
         starts += self.childlist
         for i in range(len(self.choose_archive_index)):
             starts.append(self.archive[self.choose_archive_index[i]])
+        self.childlist = copy.deepcopy(starts)
         
         return starts, one_length, starts_length
 
     def move_nodes_reverse(self, one_length, Rmax, Rmin):
-        self.add_archive = []
         self.add_child = []
         del_archive_num = 0
         for i in range(one_length):
-            if i < len(self.childlist): # 保留的点
-                if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
-                    self.add_child.append(copy.deepcopy(self.childlist[i]))
-                    self.add_archive.append(copy.deepcopy(self.childlist[i]))
-            else:
-                if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
-                    self.add_child.append(copy.deepcopy(self.archive[self.choose_archive_index[i-len(self.childlist)]-del_archive_num]))
-                elif self.eval_score[i]>Rmax:
-                    print('output: ', self.choose_archive_index[i-len(self.childlist)]-del_archive_num)
-                    del self.archive[self.choose_archive_index[i-len(self.childlist)]-del_archive_num]
-                    del_archive_num += 1
+            if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
+                self.add_child.append(copy.deepcopy(self.childlist[i]))
         self.childlist = copy.deepcopy(self.add_child)
-        self.archive += self.add_archive
+        self.archive += self.childlist
+        if len(self.archive)> self.buffer_length:
+            self.archive = self.archive[len(self.archive)-self.buffer_length:]
 
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
@@ -601,7 +625,7 @@ def main():
     
     # run
     begin = time.time()
-    episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads
+    episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads // eval_frequency
     curriculum_episode = 0
     current_timestep = 0
     one_length = args.n_rollout_threads

@@ -54,6 +54,7 @@ class node_buffer():
         self.agent_num = agent_num
         self.buffer_length = buffer_length
         self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num)
+        # self.archive = self.produce_uniform_grid(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -90,7 +91,7 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size)
+        grid_num = int(start_boundary * 2 / cell_size) + 1
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_landmark_grid = []
@@ -100,13 +101,13 @@ class node_buffer():
             for i in range(now_agent_num):
                 while 1:
                     landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    extra_room = -2 * 0.05 * random.random() + 0.05
+                    extra_room = np.random.uniform(-0.05, +0.05, 2) 
                     if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
                         continue
                     else:
                         grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
                         one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary+extra_room
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + extra_room -start_boundary
                         one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
@@ -115,14 +116,16 @@ class node_buffer():
                 epsilon = epsilons[random.sample(range(8),8)]
                 # extra_room = -2 * 0.02 * random.random() + 0.02
                 for epsilon_id in range(epsilon.shape[0]):
-                    agent_location_grid = one_starts_landmark_grid[k] + epsilons[epsilon_id]
-                    if agent_location_grid[0] > grid.shape[0]-1 or agent_location_grid[1] > grid.shape[1]-1 \
-                        or agent_location_grid[0] <0 or agent_location_grid[1] < 0:
-                        continue
+                    agent_location_grid = one_starts_landmark_grid[k] + epsilon[epsilon_id]
+                    if agent_location_grid[0] >= grid.shape[0]:
+                        agent_location_grid[0] = grid.shape[0]-1
+                    if agent_location_grid[1] >= grid.shape[1]:
+                        agent_location_grid[1] = grid.shape[1]-1
                     if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
                         grid[agent_location_grid[0],agent_location_grid[1]]=2
                         break
-                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary 
+                noise = np.random.uniform(-0.01, +0.01)
+                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary+noise
                 one_starts_agent.append(copy.deepcopy(agent_location))
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_landmark)
@@ -518,12 +521,12 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-    use_parent_novelty = True
-    use_child_novelty = False
+    use_parent_novelty = False #关闭
+    use_child_novelty = False #关闭
     use_novelty_sample = True
     use_parent_sample = True
     del_switch = 'novelty'
-    child_novelty_threshold = 5.0 
+    child_novelty_threshold = 5.0 #用于ablation
     starts = []
     buffer_length = 2000 # archive 长度
     N_child = 300
@@ -535,11 +538,11 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 1.0
+    start_boundary = 3.0
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.97
+    upper_bound = 0.99
     target_num = 64
     last_agent_num = 0
     now_agent_num = 8
@@ -550,7 +553,7 @@ def main():
     save_node_flag = True
     historical_length = 5
     next_stage_flag = 0
-    frozen_epoch = 6
+    frozen_epoch = 0
     frozen_count = 0
     initial_optimizer = False
     eval_flag = False # 只用evaluate
@@ -569,14 +572,14 @@ def main():
     
     # run
     begin = time.time()
-    episodes = int(args.num_env_steps) // now_episode_length // args.n_rollout_threads
+    episodes = int(args.num_env_steps) // now_episode_length // args.n_rollout_threads // eval_frequency
     curriculum_episode = 0
     current_timestep = 0
     one_length_now = args.n_rollout_threads
     starts_length_now = args.n_rollout_threads
 
     # good model
-    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/optimizer2_true/run1/models/agent_model.pt')['model'].to(device)
+    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/cover09_agent_model.pt')['model'].to(device)
     actor_critic.agents_num = now_node.agent_num
     agents.actor_critic = actor_critic
     # pdb.set_trace()
@@ -592,14 +595,14 @@ def main():
                         update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
             # reproduction
-            start1 = time.time()
+            # start1 = time.time()
             if not fix_init_set:
                 if use_novelty_sample:
                     now_node.childlist += now_node.SampleNearby_novelty(now_node.parent, child_novelty_threshold,logger, current_timestep)
                 else:
                     now_node.childlist += now_node.SampleNearby(now_node.parent)
-            end1 = time.time()
-            print('sample_time: ', end1-start1)
+            # end1 = time.time()
+            # print('sample_time: ', end1-start1)
             
             # reset env 
             # one length = now_process_num
@@ -646,7 +649,7 @@ def main():
                         rollouts_now[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts_now[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
                 step_cover_rate = np.zeros(shape=(one_length_now,now_episode_length))
 
-                start1 = time.time()
+                # start1 = time.time()
                 for step in range(now_episode_length):
                     # Sample actions
                     values = []
@@ -767,8 +770,8 @@ def main():
                     current_timestep += now_episode_length * starts_length_now
                     curriculum_episode += 1
                     now_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
-                end1 = time.time()
-                print('step_time: ', end1-start1)
+                # end1 = time.time()
+                # print('step_time: ', end1-start1)
 
                 # start1 = time.time()                         
                 with torch.no_grad():  # get value and compute return
@@ -810,17 +813,20 @@ def main():
                 # end1 = time.time()
                 # print('get_value: ', end1-start1)
 
-                start1 = time.time()
+                # start1 = time.time()
                 # update the network
                 if args.share_policy:
                     actor_critic.train()
                     if frozen_epoch==frozen_count: # critic,actor同时更新
                         value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, False, initial_optimizer=False) 
+                        # value_loss, action_loss, dist_entropy = agents.update_share(now_node.agent_num, rollouts_now, False) 
                         print('actor and critic update') 
                     else:
                         value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, True, initial_optimizer=False)
+                        # value_loss, action_loss, dist_entropy = agents.update_share(now_node.agent_num, rollouts_now, True) 
                         frozen_count += 1
                         print('critic update') 
+                    print('value_loss: ', value_loss)
                     logger.add_scalars('value_loss',
                         {'value_loss': value_loss},
                         current_timestep)
@@ -851,8 +857,8 @@ def main():
                             {'average_episode_reward': np.mean(rew)},
                             (episode+1) * args.episode_length * one_length*eval_frequency)
                         rollouts[agent_id].after_update()
-                end1=time.time()
-                print('update: ',end1-start1)
+                # end1=time.time()
+                # print('update: ',end1-start1)
             # move nodes
             now_node.eval_score = now_node.eval_score / eval_frequency
             if not fix_init_set:
@@ -1007,7 +1013,7 @@ def main():
                 print('test_agent_num: ', now_node.agent_num)
                 print('test_mean_cover_rate: ', mean_cover_rate)
         
-        if mean_cover_rate > upper_bound and now_node.agent_num < target_num:
+        if mean_cover_rate > upper_bound and now_node.agent_num < target_num and frozen_epoch==frozen_count:
             mean_cover_rate = 0
             last_agent_num = now_node.agent_num
             now_agent_num = min(last_agent_num * 2,target_num)
@@ -1019,7 +1025,7 @@ def main():
         if next_stage_flag==1:
             next_stage_flag = 0
             start_boundary = 3.0
-            max_step=0.6
+            max_step=0.3
             frozen_count = 0
             actor_critic.agents_num = now_node.agent_num
             check_frequency = 1

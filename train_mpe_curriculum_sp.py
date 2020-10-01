@@ -100,13 +100,13 @@ class node_buffer():
             for i in range(now_agent_num):
                 while 1:
                     landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    extra_room = -2 * 0.05 * random.random() + 0.05
+                    extra_room = np.random.uniform(-0.05, +0.05, 2) 
                     if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
                         continue
                     else:
                         grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
                         one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary+extra_room
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + extra_room -start_boundary
                         one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             indices = random.sample(range(now_agent_num), now_agent_num)
@@ -115,10 +115,11 @@ class node_buffer():
                 epsilon = epsilons[random.sample(range(8),8)]
                 # extra_room = -2 * 0.02 * random.random() + 0.02
                 for epsilon_id in range(epsilon.shape[0]):
-                    agent_location_grid = one_starts_landmark_grid[k] + epsilons[epsilon_id]
-                    if agent_location_grid[0] > grid.shape[0]-1 or agent_location_grid[1] > grid.shape[1]-1 \
-                        or agent_location_grid[0] <0 or agent_location_grid[1] < 0:
-                        continue
+                    agent_location_grid = one_starts_landmark_grid[k] + epsilon[epsilon_id]
+                    if agent_location_grid[0] >= grid.shape[0]:
+                        agent_location_grid[0] = grid.shape[0]-1
+                    if agent_location_grid[1] >= grid.shape[1]:
+                        agent_location_grid[1] = grid.shape[1]-1
                     if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
                         grid[agent_location_grid[0],agent_location_grid[1]]=2
                         break
@@ -524,11 +525,11 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-    use_parent_novelty = False
-    use_child_novelty = False
-    use_novelty_sample = False
+    use_parent_novelty = False # 保持false
+    use_child_novelty = False # 保持false
+    use_novelty_sample = True
     use_parent_sample = True
-    del_switch = 'old'
+    del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
@@ -556,6 +557,7 @@ def main():
     check_frequency = 1
     save_node_frequency = 1
     save_node_flag = True
+    save_90_flag = True
     historical_length = 5
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -569,7 +571,7 @@ def main():
     
     # run
     begin = time.time()
-    episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads
+    episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads // eval_frequency
     curriculum_episode = 0
     current_timestep = 0
     one_length = args.n_rollout_threads
@@ -951,8 +953,9 @@ def main():
             logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
             logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
-            if mean_cover_rate >= 0.9 and args.algorithm_name=='ours':
+            if mean_cover_rate >= 0.9 and args.algorithm_name=='ours' and save_90_flag:
                 torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")
+                save_90_flag = False
             print('test_agent_num: ', last_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
 

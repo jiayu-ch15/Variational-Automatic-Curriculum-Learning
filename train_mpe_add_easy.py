@@ -217,7 +217,7 @@ def main():
     episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads
     timesteps = 0
     starts = []
-    boundary_easy = 1
+    boundary_easy = 0.3
     boundary = 3
     num_easy = 250
     num_uniform = 250
