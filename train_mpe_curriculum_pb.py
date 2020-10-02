@@ -543,9 +543,12 @@ def main():
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 300
+    if use_parent_sample:
+        N_parent = 50
+    else:
+        N_parent = 0
     N_archive = 150
-    N_parent = 50
+    N_child = args.n_rollout_threads - N_archive - N_parent
     max_step = 0.1
     TB = 1
     M = N_child
