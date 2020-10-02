@@ -139,7 +139,7 @@ class node_buffer():
         # list1是需要求novelty的
         topk=5
         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
-        if len(list2) < topk+1:
+        if len(list2) or len(list1) < topk+1:
             dist_k = dist
             novelty = np.sum(dist_k,axis=1)/len(list2)
         else:
@@ -441,6 +441,8 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
+        # load model
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -538,11 +540,11 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 3.0
+    start_boundary = 1.0
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.99
+    upper_bound = 0.98
     target_num = 64
     last_agent_num = 0
     now_agent_num = 8
@@ -559,6 +561,7 @@ def main():
     eval_flag = False # 只用evaluate
     use_uniform = False # 用uniform train
     fix_init_set = False
+    save_90_flag = True
     random.seed(args.seed)
     np.random.seed(args.seed)
     now_node = node_buffer(now_agent_num,buffer_length,
@@ -578,12 +581,8 @@ def main():
     one_length_now = args.n_rollout_threads
     starts_length_now = args.n_rollout_threads
 
-    # good model
-    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/cover09_agent_model.pt')['model'].to(device)
-    actor_critic.agents_num = now_node.agent_num
-    agents.actor_critic = actor_critic
-    # pdb.set_trace()
 
+    actor_critic.agents_num = now_node.agent_num
     for episode in range(episodes):
         if not eval_flag:
             print('now_agent_num: ', now_node.agent_num)
@@ -877,10 +876,10 @@ def main():
             actor_critic.agents_num = now_node.agent_num
             if episode % check_frequency==0 or eval_flag:
                 obs, _ = envs.reset(now_node.agent_num)
-                if now_node.agent_num == 4:
+                if now_node.agent_num <= 4:
                     episode_length = 70
                 else:
-                    episode_length = 200
+                    episode_length = 300
                 #replay buffer
                 rollouts = RolloutStorage_share(now_node.agent_num,
                             episode_length, 
@@ -1012,6 +1011,9 @@ def main():
                 mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
                 print('test_agent_num: ', now_node.agent_num)
                 print('test_mean_cover_rate: ', mean_cover_rate)
+                if mean_cover_rate > 0.9 and save_90_flag and now_node.agent_num==4:
+                    torch.save({'model': actor_critic}, str(save_dir) + "/cover90_agent_model.pt")
+                    save_90_flag = False
         
         if mean_cover_rate > upper_bound and now_node.agent_num < target_num and frozen_epoch==frozen_count:
             mean_cover_rate = 0
@@ -1025,7 +1027,7 @@ def main():
         if next_stage_flag==1:
             next_stage_flag = 0
             start_boundary = 3.0
-            max_step=0.3
+            max_step=0.6
             frozen_count = 0
             actor_critic.agents_num = now_node.agent_num
             check_frequency = 1
@@ -1044,17 +1046,17 @@ def main():
             elif now_node.agent_num==32:
                 agents.num_mini_batch = 512
             else:
-                agents.num_mini_batch = 2024
+                agents.num_mini_batch = 2048
             # initial_optimizer = True
 
         total_num_steps = current_timestep
 
-        if (episode % args.save_interval == 0 or episode == episodes - 1):# save for every interval-th episode or for the last epoch
+        if (curriculum_episode % args.save_interval == 0 or episode == episodes - 1):# save for every interval-th episode or for the last epoch
             if args.share_policy:
                 torch.save({
                             'model': actor_critic
                             }, 
-                            str(save_dir) + "/agent_model.pt")
+                            str(save_dir) + "/agent_model_iter%i.pt"%curriculum_episode)
             else:
                 for agent_id in range(num_agents):                                                  
                     torch.save({

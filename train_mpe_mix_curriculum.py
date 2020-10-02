@@ -527,7 +527,7 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-    use_parent_novelty = True
+    use_parent_novelty = False
     use_child_novelty = False
     use_novelty_sample = True
     use_parent_sample = True
@@ -585,6 +585,9 @@ def main():
     current_timestep = 0
 
     # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/double4_24/' + 'run1' + "/models/4agent_model.pt")['model'].to(device)
+    # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8/run1/models/4agent_model.pt')['model'].to(device)
+    # actor_critic.agents_num = now_node.agent_num
+    # agents.actor_critic = actor_critic
 
     for episode in range(episodes):
         if args.use_linear_lr_decay:# decrease learning rate linearly
@@ -609,9 +612,9 @@ def main():
         one_length_last = 0
         if last_node.agent_num!=0:
             if use_parent_sample:
-                starts_last, one_length_last, starts_length_last = now_node.sample_starts(N_child,N_archive,N_parent)
+                starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive,N_parent)
             else:
-                starts_last, one_length_now, starts_length_last = now_node.sample_starts(N_child,N_archive)
+                starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive)
             last_node.eval_score = np.zeros(shape=one_length_last)
         # starts_now, one_length_now = now_node.sample_starts(N_child,N_archive)
         if use_parent_sample:
@@ -796,7 +799,8 @@ def main():
                                                     args.use_popart,
                                                     agents[agent_id].value_normalizer)
             # now_node  
-            actor_critic.agents_num = now_node.agent_num                             
+            actor_critic.agents_num = now_node.agent_num  
+            agents.num_mini_batch = 16                           
             obs = envs.new_starts_obs(starts_now, now_node.agent_num, starts_length_now)
             #replay buffer
             rollouts_now = RolloutStorage_share(now_node.agent_num,
@@ -1184,6 +1188,7 @@ def main():
 
         if next_stage_flag==1:
             next_stage_flag = 0
+            start_boundary = 3.0
             last_node = copy.deepcopy(now_node)
             now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=args.n_rollout_threads,
@@ -1191,14 +1196,9 @@ def main():
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
+            actor_critic.agents_num = now_node.agent_num
             if now_node.agent_num==8:
-                agents.num_mini_batch = 8
-            elif now_node.agent_num==16:
-                agents.num_mini_batch = 48
-            elif now_node.agent_num==32:
-                agents.num_mini_batch = 96
-            else:
-                agents.num_mini_batch = 320
+                agents.num_mini_batch = 16
 
 
         total_num_steps = current_timestep

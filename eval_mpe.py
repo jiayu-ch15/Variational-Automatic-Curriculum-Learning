@@ -203,12 +203,12 @@ def main():
     #         ac = torch.load(str(args.model_dir) + 'run' + str(args.seed) + "/models/agent" + str(agent_id) + "_model.pt")['model'].to(device)
     #         actor_critic.append(ac)
    
-    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/optimizer2_true/run1/models/agent_model.pt')['model'].to(device)
+    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
     # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_shaped_reward' + '/run2' + "/models/agent_model.pt")['model'].to(device)
-    actor_critic.agents_num = 16
-    actor_critic.boxes_num = 16
-    num_agents = 16
-    num_boxes = 16
+    actor_critic.agents_num = 50
+    actor_critic.boxes_num = 50
+    num_agents = 50
+    num_boxes = 50
     all_frames = []
     cover_rate = 0
     random.seed(args.seed)
@@ -242,8 +242,8 @@ def main():
             all_frames.append(image)
         
         # eval_obs, _ = eval_env.reset(num_agents,num_boxes)
-        # eval_obs, _ = eval_env.reset(num_agents)
-        eval_obs = eval_env.new_starts_obs(starts[eval_episode],num_agents)
+        eval_obs, _ = eval_env.reset(num_agents)
+        # eval_obs = eval_env.new_starts_obs(starts[eval_episode],num_agents)
         # eval_obs = eval_env.new_starts_obs_pb(starts[eval_episode],num_agents,num_boxes)
         eval_obs = np.array(eval_obs)       
         eval_share_obs = eval_obs.reshape(1, -1)

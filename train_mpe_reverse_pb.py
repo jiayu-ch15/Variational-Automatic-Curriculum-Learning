@@ -13,7 +13,7 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO, PPO3
+from algorithm.ppo import PPO,PPO3
 from algorithm.model import Policy_pb, Policy_pb_3, ATTBase_pb, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
 
 from config import get_config
@@ -29,7 +29,7 @@ import random
 import copy
 import matplotlib.pyplot as plt
 import pdb
-np.set_printoptions(linewidth=10000)
+np.set_printoptions(linewidth=1000)
 
 
 def make_parallel_env(args):
@@ -233,6 +233,35 @@ class node_buffer():
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
 
+    def SampleNearby_reverse(self, starts):
+        starts_new = starts + []
+        len_start = len(starts_new)
+        if starts_new==[]:
+            return []
+        else:
+            add_num = 0
+            while add_num < self.reproduction_num:
+                for i in range(len_start):
+                    st = copy.deepcopy(starts[i])
+                    s_len = len(st)
+                    for i in range(s_len):
+                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                        st[i][0] = st[i][0] + epsilon_x
+                        st[i][1] = st[i][1] + epsilon_y
+                        if st[i][0] > self.boundary:
+                            st[i][0] = self.boundary - random.random()*0.01
+                        if st[i][0] < -self.boundary:
+                            st[i][0] = -self.boundary + random.random()*0.01
+                        if st[i][1] > self.boundary:
+                            st[i][1] = self.boundary - random.random()*0.01
+                        if st[i][1] < -self.boundary:
+                            st[i][1] = -self.boundary + random.random()*0.01
+                    starts_new.append(copy.deepcopy(st))
+                    add_num += 1
+            starts_new = random.sample(starts_new, self.reproduction_num)
+            return starts_new
+
     def sample_starts(self, N_child, N_archive, N_parent=0):
         self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
         self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
@@ -258,6 +287,33 @@ class node_buffer():
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
     
+    def sample_starts_reverse(self, N_new, N_old):
+        if len(self.childlist) < N_new:
+            self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new -len(self.childlist)))
+        else:
+            self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old))
+        self.choose_archive_index = np.sort(self.choose_archive_index)
+        one_length = len(self.childlist) + len(self.choose_archive_index) # 需要搬运的点个数
+        starts_length = len(self.childlist) + len(self.choose_archive_index)
+        starts = []
+        starts += self.childlist
+        for i in range(len(self.choose_archive_index)):
+            starts.append(self.archive[self.choose_archive_index[i]])
+        self.childlist = copy.deepcopy(starts)
+        
+        return starts, one_length, starts_length
+
+    def move_nodes_reverse(self, one_length, Rmax, Rmin):
+        self.add_child = []
+        del_archive_num = 0
+        for i in range(one_length):
+            if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
+                self.add_child.append(copy.deepcopy(self.childlist[i]))
+        self.childlist = copy.deepcopy(self.add_child)
+        self.archive += self.childlist
+        if len(self.archive)> self.buffer_length:
+            self.archive = self.archive[len(self.archive)-self.buffer_length:]
+
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
         del_archive_num = 0
@@ -419,7 +475,6 @@ def main():
     num_boxes = args.num_landmarks
     #Policy network
     if args.share_policy:
-        # share_base = ATTBase_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
         actor_base = ATTBase_actor_dist_pb_add(envs.observation_space[0].shape[0], envs.action_space[0],num_agents,num_boxes)
         critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0],num_agents,num_boxes)
         actor_critic = Policy_pb_3(envs.observation_space[0],
@@ -534,21 +589,20 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-    use_parent_novelty = False # 关闭
-    use_child_novelty = False # 关闭
-    use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
-    use_novelty_sample = True
+    use_parent_novelty = False
+    use_child_novelty = False
+    use_novelty_sample = False
     use_parent_sample = False
-    del_switch = 'novelty'
+    use_reverse_goal = True
+    del_switch = 'old'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 300
-    N_archive = 150
-    N_parent = 50
+    N_new = 300
+    N_old = 200
     max_step = 0.1
     TB = 1
-    M = N_child
+    M = N_new
     Rmin = 0.5
     Rmax = 0.95
     boundary = 1
@@ -593,7 +647,9 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction
-        if use_samplenearby:
+        if use_reverse_goal:
+            last_node.childlist = last_node.SampleNearby(last_node.childlist)
+        else:
             if use_novelty_sample:
                 last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
             else:
@@ -601,17 +657,17 @@ def main():
         
         # reset env 
         # one length = now_process_num
-        start1 = time.time()
-        if use_parent_sample:
-            starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)
+        if use_reverse_goal:
+            starts, one_length, starts_length = last_node.sample_starts_reverse(N_new,N_old)
         else:
-            starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive)
-        end1 = time.time()
-        print('sample_time: ', end1- start1)
+            if use_parent_sample:
+                starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)
+            else:
+                starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive)
         last_node.eval_score = np.zeros(shape=one_length)
 
         for times in range(eval_frequency):
-            obs = envs.new_starts_obs_pb(starts, num_agents, num_boxes,starts_length)
+            obs = envs.new_starts_obs_pb(starts, last_node.agent_num, last_node.box_num, starts_length)
             #replay buffer
             rollouts = RolloutStorage(num_agents,
                         args.episode_length, 
@@ -695,7 +751,7 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
-                step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
+                step_cover_rate[:,step] = np.array(infos)[:,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -740,10 +796,12 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            logger.add_scalars('agent/traing_cover_rate',{'training_cover_rate': np.mean(infos)}, current_timestep)
-            curriculum_episode += 1
+            logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
             current_timestep += args.episode_length * starts_length
+            curriculum_episode += 1
             last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
+            
                                         
             with torch.no_grad():  # get value and compute return
                 for agent_id in range(num_agents):         
@@ -787,7 +845,8 @@ def main():
                 value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
                 logger.add_scalars('value_loss',
                     {'value_loss': value_loss},
-                    current_timestep)      
+                    current_timestep)
+                            
                 rew = []
                 for i in range(rollouts.rewards.shape[1]):
                     rew.append(np.sum(rollouts.rewards[:,i]))
@@ -813,15 +872,13 @@ def main():
                         rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
                     logger.add_scalars('agent%i/average_episode_reward'%agent_id,
                         {'average_episode_reward': np.mean(rew)},
-                        (episode+1) * args.episode_length * starts_length*eval_frequency)
+                        (episode+1) * args.episode_length * one_length*eval_frequency)
                     
                     rollouts[agent_id].after_update()
 
         # move nodes
         last_node.eval_score = last_node.eval_score / eval_frequency
-        if use_samplenearby:
-            last_node.move_nodes(one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, logger, (episode+1) * args.episode_length * starts_length)
-        print('last_node_parent: ', len(last_node.parent))
+        last_node.move_nodes_reverse(one_length, Rmax, Rmin)
         # 需要改路径
         if (episode+1) % save_node_frequency ==0 and save_node_flag:
             last_node.save_node(save_node_dir, episode)
@@ -830,7 +887,7 @@ def main():
 
         # test
         if episode % check_frequency==0:
-            obs, _ = envs.reset(num_agents,num_boxes)
+            obs, _ = envs.reset(last_node.agent_num,last_node.box_num)
             episode_length = 120
             #replay buffer
             rollouts = RolloutStorage(num_agents,
@@ -963,9 +1020,6 @@ def main():
             logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
             logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
-            if mean_cover_rate >= 0.9 and args.algorithm_name=='ours_pb' and save_90_flag:
-                torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")
-                save_90_flag = False
             print('test_agent_num: ', last_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
 

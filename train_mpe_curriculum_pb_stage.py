@@ -1025,7 +1025,7 @@ def main():
             now_episode_length = 120
             frozen_count = 0
             if now_node.agent_num==4:
-                agents.num_mini_batch = 16
+                agents.num_mini_batch = 8
             elif now_node.agent_num==8:
                 agents.num_mini_batch = 96
             else:
