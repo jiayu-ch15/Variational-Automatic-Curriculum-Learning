@@ -53,8 +53,8 @@ class node_buffer():
         self.agent_num = agent_num
         self.buffer_length = buffer_length
         self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num)
-        if len(self.archive) > 0:
-            self.archive_novelty = self.get_novelty(self.archive,self.archive)
+        # self.archive = self.produce_uniform_grid(archive_initial_length, start_boundary, self.agent_num)
+        self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
         self.hardlist = []
@@ -124,7 +124,7 @@ class node_buffer():
                         grid[agent_location_grid[0],agent_location_grid[1]]=2
                         break
                 noise = np.random.uniform(-0.01, +0.01)
-                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary + noise
+                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary+noise
                 one_starts_agent.append(copy.deepcopy(agent_location))
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_landmark)
@@ -138,7 +138,7 @@ class node_buffer():
         # list1是需要求novelty的
         topk=5
         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
-        if len(list2) < topk+1:
+        if len(list2) < topk+1 or len(list1) < topk+1:
             dist_k = dist
             novelty = np.sum(dist_k,axis=1)/len(list2)
         else:

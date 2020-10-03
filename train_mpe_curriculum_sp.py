@@ -137,7 +137,7 @@ class node_buffer():
         # list1是需要求novelty的
         topk=5
         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
-        if len(list2) < topk+1:
+        if len(list2) < topk+1 or len(list1) < topk+1:
             dist_k = dist
             novelty = np.sum(dist_k,axis=1)/len(list2)
         else:
@@ -539,13 +539,13 @@ def main():
         N_parent = 0
     N_archive = 150
     N_child = args.n_rollout_threads - N_archive - N_parent
-    max_step = 0.6
     TB = 1
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
     start_boundary = 0.3
+    max_step = 0.6
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
