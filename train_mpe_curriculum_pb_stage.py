@@ -13,8 +13,8 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO, PPO2
-from algorithm.model import Policy, Policy_pb_2, ATTBase_actor_pb_add,ATTBase_critic_pb_add
+from algorithm.ppo import PPO, PPO2, PP3
+from algorithm.model import Policy, Policy_pb_2, ATTBase_actor_dist_pb_add, ATTBase_actor_pb_add,ATTBase_critic_pb_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -420,7 +420,7 @@ def main():
     #Policy network
     if args.share_policy:
         # share_base = ATTBase_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
-        actor_base = ATTBase_actor_pb_add(envs.observation_space[0].shape[0],num_agents,num_boxes)
+        actor_base = ATTBase_actor_dist_pb_add(envs.observation_space[0].shape[0], envs.action_space[0],num_agents,num_boxes)
         critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0],num_agents,num_boxes)
         actor_critic = Policy_pb_2(envs.observation_space[0], 
                     envs.action_space[0],
@@ -448,7 +448,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO2(actor_critic,
+        agents = PPO3(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,

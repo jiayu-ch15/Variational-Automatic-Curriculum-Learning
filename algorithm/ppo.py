@@ -1244,7 +1244,6 @@ class PPO3():
         self.num_mini_batch = num_mini_batch
         self.use_no_optimize = True
         self.use_valueloss_average = False
-        self.double_value_lr = False
         self.data_chunk_length = data_chunk_length
 
         self.value_loss_coef = value_loss_coef
@@ -1262,10 +1261,7 @@ class PPO3():
 
         # self.optimizer = optim.Adam(actor_critic.parameters(), lr=lr, eps=eps, weight_decay=weight_decay)
         self.optimizer_actor = optim.Adam(actor_critic.actor_base.parameters(), lr=lr, eps=eps, weight_decay=weight_decay)
-        if self.double_value_lr:
-            self.optimizer_critic = optim.Adam(actor_critic.critic_base.parameters(), lr=lr*2, eps=eps, weight_decay=weight_decay)
-        else:
-            self.optimizer_critic = optim.Adam(actor_critic.critic_base.parameters(), lr=lr, eps=eps, weight_decay=weight_decay)
+        self.optimizer_critic = optim.Adam(actor_critic.critic_base.parameters(), lr=lr, eps=eps, weight_decay=weight_decay)
         self.use_popart = use_popart
         if self.use_popart:
             self.value_normalizer = PopArt(1, device=self.device)
