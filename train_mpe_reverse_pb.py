@@ -287,13 +287,20 @@ class node_buffer():
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
     
-    def sample_starts_reverse(self, N_new, N_old):
+    def sample_starts_reverse(self, N_new, N_old, n_rollout_threads):
         if len(self.childlist) < N_new:
             self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new -len(self.childlist)))
         else:
             self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old))
         self.choose_archive_index = np.sort(self.choose_archive_index)
         one_length = len(self.childlist) + len(self.choose_archive_index) # 需要搬运的点个数
+        starts_length = len(self.childlist) + len(self.choose_archive_index)
+        while starts_length < n_rollout_threads:
+            self.choose_archive_index = np.concatenate((self.choose_archive_index,self.choose_archive_index))
+            starts_length = len(self.childlist) + len(self.choose_archive_index)
+        self.choose_archive_index = np.sort(self.choose_archive_index)
+        self.choose_archive_index = self.choose_archive_index[0:n_rollout_threads-len(self.childlist)]
+        one_length = len(self.childlist) + len(self.choose_archive_index)
         starts_length = len(self.childlist) + len(self.choose_archive_index)
         starts = []
         starts += self.childlist
@@ -598,13 +605,13 @@ def main():
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
-    N_new = 300
-    N_old = 200
+    N_new = 200
+    N_old = 100
     max_step = 0.1
     TB = 1
-    M = N_new
-    Rmin = 0.5
-    Rmax = 0.95
+    M = N_new + N_old
+    Rmin = 0.1
+    Rmax = 0.9
     boundary = 1
     start_boundary = 0.3
     N_easy = 0

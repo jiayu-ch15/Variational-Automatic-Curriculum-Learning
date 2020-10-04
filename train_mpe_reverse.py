@@ -53,7 +53,7 @@ class node_buffer():
     def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num)
+        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.add_archive = [] # 上次更新成为archive的点
@@ -281,13 +281,20 @@ class node_buffer():
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
     
-    def sample_starts_reverse(self, N_new, N_old):
+    def sample_starts_reverse(self, N_new, N_old, n_rollout_threads):
         if len(self.childlist) < N_new:
             self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new -len(self.childlist)))
         else:
             self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old))
         self.choose_archive_index = np.sort(self.choose_archive_index)
         one_length = len(self.childlist) + len(self.choose_archive_index) # 需要搬运的点个数
+        starts_length = len(self.childlist) + len(self.choose_archive_index)
+        while starts_length < n_rollout_threads:
+            self.choose_archive_index = np.concatenate((self.choose_archive_index,self.choose_archive_index))
+            starts_length = len(self.childlist) + len(self.choose_archive_index)
+        self.choose_archive_index = np.sort(self.choose_archive_index)
+        self.choose_archive_index = self.choose_archive_index[0:n_rollout_threads-len(self.childlist)]
+        one_length = len(self.childlist) + len(self.choose_archive_index)
         starts_length = len(self.childlist) + len(self.choose_archive_index)
         starts = []
         starts += self.childlist
@@ -591,14 +598,14 @@ def main():
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
-    N_new = 300
-    N_old = 200
+    N_new = 200
+    N_old = 100
     # N_parent = 50
     max_step = 0.6
     TB = 1
-    M = N_new
-    Rmin = 0.5
-    Rmax = 0.95
+    M = N_new + N_old
+    Rmin = 0.1
+    Rmax = 0.9
     boundary = 3
     start_boundary = 0.3
     N_easy = 0
@@ -608,7 +615,7 @@ def main():
     last_agent_num = 4
     now_agent_num = num_agents
     mean_cover_rate = 0
-    eval_frequency = 3 #需要fix几个回合
+    eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 1
     save_node_flag = True
@@ -651,7 +658,7 @@ def main():
         # reset env 
         # one length = now_process_num
         if use_reverse_goal:
-            starts, one_length, starts_length = last_node.sample_starts_reverse(N_new,N_old)
+            starts, one_length, starts_length = last_node.sample_starts_reverse(N_new,N_old,args.n_rollout_threads)
         else:
             if use_parent_sample:
                 starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)

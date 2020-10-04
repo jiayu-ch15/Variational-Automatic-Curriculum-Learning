@@ -442,7 +442,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # load model
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
+        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -540,14 +540,14 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 1.0
+    start_boundary = 0.3
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.98
+    upper_bound = 0.9
     target_num = 64
     last_agent_num = 0
-    now_agent_num = 8
+    now_agent_num = 4
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
@@ -1026,7 +1026,7 @@ def main():
                     torch.save({'model': actor_critic}, str(save_dir) + "/%iagent_model.pt"%now_node.agent_num)
         if next_stage_flag==1:
             next_stage_flag = 0
-            start_boundary = 3.0
+            start_boundary = 1.0
             max_step=0.6
             frozen_count = 0
             actor_critic.agents_num = now_node.agent_num
