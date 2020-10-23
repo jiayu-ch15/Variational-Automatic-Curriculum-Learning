@@ -124,7 +124,8 @@ class node_buffer():
                     if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
                         grid[agent_location_grid[0],agent_location_grid[1]]=2
                         break
-                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary 
+                noise = np.random.uniform(-0.01, +0.01)
+                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary+noise
                 one_starts_agent.append(copy.deepcopy(agent_location))
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_landmark)
@@ -281,6 +282,29 @@ class node_buffer():
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
     
+    # def sample_starts_reverse(self, N_new, N_old, n_rollout_threads):
+    #     if len(self.childlist) < N_new:
+    #         self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new -len(self.childlist)))
+    #     else:
+    #         self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old))
+    #     self.choose_archive_index = np.sort(self.choose_archive_index)
+    #     one_length = len(self.childlist) + len(self.choose_archive_index) # 需要搬运的点个数
+    #     starts_length = len(self.childlist) + len(self.choose_archive_index)
+    #     while starts_length < n_rollout_threads:
+    #         self.choose_archive_index = np.concatenate((self.choose_archive_index,self.choose_archive_index))
+    #         starts_length = len(self.childlist) + len(self.choose_archive_index)
+    #     self.choose_archive_index = np.sort(self.choose_archive_index)
+    #     self.choose_archive_index = self.choose_archive_index[0:n_rollout_threads-len(self.childlist)]
+    #     one_length = len(self.childlist) + len(self.choose_archive_index)
+    #     starts_length = len(self.childlist) + len(self.choose_archive_index)
+    #     starts = []
+    #     starts += self.childlist
+    #     for i in range(len(self.choose_archive_index)):
+    #         starts.append(self.archive[self.choose_archive_index[i]])
+    #     self.childlist = copy.deepcopy(starts)
+        
+    #     return starts, one_length, starts_length
+
     def sample_starts_reverse(self, N_new, N_old, n_rollout_threads):
         if len(self.childlist) < N_new:
             self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new -len(self.childlist)))
@@ -288,13 +312,6 @@ class node_buffer():
             self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old))
         self.choose_archive_index = np.sort(self.choose_archive_index)
         one_length = len(self.childlist) + len(self.choose_archive_index) # 需要搬运的点个数
-        starts_length = len(self.childlist) + len(self.choose_archive_index)
-        while starts_length < n_rollout_threads:
-            self.choose_archive_index = np.concatenate((self.choose_archive_index,self.choose_archive_index))
-            starts_length = len(self.childlist) + len(self.choose_archive_index)
-        self.choose_archive_index = np.sort(self.choose_archive_index)
-        self.choose_archive_index = self.choose_archive_index[0:n_rollout_threads-len(self.childlist)]
-        one_length = len(self.childlist) + len(self.choose_archive_index)
         starts_length = len(self.childlist) + len(self.choose_archive_index)
         starts = []
         starts += self.childlist
@@ -598,14 +615,14 @@ def main():
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
-    N_new = 200
-    N_old = 100
+    N_new = 300
+    N_old = 200
     # N_parent = 50
     max_step = 0.6
     TB = 1
-    M = N_new + N_old
-    Rmin = 0.1
-    Rmax = 0.9
+    M = N_new
+    Rmin = 0.5
+    Rmax = 0.95
     boundary = 3
     start_boundary = 0.3
     N_easy = 0

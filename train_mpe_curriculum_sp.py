@@ -29,6 +29,8 @@ import random
 import copy
 import matplotlib.pyplot as plt
 import pdb
+import wandb
+# wandb.init(project="my-project")
 np.set_printoptions(linewidth=1000)
 
 
@@ -53,7 +55,7 @@ class node_buffer():
     def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num)
+        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -123,7 +125,8 @@ class node_buffer():
                     if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
                         grid[agent_location_grid[0],agent_location_grid[1]]=2
                         break
-                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary 
+                noise = np.random.uniform(-0.01, +0.01)
+                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary+noise
                 one_starts_agent.append(copy.deepcopy(agent_location))
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_landmark)
@@ -534,7 +537,7 @@ def main():
     starts = []
     buffer_length = 2000 # archive 长度
     if use_parent_sample:
-        N_parent = 50
+        N_parent = 25
     else:
         N_parent = 0
     N_archive = 150

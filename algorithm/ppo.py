@@ -1413,3 +1413,231 @@ class PPO3():
         dist_entropy_epoch /= num_updates
 
         return value_loss_epoch, action_loss_epoch, dist_entropy_epoch
+
+    def update_double_share(self, last_agents, current_agents, rollouts_last, rollouts_current, turn_on=True):
+        advantages_last = []
+        advantages_current = []
+        for agent_id in range(last_agents):
+            if self.use_popart:
+                advantage_last = rollouts_last.returns[:-1,:,agent_id] - self.value_normalizer.denormalize(torch.tensor(rollouts_last.value_preds[:-1,:,agent_id])).cpu().numpy()
+            else:
+                advantage_last = rollouts_last.returns[:-1,:,agent_id] - rollouts_last.value_preds[:-1,:,agent_id]           
+            advantages_last.append(advantage_last)
+        #agent , step, parallel,1
+        advantages_last = np.array(advantages_last).transpose(1,2,0,3) 
+        # step, parallel, agent, 1
+        for agent_id in range(current_agents):
+            if self.use_popart:
+                advantage_current = rollouts_current.returns[:-1,:,agent_id] - self.value_normalizer.denormalize(torch.tensor(rollouts_current.value_preds[:-1,:,agent_id])).cpu().numpy()
+            else:
+                advantage_current = rollouts_current.returns[:-1,:,agent_id] - rollouts_current.value_preds[:-1,:,agent_id]           
+            advantages_current.append(advantage_current)
+        #agent ,step, parallel,1
+        advantages_current = np.array(advantages_current).transpose(1,2,0,3)
+        tmp_advantages = np.concatenate((advantages_last.reshape(-1,1),advantages_current.reshape(-1,1)),axis=0)
+        advantages_last = (advantages_last - tmp_advantages.mean()) / (
+                tmp_advantages.std() + 1e-5)  
+        advantages_current = (advantages_current - tmp_advantages.mean()) / (
+                tmp_advantages.std() + 1e-5) 
+
+
+        value_loss_epoch = 0
+        action_loss_epoch = 0
+        dist_entropy_epoch = 0
+
+        for e in range(self.ppo_epoch):
+            
+            if self.actor_critic.is_recurrent:
+                data_generator_last = rollouts_last.recurrent_generator_share(
+                    advantages_last, self.num_mini_batch, self.data_chunk_length)
+                data_generator_current = rollouts_current.recurrent_generator_share(
+                    advantages_current, self.num_mini_batch, self.data_chunk_length)
+            elif self.actor_critic.is_naive_recurrent:
+                data_generator_last = rollouts_last.naive_recurrent_generator_share(
+                    advantages_last, self.num_mini_batch)
+                data_generator_current = rollouts_current.naive_recurrent_generator_share(
+                    advantages_current, self.num_mini_batch)
+            else:
+                data_generator_last = rollouts_last.feed_forward_generator_share(
+                    advantages_last, self.num_mini_batch)
+                data_generator_current = rollouts_current.feed_forward_generator_share(
+                    advantages_current, self.num_mini_batch)
+            
+            count_stop_step = 0
+            for sample_last, sample_current in zip(data_generator_last, data_generator_current): 
+                share_obs_batch_last, obs_batch_last, recurrent_hidden_states_batch_last, recurrent_hidden_states_critic_batch_last, actions_batch_last, \
+                   value_preds_batch_last, return_batch_last, masks_batch_last, high_masks_batch_last, old_action_log_probs_batch_last, \
+                        adv_targ_last = sample_last 
+                share_obs_batch_current, obs_batch_current, recurrent_hidden_states_batch_current, recurrent_hidden_states_critic_batch_current, actions_batch_current, \
+                   value_preds_batch_current, return_batch_current, masks_batch_current, high_masks_batch_current, old_action_log_probs_batch_current, \
+                        adv_targ_current = sample_current             
+                
+                weight_last = obs_batch_last.shape[0]/(obs_batch_last.shape[0]+obs_batch_current.shape[0])
+                old_action_log_probs_batch_last = old_action_log_probs_batch_last.to(self.device)
+                adv_targ_last = adv_targ_last.to(self.device)
+                value_preds_batch_last = value_preds_batch_last.to(self.device)
+                return_batch_last = return_batch_last.to(self.device)
+                high_masks_batch_last = high_masks_batch_last.to(self.device)
+
+                weight_current = obs_batch_current.shape[0]/(obs_batch_last.shape[0]+obs_batch_current.shape[0])
+                old_action_log_probs_batch_current = old_action_log_probs_batch_current.to(self.device)
+                adv_targ_current = adv_targ_current.to(self.device)
+                value_preds_batch_current = value_preds_batch_current.to(self.device)
+                return_batch_current = return_batch_current.to(self.device)
+                high_masks_batch_current = high_masks_batch_current.to(self.device)
+  
+                # Reshape to do in a single forward pass for all steps
+                
+                # last agent update
+                self.actor_critic.agents_num = last_agents
+                values, action_log_probs, dist_entropy, _, _ = self.actor_critic.evaluate_actions(agent_id, share_obs_batch_last, 
+                obs_batch_last, recurrent_hidden_states_batch_last, recurrent_hidden_states_critic_batch_last, masks_batch_last, high_masks_batch_last, actions_batch_last)
+
+                ratio = torch.exp(action_log_probs - old_action_log_probs_batch_last)
+                KL_divloss = nn.KLDivLoss(reduction='batchmean')(old_action_log_probs_batch_last, torch.exp(action_log_probs))
+                surr1 = ratio * adv_targ_last
+                surr2 = torch.clamp(ratio, 1.0 - self.clip_param, 1.0 + self.clip_param) * adv_targ_last
+                action_loss = (-torch.min(surr1, surr2)* high_masks_batch_last).sum() / high_masks_batch_last.sum()
+
+                if self.use_clipped_value_loss:
+                    if self.use_huber_loss:
+                        if self.use_popart:
+                            value_pred_clipped = value_preds_batch_last + (values - value_preds_batch_last).clamp(-self.clip_param, self.clip_param)
+                            error_clipped = self.value_normalizer(return_batch_last) - value_pred_clipped
+                            value_losses_clipped = huber_loss(error_clipped, self.huber_delta)
+                            error = self.value_normalizer(return_batch_last) - values
+                            value_losses = huber_loss(error,self.huber_delta)
+                            value_loss = weight_last * torch.max(value_losses, value_losses_clipped).mean()
+                        else:
+                            value_pred_clipped = value_preds_batch_last + (values - value_preds_batch_last).clamp(-self.clip_param, self.clip_param)
+                            error_clipped = (return_batch_last) - value_pred_clipped
+                            value_losses_clipped = huber_loss(error_clipped, self.huber_delta)
+                            error = (return_batch_last) - values
+                            value_losses = huber_loss(error,self.huber_delta)
+                            value_loss = weight_last * torch.max(value_losses, value_losses_clipped).mean()
+                    else:
+                        if self.use_popart:
+                            value_pred_clipped = value_preds_batch_last + (values - value_preds_batch_last).clamp(-self.clip_param, self.clip_param)
+                            value_losses = (values - self.value_normalizer(return_batch_last)).pow(2)
+                            value_losses_clipped = (value_pred_clipped - self.value_normalizer(return_batch_last)).pow(2)
+                            value_loss = weight_last * 0.5 * torch.max(value_losses, value_losses_clipped).mean()
+                        else:
+                            value_pred_clipped = value_preds_batch_last + (values - value_preds_batch_last).clamp(-self.clip_param, self.clip_param)
+                            value_losses = (values - (return_batch_last)).pow(2)
+                            value_losses_clipped = (value_pred_clipped - (return_batch_last)).pow(2)
+                            value_loss = weight_last * 0.5 * torch.max(value_losses, value_losses_clipped).mean() 
+                else:
+                    if self.use_huber_loss:
+                        if self.use_popart:
+                            error = self.value_normalizer(return_batch_last) - values
+                        else:
+                            error = return_batch_last - values
+                        value_loss = weight_last * huber_loss(error,self.huber_delta).mean()
+                    else:
+                        if self.use_popart:
+                            value_loss = weight_last * 0.5 * (self.value_normalizer(return_batch_last) - values).pow(2).mean()
+                        else:
+                            value_loss = weight_last * 0.5 * (return_batch_last - values).pow(2).mean()               
+                if count_stop_step > self.num_mini_batch or count_stop_step==0: 
+                    self.optimizer_actor.zero_grad()
+                    self.optimizer_critic.zero_grad()
+                    count_stop_step = 0
+                
+                        
+                # if self.use_common_layer:
+                #     (value_loss * self.value_loss_coef + action_loss - dist_entropy * self.entropy_coef).backward()
+                # else:              
+                #     (value_loss * self.value_loss_coef).backward()
+                #     if turn_on == True:
+                #         (action_loss - dist_entropy * self.entropy_coef).backward()
+                
+                (value_loss * self.value_loss_coef + action_loss - dist_entropy * self.entropy_coef).backward()
+                
+                norm, grad_norm = get_p_and_g_mean_norm(self.actor_critic.parameters())
+                       
+                if self.use_max_grad_norm:
+                    nn.utils.clip_grad_norm_(self.actor_critic.parameters(), self.max_grad_norm)
+                 
+                # current agent backward
+                self.actor_critic.agents_num = current_agents
+                values, action_log_probs, dist_entropy, _, _ = self.actor_critic.evaluate_actions(agent_id, share_obs_batch_current, 
+                obs_batch_current, recurrent_hidden_states_batch_current, recurrent_hidden_states_critic_batch_current, masks_batch_current, high_masks_batch_current, actions_batch_current)
+  
+                ratio = torch.exp(action_log_probs - old_action_log_probs_batch_current)
+                KL_divloss = nn.KLDivLoss(reduction='batchmean')(old_action_log_probs_batch_current, torch.exp(action_log_probs))
+                surr1 = ratio * adv_targ_current
+                surr2 = torch.clamp(ratio, 1.0 - self.clip_param, 1.0 + self.clip_param) * adv_targ_current
+                action_loss = (-torch.min(surr1, surr2)* high_masks_batch_current).sum() / high_masks_batch_current.sum()
+
+
+                if self.use_clipped_value_loss:
+                    if self.use_huber_loss:
+                        if self.use_popart:
+                            value_pred_clipped = value_preds_batch_current + (values - value_preds_batch_current).clamp(-self.clip_param, self.clip_param)
+                            error_clipped = self.value_normalizer(return_batch_current) - value_pred_clipped
+                            value_losses_clipped = huber_loss(error_clipped, self.huber_delta)
+                            error = self.value_normalizer(return_batch_current) - values
+                            value_losses = huber_loss(error,self.huber_delta)
+                            value_loss = weight_current * torch.max(value_losses, value_losses_clipped).mean()
+                        else:
+                            value_pred_clipped = value_preds_batch_current + (values - value_preds_batch_current).clamp(-self.clip_param, self.clip_param)
+                            error_clipped = (return_batch_current) - value_pred_clipped
+                            value_losses_clipped = huber_loss(error_clipped, self.huber_delta)
+                            error = (return_batch_current) - values
+                            value_losses = huber_loss(error,self.huber_delta)
+                            value_loss = weight_current * torch.max(value_losses, value_losses_clipped).mean()
+                    else:
+                        if self.use_popart:
+                            value_pred_clipped = value_preds_batch_current + (values - value_preds_batch_current).clamp(-self.clip_param, self.clip_param)
+                            value_losses = (values - self.value_normalizer(return_batch_current)).pow(2)
+                            value_losses_clipped = (value_pred_clipped - self.value_normalizer(return_batch_current)).pow(2)
+                            value_loss = weight_current * 0.5 * torch.max(value_losses, value_losses_clipped).mean()
+                        else:
+                            value_pred_clipped = value_preds_batch_current + (values - value_preds_batch_current).clamp(-self.clip_param, self.clip_param)
+                            value_losses = (values - (return_batch_current)).pow(2)
+                            value_losses_clipped = (value_pred_clipped - (return_batch_current)).pow(2)
+                            value_loss = weight_current * 0.5 * torch.max(value_losses, value_losses_clipped).mean() 
+                else:
+                    if self.use_huber_loss:
+                        if self.use_popart:
+                            error = self.value_normalizer(return_batch_current) - values
+                        else:
+                            error = return_batch_current - values
+                        value_loss = weight_current * huber_loss(error,self.huber_delta).mean()
+                    else:
+                        if self.use_popart:
+                            value_loss = weight_current * 0.5 * (self.value_normalizer(return_batch_current) - values).pow(2).mean()
+                        else:
+                            value_loss = weight_current * 0.5 * (return_batch_current - values).pow(2).mean()               
+                        
+                # if self.use_common_layer:
+                #     (value_loss * self.value_loss_coef + action_loss - dist_entropy * self.entropy_coef).backward()
+                # else:              
+                #     (value_loss * self.value_loss_coef).backward()
+                #     if turn_on == True:
+                #         (action_loss - dist_entropy * self.entropy_coef).backward()
+                # (value_loss * self.value_loss_coef + action_loss - dist_entropy * self.entropy_coef).backward()
+                (value_loss * self.value_loss_coef).backward()
+                (action_loss - dist_entropy * self.entropy_coef).backward()
+
+                norm, grad_norm = get_p_and_g_mean_norm(self.actor_critic.parameters())
+                       
+                if self.use_max_grad_norm:
+                    nn.utils.clip_grad_norm_(self.actor_critic.parameters(), self.max_grad_norm)
+
+                if count_stop_step == self.num_mini_batch - 1: 
+                    self.optimizer_actor.step()
+                    self.optimizer_critic.step()
+                count_stop_step += 1
+
+                value_loss_epoch += value_loss.item()
+                action_loss_epoch += action_loss.item()
+                dist_entropy_epoch += dist_entropy.item()  
+       
+        num_updates = self.ppo_epoch * self.num_mini_batch
+
+        value_loss_epoch /= num_updates
+        action_loss_epoch /= num_updates
+        dist_entropy_epoch /= num_updates
+
+        return value_loss_epoch, action_loss_epoch, dist_entropy_epoch

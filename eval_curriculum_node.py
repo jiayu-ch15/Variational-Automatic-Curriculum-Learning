@@ -108,16 +108,16 @@ if __name__ == '__main__':
     num_processes = 1000
     # envs = make_parallel_env(args.env_name, num_processes, args.seed, True)
     cover_rate_sum = 0
-    agent_num = 4
-    box_num = 4
+    agent_num = 2
+    box_num = 2
     # data = []
     mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run1'
     if args.scenario_name=='simple_spread':
         mode_path = mode_path / ('%iagents'%agent_num)
-        data_dir = '/home/chenjy/mappo-sc/node_data/sp_66_%i.txt' %agent_num
+        data_dir = '/home/tsing73/curriculum/node_data/sp_66_%i.txt' %agent_num
     elif args.scenario_name=='push_ball':
-        mode_path = mode_path / ('%iboxes'%box_num)
-        data_dir = '/home/chenjy/mappo-sc/node_data/pb_22_4people%ibox.txt' %box_num
+        mode_path = mode_path / ('%iagents'%box_num)
+        data_dir = '/home/tsing73/curriculum/node_data/pb_22_2people%ibox.txt' %box_num
     with open(data_dir,'r') as fp:
         data = fp.readlines()
     for i in range(len(data)):
@@ -202,6 +202,6 @@ if __name__ == '__main__':
         #         plt.scatter(uniform[:, 0], uniform[:, 1], marker='o')
         #         plt.scatter(archive_projection[:, 0], archive_projection[:, 1],marker='1')
         #         plt.savefig(mode_path / 'parent_all' / ('result_%i.jpg'%j))
-        j += 1
+        j += 5
 
 

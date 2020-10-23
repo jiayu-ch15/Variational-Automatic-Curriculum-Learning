@@ -921,7 +921,7 @@ class Policy_pb_2(nn.Module): # actor critic 分开
         # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
         actor_features = self.actor_base(inputs, self.agents_num, self.boxes_num) 
         value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.agents_num, self.boxes_num,rnn_hxs_actor, masks)         
-        
+
         if self.mixed_action:
             dist, action, action_log_probs = [None, None], [None, None], [None, None]
             for i in range(2):
@@ -958,6 +958,7 @@ class Policy_pb_2(nn.Module): # actor critic 分开
             
         else:
             dist = self.dist(actor_features, available_actions)
+            pdb.set_trace()
     
             if deterministic:
                 action = dist.mode()

@@ -54,7 +54,7 @@ class node_buffer():
         self.agent_num = agent_num
         self.box_num = box_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num, self.box_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -538,23 +538,23 @@ def main():
     use_child_novelty = False # 关闭
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
     use_novelty_sample = True
-    use_parent_sample = False
+    use_parent_sample = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
     if use_parent_sample:
-        N_parent = 50
+        N_parent = 25
     else:
         N_parent = 0
     N_archive = 150
     N_child = args.n_rollout_threads - N_archive - N_parent
-    max_step = 0.1
+    max_step = 0.2
     TB = 1
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = 1
+    boundary = 2.0
     start_boundary = 0.3
     N_easy = 0
     test_flag = 0

@@ -13,8 +13,8 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO, PPO2, PP3
-from algorithm.model import Policy, Policy_pb_2, ATTBase_actor_dist_pb_add, ATTBase_actor_pb_add,ATTBase_critic_pb_add
+from algorithm.ppo import PPO, PPO2, PPO3
+from algorithm.model import Policy, Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_actor_pb_add,ATTBase_critic_pb_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -54,7 +54,7 @@ class node_buffer():
         self.agent_num = agent_num
         self.box_num = box_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num, self.box_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -98,7 +98,7 @@ class node_buffer():
         # agent_size=0.2, ball_size=0.2,landmark_size=0.3
         # box在内侧，agent在start_boundary和start_boundary_agent之间
         cell_size = 0.3
-        grid_num = int(start_boundary * 2 / cell_size)
+        grid_num = int(start_boundary * 2 / cell_size) + 1
         assert grid_num ** 2 >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
@@ -422,7 +422,7 @@ def main():
         # share_base = ATTBase_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
         actor_base = ATTBase_actor_dist_pb_add(envs.observation_space[0].shape[0], envs.action_space[0],num_agents,num_boxes)
         critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0],num_agents,num_boxes)
-        actor_critic = Policy_pb_2(envs.observation_space[0], 
+        actor_critic = Policy_pb_3(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
                     num_box = num_boxes,
@@ -447,6 +447,7 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
+        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/add_landmark_obs/run3/models/agent_model.pt')['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -527,7 +528,7 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-    use_parent_novelty = True
+    use_parent_novelty = False
     use_child_novelty = False
     use_novelty_sample = True
     use_parent_sample = True
@@ -538,30 +539,30 @@ def main():
     N_child = 300
     N_archive = 150
     N_parent = 50
-    max_step = 0.1
+    max_step = 0.2
     TB = 1
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = 1
+    boundary = 2
     start_boundary = 0.3
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.95
-    target_num = 2
+    target_num = 12
     last_box_num = 0
     now_box_num = 2
     now_agent_num = now_box_num
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
-    check_frequency = 3
-    save_node_frequency = 1
+    check_frequency = 1
+    save_node_frequency = 5
     save_node_flag = True
     historical_length = 5
     next_stage_flag = 0
-    frozen_epoch = 3
-    frozen_count = 3
+    frozen_epoch = 6
+    frozen_count = 6
     initial_optimizer = False
     eval_flag = False
     random.seed(args.seed)
@@ -1013,7 +1014,10 @@ def main():
                     torch.save({'model': actor_critic}, str(save_dir) + "/%ibox_model.pt"%now_node.box_num)
         if next_stage_flag==1:
             next_stage_flag = 0
-            start_boundary = 0.6
+            if now_agent_num <= 4:
+                start_boundary = 0.6
+            else:
+                start_boundary = 1.0
             now_node = node_buffer(now_agent_num, now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,

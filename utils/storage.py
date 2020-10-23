@@ -786,6 +786,62 @@ class RolloutStorage_share(object):  # 减小share_obs
                     self.returns[step,:,agent_id] = self.returns[step + 1,:,agent_id] * \
                             gamma * self.masks[step + 1,:,agent_id] + self.rewards[step,:,agent_id]
 
+    def shared_compute_returns(self,
+                        next_value,
+                        use_gae,
+                        gamma,
+                        gae_lambda,
+                        use_proper_time_limits=True,
+                        use_popart=True,
+                        value_normalizer=None): # 把所有的agent的return同时计算完
+        if use_proper_time_limits:
+            if use_gae:
+                self.value_preds[-1,:] = next_value
+                gae = 0
+                for step in reversed(range(self.rewards.shape[0])):
+                    if use_popart:
+                        delta = self.rewards[step,:] + gamma * value_normalizer.denormalize(torch.tensor(self.value_preds[
+                        step + 1,:])).cpu().numpy() * self.masks[step + 1,:] - value_normalizer.denormalize(torch.tensor(self.value_preds[step,:])).cpu().numpy()
+                        gae = delta + gamma * gae_lambda * self.masks[step + 1,:] * gae
+                        gae = gae * self.bad_masks[step + 1,:]
+                        self.returns[step,:] = gae + value_normalizer.denormalize(torch.tensor(self.value_preds[step,:])).cpu().numpy()
+                    else:
+                        delta = self.rewards[step,:] + gamma * self.value_preds[
+                            step + 1,:] * self.masks[step + 1,:] - self.value_preds[step,:]
+                        gae = delta + gamma * gae_lambda * self.masks[step + 1,:] * gae
+                        gae = gae * self.bad_masks[step + 1,:]
+                        self.returns[step,:] = gae + self.value_preds[step,:]
+            else:
+                self.returns[-1,:] = next_value
+                for step in reversed(range(self.rewards.shape[0])):
+                    if use_popart:
+                        self.returns[step,:] = (self.returns[step + 1,:] * \
+                        gamma * self.masks[step + 1,:] + self.rewards[step,:]) * self.bad_masks[step + 1,:] \
+                        + (1 - self.bad_masks[step + 1,:]) * value_normalizer.denormalize(torch.tensor(self.value_preds[step,:])).cpu().numpy()
+                    else:
+                        self.returns[step,:] = (self.returns[step + 1,:] * \
+                            gamma * self.masks[step + 1,:] + self.rewards[step,:]) * self.bad_masks[step + 1,:] \
+                            + (1 - self.bad_masks[step + 1,:]) * self.value_preds[step,:]
+        else:
+            if use_gae:
+                self.value_preds[-1,:] = next_value
+                gae = 0
+                for step in reversed(range(self.rewards.shape[0])):
+                    if use_popart:
+                        delta = self.rewards[step,:] + gamma * value_normalizer.denormalize(torch.tensor(self.value_preds[
+                            step + 1,:])).cpu().numpy() * self.masks[step + 1,:] - value_normalizer.denormalize(torch.tensor(self.value_preds[step,:])).cpu().numpy()
+                        gae = delta + gamma * gae_lambda * self.masks[step + 1,:] * gae                       
+                        self.returns[step,:] = gae + value_normalizer.denormalize(torch.tensor(self.value_preds[step,:])).cpu().numpy()
+                    else:
+                        delta = self.rewards[step,:] + gamma * self.value_preds[step + 1,:] * self.masks[step + 1,:] - self.value_preds[step,:]
+                        gae = delta + gamma * gae_lambda * self.masks[step + 1,:] * gae
+                        self.returns[step,:] = gae + self.value_preds[step,:]
+            else:
+                self.returns[-1,:] = next_value
+                for step in reversed(range(self.rewards.shape[0])):
+                    self.returns[step,:] = self.returns[step + 1,:] * \
+                            gamma * self.masks[step + 1,:] + self.rewards[step,:]
+
     def feed_forward_generator(self, agent_id, advantages, num_mini_batch=None, mini_batch_size=None):
         episode_length, n_rollout_threads = self.rewards.shape[0:2]
         batch_size = n_rollout_threads * episode_length

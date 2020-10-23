@@ -52,7 +52,7 @@ class node_buffer():
     def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num)
+        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
         # self.archive = self.produce_uniform_grid(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
@@ -90,7 +90,7 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size) + 1
+        grid_num = int(start_boundary * 2 / cell_size)
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_landmark_grid = []
@@ -441,7 +441,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO(actor_critic,
+        agents = PPO3(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
@@ -548,7 +548,7 @@ def main():
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.9
+    upper_bound = 0.95
     target_num = 8
     last_agent_num = 0
     now_agent_num = 4
@@ -981,7 +981,7 @@ def main():
                 if last_node.agent_num!=0:
                     value_loss, action_loss, dist_entropy = agents.update_double_share(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
                 else:
-                    value_loss, action_loss, dist_entropy = agents.update_share(now_node.agent_num, rollouts_now)
+                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now,False)
                 logger.add_scalars('value_loss',
                     {'value_loss': value_loss},
                     current_timestep)
@@ -1188,8 +1188,8 @@ def main():
 
         if next_stage_flag==1:
             next_stage_flag = 0
-            start_boundary = 3.0
             last_node = copy.deepcopy(now_node)
+            start_boundary = 1.0
             now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
