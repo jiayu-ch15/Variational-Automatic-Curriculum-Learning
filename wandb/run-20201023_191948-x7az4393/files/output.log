@@ -1,0 +1,272 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.040299999999999996
+training_cover_rate:  0.0308
+training_cover_rate:  0.0103
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Policy3. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type MLPBase. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type LayerNorm. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Sequential. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Linear. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Tanh. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_actor_dist_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ObsEncoder_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Categorical. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_critic_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+
+ Scenario simple_spread Algo check updates 0/380 episodes, total num timesteps 105000/40000000, FPS 1202.
+
+value loss of agent: 0.130068326741457
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0025
+training_cover_rate:  0.0003
+training_cover_rate:  0.00030000000000000003
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0015
+
+ Scenario simple_spread Algo check updates 1/380 episodes, total num timesteps 210000/40000000, FPS 1204.
+
+value loss of agent: 0.019033828005194663
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0025
+training_cover_rate:  0.001
+training_cover_rate:  0.0004
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0065
+
+ Scenario simple_spread Algo check updates 2/380 episodes, total num timesteps 315000/40000000, FPS 1203.
+
+value loss of agent: 0.014545504624644915
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0
+training_cover_rate:  0.0
+training_cover_rate:  0.0
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.005
+
+ Scenario simple_spread Algo check updates 3/380 episodes, total num timesteps 420000/40000000, FPS 1206.
+
+value loss of agent: 0.009767223273714383
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0
+training_cover_rate:  0.0
+training_cover_rate:  0.0
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0065
+
+ Scenario simple_spread Algo check updates 4/380 episodes, total num timesteps 525000/40000000, FPS 1188.
+
+value loss of agent: 0.013693737455954154
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0
+training_cover_rate:  0.0
+training_cover_rate:  0.002
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0105
+
+ Scenario simple_spread Algo check updates 5/380 episodes, total num timesteps 630000/40000000, FPS 1184.
+
+value loss of agent: 0.03418777659535408
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0016
+training_cover_rate:  0.0134
+training_cover_rate:  0.0155
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.008
+
+ Scenario simple_spread Algo check updates 6/380 episodes, total num timesteps 735000/40000000, FPS 1186.
+
+value loss of agent: 0.1290796582897504
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.04410000000000001
+training_cover_rate:  0.084
+training_cover_rate:  0.139
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0129
+
+ Scenario simple_spread Algo check updates 7/380 episodes, total num timesteps 840000/40000000, FPS 1184.
+
+value loss of agent: 0.7054649750391643
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.26289999999999997
+training_cover_rate:  0.40720000000000006
+training_cover_rate:  0.548
+child_drop:  0
+add_hard_num:  0
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  461
+test_agent_num:  4
+test_mean_cover_rate:  0.025299999999999996
+
+ Scenario simple_spread Algo check updates 8/380 episodes, total num timesteps 945000/40000000, FPS 1183.
+
+value loss of agent: 3.197664562861125
+> /home/tsing73/curriculum/train_mpe_curriculum_sp.py(192)SampleNearby_novelty()
+-> if self.get_novelty([st],self.parent_all) > novelty_threshold:
+(Pdb) 0.6855559799746331
+(Pdb) [0.5549841656381226, 0.5740841454456475, 0.5870350582116951, 0.5879600111567268, 0.5887565351005611, 0.6021907011321193, 0.6039717184911039, 0.6079091944793367, 0.6079737146149048, 0.6179429078801227, 0.6317335244991509, 0.6330957089737591, 0.633946624039638, 0.6506894374824742, 0.6574632526730235, 0.6595374125663884, 0.6643381130155882, 0.6729831438509077, 0.6803758415327904, 0.6819028019606708, 0.6829333695075415, 0.6908808141792473, 0.6951497266586963, 0.6967164579931597, 0.6987169621986588, 0.7086351676496971, 0.714166024590332, 0.7314924406972112, 0.7321288947125688, 0.7366739669044607, 0.7405011818845255, 0.7464068542248906, 0.7502349245393993, 0.7634957716313762, 0.7664782115478121, 0.8074520338789906, 0.8138602013851403, 0.8491873796290017, 0.9126988224532543]
+(Pdb) array([1.59613719])
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(193)SampleNearby_novelty()
+-> child_new.append(copy.deepcopy(st))
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(194)SampleNearby_novelty()
+-> add_num += 1
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(174)SampleNearby_novelty()
+-> for k in range(len_start):
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(175)SampleNearby_novelty()
+-> st = copy.deepcopy(parents[k])
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(176)SampleNearby_novelty()
+-> s_len = len(st)
+(Pdb) array([0.58796001])
+(Pdb) *** ValueError: XA and XB must have the same number of columns (i.e. feature dimension.)
+(Pdb) array([0.55498417])
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(192)SampleNearby_novelty()
+-> if self.get_novelty([st],self.parent_all) > novelty_threshold:
+(Pdb) array([1.60335318])
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(193)SampleNearby_novelty()
+-> child_new.append(copy.deepcopy(st))
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(194)SampleNearby_novelty()
+-> add_num += 1
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(174)SampleNearby_novelty()
+-> for k in range(len_start):
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(175)SampleNearby_novelty()
+-> st = copy.deepcopy(parents[k])
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(176)SampleNearby_novelty()
+-> s_len = len(st)
+(Pdb) [array([0.05377051, 0.2584799 ]), array([-0.18626822, -0.06358135]), array([ 0.08787595, -0.1072114 ]), array([0.06174087, 0.1165978 ]), array([0.04868308, 0.25339247]), array([0.07110023, 0.12595716]), array([ 0.09677522, -0.09831214]), array([-0.17799909, -0.05531222])]
+(Pdb) array([0.58703506])
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(177)SampleNearby_novelty()
+-> for i in range(s_len):
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(178)SampleNearby_novelty()
+-> epsilon_x = -2 * self.max_step * random.random() + self.max_step
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(179)SampleNearby_novelty()
+-> epsilon_y = -2 * self.max_step * random.random() + self.max_step
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(180)SampleNearby_novelty()
+-> st[i][0] = st[i][0] + epsilon_x
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(181)SampleNearby_novelty()
+-> st[i][1] = st[i][1] + epsilon_y
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(182)SampleNearby_novelty()
+-> if st[i][0] > self.boundary:
+(Pdb) array([-0.15778792,  0.0223571 ])
+(Pdb) -0.2115584278849345
+(Pdb) -0.23612280410466313
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(192)SampleNearby_novelty()
+-> if self.get_novelty([st],self.parent_all) > novelty_threshold:
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(193)SampleNearby_novelty()
+-> child_new.append(copy.deepcopy(st))
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(194)SampleNearby_novelty()
+-> add_num += 1
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(174)SampleNearby_novelty()
+-> for k in range(len_start):
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(175)SampleNearby_novelty()
+-> st = copy.deepcopy(parents[k])
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(176)SampleNearby_novelty()
+-> s_len = len(st)
+(Pdb) [array([ 0.16118489, -0.12138634]), array([ 0.23512823, -0.12209724]), array([-0.07264184, -0.11815202]), array([-0.05773125, -0.17711628]), array([ 0.24152193, -0.11570354]), array([ 0.15202804, -0.13054318]), array([-0.07885388, -0.12436406]), array([-0.05178556, -0.17117058])]
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(192)SampleNearby_novelty()
+-> if self.get_novelty([st],self.parent_all) > novelty_threshold:
+(Pdb) [array([ 0.53527434, -0.23923826]), array([ 0.81871608, -0.28399148]), array([-0.362633  ,  0.16325674]), array([-0.1227301 ,  0.33035476]), array([-0.24362994,  0.01585433]), array([ 0.06832761, -0.70250706]), array([0.47509308, 0.2401559 ]), array([-0.01951841, -0.74298711])]
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(191)SampleNearby_novelty()
+-> pdb.set_trace()
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(192)SampleNearby_novelty()
+-> if self.get_novelty([st],self.parent_all) > novelty_threshold:
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(191)SampleNearby_novelty()
+-> pdb.set_trace()
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(192)SampleNearby_novelty()
+-> if self.get_novelty([st],self.parent_all) > novelty_threshold:
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(191)SampleNearby_novelty()
+-> pdb.set_trace()
+(Pdb) > /home/tsing73/curriculum/train_mpe_curriculum_sp.py(192)SampleNearby_novelty()
+-> if self.get_novelty([st],self.parent_all) > novelty_threshold:
+(Pdb) Traceback (most recent call last):
+  File "train_mpe_curriculum_sp.py", line 1006, in <module>
+    main()
+  File "train_mpe_curriculum_sp.py", line 589, in main
+    last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+  File "train_mpe_curriculum_sp.py", line 192, in SampleNearby_novelty
+    if self.get_novelty([st],self.parent_all) > novelty_threshold:
+  File "train_mpe_curriculum_sp.py", line 192, in SampleNearby_novelty
+    if self.get_novelty([st],self.parent_all) > novelty_threshold:
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/bdb.py", line 48, in trace_dispatch
+    return self.dispatch_line(frame)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/bdb.py", line 67, in dispatch_line
+    if self.quitting: raise BdbQuit
+bdb.BdbQuit

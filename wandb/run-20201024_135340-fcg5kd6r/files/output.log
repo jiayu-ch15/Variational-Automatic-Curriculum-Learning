@@ -1,0 +1,168 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+sample_time:  0.005139589309692383
+child_drop:  0
+add_hard_num:  0
+parent:  8
+last_node_parent:  8
+childlist:  0
+archive:  492
+test_agent_num:  2
+test_mean_cover_rate:  0.131
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Policy_pb_3. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type MLPBase. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type LayerNorm. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Sequential. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Linear. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Tanh. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_actor_dist_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ObsEncoder_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Categorical. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_critic_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+
+ Scenario push_ball Algo diversified_novelty_pb updates 0/444 episodes, total num timesteps 180000/80000000, FPS 2524.
+
+value loss of agent: 1.6062252044677734
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0009660720825195312
+child_drop:  22
+add_hard_num:  171
+parent:  2
+last_node_parent:  2
+childlist:  0
+archive:  647
+test_agent_num:  2
+test_mean_cover_rate:  0.121
+
+ Scenario push_ball Algo diversified_novelty_pb updates 1/444 episodes, total num timesteps 360000/80000000, FPS 2570.
+
+value loss of agent: 2.0962554454803466
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0024738311767578125
+child_drop:  39
+add_hard_num:  139
+parent:  2
+last_node_parent:  2
+childlist:  0
+archive:  817
+test_agent_num:  2
+test_mean_cover_rate:  0.115
+
+ Scenario push_ball Algo diversified_novelty_pb updates 2/444 episodes, total num timesteps 540000/80000000, FPS 2546.
+
+value loss of agent: 2.1118165016174317
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014913082122802734
+child_drop:  115
+add_hard_num:  88
+parent:  11
+last_node_parent:  11
+childlist:  0
+archive:  953
+test_agent_num:  2
+test_mean_cover_rate:  0.122
+
+ Scenario push_ball Algo diversified_novelty_pb updates 3/444 episodes, total num timesteps 720000/80000000, FPS 2407.
+
+value loss of agent: 2.9919784228007
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001928091049194336
+child_drop:  77
+add_hard_num:  122
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  1086
+test_agent_num:  2
+test_mean_cover_rate:  0.118
+
+ Scenario push_ball Algo diversified_novelty_pb updates 4/444 episodes, total num timesteps 900000/80000000, FPS 2248.
+
+value loss of agent: 1.9671730041503905
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015652179718017578
+child_drop:  96
+add_hard_num:  119
+parent:  14
+last_node_parent:  14
+childlist:  0
+archive:  1207
+test_agent_num:  2
+test_mean_cover_rate:  0.111
+
+ Scenario push_ball Algo diversified_novelty_pb updates 5/444 episodes, total num timesteps 1080000/80000000, FPS 2142.
+
+value loss of agent: 2.055053774515788
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00251007080078125
+child_drop:  123
+add_hard_num:  80
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  1336
+test_agent_num:  2
+test_mean_cover_rate:  0.134
+
+ Scenario push_ball Algo diversified_novelty_pb updates 6/444 episodes, total num timesteps 1260000/80000000, FPS 2012.
+
+value loss of agent: 1.9917417605717977
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0026311874389648438
+child_drop:  71
+add_hard_num:  108
+parent:  13
+last_node_parent:  13
+childlist:  0
+archive:  1494
+test_agent_num:  2
+test_mean_cover_rate:  0.146
+
+ Scenario push_ball Algo diversified_novelty_pb updates 7/444 episodes, total num timesteps 1440000/80000000, FPS 1902.
+
+value loss of agent: 1.5455480019251506
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002827882766723633
+child_drop:  97
+add_hard_num:  92
+parent:  16
+last_node_parent:  16
+childlist:  0
+archive:  1639
+test_agent_num:  2
+test_mean_cover_rate:  0.139
+
+ Scenario push_ball Algo diversified_novelty_pb updates 8/444 episodes, total num timesteps 1620000/80000000, FPS 1865.
+
+value loss of agent: 1.646000830332438
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017619132995605469

@@ -1,0 +1,19 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+Traceback (most recent call last):
+  File "train_mpe_curriculum_sp.py", line 1005, in <module>
+    main()
+  File "train_mpe_curriculum_sp.py", line 684, in main
+    obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
+  File "/home/tsing73/curriculum/baselines/common/vec_env/vec_env.py", line 116, in step
+    self.step_async(actions, now_num_processes, now_agent_num)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 198, in step_async
+    remote.send((tmp_list,None))
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 206, in send
+    self._send_bytes(_ForkingPickler.dumps(obj))
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 404, in _send_bytes
+    self._send(header + buf)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 368, in _send
+    n = write(self._handle, buf)
+KeyboardInterrupt

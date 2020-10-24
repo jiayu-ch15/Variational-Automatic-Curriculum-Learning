@@ -29,6 +29,7 @@ import random
 import copy
 import matplotlib.pyplot as plt
 import pdb
+import wandb
 np.set_printoptions(linewidth=10000)
 
 
@@ -54,7 +55,7 @@ class node_buffer():
         self.agent_num = agent_num
         self.box_num = box_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num, self.box_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -167,8 +168,7 @@ class node_buffer():
         else:
             novelty_threshold = 0
         # novelty_threshold = child_novelty_threshold
-        writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
-                {'novelty_threshold': novelty_threshold},timestep)
+        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -328,19 +328,15 @@ class node_buffer():
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
         if len(self.parent_all) > self.buffer_length:
             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
-        writer.add_scalars(str(self.agent_num)+'agent/archive',
-                        {'archive_length': len(self.archive)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/childlist',
-                        {'childlist_length': len(self.childlist)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/parentlist',
-                        {'parentlist_length': len(self.parent)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/child_drop',
-                        {'drop_num': drop_num},timestep)
+        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
+        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
+        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
+        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
     
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
-        if self.box_num!=0:
-            save_path = dir_path / ('%iboxes' % (self.box_num))
+        if self.agent_num!=0:
+            save_path = dir_path / ('%iagents' % (self.agent_num))
             if not os.path.exists(save_path):
                 os.makedirs(save_path / 'childlist')
                 os.makedirs(save_path / 'archive')
@@ -367,6 +363,7 @@ class node_buffer():
 
 def main():
     args = get_config()
+    run = wandb.init(project='phase_pb')
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -536,9 +533,9 @@ def main():
     child_novelty_threshold = 0.5
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 300
+    N_child = 325
     N_archive = 150
-    N_parent = 50
+    N_parent = 23
     max_step = 0.2
     TB = 1
     M = N_child
@@ -757,7 +754,7 @@ def main():
                                     rewards[:,agent_id], 
                                     np.array(masks)[:,agent_id])
                 # import pdb;pdb.set_trace()
-                logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
                 print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
                 current_timestep += now_episode_length * starts_length_now
                 curriculum_episode += 1
@@ -820,13 +817,13 @@ def main():
                     else:
                         value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, True, initial_optimizer=False)
                         frozen_count += 1
-                    logger.add_scalars('value_loss',
+                    wandb.log(
                         {'value_loss': value_loss},
                         current_timestep)
                     rew = []
                     for i in range(rollouts_now.rewards.shape[1]):
                         rew.append(np.sum(rollouts_now.rewards[:,i]))
-                    logger.add_scalars('average_episode_reward',
+                    wandb.log(
                         {'average_episode_reward': np.mean(rew)},
                         current_timestep)
                     # clean the buffer and reset
@@ -845,7 +842,7 @@ def main():
                         rew = []
                         for i in range(rollouts[agent_id].rewards.shape[1]):
                             rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
-                        logger.add_scalars('agent%i/average_episode_reward'%agent_id,
+                        wandb.log(
                             {'average_episode_reward': np.mean(rew)},
                             (episode+1) * args.episode_length * one_length*eval_frequency)
                         rollouts[agent_id].after_update()
@@ -997,7 +994,7 @@ def main():
                                 np.array(values[agent_id]),
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
-            logger.add_scalars('%ibox/cover_rate' %now_node.box_num,{'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({str(now_node.agent_num)+'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
             print('test_box_num: ', now_node.box_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
@@ -1014,10 +1011,7 @@ def main():
                     torch.save({'model': actor_critic}, str(save_dir) + "/%ibox_model.pt"%now_node.box_num)
         if next_stage_flag==1:
             next_stage_flag = 0
-            if now_agent_num <= 4:
-                start_boundary = 0.6
-            else:
-                start_boundary = 1.0
+            start_boundary = 1.0
             now_node = node_buffer(now_agent_num, now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
@@ -1066,14 +1060,6 @@ def main():
             else:
                 for agent_id in range(now_agent_num):
                     print("value loss of agent%i: " % agent_id + str(value_losses[agent_id]))
-
-            # if args.env_name == "MPE":
-            #     for agent_id in range(num_agents):
-            #         show_rewards = []
-            #         for info in infos:                        
-            #             if 'individual_reward' in info[agent_id].keys():
-            #                 show_rewards.append(info[agent_id]['individual_reward'])                    
-            #         logger.add_scalars('agent%i/individual_reward' % agent_id, {'individual_reward': np.mean(show_rewards)}, total_num_steps)
                 
     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
     logger.close()

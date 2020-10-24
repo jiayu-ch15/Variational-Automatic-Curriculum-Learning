@@ -1,0 +1,1516 @@
+Process Process-78:
+Process Process-67:
+Process Process-35:
+Process Process-7:
+Process Process-10:
+Process Process-16:
+Process Process-23:
+Process Process-89:
+Process Process-36:
+Process Process-98:
+Process Process-99:
+Process Process-60:
+Process Process-81:
+Process Process-91:
+Process Process-87:
+Process Process-64:
+Process Process-83:
+Process Process-20:
+Process Process-45:
+Process Process-52:
+Process Process-48:
+Process Process-17:
+Process Process-53:
+Process Process-54:
+Process Process-24:
+Process Process-66:
+Process Process-32:
+Process Process-33:
+Process Process-34:
+Process Process-65:
+Process Process-51:
+Process Process-49:
+Process Process-57:
+Process Process-38:
+Process Process-25:
+Process Process-19:
+Process Process-50:
+Process Process-100:
+Process Process-31:
+Process Process-21:
+Process Process-5:
+Process Process-79:
+Process Process-85:
+Process Process-86:
+Process Process-58:
+Process Process-82:
+Process Process-2:
+Process Process-9:
+Process Process-8:
+Process Process-6:
+Process Process-75:
+Process Process-61:
+Process Process-11:
+Process Process-29:
+Process Process-62:
+Process Process-71:
+Process Process-14:
+Process Process-18:
+Process Process-27:
+Process Process-22:
+Process Process-30:
+Process Process-4:
+Process Process-12:
+Process Process-70:
+Process Process-77:
+Process Process-72:
+Process Process-92:
+Process Process-26:
+Process Process-47:
+Process Process-40:
+Process Process-97:
+Process Process-39:
+Process Process-15:
+Process Process-42:
+Process Process-95:
+Process Process-46:
+Process Process-73:
+Process Process-74:
+Process Process-56:
+Process Process-55:
+Process Process-84:
+Process Process-80:
+Process Process-69:
+Process Process-28:
+Process Process-13:
+Process Process-43:
+Process Process-68:
+Process Process-93:
+Process Process-63:
+Process Process-96:
+Process Process-90:
+Process Process-3:
+Process Process-76:
+Process Process-88:
+Process Process-101:
+Process Process-59:
+Process Process-37:
+Process Process-94:
+Process Process-44:
+Process Process-41:
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+Traceback (most recent call last):
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+Traceback (most recent call last):
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+Traceback (most recent call last):
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+Traceback (most recent call last):
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+KeyboardInterrupt
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+Traceback (most recent call last):
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+KeyboardInterrupt
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+Traceback (most recent call last):
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+KeyboardInterrupt
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+KeyboardInterrupt
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+KeyboardInterrupt
+KeyboardInterrupt
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+KeyboardInterrupt
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+KeyboardInterrupt
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 249, in _bootstrap
+    self.run()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 93, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 97, in worker
+    cmd, data = remote.recv()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "train_mpe_curriculum_sp.py", line 1006, in <module>
+    main()
+  File "train_mpe_curriculum_sp.py", line 439, in main
+    actor_critic.to(device)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/nn/modules/module.py", line 426, in to
+    return self._apply(convert)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/nn/modules/module.py", line 202, in _apply
+    module._apply(fn)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/nn/modules/module.py", line 202, in _apply
+    module._apply(fn)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/nn/modules/module.py", line 224, in _apply
+    param_applied = fn(param)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/nn/modules/module.py", line 424, in convert
+    return t.to(device, dtype if t.is_floating_point() else None, non_blocking)
+KeyboardInterrupt

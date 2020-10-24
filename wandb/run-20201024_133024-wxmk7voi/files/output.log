@@ -1,0 +1,19 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+Traceback (most recent call last):
+  File "train_mpe_curriculum_sp.py", line 1005, in <module>
+    main()
+  File "train_mpe_curriculum_sp.py", line 684, in main
+    obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
+  File "/home/tsing73/curriculum/baselines/common/vec_env/vec_env.py", line 117, in step
+    return self.step_wait(now_num_processes)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 207, in step_wait
+    results.append(remote.recv())
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 411, in _recv_bytes
+    return self._recv(size)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt

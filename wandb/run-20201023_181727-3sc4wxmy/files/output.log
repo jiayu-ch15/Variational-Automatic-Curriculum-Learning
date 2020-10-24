@@ -1,0 +1,7124 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+sample_time:  0.0012001991271972656
+child_drop:  0
+add_hard_num:  0
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  493
+test_agent_num:  2
+test_mean_cover_rate:  0.125
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Policy_pb_3. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type MLPBase. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type LayerNorm. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Sequential. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Linear. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Tanh. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_actor_dist_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ObsEncoder_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Categorical. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_critic_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+
+ Scenario push_ball Algo diversified_novelty_pb updates 0/444 episodes, total num timesteps 180000/80000000, FPS 3029.
+
+value loss of agent: 1.4230246702829996
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0008416175842285156
+child_drop:  55
+add_hard_num:  134
+parent:  4
+last_node_parent:  4
+childlist:  0
+archive:  650
+test_agent_num:  2
+test_mean_cover_rate:  0.126
+
+ Scenario push_ball Algo diversified_novelty_pb updates 1/444 episodes, total num timesteps 360000/80000000, FPS 2981.
+
+value loss of agent: 1.7331953287124633
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017321109771728516
+child_drop:  39
+add_hard_num:  158
+parent:  4
+last_node_parent:  4
+childlist:  0
+archive:  799
+test_agent_num:  2
+test_mean_cover_rate:  0.126
+
+ Scenario push_ball Algo diversified_novelty_pb updates 2/444 episodes, total num timesteps 540000/80000000, FPS 2901.
+
+value loss of agent: 1.5223662932713826
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0013926029205322266
+child_drop:  53
+add_hard_num:  114
+parent:  4
+last_node_parent:  4
+childlist:  0
+archive:  978
+test_agent_num:  2
+test_mean_cover_rate:  0.109
+
+ Scenario push_ball Algo diversified_novelty_pb updates 3/444 episodes, total num timesteps 720000/80000000, FPS 2715.
+
+value loss of agent: 1.8911969741185506
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016775131225585938
+child_drop:  44
+add_hard_num:  141
+parent:  8
+last_node_parent:  8
+childlist:  0
+archive:  1135
+test_agent_num:  2
+test_mean_cover_rate:  0.094
+
+ Scenario push_ball Algo diversified_novelty_pb updates 4/444 episodes, total num timesteps 900000/80000000, FPS 2601.
+
+value loss of agent: 1.6788549343744914
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015192031860351562
+child_drop:  48
+add_hard_num:  140
+parent:  1
+last_node_parent:  1
+childlist:  0
+archive:  1296
+test_agent_num:  2
+test_mean_cover_rate:  0.101
+
+ Scenario push_ball Algo diversified_novelty_pb updates 5/444 episodes, total num timesteps 1080000/80000000, FPS 2559.
+
+value loss of agent: 1.878238813082377
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016036033630371094
+child_drop:  8
+add_hard_num:  220
+parent:  4
+last_node_parent:  4
+childlist:  0
+archive:  1414
+test_agent_num:  2
+test_mean_cover_rate:  0.111
+
+ Scenario push_ball Algo diversified_novelty_pb updates 6/444 episodes, total num timesteps 1260000/80000000, FPS 2471.
+
+value loss of agent: 1.0810916662216186
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001486063003540039
+child_drop:  52
+add_hard_num:  152
+parent:  13
+last_node_parent:  13
+childlist:  0
+archive:  1547
+test_agent_num:  2
+test_mean_cover_rate:  0.113
+
+ Scenario push_ball Algo diversified_novelty_pb updates 7/444 episodes, total num timesteps 1440000/80000000, FPS 2429.
+
+value loss of agent: 1.3303602695465089
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0013616085052490234
+child_drop:  89
+add_hard_num:  135
+parent:  11
+last_node_parent:  11
+childlist:  0
+archive:  1662
+test_agent_num:  2
+test_mean_cover_rate:  0.122
+
+ Scenario push_ball Algo diversified_novelty_pb updates 8/444 episodes, total num timesteps 1620000/80000000, FPS 2343.
+
+value loss of agent: 1.7144226471583048
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015714168548583984
+child_drop:  96
+add_hard_num:  107
+parent:  16
+last_node_parent:  16
+childlist:  0
+archive:  1793
+test_agent_num:  2
+test_mean_cover_rate:  0.121
+
+ Scenario push_ball Algo diversified_novelty_pb updates 9/444 episodes, total num timesteps 1800000/80000000, FPS 2313.
+
+value loss of agent: 1.510493016242981
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002542734146118164
+child_drop:  107
+add_hard_num:  117
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  1910
+test_agent_num:  2
+test_mean_cover_rate:  0.11
+
+ Scenario push_ball Algo diversified_novelty_pb updates 10/444 episodes, total num timesteps 1980000/80000000, FPS 2292.
+
+value loss of agent: 1.7481746832529703
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017867088317871094
+child_drop:  66
+add_hard_num:  118
+parent:  11
+last_node_parent:  11
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.123
+
+ Scenario push_ball Algo diversified_novelty_pb updates 11/444 episodes, total num timesteps 2160000/80000000, FPS 2257.
+
+value loss of agent: 1.4673378626505533
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015692710876464844
+child_drop:  100
+add_hard_num:  108
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.113
+
+ Scenario push_ball Algo diversified_novelty_pb updates 12/444 episodes, total num timesteps 2340000/80000000, FPS 2255.
+
+value loss of agent: 1.5366260449091593
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016167163848876953
+child_drop:  64
+add_hard_num:  121
+parent:  13
+last_node_parent:  13
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.12
+
+ Scenario push_ball Algo diversified_novelty_pb updates 13/444 episodes, total num timesteps 2520000/80000000, FPS 2274.
+
+value loss of agent: 1.353439497947693
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015604496002197266
+child_drop:  85
+add_hard_num:  117
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.137
+
+ Scenario push_ball Algo diversified_novelty_pb updates 14/444 episodes, total num timesteps 2700000/80000000, FPS 2285.
+
+value loss of agent: 1.5176851431528726
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015492439270019531
+child_drop:  82
+add_hard_num:  108
+parent:  14
+last_node_parent:  14
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.102
+
+ Scenario push_ball Algo diversified_novelty_pb updates 15/444 episodes, total num timesteps 2880000/80000000, FPS 2274.
+
+value loss of agent: 1.5578387022018432
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016601085662841797
+child_drop:  100
+add_hard_num:  106
+parent:  12
+last_node_parent:  12
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.136
+
+ Scenario push_ball Algo diversified_novelty_pb updates 16/444 episodes, total num timesteps 3060000/80000000, FPS 2275.
+
+value loss of agent: 1.6638174295425414
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001604318618774414
+child_drop:  80
+add_hard_num:  94
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.129
+
+ Scenario push_ball Algo diversified_novelty_pb updates 17/444 episodes, total num timesteps 3240000/80000000, FPS 2268.
+
+value loss of agent: 1.6274635314941406
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018262863159179688
+child_drop:  85
+add_hard_num:  100
+parent:  11
+last_node_parent:  11
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.128
+
+ Scenario push_ball Algo diversified_novelty_pb updates 18/444 episodes, total num timesteps 3420000/80000000, FPS 2272.
+
+value loss of agent: 1.6772166967391968
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016372203826904297
+child_drop:  86
+add_hard_num:  94
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.15
+
+ Scenario push_ball Algo diversified_novelty_pb updates 19/444 episodes, total num timesteps 3600000/80000000, FPS 2271.
+
+value loss of agent: 1.6848880290985107
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001695394515991211
+child_drop:  84
+add_hard_num:  100
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.14980000000000002
+
+ Scenario push_ball Algo diversified_novelty_pb updates 20/444 episodes, total num timesteps 3780000/80000000, FPS 2266.
+
+value loss of agent: 1.5831305583318074
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015938282012939453
+child_drop:  56
+add_hard_num:  101
+parent:  17
+last_node_parent:  17
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.1474
+
+ Scenario push_ball Algo diversified_novelty_pb updates 21/444 episodes, total num timesteps 3960000/80000000, FPS 2266.
+
+value loss of agent: 1.589332930246989
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020334720611572266
+child_drop:  90
+add_hard_num:  92
+parent:  8
+last_node_parent:  8
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.153
+
+ Scenario push_ball Algo diversified_novelty_pb updates 22/444 episodes, total num timesteps 4140000/80000000, FPS 2270.
+
+value loss of agent: 1.8456539948781332
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016486644744873047
+child_drop:  101
+add_hard_num:  81
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.1458
+
+ Scenario push_ball Algo diversified_novelty_pb updates 23/444 episodes, total num timesteps 4320000/80000000, FPS 2275.
+
+value loss of agent: 1.72275390625
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016369819641113281
+child_drop:  79
+add_hard_num:  99
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.133
+
+ Scenario push_ball Algo diversified_novelty_pb updates 24/444 episodes, total num timesteps 4500000/80000000, FPS 2276.
+
+value loss of agent: 1.5522205114364624
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016810894012451172
+child_drop:  101
+add_hard_num:  83
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.146
+
+ Scenario push_ball Algo diversified_novelty_pb updates 25/444 episodes, total num timesteps 4680000/80000000, FPS 2277.
+
+value loss of agent: 1.6463967879613242
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020563602447509766
+child_drop:  62
+add_hard_num:  86
+parent:  11
+last_node_parent:  11
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.126
+
+ Scenario push_ball Algo diversified_novelty_pb updates 26/444 episodes, total num timesteps 4860000/80000000, FPS 2270.
+
+value loss of agent: 1.2371177355448404
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016546249389648438
+child_drop:  54
+add_hard_num:  112
+parent:  5
+last_node_parent:  5
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.122
+
+ Scenario push_ball Algo diversified_novelty_pb updates 27/444 episodes, total num timesteps 5040000/80000000, FPS 2268.
+
+value loss of agent: 1.2682447195053101
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017352104187011719
+child_drop:  69
+add_hard_num:  122
+parent:  6
+last_node_parent:  6
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.123
+
+ Scenario push_ball Algo diversified_novelty_pb updates 28/444 episodes, total num timesteps 5220000/80000000, FPS 2267.
+
+value loss of agent: 1.1636250734329223
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0029370784759521484
+child_drop:  90
+add_hard_num:  90
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.124
+
+ Scenario push_ball Algo diversified_novelty_pb updates 29/444 episodes, total num timesteps 5400000/80000000, FPS 2268.
+
+value loss of agent: 1.244582430521647
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015957355499267578
+child_drop:  68
+add_hard_num:  119
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.125
+
+ Scenario push_ball Algo diversified_novelty_pb updates 30/444 episodes, total num timesteps 5580000/80000000, FPS 2271.
+
+value loss of agent: 1.3536267042160035
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016422271728515625
+child_drop:  66
+add_hard_num:  106
+parent:  3
+last_node_parent:  3
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.124
+
+ Scenario push_ball Algo diversified_novelty_pb updates 31/444 episodes, total num timesteps 5760000/80000000, FPS 2270.
+
+value loss of agent: 1.3896268288294473
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016126632690429688
+child_drop:  50
+add_hard_num:  134
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.15
+
+ Scenario push_ball Algo diversified_novelty_pb updates 32/444 episodes, total num timesteps 5940000/80000000, FPS 2272.
+
+value loss of agent: 1.4563930034637451
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016491413116455078
+child_drop:  66
+add_hard_num:  100
+parent:  4
+last_node_parent:  4
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.1462
+
+ Scenario push_ball Algo diversified_novelty_pb updates 33/444 episodes, total num timesteps 6120000/80000000, FPS 2273.
+
+value loss of agent: 1.513657013575236
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016629695892333984
+child_drop:  64
+add_hard_num:  66
+parent:  5
+last_node_parent:  5
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.175
+
+ Scenario push_ball Algo diversified_novelty_pb updates 34/444 episodes, total num timesteps 6300000/80000000, FPS 2276.
+
+value loss of agent: 1.650769559542338
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017216205596923828
+child_drop:  74
+add_hard_num:  74
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.219
+
+ Scenario push_ball Algo diversified_novelty_pb updates 35/444 episodes, total num timesteps 6480000/80000000, FPS 2281.
+
+value loss of agent: 2.14819065729777
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020656585693359375
+child_drop:  62
+add_hard_num:  100
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.2326
+
+ Scenario push_ball Algo diversified_novelty_pb updates 36/444 episodes, total num timesteps 6660000/80000000, FPS 2279.
+
+value loss of agent: 2.113393719991048
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015485286712646484
+child_drop:  82
+add_hard_num:  68
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.2164
+
+ Scenario push_ball Algo diversified_novelty_pb updates 37/444 episodes, total num timesteps 6840000/80000000, FPS 2281.
+
+value loss of agent: 2.109599574406942
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015683174133300781
+child_drop:  67
+add_hard_num:  100
+parent:  2
+last_node_parent:  2
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.2268
+
+ Scenario push_ball Algo diversified_novelty_pb updates 38/444 episodes, total num timesteps 7020000/80000000, FPS 2287.
+
+value loss of agent: 1.7693139553070067
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001554250717163086
+child_drop:  103
+add_hard_num:  26
+parent:  11
+last_node_parent:  11
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.2382
+
+ Scenario push_ball Algo diversified_novelty_pb updates 39/444 episodes, total num timesteps 7200000/80000000, FPS 2278.
+
+value loss of agent: 2.2866412957509357
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015685558319091797
+child_drop:  79
+add_hard_num:  50
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.25780000000000003
+
+ Scenario push_ball Algo diversified_novelty_pb updates 40/444 episodes, total num timesteps 7380000/80000000, FPS 2271.
+
+value loss of agent: 1.9886576731999714
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015954971313476562
+child_drop:  100
+add_hard_num:  30
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.2504
+
+ Scenario push_ball Algo diversified_novelty_pb updates 41/444 episodes, total num timesteps 7560000/80000000, FPS 2267.
+
+value loss of agent: 2.3973932107289633
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018301010131835938
+child_drop:  95
+add_hard_num:  42
+parent:  15
+last_node_parent:  15
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.258
+
+ Scenario push_ball Algo diversified_novelty_pb updates 42/444 episodes, total num timesteps 7740000/80000000, FPS 2262.
+
+value loss of agent: 2.2995192368825275
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017426013946533203
+child_drop:  103
+add_hard_num:  43
+parent:  15
+last_node_parent:  15
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.269
+
+ Scenario push_ball Algo diversified_novelty_pb updates 43/444 episodes, total num timesteps 7920000/80000000, FPS 2252.
+
+value loss of agent: 2.2552628993988035
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001642465591430664
+child_drop:  89
+add_hard_num:  23
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.2782
+
+ Scenario push_ball Algo diversified_novelty_pb updates 44/444 episodes, total num timesteps 8100000/80000000, FPS 2249.
+
+value loss of agent: 2.471566994984945
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015749931335449219
+child_drop:  99
+add_hard_num:  32
+parent:  14
+last_node_parent:  14
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.2738
+
+ Scenario push_ball Algo diversified_novelty_pb updates 45/444 episodes, total num timesteps 8280000/80000000, FPS 2242.
+
+value loss of agent: 2.2284199714660646
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003747701644897461
+child_drop:  103
+add_hard_num:  17
+parent:  14
+last_node_parent:  14
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.323
+
+ Scenario push_ball Algo diversified_novelty_pb updates 46/444 episodes, total num timesteps 8460000/80000000, FPS 2235.
+
+value loss of agent: 2.650074609120687
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.007429838180541992
+child_drop:  139
+add_hard_num:  14
+parent:  19
+last_node_parent:  19
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3182
+
+ Scenario push_ball Algo diversified_novelty_pb updates 47/444 episodes, total num timesteps 8640000/80000000, FPS 2231.
+
+value loss of agent: 2.55998428662618
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015804767608642578
+child_drop:  138
+add_hard_num:  22
+parent:  19
+last_node_parent:  19
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.31639999999999996
+
+ Scenario push_ball Algo diversified_novelty_pb updates 48/444 episodes, total num timesteps 8820000/80000000, FPS 2227.
+
+value loss of agent: 2.3988839467366536
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022971630096435547
+child_drop:  130
+add_hard_num:  12
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3054
+
+ Scenario push_ball Algo diversified_novelty_pb updates 49/444 episodes, total num timesteps 9000000/80000000, FPS 2228.
+
+value loss of agent: 2.2331454277038576
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017457008361816406
+child_drop:  120
+add_hard_num:  15
+parent:  27
+last_node_parent:  27
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.32639999999999997
+
+ Scenario push_ball Algo diversified_novelty_pb updates 50/444 episodes, total num timesteps 9180000/80000000, FPS 2230.
+
+value loss of agent: 2.55267235438029
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001741170883178711
+child_drop:  122
+add_hard_num:  16
+parent:  21
+last_node_parent:  21
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3416
+
+ Scenario push_ball Algo diversified_novelty_pb updates 51/444 episodes, total num timesteps 9360000/80000000, FPS 2227.
+
+value loss of agent: 2.558462317784627
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016720294952392578
+child_drop:  116
+add_hard_num:  22
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.34
+
+ Scenario push_ball Algo diversified_novelty_pb updates 52/444 episodes, total num timesteps 9540000/80000000, FPS 2226.
+
+value loss of agent: 2.620933453241984
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0029816627502441406
+child_drop:  141
+add_hard_num:  14
+parent:  25
+last_node_parent:  25
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3408
+
+ Scenario push_ball Algo diversified_novelty_pb updates 53/444 episodes, total num timesteps 9720000/80000000, FPS 2217.
+
+value loss of agent: 2.5364128589630126
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001969575881958008
+child_drop:  135
+add_hard_num:  6
+parent:  24
+last_node_parent:  24
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.31860000000000005
+
+ Scenario push_ball Algo diversified_novelty_pb updates 54/444 episodes, total num timesteps 9900000/80000000, FPS 2210.
+
+value loss of agent: 2.4450114727020265
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016522407531738281
+child_drop:  147
+add_hard_num:  10
+parent:  24
+last_node_parent:  24
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.37379999999999997
+
+ Scenario push_ball Algo diversified_novelty_pb updates 55/444 episodes, total num timesteps 10080000/80000000, FPS 2203.
+
+value loss of agent: 2.533729839324951
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019354820251464844
+child_drop:  136
+add_hard_num:  12
+parent:  22
+last_node_parent:  22
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3436
+
+ Scenario push_ball Algo diversified_novelty_pb updates 56/444 episodes, total num timesteps 10260000/80000000, FPS 2201.
+
+value loss of agent: 2.453108565012614
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.015651226043701172
+child_drop:  159
+add_hard_num:  10
+parent:  25
+last_node_parent:  25
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3406
+
+ Scenario push_ball Algo diversified_novelty_pb updates 57/444 episodes, total num timesteps 10440000/80000000, FPS 2199.
+
+value loss of agent: 2.494566774368286
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004353046417236328
+child_drop:  157
+add_hard_num:  22
+parent:  26
+last_node_parent:  26
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3574
+
+ Scenario push_ball Algo diversified_novelty_pb updates 58/444 episodes, total num timesteps 10620000/80000000, FPS 2197.
+
+value loss of agent: 2.8073018391927085
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001722097396850586
+child_drop:  139
+add_hard_num:  10
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3544
+
+ Scenario push_ball Algo diversified_novelty_pb updates 59/444 episodes, total num timesteps 10800000/80000000, FPS 2192.
+
+value loss of agent: 2.4872382640838624
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018308162689208984
+child_drop:  164
+add_hard_num:  10
+parent:  27
+last_node_parent:  27
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.37279999999999996
+
+ Scenario push_ball Algo diversified_novelty_pb updates 60/444 episodes, total num timesteps 10980000/80000000, FPS 2192.
+
+value loss of agent: 2.6132996400197346
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003540515899658203
+child_drop:  149
+add_hard_num:  10
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.359
+
+ Scenario push_ball Algo diversified_novelty_pb updates 61/444 episodes, total num timesteps 11160000/80000000, FPS 2192.
+
+value loss of agent: 2.54209033648173
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015170574188232422
+child_drop:  168
+add_hard_num:  13
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3564
+
+ Scenario push_ball Algo diversified_novelty_pb updates 62/444 episodes, total num timesteps 11340000/80000000, FPS 2184.
+
+value loss of agent: 2.5314021905263266
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002530813217163086
+child_drop:  163
+add_hard_num:  11
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.36939999999999995
+
+ Scenario push_ball Algo diversified_novelty_pb updates 63/444 episodes, total num timesteps 11520000/80000000, FPS 2181.
+
+value loss of agent: 2.6400166511535645
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.006096839904785156
+child_drop:  143
+add_hard_num:  12
+parent:  30
+last_node_parent:  30
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3882
+
+ Scenario push_ball Algo diversified_novelty_pb updates 64/444 episodes, total num timesteps 11700000/80000000, FPS 2174.
+
+value loss of agent: 2.539945650100708
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004110097885131836
+child_drop:  154
+add_hard_num:  7
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.38880000000000003
+
+ Scenario push_ball Algo diversified_novelty_pb updates 65/444 episodes, total num timesteps 11880000/80000000, FPS 2175.
+
+value loss of agent: 2.570197327931722
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020704269409179688
+child_drop:  175
+add_hard_num:  14
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3906
+
+ Scenario push_ball Algo diversified_novelty_pb updates 66/444 episodes, total num timesteps 12060000/80000000, FPS 2176.
+
+value loss of agent: 2.544799073537191
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0026950836181640625
+child_drop:  162
+add_hard_num:  11
+parent:  24
+last_node_parent:  24
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3732
+
+ Scenario push_ball Algo diversified_novelty_pb updates 67/444 episodes, total num timesteps 12240000/80000000, FPS 2176.
+
+value loss of agent: 2.598705021540324
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001972198486328125
+child_drop:  164
+add_hard_num:  12
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.368
+
+ Scenario push_ball Algo diversified_novelty_pb updates 68/444 episodes, total num timesteps 12420000/80000000, FPS 2173.
+
+value loss of agent: 2.658464558919271
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002160310745239258
+child_drop:  175
+add_hard_num:  10
+parent:  25
+last_node_parent:  25
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.37839999999999996
+
+ Scenario push_ball Algo diversified_novelty_pb updates 69/444 episodes, total num timesteps 12600000/80000000, FPS 2173.
+
+value loss of agent: 2.575020980834961
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002938985824584961
+child_drop:  148
+add_hard_num:  10
+parent:  44
+last_node_parent:  44
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.39220000000000005
+
+ Scenario push_ball Algo diversified_novelty_pb updates 70/444 episodes, total num timesteps 12780000/80000000, FPS 2172.
+
+value loss of agent: 2.620647096633911
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0031461715698242188
+child_drop:  136
+add_hard_num:  16
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3994
+
+ Scenario push_ball Algo diversified_novelty_pb updates 71/444 episodes, total num timesteps 12960000/80000000, FPS 2172.
+
+value loss of agent: 2.834686215718587
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022296905517578125
+child_drop:  153
+add_hard_num:  22
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.395
+
+ Scenario push_ball Algo diversified_novelty_pb updates 72/444 episodes, total num timesteps 13140000/80000000, FPS 2173.
+
+value loss of agent: 3.047224013010661
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004500627517700195
+child_drop:  145
+add_hard_num:  29
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4154
+
+ Scenario push_ball Algo diversified_novelty_pb updates 73/444 episodes, total num timesteps 13320000/80000000, FPS 2173.
+
+value loss of agent: 3.1502152760823567
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002103567123413086
+child_drop:  171
+add_hard_num:  22
+parent:  45
+last_node_parent:  45
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.404
+
+ Scenario push_ball Algo diversified_novelty_pb updates 74/444 episodes, total num timesteps 13500000/80000000, FPS 2172.
+
+value loss of agent: 2.9852211157480877
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002095460891723633
+child_drop:  159
+add_hard_num:  17
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4176
+
+ Scenario push_ball Algo diversified_novelty_pb updates 75/444 episodes, total num timesteps 13680000/80000000, FPS 2175.
+
+value loss of agent: 3.0759034792582196
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002048492431640625
+child_drop:  176
+add_hard_num:  15
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.42460000000000003
+
+ Scenario push_ball Algo diversified_novelty_pb updates 76/444 episodes, total num timesteps 13860000/80000000, FPS 2177.
+
+value loss of agent: 2.9612439314524335
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0030090808868408203
+child_drop:  181
+add_hard_num:  16
+parent:  34
+last_node_parent:  34
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3786
+
+ Scenario push_ball Algo diversified_novelty_pb updates 77/444 episodes, total num timesteps 14040000/80000000, FPS 2177.
+
+value loss of agent: 3.10308354695638
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020134449005126953
+child_drop:  175
+add_hard_num:  17
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.423
+
+ Scenario push_ball Algo diversified_novelty_pb updates 78/444 episodes, total num timesteps 14220000/80000000, FPS 2173.
+
+value loss of agent: 3.1318670908610025
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.006085395812988281
+child_drop:  149
+add_hard_num:  21
+parent:  43
+last_node_parent:  43
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4186
+
+ Scenario push_ball Algo diversified_novelty_pb updates 79/444 episodes, total num timesteps 14400000/80000000, FPS 2168.
+
+value loss of agent: 2.879850991566976
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017728805541992188
+child_drop:  163
+add_hard_num:  23
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3956
+
+ Scenario push_ball Algo diversified_novelty_pb updates 80/444 episodes, total num timesteps 14580000/80000000, FPS 2169.
+
+value loss of agent: 2.643036429087321
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019369125366210938
+child_drop:  153
+add_hard_num:  17
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.42960000000000004
+
+ Scenario push_ball Algo diversified_novelty_pb updates 81/444 episodes, total num timesteps 14760000/80000000, FPS 2163.
+
+value loss of agent: 2.9470629851023356
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00174713134765625
+child_drop:  158
+add_hard_num:  23
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4024
+
+ Scenario push_ball Algo diversified_novelty_pb updates 82/444 episodes, total num timesteps 14940000/80000000, FPS 2162.
+
+value loss of agent: 2.49183832804362
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016338825225830078
+child_drop:  183
+add_hard_num:  22
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4038
+
+ Scenario push_ball Algo diversified_novelty_pb updates 83/444 episodes, total num timesteps 15120000/80000000, FPS 2163.
+
+value loss of agent: 2.6038370450337727
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002976655960083008
+child_drop:  176
+add_hard_num:  19
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.454
+
+ Scenario push_ball Algo diversified_novelty_pb updates 84/444 episodes, total num timesteps 15300000/80000000, FPS 2162.
+
+value loss of agent: 2.532261037826538
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019905567169189453
+child_drop:  146
+add_hard_num:  37
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4012
+
+ Scenario push_ball Algo diversified_novelty_pb updates 85/444 episodes, total num timesteps 15480000/80000000, FPS 2161.
+
+value loss of agent: 2.7497109095255534
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020165443420410156
+child_drop:  167
+add_hard_num:  26
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.41220000000000007
+
+ Scenario push_ball Algo diversified_novelty_pb updates 86/444 episodes, total num timesteps 15660000/80000000, FPS 2159.
+
+value loss of agent: 2.7762284437815348
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018277168273925781
+child_drop:  191
+add_hard_num:  12
+parent:  41
+last_node_parent:  41
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3946
+
+ Scenario push_ball Algo diversified_novelty_pb updates 87/444 episodes, total num timesteps 15840000/80000000, FPS 2159.
+
+value loss of agent: 2.5612415790557863
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002809762954711914
+child_drop:  146
+add_hard_num:  13
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4538
+
+ Scenario push_ball Algo diversified_novelty_pb updates 88/444 episodes, total num timesteps 16020000/80000000, FPS 2158.
+
+value loss of agent: 2.475580406188965
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019159317016601562
+child_drop:  201
+add_hard_num:  21
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4142
+
+ Scenario push_ball Algo diversified_novelty_pb updates 89/444 episodes, total num timesteps 16200000/80000000, FPS 2157.
+
+value loss of agent: 2.4329578558603924
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016546249389648438
+child_drop:  168
+add_hard_num:  27
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.42919999999999997
+
+ Scenario push_ball Algo diversified_novelty_pb updates 90/444 episodes, total num timesteps 16380000/80000000, FPS 2156.
+
+value loss of agent: 2.317764393488566
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003441333770751953
+child_drop:  159
+add_hard_num:  30
+parent:  43
+last_node_parent:  43
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4484
+
+ Scenario push_ball Algo diversified_novelty_pb updates 91/444 episodes, total num timesteps 16560000/80000000, FPS 2157.
+
+value loss of agent: 2.108831294377645
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019068717956542969
+child_drop:  185
+add_hard_num:  31
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4284
+
+ Scenario push_ball Algo diversified_novelty_pb updates 92/444 episodes, total num timesteps 16740000/80000000, FPS 2157.
+
+value loss of agent: 2.335987997055054
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0026476383209228516
+child_drop:  151
+add_hard_num:  24
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.41
+
+ Scenario push_ball Algo diversified_novelty_pb updates 93/444 episodes, total num timesteps 16920000/80000000, FPS 2154.
+
+value loss of agent: 2.5736196200052897
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019307136535644531
+child_drop:  164
+add_hard_num:  19
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.45039999999999997
+
+ Scenario push_ball Algo diversified_novelty_pb updates 94/444 episodes, total num timesteps 17100000/80000000, FPS 2153.
+
+value loss of agent: 2.668320067723592
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001672506332397461
+child_drop:  152
+add_hard_num:  32
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.429
+
+ Scenario push_ball Algo diversified_novelty_pb updates 95/444 episodes, total num timesteps 17280000/80000000, FPS 2152.
+
+value loss of agent: 2.5744355360666913
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019040107727050781
+child_drop:  183
+add_hard_num:  21
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.41940000000000005
+
+ Scenario push_ball Algo diversified_novelty_pb updates 96/444 episodes, total num timesteps 17460000/80000000, FPS 2153.
+
+value loss of agent: 2.407098817825317
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018773078918457031
+child_drop:  162
+add_hard_num:  20
+parent:  30
+last_node_parent:  30
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4642
+
+ Scenario push_ball Algo diversified_novelty_pb updates 97/444 episodes, total num timesteps 17640000/80000000, FPS 2151.
+
+value loss of agent: 2.26171932220459
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001646280288696289
+child_drop:  186
+add_hard_num:  18
+parent:  44
+last_node_parent:  44
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4082
+
+ Scenario push_ball Algo diversified_novelty_pb updates 98/444 episodes, total num timesteps 17820000/80000000, FPS 2148.
+
+value loss of agent: 2.208749755223592
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019314289093017578
+child_drop:  149
+add_hard_num:  24
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.42279999999999995
+
+ Scenario push_ball Algo diversified_novelty_pb updates 99/444 episodes, total num timesteps 18000000/80000000, FPS 2145.
+
+value loss of agent: 2.347366698582967
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.005982875823974609
+child_drop:  167
+add_hard_num:  30
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.445
+
+ Scenario push_ball Algo diversified_novelty_pb updates 100/444 episodes, total num timesteps 18180000/80000000, FPS 2146.
+
+value loss of agent: 2.2382381121317545
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002068042755126953
+child_drop:  142
+add_hard_num:  45
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4508
+
+ Scenario push_ball Algo diversified_novelty_pb updates 101/444 episodes, total num timesteps 18360000/80000000, FPS 2146.
+
+value loss of agent: 2.4494392395019533
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018734931945800781
+child_drop:  181
+add_hard_num:  23
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.465
+
+ Scenario push_ball Algo diversified_novelty_pb updates 102/444 episodes, total num timesteps 18540000/80000000, FPS 2146.
+
+value loss of agent: 2.8918861548105874
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017483234405517578
+child_drop:  151
+add_hard_num:  33
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4644
+
+ Scenario push_ball Algo diversified_novelty_pb updates 103/444 episodes, total num timesteps 18720000/80000000, FPS 2146.
+
+value loss of agent: 2.8699908097585043
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018172264099121094
+child_drop:  170
+add_hard_num:  26
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4658
+
+ Scenario push_ball Algo diversified_novelty_pb updates 104/444 episodes, total num timesteps 18900000/80000000, FPS 2144.
+
+value loss of agent: 2.54140731493632
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00457453727722168
+child_drop:  177
+add_hard_num:  17
+parent:  30
+last_node_parent:  30
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4796
+
+ Scenario push_ball Algo diversified_novelty_pb updates 105/444 episodes, total num timesteps 19080000/80000000, FPS 2145.
+
+value loss of agent: 2.6038729190826415
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00185394287109375
+child_drop:  157
+add_hard_num:  32
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.45840000000000003
+
+ Scenario push_ball Algo diversified_novelty_pb updates 106/444 episodes, total num timesteps 19260000/80000000, FPS 2140.
+
+value loss of agent: 2.7450647513071695
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002749919891357422
+child_drop:  173
+add_hard_num:  22
+parent:  34
+last_node_parent:  34
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4586
+
+ Scenario push_ball Algo diversified_novelty_pb updates 107/444 episodes, total num timesteps 19440000/80000000, FPS 2139.
+
+value loss of agent: 2.5497411410013835
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0026581287384033203
+child_drop:  191
+add_hard_num:  15
+parent:  41
+last_node_parent:  41
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.43420000000000003
+
+ Scenario push_ball Algo diversified_novelty_pb updates 108/444 episodes, total num timesteps 19620000/80000000, FPS 2138.
+
+value loss of agent: 2.6318854331970214
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.011285066604614258
+child_drop:  161
+add_hard_num:  29
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4498000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 109/444 episodes, total num timesteps 19800000/80000000, FPS 2139.
+
+value loss of agent: 2.3905463218688965
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004562854766845703
+child_drop:  165
+add_hard_num:  14
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.45339999999999997
+
+ Scenario push_ball Algo diversified_novelty_pb updates 110/444 episodes, total num timesteps 19980000/80000000, FPS 2138.
+
+value loss of agent: 2.5345746994018556
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002453327178955078
+child_drop:  163
+add_hard_num:  26
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4798
+
+ Scenario push_ball Algo diversified_novelty_pb updates 111/444 episodes, total num timesteps 20160000/80000000, FPS 2139.
+
+value loss of agent: 2.2756066004435223
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016636848449707031
+child_drop:  162
+add_hard_num:  21
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.47759999999999997
+
+ Scenario push_ball Algo diversified_novelty_pb updates 112/444 episodes, total num timesteps 20340000/80000000, FPS 2138.
+
+value loss of agent: 2.6382755120595296
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016133785247802734
+child_drop:  148
+add_hard_num:  26
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4786
+
+ Scenario push_ball Algo diversified_novelty_pb updates 113/444 episodes, total num timesteps 20520000/80000000, FPS 2137.
+
+value loss of agent: 2.493716843922933
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0044896602630615234
+child_drop:  159
+add_hard_num:  29
+parent:  41
+last_node_parent:  41
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.44239999999999996
+
+ Scenario push_ball Algo diversified_novelty_pb updates 114/444 episodes, total num timesteps 20700000/80000000, FPS 2135.
+
+value loss of agent: 2.6603691736857096
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017533302307128906
+child_drop:  173
+add_hard_num:  20
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.45620000000000005
+
+ Scenario push_ball Algo diversified_novelty_pb updates 115/444 episodes, total num timesteps 20880000/80000000, FPS 2134.
+
+value loss of agent: 2.4911073207855225
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016696453094482422
+child_drop:  182
+add_hard_num:  22
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.46520000000000006
+
+ Scenario push_ball Algo diversified_novelty_pb updates 116/444 episodes, total num timesteps 21060000/80000000, FPS 2134.
+
+value loss of agent: 2.4611189365386963
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003026723861694336
+child_drop:  159
+add_hard_num:  25
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.46720000000000006
+
+ Scenario push_ball Algo diversified_novelty_pb updates 117/444 episodes, total num timesteps 21240000/80000000, FPS 2133.
+
+value loss of agent: 2.740699545542399
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001722097396850586
+child_drop:  164
+add_hard_num:  27
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4676
+
+ Scenario push_ball Algo diversified_novelty_pb updates 118/444 episodes, total num timesteps 21420000/80000000, FPS 2132.
+
+value loss of agent: 2.553865607579549
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017900466918945312
+child_drop:  163
+add_hard_num:  29
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.46979999999999994
+
+ Scenario push_ball Algo diversified_novelty_pb updates 119/444 episodes, total num timesteps 21600000/80000000, FPS 2130.
+
+value loss of agent: 2.659540541966756
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002192258834838867
+child_drop:  161
+add_hard_num:  41
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5034
+
+ Scenario push_ball Algo diversified_novelty_pb updates 120/444 episodes, total num timesteps 21780000/80000000, FPS 2132.
+
+value loss of agent: 2.7342181046803793
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017902851104736328
+child_drop:  162
+add_hard_num:  21
+parent:  34
+last_node_parent:  34
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.458
+
+ Scenario push_ball Algo diversified_novelty_pb updates 121/444 episodes, total num timesteps 21960000/80000000, FPS 2133.
+
+value loss of agent: 2.4102723916371662
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018298625946044922
+child_drop:  175
+add_hard_num:  26
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.49460000000000004
+
+ Scenario push_ball Algo diversified_novelty_pb updates 122/444 episodes, total num timesteps 22140000/80000000, FPS 2134.
+
+value loss of agent: 2.5848711172739667
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016756057739257812
+child_drop:  166
+add_hard_num:  29
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.476
+
+ Scenario push_ball Algo diversified_novelty_pb updates 123/444 episodes, total num timesteps 22320000/80000000, FPS 2133.
+
+value loss of agent: 2.6754759152730307
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0030698776245117188
+child_drop:  188
+add_hard_num:  19
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.497
+
+ Scenario push_ball Algo diversified_novelty_pb updates 124/444 episodes, total num timesteps 22500000/80000000, FPS 2133.
+
+value loss of agent: 2.757726208368937
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019898414611816406
+child_drop:  162
+add_hard_num:  44
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4864
+
+ Scenario push_ball Algo diversified_novelty_pb updates 125/444 episodes, total num timesteps 22680000/80000000, FPS 2132.
+
+value loss of agent: 2.766938559214274
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001829385757446289
+child_drop:  159
+add_hard_num:  20
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4802
+
+ Scenario push_ball Algo diversified_novelty_pb updates 126/444 episodes, total num timesteps 22860000/80000000, FPS 2131.
+
+value loss of agent: 3.083897415796916
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016853809356689453
+child_drop:  149
+add_hard_num:  34
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.49720000000000003
+
+ Scenario push_ball Algo diversified_novelty_pb updates 127/444 episodes, total num timesteps 23040000/80000000, FPS 2130.
+
+value loss of agent: 2.7910401662190756
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019850730895996094
+child_drop:  142
+add_hard_num:  37
+parent:  25
+last_node_parent:  25
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.48260000000000003
+
+ Scenario push_ball Algo diversified_novelty_pb updates 128/444 episodes, total num timesteps 23220000/80000000, FPS 2129.
+
+value loss of agent: 2.7805655638376874
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015904903411865234
+child_drop:  167
+add_hard_num:  24
+parent:  26
+last_node_parent:  26
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5094
+
+ Scenario push_ball Algo diversified_novelty_pb updates 129/444 episodes, total num timesteps 23400000/80000000, FPS 2128.
+
+value loss of agent: 2.595532782872518
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018737316131591797
+child_drop:  159
+add_hard_num:  35
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5016
+
+ Scenario push_ball Algo diversified_novelty_pb updates 130/444 episodes, total num timesteps 23580000/80000000, FPS 2126.
+
+value loss of agent: 3.0463950951894123
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017993450164794922
+child_drop:  169
+add_hard_num:  32
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.471
+
+ Scenario push_ball Algo diversified_novelty_pb updates 131/444 episodes, total num timesteps 23760000/80000000, FPS 2125.
+
+value loss of agent: 2.6829484621683757
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0031070709228515625
+child_drop:  132
+add_hard_num:  26
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.49920000000000003
+
+ Scenario push_ball Algo diversified_novelty_pb updates 132/444 episodes, total num timesteps 23940000/80000000, FPS 2125.
+
+value loss of agent: 2.6969558874766033
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001833200454711914
+child_drop:  143
+add_hard_num:  28
+parent:  27
+last_node_parent:  27
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.504
+
+ Scenario push_ball Algo diversified_novelty_pb updates 133/444 episodes, total num timesteps 24120000/80000000, FPS 2125.
+
+value loss of agent: 2.6321167310078937
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019021034240722656
+child_drop:  166
+add_hard_num:  38
+parent:  30
+last_node_parent:  30
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4738
+
+ Scenario push_ball Algo diversified_novelty_pb updates 134/444 episodes, total num timesteps 24300000/80000000, FPS 2125.
+
+value loss of agent: 2.98652024269104
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0035550594329833984
+child_drop:  161
+add_hard_num:  16
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.493
+
+ Scenario push_ball Algo diversified_novelty_pb updates 135/444 episodes, total num timesteps 24480000/80000000, FPS 2124.
+
+value loss of agent: 2.944269148508708
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002414226531982422
+child_drop:  161
+add_hard_num:  26
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4988
+
+ Scenario push_ball Algo diversified_novelty_pb updates 136/444 episodes, total num timesteps 24660000/80000000, FPS 2123.
+
+value loss of agent: 3.0957586924235025
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018589496612548828
+child_drop:  165
+add_hard_num:  19
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.48519999999999996
+
+ Scenario push_ball Algo diversified_novelty_pb updates 137/444 episodes, total num timesteps 24840000/80000000, FPS 2122.
+
+value loss of agent: 2.9914626916249594
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015764236450195312
+child_drop:  155
+add_hard_num:  23
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.49720000000000003
+
+ Scenario push_ball Algo diversified_novelty_pb updates 138/444 episodes, total num timesteps 25020000/80000000, FPS 2120.
+
+value loss of agent: 3.0745089530944822
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002773284912109375
+child_drop:  160
+add_hard_num:  26
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5062
+
+ Scenario push_ball Algo diversified_novelty_pb updates 139/444 episodes, total num timesteps 25200000/80000000, FPS 2116.
+
+value loss of agent: 2.8418047428131104
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001979827880859375
+child_drop:  158
+add_hard_num:  25
+parent:  34
+last_node_parent:  34
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5036
+
+ Scenario push_ball Algo diversified_novelty_pb updates 140/444 episodes, total num timesteps 25380000/80000000, FPS 2115.
+
+value loss of agent: 3.161562935511271
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0035893917083740234
+child_drop:  177
+add_hard_num:  17
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5099999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 141/444 episodes, total num timesteps 25560000/80000000, FPS 2116.
+
+value loss of agent: 3.3017480850219725
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001847982406616211
+child_drop:  170
+add_hard_num:  33
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5206000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 142/444 episodes, total num timesteps 25740000/80000000, FPS 2116.
+
+value loss of agent: 2.571062135696411
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017287731170654297
+child_drop:  161
+add_hard_num:  35
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.535
+
+ Scenario push_ball Algo diversified_novelty_pb updates 143/444 episodes, total num timesteps 25920000/80000000, FPS 2116.
+
+value loss of agent: 2.444472821553548
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0027267932891845703
+child_drop:  188
+add_hard_num:  19
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5192
+
+ Scenario push_ball Algo diversified_novelty_pb updates 144/444 episodes, total num timesteps 26100000/80000000, FPS 2117.
+
+value loss of agent: 2.371980063120524
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017268657684326172
+child_drop:  162
+add_hard_num:  25
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5077999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 145/444 episodes, total num timesteps 26280000/80000000, FPS 2118.
+
+value loss of agent: 2.8282314936319985
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018651485443115234
+child_drop:  187
+add_hard_num:  16
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5434
+
+ Scenario push_ball Algo diversified_novelty_pb updates 146/444 episodes, total num timesteps 26460000/80000000, FPS 2119.
+
+value loss of agent: 2.5727725982666017
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020029544830322266
+child_drop:  173
+add_hard_num:  18
+parent:  41
+last_node_parent:  41
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5688
+
+ Scenario push_ball Algo diversified_novelty_pb updates 147/444 episodes, total num timesteps 26640000/80000000, FPS 2120.
+
+value loss of agent: 2.501053206125895
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001825094223022461
+child_drop:  192
+add_hard_num:  9
+parent:  43
+last_node_parent:  43
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5327999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 148/444 episodes, total num timesteps 26820000/80000000, FPS 2120.
+
+value loss of agent: 2.2562107404073077
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0027396678924560547
+child_drop:  166
+add_hard_num:  12
+parent:  41
+last_node_parent:  41
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.532
+
+ Scenario push_ball Algo diversified_novelty_pb updates 149/444 episodes, total num timesteps 27000000/80000000, FPS 2121.
+
+value loss of agent: 2.21563925743103
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002053976058959961
+child_drop:  184
+add_hard_num:  19
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5482
+
+ Scenario push_ball Algo diversified_novelty_pb updates 150/444 episodes, total num timesteps 27180000/80000000, FPS 2117.
+
+value loss of agent: 2.2735110918680825
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.005517721176147461
+child_drop:  164
+add_hard_num:  25
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5052
+
+ Scenario push_ball Algo diversified_novelty_pb updates 151/444 episodes, total num timesteps 27360000/80000000, FPS 2116.
+
+value loss of agent: 2.4493370056152344
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019986629486083984
+child_drop:  153
+add_hard_num:  26
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5396
+
+ Scenario push_ball Algo diversified_novelty_pb updates 152/444 episodes, total num timesteps 27540000/80000000, FPS 2116.
+
+value loss of agent: 2.2429882049560548
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019202232360839844
+child_drop:  174
+add_hard_num:  18
+parent:  41
+last_node_parent:  41
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5232
+
+ Scenario push_ball Algo diversified_novelty_pb updates 153/444 episodes, total num timesteps 27720000/80000000, FPS 2115.
+
+value loss of agent: 2.6445474942525227
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018665790557861328
+child_drop:  186
+add_hard_num:  19
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5424
+
+ Scenario push_ball Algo diversified_novelty_pb updates 154/444 episodes, total num timesteps 27900000/80000000, FPS 2115.
+
+value loss of agent: 2.608979829152425
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0031893253326416016
+child_drop:  192
+add_hard_num:  13
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5504
+
+ Scenario push_ball Algo diversified_novelty_pb updates 155/444 episodes, total num timesteps 28080000/80000000, FPS 2116.
+
+value loss of agent: 2.5480987866719564
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.005750417709350586
+child_drop:  160
+add_hard_num:  27
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.537
+
+ Scenario push_ball Algo diversified_novelty_pb updates 156/444 episodes, total num timesteps 28260000/80000000, FPS 2117.
+
+value loss of agent: 2.6715691725413007
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020203590393066406
+child_drop:  193
+add_hard_num:  13
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.528
+
+ Scenario push_ball Algo diversified_novelty_pb updates 157/444 episodes, total num timesteps 28440000/80000000, FPS 2117.
+
+value loss of agent: 2.3009149551391603
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020720958709716797
+child_drop:  174
+add_hard_num:  16
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5314000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 158/444 episodes, total num timesteps 28620000/80000000, FPS 2119.
+
+value loss of agent: 2.315873209635417
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.012043476104736328
+child_drop:  197
+add_hard_num:  10
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5456
+
+ Scenario push_ball Algo diversified_novelty_pb updates 159/444 episodes, total num timesteps 28800000/80000000, FPS 2119.
+
+value loss of agent: 2.159379561742147
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0031948089599609375
+child_drop:  167
+add_hard_num:  21
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.557
+
+ Scenario push_ball Algo diversified_novelty_pb updates 160/444 episodes, total num timesteps 28980000/80000000, FPS 2118.
+
+value loss of agent: 2.3190742333730063
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021562576293945312
+child_drop:  188
+add_hard_num:  21
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5572
+
+ Scenario push_ball Algo diversified_novelty_pb updates 161/444 episodes, total num timesteps 29160000/80000000, FPS 2118.
+
+value loss of agent: 2.308561579386393
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.016014575958251953
+child_drop:  175
+add_hard_num:  14
+parent:  44
+last_node_parent:  44
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5684
+
+ Scenario push_ball Algo diversified_novelty_pb updates 162/444 episodes, total num timesteps 29340000/80000000, FPS 2116.
+
+value loss of agent: 2.0180688381195067
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017354488372802734
+child_drop:  202
+add_hard_num:  13
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5676
+
+ Scenario push_ball Algo diversified_novelty_pb updates 163/444 episodes, total num timesteps 29520000/80000000, FPS 2115.
+
+value loss of agent: 1.9778851906458537
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019550323486328125
+child_drop:  163
+add_hard_num:  20
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5763999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 164/444 episodes, total num timesteps 29700000/80000000, FPS 2114.
+
+value loss of agent: 2.210232210159302
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018775463104248047
+child_drop:  199
+add_hard_num:  14
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5842
+
+ Scenario push_ball Algo diversified_novelty_pb updates 165/444 episodes, total num timesteps 29880000/80000000, FPS 2113.
+
+value loss of agent: 1.9719606637954712
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017290115356445312
+child_drop:  182
+add_hard_num:  17
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.567
+
+ Scenario push_ball Algo diversified_novelty_pb updates 166/444 episodes, total num timesteps 30060000/80000000, FPS 2113.
+
+value loss of agent: 1.845415679613749
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019843578338623047
+child_drop:  209
+add_hard_num:  15
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5636000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 167/444 episodes, total num timesteps 30240000/80000000, FPS 2114.
+
+value loss of agent: 2.195127805074056
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002707242965698242
+child_drop:  177
+add_hard_num:  13
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.606
+
+ Scenario push_ball Algo diversified_novelty_pb updates 168/444 episodes, total num timesteps 30420000/80000000, FPS 2113.
+
+value loss of agent: 2.395241212844849
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0029840469360351562
+child_drop:  197
+add_hard_num:  15
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5705999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 169/444 episodes, total num timesteps 30600000/80000000, FPS 2111.
+
+value loss of agent: 2.112300682067871
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0051457881927490234
+child_drop:  215
+add_hard_num:  20
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.604
+
+ Scenario push_ball Algo diversified_novelty_pb updates 170/444 episodes, total num timesteps 30780000/80000000, FPS 2113.
+
+value loss of agent: 1.9881211996078492
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002154111862182617
+child_drop:  200
+add_hard_num:  10
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5922
+
+ Scenario push_ball Algo diversified_novelty_pb updates 171/444 episodes, total num timesteps 30960000/80000000, FPS 2113.
+
+value loss of agent: 2.0162647485733034
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.023430585861206055
+child_drop:  197
+add_hard_num:  12
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6167999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 172/444 episodes, total num timesteps 31140000/80000000, FPS 2114.
+
+value loss of agent: 2.274690039952596
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020105838775634766
+child_drop:  193
+add_hard_num:  16
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5804
+
+ Scenario push_ball Algo diversified_novelty_pb updates 173/444 episodes, total num timesteps 31320000/80000000, FPS 2114.
+
+value loss of agent: 2.43930238087972
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.006568431854248047
+child_drop:  180
+add_hard_num:  15
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5892000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 174/444 episodes, total num timesteps 31500000/80000000, FPS 2115.
+
+value loss of agent: 2.5127582708994547
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003011465072631836
+child_drop:  204
+add_hard_num:  10
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6256
+
+ Scenario push_ball Algo diversified_novelty_pb updates 175/444 episodes, total num timesteps 31680000/80000000, FPS 2114.
+
+value loss of agent: 2.5654707113901773
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019690990447998047
+child_drop:  206
+add_hard_num:  7
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6014
+
+ Scenario push_ball Algo diversified_novelty_pb updates 176/444 episodes, total num timesteps 31860000/80000000, FPS 2113.
+
+value loss of agent: 2.686579529444377
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.008048772811889648
+child_drop:  184
+add_hard_num:  10
+parent:  56
+last_node_parent:  56
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.634
+
+ Scenario push_ball Algo diversified_novelty_pb updates 177/444 episodes, total num timesteps 32040000/80000000, FPS 2112.
+
+value loss of agent: 2.5562446117401123
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019259452819824219
+child_drop:  196
+add_hard_num:  20
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6372000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 178/444 episodes, total num timesteps 32220000/80000000, FPS 2111.
+
+value loss of agent: 2.0928576946258546
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022084712982177734
+child_drop:  187
+add_hard_num:  12
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6018
+
+ Scenario push_ball Algo diversified_novelty_pb updates 179/444 episodes, total num timesteps 32400000/80000000, FPS 2111.
+
+value loss of agent: 2.0242324272791543
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001993417739868164
+child_drop:  208
+add_hard_num:  10
+parent:  45
+last_node_parent:  45
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6344000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 180/444 episodes, total num timesteps 32580000/80000000, FPS 2111.
+
+value loss of agent: 2.2057041486104327
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003048419952392578
+child_drop:  184
+add_hard_num:  21
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6286
+
+ Scenario push_ball Algo diversified_novelty_pb updates 181/444 episodes, total num timesteps 32760000/80000000, FPS 2112.
+
+value loss of agent: 2.3930683453877766
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017457008361816406
+child_drop:  186
+add_hard_num:  10
+parent:  50
+last_node_parent:  50
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6202
+
+ Scenario push_ball Algo diversified_novelty_pb updates 182/444 episodes, total num timesteps 32940000/80000000, FPS 2112.
+
+value loss of agent: 2.43617639541626
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001903533935546875
+child_drop:  222
+add_hard_num:  14
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.626
+
+ Scenario push_ball Algo diversified_novelty_pb updates 183/444 episodes, total num timesteps 33120000/80000000, FPS 2113.
+
+value loss of agent: 2.383168379465739
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018241405487060547
+child_drop:  199
+add_hard_num:  14
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.644
+
+ Scenario push_ball Algo diversified_novelty_pb updates 184/444 episodes, total num timesteps 33300000/80000000, FPS 2113.
+
+value loss of agent: 2.4222089290618896
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002492189407348633
+child_drop:  175
+add_hard_num:  5
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.637
+
+ Scenario push_ball Algo diversified_novelty_pb updates 185/444 episodes, total num timesteps 33480000/80000000, FPS 2112.
+
+value loss of agent: 2.7748075326283774
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019283294677734375
+child_drop:  192
+add_hard_num:  18
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.67
+
+ Scenario push_ball Algo diversified_novelty_pb updates 186/444 episodes, total num timesteps 33660000/80000000, FPS 2112.
+
+value loss of agent: 2.5167670885721845
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.014296293258666992
+child_drop:  197
+add_hard_num:  9
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6416
+
+ Scenario push_ball Algo diversified_novelty_pb updates 187/444 episodes, total num timesteps 33840000/80000000, FPS 2113.
+
+value loss of agent: 2.474789333343506
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020966529846191406
+child_drop:  215
+add_hard_num:  7
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.687
+
+ Scenario push_ball Algo diversified_novelty_pb updates 188/444 episodes, total num timesteps 34020000/80000000, FPS 2112.
+
+value loss of agent: 2.4086233139038087
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025916099548339844
+child_drop:  202
+add_hard_num:  11
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6676
+
+ Scenario push_ball Algo diversified_novelty_pb updates 189/444 episodes, total num timesteps 34200000/80000000, FPS 2112.
+
+value loss of agent: 2.252165651321411
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018889904022216797
+child_drop:  170
+add_hard_num:  17
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6632
+
+ Scenario push_ball Algo diversified_novelty_pb updates 190/444 episodes, total num timesteps 34380000/80000000, FPS 2112.
+
+value loss of agent: 2.3354927221934
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018851757049560547
+child_drop:  209
+add_hard_num:  11
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6634
+
+ Scenario push_ball Algo diversified_novelty_pb updates 191/444 episodes, total num timesteps 34560000/80000000, FPS 2111.
+
+value loss of agent: 2.4506967067718506
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.08388090133666992
+child_drop:  206
+add_hard_num:  9
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6557999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 192/444 episodes, total num timesteps 34740000/80000000, FPS 2110.
+
+value loss of agent: 2.3819807529449464
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003151416778564453
+child_drop:  205
+add_hard_num:  7
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6564000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 193/444 episodes, total num timesteps 34920000/80000000, FPS 2111.
+
+value loss of agent: 2.327152792612712
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019214153289794922
+child_drop:  227
+add_hard_num:  7
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.659
+
+ Scenario push_ball Algo diversified_novelty_pb updates 194/444 episodes, total num timesteps 35100000/80000000, FPS 2112.
+
+value loss of agent: 1.8523255030314127
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003866434097290039
+child_drop:  192
+add_hard_num:  8
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6946
+
+ Scenario push_ball Algo diversified_novelty_pb updates 195/444 episodes, total num timesteps 35280000/80000000, FPS 2113.
+
+value loss of agent: 1.7824519395828247
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019431114196777344
+child_drop:  211
+add_hard_num:  11
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6826
+
+ Scenario push_ball Algo diversified_novelty_pb updates 196/444 episodes, total num timesteps 35460000/80000000, FPS 2114.
+
+value loss of agent: 1.820249819755554
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0029265880584716797
+child_drop:  202
+add_hard_num:  8
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6758000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 197/444 episodes, total num timesteps 35640000/80000000, FPS 2115.
+
+value loss of agent: 1.686251425743103
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019664764404296875
+child_drop:  226
+add_hard_num:  6
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6828
+
+ Scenario push_ball Algo diversified_novelty_pb updates 198/444 episodes, total num timesteps 35820000/80000000, FPS 2116.
+
+value loss of agent: 1.646193544069926
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001725912094116211
+child_drop:  192
+add_hard_num:  6
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6644000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 199/444 episodes, total num timesteps 36000000/80000000, FPS 2116.
+
+value loss of agent: 1.7384559472401937
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019063949584960938
+child_drop:  201
+add_hard_num:  11
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.693
+
+ Scenario push_ball Algo diversified_novelty_pb updates 200/444 episodes, total num timesteps 36180000/80000000, FPS 2117.
+
+value loss of agent: 1.8014443000157674
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.005520820617675781
+child_drop:  214
+add_hard_num:  9
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7142000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 201/444 episodes, total num timesteps 36360000/80000000, FPS 2117.
+
+value loss of agent: 1.7954721609751383
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025048255920410156
+child_drop:  209
+add_hard_num:  8
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.687
+
+ Scenario push_ball Algo diversified_novelty_pb updates 202/444 episodes, total num timesteps 36540000/80000000, FPS 2117.
+
+value loss of agent: 1.7393768946329753
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0032176971435546875
+child_drop:  222
+add_hard_num:  10
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6852
+
+ Scenario push_ball Algo diversified_novelty_pb updates 203/444 episodes, total num timesteps 36720000/80000000, FPS 2117.
+
+value loss of agent: 1.7337145964304606
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001997709274291992
+child_drop:  224
+add_hard_num:  6
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7074000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 204/444 episodes, total num timesteps 36900000/80000000, FPS 2117.
+
+value loss of agent: 1.7455199797948202
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017402172088623047
+child_drop:  229
+add_hard_num:  6
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7116
+
+ Scenario push_ball Algo diversified_novelty_pb updates 205/444 episodes, total num timesteps 37080000/80000000, FPS 2116.
+
+value loss of agent: 1.8936533689498902
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002024412155151367
+child_drop:  230
+add_hard_num:  11
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7045999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 206/444 episodes, total num timesteps 37260000/80000000, FPS 2115.
+
+value loss of agent: 1.8695897817611695
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019562244415283203
+child_drop:  205
+add_hard_num:  7
+parent:  56
+last_node_parent:  56
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7172000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 207/444 episodes, total num timesteps 37440000/80000000, FPS 2115.
+
+value loss of agent: 1.9144546429316203
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001893758773803711
+child_drop:  214
+add_hard_num:  8
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7143999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 208/444 episodes, total num timesteps 37620000/80000000, FPS 2116.
+
+value loss of agent: 1.6920888582865397
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0026323795318603516
+child_drop:  231
+add_hard_num:  6
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7367999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 209/444 episodes, total num timesteps 37800000/80000000, FPS 2116.
+
+value loss of agent: 1.809505852063497
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020360946655273438
+child_drop:  217
+add_hard_num:  13
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7135999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 210/444 episodes, total num timesteps 37980000/80000000, FPS 2116.
+
+value loss of agent: 1.817804479598999
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025076866149902344
+child_drop:  237
+add_hard_num:  5
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7268
+
+ Scenario push_ball Algo diversified_novelty_pb updates 211/444 episodes, total num timesteps 38160000/80000000, FPS 2117.
+
+value loss of agent: 1.8002698103586832
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002042531967163086
+child_drop:  234
+add_hard_num:  6
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7455999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 212/444 episodes, total num timesteps 38340000/80000000, FPS 2117.
+
+value loss of agent: 1.6199018796284994
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001943349838256836
+child_drop:  221
+add_hard_num:  9
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7183999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 213/444 episodes, total num timesteps 38520000/80000000, FPS 2117.
+
+value loss of agent: 1.7586588621139527
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.006665706634521484
+child_drop:  211
+add_hard_num:  11
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7143999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 214/444 episodes, total num timesteps 38700000/80000000, FPS 2116.
+
+value loss of agent: 1.5989896774291992
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0030896663665771484
+child_drop:  235
+add_hard_num:  7
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.754
+
+ Scenario push_ball Algo diversified_novelty_pb updates 215/444 episodes, total num timesteps 38880000/80000000, FPS 2116.
+
+value loss of agent: 1.533188287417094
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002023935317993164
+child_drop:  225
+add_hard_num:  5
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7425999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 216/444 episodes, total num timesteps 39060000/80000000, FPS 2113.
+
+value loss of agent: 1.5588297684987387
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019366741180419922
+child_drop:  231
+add_hard_num:  4
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7382000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 217/444 episodes, total num timesteps 39240000/80000000, FPS 2112.
+
+value loss of agent: 1.5570599555969238
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019576549530029297
+child_drop:  211
+add_hard_num:  11
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7604000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 218/444 episodes, total num timesteps 39420000/80000000, FPS 2111.
+
+value loss of agent: 1.7607350905736288
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019059181213378906
+child_drop:  207
+add_hard_num:  9
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7535999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 219/444 episodes, total num timesteps 39600000/80000000, FPS 2110.
+
+value loss of agent: 1.5993987401326497
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017440319061279297
+child_drop:  230
+add_hard_num:  7
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7624000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 220/444 episodes, total num timesteps 39780000/80000000, FPS 2110.
+
+value loss of agent: 1.5534172296524047
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019505023956298828
+child_drop:  228
+add_hard_num:  6
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7617999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 221/444 episodes, total num timesteps 39960000/80000000, FPS 2111.
+
+value loss of agent: 1.6407536745071412
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019404888153076172
+child_drop:  216
+add_hard_num:  6
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7522000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 222/444 episodes, total num timesteps 40140000/80000000, FPS 2112.
+
+value loss of agent: 1.669209631284078
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019521713256835938
+child_drop:  243
+add_hard_num:  7
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7734
+
+ Scenario push_ball Algo diversified_novelty_pb updates 223/444 episodes, total num timesteps 40320000/80000000, FPS 2112.
+
+value loss of agent: 1.5018823782602946
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018739700317382812
+child_drop:  229
+add_hard_num:  13
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7776
+
+ Scenario push_ball Algo diversified_novelty_pb updates 224/444 episodes, total num timesteps 40500000/80000000, FPS 2111.
+
+value loss of agent: 1.7113970041275024
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018510818481445312
+child_drop:  241
+add_hard_num:  6
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8024
+
+ Scenario push_ball Algo diversified_novelty_pb updates 225/444 episodes, total num timesteps 40680000/80000000, FPS 2111.
+
+value loss of agent: 1.6611491362253825
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025997161865234375
+child_drop:  219
+add_hard_num:  12
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7742
+
+ Scenario push_ball Algo diversified_novelty_pb updates 226/444 episodes, total num timesteps 40860000/80000000, FPS 2110.
+
+value loss of agent: 1.705965479214986
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0036368370056152344
+child_drop:  243
+add_hard_num:  11
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8054
+
+ Scenario push_ball Algo diversified_novelty_pb updates 227/444 episodes, total num timesteps 41040000/80000000, FPS 2109.
+
+value loss of agent: 1.4180476347605386
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003122568130493164
+child_drop:  231
+add_hard_num:  18
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.791
+
+ Scenario push_ball Algo diversified_novelty_pb updates 228/444 episodes, total num timesteps 41220000/80000000, FPS 2108.
+
+value loss of agent: 1.5431344429651896
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020143985748291016
+child_drop:  237
+add_hard_num:  6
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7824000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 229/444 episodes, total num timesteps 41400000/80000000, FPS 2106.
+
+value loss of agent: 1.285636297861735
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017838478088378906
+child_drop:  232
+add_hard_num:  2
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7734
+
+ Scenario push_ball Algo diversified_novelty_pb updates 230/444 episodes, total num timesteps 41580000/80000000, FPS 2106.
+
+value loss of agent: 1.4488360246022542
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020360946655273438
+child_drop:  144
+add_hard_num:  8
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7356000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 231/444 episodes, total num timesteps 41760000/80000000, FPS 2105.
+
+value loss of agent: 1.534011220932007
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017976760864257812
+child_drop:  151
+add_hard_num:  4
+parent:  44
+last_node_parent:  44
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7576
+
+ Scenario push_ball Algo diversified_novelty_pb updates 232/444 episodes, total num timesteps 41940000/80000000, FPS 2104.
+
+value loss of agent: 1.5181373039881387
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001773834228515625
+child_drop:  190
+add_hard_num:  5
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7584000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 233/444 episodes, total num timesteps 42120000/80000000, FPS 2105.
+
+value loss of agent: 1.5925156672795613
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018770694732666016
+child_drop:  209
+add_hard_num:  7
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7602000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 234/444 episodes, total num timesteps 42300000/80000000, FPS 2105.
+
+value loss of agent: 1.530782930056254
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018961429595947266
+child_drop:  186
+add_hard_num:  7
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.73
+
+ Scenario push_ball Algo diversified_novelty_pb updates 235/444 episodes, total num timesteps 42480000/80000000, FPS 2106.
+
+value loss of agent: 1.5847009817759197
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.020735740661621094
+child_drop:  180
+add_hard_num:  3
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7854
+
+ Scenario push_ball Algo diversified_novelty_pb updates 236/444 episodes, total num timesteps 42660000/80000000, FPS 2104.
+
+value loss of agent: 1.584823473294576
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019507408142089844
+child_drop:  187
+add_hard_num:  2
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7802
+
+ Scenario push_ball Algo diversified_novelty_pb updates 237/444 episodes, total num timesteps 42840000/80000000, FPS 2103.
+
+value loss of agent: 1.544270126024882
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0029752254486083984
+child_drop:  191
+add_hard_num:  4
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.785
+
+ Scenario push_ball Algo diversified_novelty_pb updates 238/444 episodes, total num timesteps 43020000/80000000, FPS 2102.
+
+value loss of agent: 1.588935621579488
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018415451049804688
+child_drop:  178
+add_hard_num:  8
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.793
+
+ Scenario push_ball Algo diversified_novelty_pb updates 239/444 episodes, total num timesteps 43200000/80000000, FPS 2102.
+
+value loss of agent: 1.7635890324910481
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001931905746459961
+child_drop:  195
+add_hard_num:  3
+parent:  45
+last_node_parent:  45
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.774
+
+ Scenario push_ball Algo diversified_novelty_pb updates 240/444 episodes, total num timesteps 43380000/80000000, FPS 2102.
+
+value loss of agent: 1.6680180152257285
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020296573638916016
+child_drop:  169
+add_hard_num:  3
+parent:  45
+last_node_parent:  45
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8034
+
+ Scenario push_ball Algo diversified_novelty_pb updates 241/444 episodes, total num timesteps 43560000/80000000, FPS 2102.
+
+value loss of agent: 1.9543192545572916
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002120494842529297
+child_drop:  198
+add_hard_num:  4
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7706
+
+ Scenario push_ball Algo diversified_novelty_pb updates 242/444 episodes, total num timesteps 43740000/80000000, FPS 2102.
+
+value loss of agent: 1.801228388150533
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002070188522338867
+child_drop:  199
+add_hard_num:  3
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7867999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 243/444 episodes, total num timesteps 43920000/80000000, FPS 2101.
+
+value loss of agent: 1.7661285638809203
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018129348754882812
+child_drop:  228
+add_hard_num:  4
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8036
+
+ Scenario push_ball Algo diversified_novelty_pb updates 244/444 episodes, total num timesteps 44100000/80000000, FPS 2101.
+
+value loss of agent: 1.4601103782653808
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003232717514038086
+child_drop:  202
+add_hard_num:  8
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7908
+
+ Scenario push_ball Algo diversified_novelty_pb updates 245/444 episodes, total num timesteps 44280000/80000000, FPS 2100.
+
+value loss of agent: 1.7612067619959513
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001953601837158203
+child_drop:  192
+add_hard_num:  13
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7898
+
+ Scenario push_ball Algo diversified_novelty_pb updates 246/444 episodes, total num timesteps 44460000/80000000, FPS 2101.
+
+value loss of agent: 1.7192111333211264
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003419637680053711
+child_drop:  214
+add_hard_num:  4
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8032
+
+ Scenario push_ball Algo diversified_novelty_pb updates 247/444 episodes, total num timesteps 44640000/80000000, FPS 2101.
+
+value loss of agent: 1.8462852398554483
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001859903335571289
+child_drop:  205
+add_hard_num:  10
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.81
+
+ Scenario push_ball Algo diversified_novelty_pb updates 248/444 episodes, total num timesteps 44820000/80000000, FPS 2102.
+
+value loss of agent: 2.07409782409668
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0028314590454101562
+child_drop:  218
+add_hard_num:  8
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8122
+
+ Scenario push_ball Algo diversified_novelty_pb updates 249/444 episodes, total num timesteps 45000000/80000000, FPS 2102.
+
+value loss of agent: 1.7245752652486166
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001791238784790039
+child_drop:  210
+add_hard_num:  7
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7926
+
+ Scenario push_ball Algo diversified_novelty_pb updates 250/444 episodes, total num timesteps 45180000/80000000, FPS 2102.
+
+value loss of agent: 1.7547057469685872
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.01404118537902832
+child_drop:  204
+add_hard_num:  2
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.828
+
+ Scenario push_ball Algo diversified_novelty_pb updates 251/444 episodes, total num timesteps 45360000/80000000, FPS 2102.
+
+value loss of agent: 1.5063681602478027
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018477439880371094
+child_drop:  227
+add_hard_num:  2
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8044
+
+ Scenario push_ball Algo diversified_novelty_pb updates 252/444 episodes, total num timesteps 45540000/80000000, FPS 2102.
+
+value loss of agent: 1.5687229792277018
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019161701202392578
+child_drop:  204
+add_hard_num:  6
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.824
+
+ Scenario push_ball Algo diversified_novelty_pb updates 253/444 episodes, total num timesteps 45720000/80000000, FPS 2103.
+
+value loss of agent: 1.6004119873046876
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0027952194213867188
+child_drop:  206
+add_hard_num:  6
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8008
+
+ Scenario push_ball Algo diversified_novelty_pb updates 254/444 episodes, total num timesteps 45900000/80000000, FPS 2103.
+
+value loss of agent: 1.7624269644419353
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019936561584472656
+child_drop:  204
+add_hard_num:  5
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8246
+
+ Scenario push_ball Algo diversified_novelty_pb updates 255/444 episodes, total num timesteps 46080000/80000000, FPS 2102.
+
+value loss of agent: 1.6332688411076863
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0060846805572509766
+child_drop:  201
+add_hard_num:  6
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.824
+
+ Scenario push_ball Algo diversified_novelty_pb updates 256/444 episodes, total num timesteps 46260000/80000000, FPS 2102.
+
+value loss of agent: 1.8243931690851847
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0023055076599121094
+child_drop:  216
+add_hard_num:  10
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8366
+
+ Scenario push_ball Algo diversified_novelty_pb updates 257/444 episodes, total num timesteps 46440000/80000000, FPS 2101.
+
+value loss of agent: 1.8700167099634806
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0034334659576416016
+child_drop:  228
+add_hard_num:  5
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8492000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 258/444 episodes, total num timesteps 46620000/80000000, FPS 2101.
+
+value loss of agent: 1.821777089436849
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018177032470703125
+child_drop:  205
+add_hard_num:  5
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.813
+
+ Scenario push_ball Algo diversified_novelty_pb updates 259/444 episodes, total num timesteps 46800000/80000000, FPS 2101.
+
+value loss of agent: 1.65282883644104
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0028274059295654297
+child_drop:  213
+add_hard_num:  3
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8308
+
+ Scenario push_ball Algo diversified_novelty_pb updates 260/444 episodes, total num timesteps 46980000/80000000, FPS 2102.
+
+value loss of agent: 1.4943686167399088
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0033957958221435547
+child_drop:  211
+add_hard_num:  11
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.834
+
+ Scenario push_ball Algo diversified_novelty_pb updates 261/444 episodes, total num timesteps 47160000/80000000, FPS 2101.
+
+value loss of agent: 1.5429311990737915
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0027921199798583984
+child_drop:  188
+add_hard_num:  4
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8396
+
+ Scenario push_ball Algo diversified_novelty_pb updates 262/444 episodes, total num timesteps 47340000/80000000, FPS 2102.
+
+value loss of agent: 1.6434224685033163
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019478797912597656
+child_drop:  209
+add_hard_num:  4
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8462
+
+ Scenario push_ball Algo diversified_novelty_pb updates 263/444 episodes, total num timesteps 47520000/80000000, FPS 2102.
+
+value loss of agent: 1.5070525725682578
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018572807312011719
+child_drop:  240
+add_hard_num:  4
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.856
+
+ Scenario push_ball Algo diversified_novelty_pb updates 264/444 episodes, total num timesteps 47700000/80000000, FPS 2102.
+
+value loss of agent: 1.462887215614319
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019156932830810547
+child_drop:  215
+add_hard_num:  7
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8667999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 265/444 episodes, total num timesteps 47880000/80000000, FPS 2103.
+
+value loss of agent: 1.4871740102767945
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019078254699707031
+child_drop:  226
+add_hard_num:  5
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8508
+
+ Scenario push_ball Algo diversified_novelty_pb updates 266/444 episodes, total num timesteps 48060000/80000000, FPS 2104.
+
+value loss of agent: 1.728177293141683
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017285346984863281
+child_drop:  217
+add_hard_num:  5
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8572000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 267/444 episodes, total num timesteps 48240000/80000000, FPS 2105.
+
+value loss of agent: 1.6145825227101644
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0027747154235839844
+child_drop:  199
+add_hard_num:  7
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.873
+
+ Scenario push_ball Algo diversified_novelty_pb updates 268/444 episodes, total num timesteps 48420000/80000000, FPS 2106.
+
+value loss of agent: 1.5220882733662924
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0028319358825683594
+child_drop:  214
+add_hard_num:  2
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8725999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 269/444 episodes, total num timesteps 48600000/80000000, FPS 2106.
+
+value loss of agent: 1.3968139251073202
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020406246185302734
+child_drop:  217
+add_hard_num:  9
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8603999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 270/444 episodes, total num timesteps 48780000/80000000, FPS 2107.
+
+value loss of agent: 1.2201339880625406
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0027494430541992188
+child_drop:  203
+add_hard_num:  3
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8632000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 271/444 episodes, total num timesteps 48960000/80000000, FPS 2108.
+
+value loss of agent: 1.2993810415267943
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003253936767578125
+child_drop:  241
+add_hard_num:  3
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.888
+
+ Scenario push_ball Algo diversified_novelty_pb updates 272/444 episodes, total num timesteps 49140000/80000000, FPS 2108.
+
+value loss of agent: 1.2177708387374877
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019669532775878906
+child_drop:  198
+add_hard_num:  3
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8553999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 273/444 episodes, total num timesteps 49320000/80000000, FPS 2109.
+
+value loss of agent: 1.4403945446014403
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0036935806274414062
+child_drop:  251
+add_hard_num:  2
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8627999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 274/444 episodes, total num timesteps 49500000/80000000, FPS 2109.
+
+value loss of agent: 1.3116036971410117
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022428035736083984
+child_drop:  220
+add_hard_num:  3
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8412
+
+ Scenario push_ball Algo diversified_novelty_pb updates 275/444 episodes, total num timesteps 49680000/80000000, FPS 2110.
+
+value loss of agent: 1.239272960027059
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.007944583892822266
+child_drop:  217
+add_hard_num:  3
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8844000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 276/444 episodes, total num timesteps 49860000/80000000, FPS 2110.
+
+value loss of agent: 1.4540658950805665
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019731521606445312
+child_drop:  209
+add_hard_num:  4
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8844000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 277/444 episodes, total num timesteps 50040000/80000000, FPS 2110.
+
+value loss of agent: 1.3754149595896403
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001953601837158203
+child_drop:  235
+add_hard_num:  9
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8697999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 278/444 episodes, total num timesteps 50220000/80000000, FPS 2111.
+
+value loss of agent: 1.2390476226806642
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018353462219238281
+child_drop:  221
+add_hard_num:  4
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8855999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 279/444 episodes, total num timesteps 50400000/80000000, FPS 2111.
+
+value loss of agent: 1.3433531125386555
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019040107727050781
+child_drop:  212
+add_hard_num:  4
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8871999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 280/444 episodes, total num timesteps 50580000/80000000, FPS 2112.
+
+value loss of agent: 1.395057193438212
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025441646575927734
+child_drop:  234
+add_hard_num:  2
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8845999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 281/444 episodes, total num timesteps 50760000/80000000, FPS 2112.
+
+value loss of agent: 1.3374730269114177
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001886129379272461
+child_drop:  233
+add_hard_num:  4
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8697999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 282/444 episodes, total num timesteps 50940000/80000000, FPS 2113.
+
+value loss of agent: 1.4997859398523967
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019826889038085938
+child_drop:  212
+add_hard_num:  3
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8954000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 283/444 episodes, total num timesteps 51120000/80000000, FPS 2112.
+
+value loss of agent: 1.4952641566594442
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0034041404724121094
+child_drop:  201
+add_hard_num:  5
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8766
+
+ Scenario push_ball Algo diversified_novelty_pb updates 284/444 episodes, total num timesteps 51300000/80000000, FPS 2112.
+
+value loss of agent: 1.5831246296564738
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002025127410888672
+child_drop:  235
+add_hard_num:  3
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.898
+
+ Scenario push_ball Algo diversified_novelty_pb updates 285/444 episodes, total num timesteps 51480000/80000000, FPS 2112.
+
+value loss of agent: 1.5079156319300333
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018770694732666016
+child_drop:  232
+add_hard_num:  1
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8846
+
+ Scenario push_ball Algo diversified_novelty_pb updates 286/444 episodes, total num timesteps 51660000/80000000, FPS 2112.
+
+value loss of agent: 1.6193984587987265
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019867420196533203
+child_drop:  223
+add_hard_num:  3
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8966000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 287/444 episodes, total num timesteps 51840000/80000000, FPS 2112.
+
+value loss of agent: 1.4831839005152385
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017783641815185547
+child_drop:  222
+add_hard_num:  6
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8934
+
+ Scenario push_ball Algo diversified_novelty_pb updates 288/444 episodes, total num timesteps 52020000/80000000, FPS 2112.
+
+value loss of agent: 1.5134117603302002
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020117759704589844
+child_drop:  208
+add_hard_num:  4
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8827999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 289/444 episodes, total num timesteps 52200000/80000000, FPS 2112.
+
+value loss of agent: 1.5385369380315146
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018422603607177734
+child_drop:  218
+add_hard_num:  7
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.913
+
+ Scenario push_ball Algo diversified_novelty_pb updates 290/444 episodes, total num timesteps 52380000/80000000, FPS 2112.
+
+value loss of agent: 1.4679869095484415
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002343416213989258
+child_drop:  222
+add_hard_num:  2
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8956000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 291/444 episodes, total num timesteps 52560000/80000000, FPS 2112.
+
+value loss of agent: 1.3743640184402466
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025796890258789062
+child_drop:  214
+add_hard_num:  4
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9104000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 292/444 episodes, total num timesteps 52740000/80000000, FPS 2112.
+
+value loss of agent: 1.4685395240783692
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003003835678100586
+child_drop:  206
+add_hard_num:  6
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9026000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 293/444 episodes, total num timesteps 52920000/80000000, FPS 2112.
+
+value loss of agent: 1.4932263374328614
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018544197082519531
+child_drop:  212
+add_hard_num:  11
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9126000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 294/444 episodes, total num timesteps 53100000/80000000, FPS 2111.
+
+value loss of agent: 1.5538533369700114
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001865386962890625
+child_drop:  211
+add_hard_num:  5
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.901
+
+ Scenario push_ball Algo diversified_novelty_pb updates 295/444 episodes, total num timesteps 53280000/80000000, FPS 2111.
+
+value loss of agent: 1.4499232610066732
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019078254699707031
+child_drop:  222
+add_hard_num:  6
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8964
+
+ Scenario push_ball Algo diversified_novelty_pb updates 296/444 episodes, total num timesteps 53460000/80000000, FPS 2112.
+
+value loss of agent: 1.5322993993759155
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019359588623046875
+child_drop:  217
+add_hard_num:  4
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9121999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 297/444 episodes, total num timesteps 53640000/80000000, FPS 2113.
+
+value loss of agent: 1.4204408327738445
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020208358764648438
+child_drop:  230
+add_hard_num:  4
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9062
+
+ Scenario push_ball Algo diversified_novelty_pb updates 298/444 episodes, total num timesteps 53820000/80000000, FPS 2112.
+
+value loss of agent: 1.4560087283452352
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.010269403457641602
+child_drop:  245
+add_hard_num:  1
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9006
+
+ Scenario push_ball Algo diversified_novelty_pb updates 299/444 episodes, total num timesteps 54000000/80000000, FPS 2112.
+
+value loss of agent: 1.4583311319351195
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003322124481201172
+child_drop:  213
+add_hard_num:  7
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8967999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 300/444 episodes, total num timesteps 54180000/80000000, FPS 2113.
+
+value loss of agent: 1.431566882133484
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001821279525756836
+child_drop:  236
+add_hard_num:  2
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9102
+
+ Scenario push_ball Algo diversified_novelty_pb updates 301/444 episodes, total num timesteps 54360000/80000000, FPS 2113.
+
+value loss of agent: 1.4044786055882772
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018126964569091797
+child_drop:  236
+add_hard_num:  3
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9324000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 302/444 episodes, total num timesteps 54540000/80000000, FPS 2114.
+
+value loss of agent: 1.407147487004598
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001674652099609375
+child_drop:  223
+add_hard_num:  3
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9165999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 303/444 episodes, total num timesteps 54720000/80000000, FPS 2114.
+
+value loss of agent: 1.3891970316569011
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0027947425842285156
+child_drop:  221
+add_hard_num:  3
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.907
+
+ Scenario push_ball Algo diversified_novelty_pb updates 304/444 episodes, total num timesteps 54900000/80000000, FPS 2115.
+
+value loss of agent: 1.229539148012797
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018689632415771484
+child_drop:  199
+add_hard_num:  4
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9087999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 305/444 episodes, total num timesteps 55080000/80000000, FPS 2116.
+
+value loss of agent: 1.271993390719096
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017962455749511719
+child_drop:  240
+add_hard_num:  3
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9014
+
+ Scenario push_ball Algo diversified_novelty_pb updates 306/444 episodes, total num timesteps 55260000/80000000, FPS 2116.
+
+value loss of agent: 1.2883401393890381
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018656253814697266
+child_drop:  244
+add_hard_num:  3
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9052
+
+ Scenario push_ball Algo diversified_novelty_pb updates 307/444 episodes, total num timesteps 55440000/80000000, FPS 2117.
+
+value loss of agent: 1.3283259471257527
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018618106842041016
+child_drop:  225
+add_hard_num:  5
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9176
+
+ Scenario push_ball Algo diversified_novelty_pb updates 308/444 episodes, total num timesteps 55620000/80000000, FPS 2117.
+
+value loss of agent: 1.3294269482294718
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001997709274291992
+child_drop:  224
+add_hard_num:  5
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9176
+
+ Scenario push_ball Algo diversified_novelty_pb updates 309/444 episodes, total num timesteps 55800000/80000000, FPS 2117.
+
+value loss of agent: 1.3242918411890665
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018968582153320312
+child_drop:  221
+add_hard_num:  5
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9111999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 310/444 episodes, total num timesteps 55980000/80000000, FPS 2117.
+
+value loss of agent: 1.2911704063415528
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002366304397583008
+child_drop:  222
+add_hard_num:  2
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9136
+
+ Scenario push_ball Algo diversified_novelty_pb updates 311/444 episodes, total num timesteps 56160000/80000000, FPS 2117.
+
+value loss of agent: 1.1960585753122965
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018870830535888672
+child_drop:  219
+add_hard_num:  6
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9346
+
+ Scenario push_ball Algo diversified_novelty_pb updates 312/444 episodes, total num timesteps 56340000/80000000, FPS 2116.
+
+value loss of agent: 1.1666284243265788
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018155574798583984
+child_drop:  212
+add_hard_num:  5
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9256
+
+ Scenario push_ball Algo diversified_novelty_pb updates 313/444 episodes, total num timesteps 56520000/80000000, FPS 2116.
+
+value loss of agent: 1.1424953063329062
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019254684448242188
+child_drop:  216
+add_hard_num:  3
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.937
+
+ Scenario push_ball Algo diversified_novelty_pb updates 314/444 episodes, total num timesteps 56700000/80000000, FPS 2116.
+
+value loss of agent: 1.2050313154856365
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020449161529541016
+child_drop:  213
+add_hard_num:  3
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9395999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 315/444 episodes, total num timesteps 56880000/80000000, FPS 2116.
+
+value loss of agent: 1.1491491635640463
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001874685287475586
+child_drop:  240
+add_hard_num:  3
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.922
+
+ Scenario push_ball Algo diversified_novelty_pb updates 316/444 episodes, total num timesteps 57060000/80000000, FPS 2116.
+
+value loss of agent: 1.0193417032559713
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002814054489135742
+child_drop:  236
+add_hard_num:  3
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.92
+
+ Scenario push_ball Algo diversified_novelty_pb updates 317/444 episodes, total num timesteps 57240000/80000000, FPS 2116.
+
+value loss of agent: 1.1105206648508708
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003333568572998047
+child_drop:  226
+add_hard_num:  4
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9392
+
+ Scenario push_ball Algo diversified_novelty_pb updates 318/444 episodes, total num timesteps 57420000/80000000, FPS 2115.
+
+value loss of agent: 1.0097337007522582
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017256736755371094
+child_drop:  227
+add_hard_num:  1
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9318
+
+ Scenario push_ball Algo diversified_novelty_pb updates 319/444 episodes, total num timesteps 57600000/80000000, FPS 2115.
+
+value loss of agent: 1.0204222361246744
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001953601837158203
+child_drop:  222
+add_hard_num:  0
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9398
+
+ Scenario push_ball Algo diversified_novelty_pb updates 320/444 episodes, total num timesteps 57780000/80000000, FPS 2115.
+
+value loss of agent: 1.0077245513598123
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018453598022460938
+child_drop:  235
+add_hard_num:  2
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9295999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 321/444 episodes, total num timesteps 57960000/80000000, FPS 2115.
+
+value loss of agent: 1.0433900674184164
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020020008087158203
+child_drop:  236
+add_hard_num:  3
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9408
+
+ Scenario push_ball Algo diversified_novelty_pb updates 322/444 episodes, total num timesteps 58140000/80000000, FPS 2115.
+
+value loss of agent: 1.003406035900116
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001975536346435547
+child_drop:  246
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9162
+
+ Scenario push_ball Algo diversified_novelty_pb updates 323/444 episodes, total num timesteps 58320000/80000000, FPS 2115.
+
+value loss of agent: 1.1484267234802246
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001954317092895508
+child_drop:  229
+add_hard_num:  3
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9282
+
+ Scenario push_ball Algo diversified_novelty_pb updates 324/444 episodes, total num timesteps 58500000/80000000, FPS 2115.
+
+value loss of agent: 1.0619286219278972
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018961429595947266
+child_drop:  240
+add_hard_num:  2
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9282
+
+ Scenario push_ball Algo diversified_novelty_pb updates 325/444 episodes, total num timesteps 58680000/80000000, FPS 2116.
+
+value loss of agent: 1.1035358587900796
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018584728240966797
+child_drop:  201
+add_hard_num:  6
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9258
+
+ Scenario push_ball Algo diversified_novelty_pb updates 326/444 episodes, total num timesteps 58860000/80000000, FPS 2116.
+
+value loss of agent: 1.2067813158035279
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017886161804199219
+child_drop:  235
+add_hard_num:  2
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9388000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 327/444 episodes, total num timesteps 59040000/80000000, FPS 2116.
+
+value loss of agent: 1.0442253271738688
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020055770874023438
+child_drop:  222
+add_hard_num:  1
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.94
+
+ Scenario push_ball Algo diversified_novelty_pb updates 328/444 episodes, total num timesteps 59220000/80000000, FPS 2116.
+
+value loss of agent: 1.1333782434463502
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0034177303314208984
+child_drop:  212
+add_hard_num:  2
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9304
+
+ Scenario push_ball Algo diversified_novelty_pb updates 329/444 episodes, total num timesteps 59400000/80000000, FPS 2116.
+
+value loss of agent: 1.2351714611053466
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018570423126220703
+child_drop:  223
+add_hard_num:  4
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.949
+
+ Scenario push_ball Algo diversified_novelty_pb updates 330/444 episodes, total num timesteps 59580000/80000000, FPS 2116.
+
+value loss of agent: 1.1019001642862956
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0032167434692382812
+child_drop:  221
+add_hard_num:  3
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9244
+
+ Scenario push_ball Algo diversified_novelty_pb updates 331/444 episodes, total num timesteps 59760000/80000000, FPS 2116.
+
+value loss of agent: 1.2042675177256266
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001972675323486328
+child_drop:  215
+add_hard_num:  4
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9312
+
+ Scenario push_ball Algo diversified_novelty_pb updates 332/444 episodes, total num timesteps 59940000/80000000, FPS 2116.
+
+value loss of agent: 1.2524211247762045
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002010345458984375
+child_drop:  218
+add_hard_num:  2
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.932
+
+ Scenario push_ball Algo diversified_novelty_pb updates 333/444 episodes, total num timesteps 60120000/80000000, FPS 2116.
+
+value loss of agent: 1.2312950531641642
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018930435180664062
+child_drop:  223
+add_hard_num:  8
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9395999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 334/444 episodes, total num timesteps 60300000/80000000, FPS 2116.
+
+value loss of agent: 1.1871436357498169
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018813610076904297
+child_drop:  230
+add_hard_num:  5
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9322
+
+ Scenario push_ball Algo diversified_novelty_pb updates 335/444 episodes, total num timesteps 60480000/80000000, FPS 2117.
+
+value loss of agent: 1.0536564429601034
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00193023681640625
+child_drop:  242
+add_hard_num:  3
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9398000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 336/444 episodes, total num timesteps 60660000/80000000, FPS 2117.
+
+value loss of agent: 1.005474325021108
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001871347427368164
+child_drop:  246
+add_hard_num:  3
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.956
+
+ Scenario push_ball Algo diversified_novelty_pb updates 337/444 episodes, total num timesteps 60840000/80000000, FPS 2117.
+
+value loss of agent: 1.0487754027048746
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003294229507446289
+child_drop:  233
+add_hard_num:  2
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.946
+
+ Scenario push_ball Algo diversified_novelty_pb updates 338/444 episodes, total num timesteps 61020000/80000000, FPS 2118.
+
+value loss of agent: 1.067338800430298
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002099275588989258
+child_drop:  237
+add_hard_num:  2
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.937
+
+ Scenario push_ball Algo diversified_novelty_pb updates 339/444 episodes, total num timesteps 61200000/80000000, FPS 2118.
+
+value loss of agent: 1.038126786549886
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019631385803222656
+child_drop:  223
+add_hard_num:  2
+parent:  86
+last_node_parent:  86
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9368
+
+ Scenario push_ball Algo diversified_novelty_pb updates 340/444 episodes, total num timesteps 61380000/80000000, FPS 2118.
+
+value loss of agent: 1.0932302316029867
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020627975463867188
+child_drop:  233
+add_hard_num:  4
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9412
+
+ Scenario push_ball Algo diversified_novelty_pb updates 341/444 episodes, total num timesteps 61560000/80000000, FPS 2119.
+
+value loss of agent: 1.122676181793213
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019762516021728516
+child_drop:  220
+add_hard_num:  5
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9528
+
+ Scenario push_ball Algo diversified_novelty_pb updates 342/444 episodes, total num timesteps 61740000/80000000, FPS 2119.
+
+value loss of agent: 1.3104655742645264
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019202232360839844
+child_drop:  233
+add_hard_num:  1
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9452
+
+ Scenario push_ball Algo diversified_novelty_pb updates 343/444 episodes, total num timesteps 61920000/80000000, FPS 2119.
+
+value loss of agent: 1.1042681376139323
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002324819564819336
+child_drop:  206
+add_hard_num:  2
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9354
+
+ Scenario push_ball Algo diversified_novelty_pb updates 344/444 episodes, total num timesteps 62100000/80000000, FPS 2119.
+
+value loss of agent: 1.2287045955657958
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003754138946533203
+child_drop:  219
+add_hard_num:  3
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9532
+
+ Scenario push_ball Algo diversified_novelty_pb updates 345/444 episodes, total num timesteps 62280000/80000000, FPS 2119.
+
+value loss of agent: 1.0766775449117025
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001998424530029297
+child_drop:  218
+add_hard_num:  4
+parent:  87
+last_node_parent:  87
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9454
+
+ Scenario push_ball Algo diversified_novelty_pb updates 346/444 episodes, total num timesteps 62460000/80000000, FPS 2119.
+
+value loss of agent: 1.089157470067342
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002071857452392578
+child_drop:  235
+add_hard_num:  3
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9544
+
+ Scenario push_ball Algo diversified_novelty_pb updates 347/444 episodes, total num timesteps 62640000/80000000, FPS 2119.
+
+value loss of agent: 0.9874296069145203
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017406940460205078
+child_drop:  220
+add_hard_num:  7
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9312
+
+ Scenario push_ball Algo diversified_novelty_pb updates 348/444 episodes, total num timesteps 62820000/80000000, FPS 2120.
+
+value loss of agent: 1.0767661571502685
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001898050308227539
+child_drop:  223
+add_hard_num:  2
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9322
+
+ Scenario push_ball Algo diversified_novelty_pb updates 349/444 episodes, total num timesteps 63000000/80000000, FPS 2119.
+
+value loss of agent: 1.0045295794804892
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020971298217773438
+child_drop:  228
+add_hard_num:  1
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9574000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 350/444 episodes, total num timesteps 63180000/80000000, FPS 2119.
+
+value loss of agent: 1.0443474690119425
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002048492431640625
+child_drop:  238
+add_hard_num:  1
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9444
+
+ Scenario push_ball Algo diversified_novelty_pb updates 351/444 episodes, total num timesteps 63360000/80000000, FPS 2119.
+
+value loss of agent: 1.1247830549875895
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020194053649902344
+child_drop:  221
+add_hard_num:  1
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9328
+
+ Scenario push_ball Algo diversified_novelty_pb updates 352/444 episodes, total num timesteps 63540000/80000000, FPS 2119.
+
+value loss of agent: 1.076728089650472
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018334388732910156
+child_drop:  236
+add_hard_num:  3
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9458
+
+ Scenario push_ball Algo diversified_novelty_pb updates 353/444 episodes, total num timesteps 63720000/80000000, FPS 2119.
+
+value loss of agent: 1.1174933513005574
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001821279525756836
+child_drop:  195
+add_hard_num:  1
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9398
+
+ Scenario push_ball Algo diversified_novelty_pb updates 354/444 episodes, total num timesteps 63900000/80000000, FPS 2118.
+
+value loss of agent: 1.122791624069214
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017218589782714844
+child_drop:  224
+add_hard_num:  5
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9591999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 355/444 episodes, total num timesteps 64080000/80000000, FPS 2118.
+
+value loss of agent: 1.0662482659022012
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025501251220703125
+child_drop:  219
+add_hard_num:  2
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.955
+
+ Scenario push_ball Algo diversified_novelty_pb updates 356/444 episodes, total num timesteps 64260000/80000000, FPS 2119.
+
+value loss of agent: 1.1740681727727253
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019161701202392578
+child_drop:  229
+add_hard_num:  3
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9646
+
+ Scenario push_ball Algo diversified_novelty_pb updates 357/444 episodes, total num timesteps 64440000/80000000, FPS 2119.
+
+value loss of agent: 1.046319063504537
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002281665802001953
+child_drop:  218
+add_hard_num:  6
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9474
+
+ Scenario push_ball Algo diversified_novelty_pb updates 358/444 episodes, total num timesteps 64620000/80000000, FPS 2120.
+
+value loss of agent: 1.0406145016352335
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020089149475097656
+child_drop:  230
+add_hard_num:  3
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9566
+
+ Scenario push_ball Algo diversified_novelty_pb updates 359/444 episodes, total num timesteps 64800000/80000000, FPS 2120.
+
+value loss of agent: 1.069576915105184
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019228458404541016
+child_drop:  223
+add_hard_num:  3
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.961
+
+ Scenario push_ball Algo diversified_novelty_pb updates 360/444 episodes, total num timesteps 64980000/80000000, FPS 2121.
+
+value loss of agent: 1.212436858812968
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00197601318359375
+child_drop:  238
+add_hard_num:  2
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9382
+
+ Scenario push_ball Algo diversified_novelty_pb updates 361/444 episodes, total num timesteps 65160000/80000000, FPS 2122.
+
+value loss of agent: 1.0923474550247192
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019147396087646484
+child_drop:  206
+add_hard_num:  2
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9496
+
+ Scenario push_ball Algo diversified_novelty_pb updates 362/444 episodes, total num timesteps 65340000/80000000, FPS 2122.
+
+value loss of agent: 1.022131355603536
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017786026000976562
+child_drop:  218
+add_hard_num:  6
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.935
+
+ Scenario push_ball Algo diversified_novelty_pb updates 363/444 episodes, total num timesteps 65520000/80000000, FPS 2122.
+
+value loss of agent: 1.0822066068649292
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017464160919189453
+child_drop:  236
+add_hard_num:  4
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.948
+
+ Scenario push_ball Algo diversified_novelty_pb updates 364/444 episodes, total num timesteps 65700000/80000000, FPS 2122.
+
+value loss of agent: 1.0546500205993652
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002641439437866211
+child_drop:  244
+add_hard_num:  0
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9544
+
+ Scenario push_ball Algo diversified_novelty_pb updates 365/444 episodes, total num timesteps 65880000/80000000, FPS 2123.
+
+value loss of agent: 1.1242289543151855
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018720626831054688
+child_drop:  227
+add_hard_num:  3
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9502
+
+ Scenario push_ball Algo diversified_novelty_pb updates 366/444 episodes, total num timesteps 66060000/80000000, FPS 2123.
+
+value loss of agent: 1.16729633808136
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018398761749267578
+child_drop:  238
+add_hard_num:  1
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9526
+
+ Scenario push_ball Algo diversified_novelty_pb updates 367/444 episodes, total num timesteps 66240000/80000000, FPS 2123.
+
+value loss of agent: 1.1871119658152263
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00189208984375
+child_drop:  229
+add_hard_num:  4
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9458
+
+ Scenario push_ball Algo diversified_novelty_pb updates 368/444 episodes, total num timesteps 66420000/80000000, FPS 2123.
+
+value loss of agent: 1.2220927715301513
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001867055892944336
+child_drop:  230
+add_hard_num:  4
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9548
+
+ Scenario push_ball Algo diversified_novelty_pb updates 369/444 episodes, total num timesteps 66600000/80000000, FPS 2123.
+
+value loss of agent: 1.1919821818669638
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018455982208251953
+child_drop:  237
+add_hard_num:  4
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9388
+
+ Scenario push_ball Algo diversified_novelty_pb updates 370/444 episodes, total num timesteps 66780000/80000000, FPS 2123.
+
+value loss of agent: 1.1570211172103881
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017566680908203125
+child_drop:  235
+add_hard_num:  2
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9502
+
+ Scenario push_ball Algo diversified_novelty_pb updates 371/444 episodes, total num timesteps 66960000/80000000, FPS 2124.
+
+value loss of agent: 1.2316386858622232
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017926692962646484
+child_drop:  221
+add_hard_num:  7
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9571999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 372/444 episodes, total num timesteps 67140000/80000000, FPS 2124.
+
+value loss of agent: 1.144744873046875
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019426345825195312
+child_drop:  241
+add_hard_num:  3
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9552
+
+ Scenario push_ball Algo diversified_novelty_pb updates 373/444 episodes, total num timesteps 67320000/80000000, FPS 2125.
+
+value loss of agent: 1.0560379107793172
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017666816711425781
+child_drop:  235
+add_hard_num:  4
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9618
+
+ Scenario push_ball Algo diversified_novelty_pb updates 374/444 episodes, total num timesteps 67500000/80000000, FPS 2125.
+
+value loss of agent: 1.0926403681437173
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002657175064086914
+child_drop:  216
+add_hard_num:  4
+parent:  88
+last_node_parent:  88
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.957
+
+ Scenario push_ball Algo diversified_novelty_pb updates 375/444 episodes, total num timesteps 67680000/80000000, FPS 2125.
+
+value loss of agent: 0.9273679494857788
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020360946655273438
+child_drop:  226
+add_hard_num:  1
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9553999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 376/444 episodes, total num timesteps 67860000/80000000, FPS 2125.
+
+value loss of agent: 1.0437959909439087
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018322467803955078
+child_drop:  208
+add_hard_num:  4
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.964
+
+ Scenario push_ball Algo diversified_novelty_pb updates 377/444 episodes, total num timesteps 68040000/80000000, FPS 2126.
+
+value loss of agent: 1.164013942082723
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017745494842529297
+child_drop:  248
+add_hard_num:  1
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.963
+
+ Scenario push_ball Algo diversified_novelty_pb updates 378/444 episodes, total num timesteps 68220000/80000000, FPS 2126.
+
+value loss of agent: 1.0027475436528523
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018153190612792969
+child_drop:  218
+add_hard_num:  2
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9696
+
+ Scenario push_ball Algo diversified_novelty_pb updates 379/444 episodes, total num timesteps 68400000/80000000, FPS 2127.
+
+value loss of agent: 1.241676672299703
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018110275268554688
+child_drop:  216
+add_hard_num:  5
+parent:  83
+last_node_parent:  83
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9614000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 380/444 episodes, total num timesteps 68580000/80000000, FPS 2127.
+
+value loss of agent: 1.187042490641276
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017523765563964844
+child_drop:  209
+add_hard_num:  2
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9625999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 381/444 episodes, total num timesteps 68760000/80000000, FPS 2126.
+
+value loss of agent: 1.1847333272298177
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017735958099365234
+child_drop:  223
+add_hard_num:  2
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9726
+
+ Scenario push_ball Algo diversified_novelty_pb updates 382/444 episodes, total num timesteps 68940000/80000000, FPS 2126.
+
+value loss of agent: 1.1544114430745442
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019381046295166016
+child_drop:  226
+add_hard_num:  3
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9574
+
+ Scenario push_ball Algo diversified_novelty_pb updates 383/444 episodes, total num timesteps 69120000/80000000, FPS 2126.
+
+value loss of agent: 1.2835567553838094
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002429962158203125
+child_drop:  226
+add_hard_num:  2
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9656
+
+ Scenario push_ball Algo diversified_novelty_pb updates 384/444 episodes, total num timesteps 69300000/80000000, FPS 2125.
+
+value loss of agent: 1.2366425752639771
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00728607177734375
+child_drop:  215
+add_hard_num:  7
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9688
+
+ Scenario push_ball Algo diversified_novelty_pb updates 385/444 episodes, total num timesteps 69480000/80000000, FPS 2125.
+
+value loss of agent: 1.215959644317627
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0039594173431396484
+child_drop:  216
+add_hard_num:  4
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.967
+
+ Scenario push_ball Algo diversified_novelty_pb updates 386/444 episodes, total num timesteps 69660000/80000000, FPS 2125.
+
+value loss of agent: 1.2275009552637737
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017895698547363281
+child_drop:  233
+add_hard_num:  4
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.967
+
+ Scenario push_ball Algo diversified_novelty_pb updates 387/444 episodes, total num timesteps 69840000/80000000, FPS 2125.
+
+value loss of agent: 1.210014804204305
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0026657581329345703
+child_drop:  216
+add_hard_num:  2
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9621999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 388/444 episodes, total num timesteps 70020000/80000000, FPS 2126.
+
+value loss of agent: 1.2109507958094279
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017764568328857422
+child_drop:  207
+add_hard_num:  6
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.963
+
+ Scenario push_ball Algo diversified_novelty_pb updates 389/444 episodes, total num timesteps 70200000/80000000, FPS 2126.
+
+value loss of agent: 1.4415565729141235
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001993417739868164
+child_drop:  226
+add_hard_num:  2
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9624000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 390/444 episodes, total num timesteps 70380000/80000000, FPS 2127.
+
+value loss of agent: 1.2548784494400025
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018401145935058594
+child_drop:  225
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9598
+
+ Scenario push_ball Algo diversified_novelty_pb updates 391/444 episodes, total num timesteps 70560000/80000000, FPS 2127.
+
+value loss of agent: 1.1202954212824503
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018401145935058594
+child_drop:  217
+add_hard_num:  2
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9645999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 392/444 episodes, total num timesteps 70740000/80000000, FPS 2127.
+
+value loss of agent: 1.1221495310465495
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001997709274291992
+child_drop:  220
+add_hard_num:  6
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9572
+
+ Scenario push_ball Algo diversified_novelty_pb updates 393/444 episodes, total num timesteps 70920000/80000000, FPS 2127.
+
+value loss of agent: 1.0713606437047323
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003114461898803711
+child_drop:  213
+add_hard_num:  1
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9515999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 394/444 episodes, total num timesteps 71100000/80000000, FPS 2126.
+
+value loss of agent: 1.189533543586731
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.015178442001342773
+child_drop:  220
+add_hard_num:  5
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9688
+
+ Scenario push_ball Algo diversified_novelty_pb updates 395/444 episodes, total num timesteps 71280000/80000000, FPS 2125.
+
+value loss of agent: 1.1410351355870565
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018875598907470703
+child_drop:  204
+add_hard_num:  5
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9673999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 396/444 episodes, total num timesteps 71460000/80000000, FPS 2125.
+
+value loss of agent: 1.1215267578760784
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020203590393066406
+child_drop:  230
+add_hard_num:  2
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9614000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 397/444 episodes, total num timesteps 71640000/80000000, FPS 2125.
+
+value loss of agent: 0.9620193243026733
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022122859954833984
+child_drop:  209
+add_hard_num:  2
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9722000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 398/444 episodes, total num timesteps 71820000/80000000, FPS 2126.
+
+value loss of agent: 1.0933581193288167
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017209053039550781
+child_drop:  238
+add_hard_num:  1
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.962
+
+ Scenario push_ball Algo diversified_novelty_pb updates 399/444 episodes, total num timesteps 72000000/80000000, FPS 2126.
+
+value loss of agent: 1.0675239483515422
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.014782190322875977
+child_drop:  240
+add_hard_num:  1
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9702000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 400/444 episodes, total num timesteps 72180000/80000000, FPS 2126.
+
+value loss of agent: 1.0012381593386332
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018198490142822266
+child_drop:  242
+add_hard_num:  2
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9694
+
+ Scenario push_ball Algo diversified_novelty_pb updates 401/444 episodes, total num timesteps 72360000/80000000, FPS 2127.
+
+value loss of agent: 1.0397693475087484
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001687765121459961
+child_drop:  197
+add_hard_num:  5
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9628
+
+ Scenario push_ball Algo diversified_novelty_pb updates 402/444 episodes, total num timesteps 72540000/80000000, FPS 2127.
+
+value loss of agent: 1.171535841623942
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017752647399902344
+child_drop:  245
+add_hard_num:  3
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9544000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 403/444 episodes, total num timesteps 72720000/80000000, FPS 2127.
+
+value loss of agent: 0.9750489711761474
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018665790557861328
+child_drop:  215
+add_hard_num:  0
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9565999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 404/444 episodes, total num timesteps 72900000/80000000, FPS 2128.
+
+value loss of agent: 1.1274254163106283
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018572807312011719
+child_drop:  229
+add_hard_num:  3
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9608
+
+ Scenario push_ball Algo diversified_novelty_pb updates 405/444 episodes, total num timesteps 73080000/80000000, FPS 2128.
+
+value loss of agent: 0.9918910980224609
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017633438110351562
+child_drop:  208
+add_hard_num:  3
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9636
+
+ Scenario push_ball Algo diversified_novelty_pb updates 406/444 episodes, total num timesteps 73260000/80000000, FPS 2128.
+
+value loss of agent: 1.0945194880167644
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0028743743896484375
+child_drop:  221
+add_hard_num:  0
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9562
+
+ Scenario push_ball Algo diversified_novelty_pb updates 407/444 episodes, total num timesteps 73440000/80000000, FPS 2129.
+
+value loss of agent: 1.1456868648529053
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018966197967529297
+child_drop:  222
+add_hard_num:  1
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9702
+
+ Scenario push_ball Algo diversified_novelty_pb updates 408/444 episodes, total num timesteps 73620000/80000000, FPS 2128.
+
+value loss of agent: 1.0481523275375366
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001878499984741211
+child_drop:  215
+add_hard_num:  2
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.967
+
+ Scenario push_ball Algo diversified_novelty_pb updates 409/444 episodes, total num timesteps 73800000/80000000, FPS 2128.
+
+value loss of agent: 1.1772206624348958
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004404783248901367
+child_drop:  200
+add_hard_num:  7
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.968
+
+ Scenario push_ball Algo diversified_novelty_pb updates 410/444 episodes, total num timesteps 73980000/80000000, FPS 2128.
+
+value loss of agent: 1.1226435740788778
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001912832260131836
+child_drop:  213
+add_hard_num:  1
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9476
+
+ Scenario push_ball Algo diversified_novelty_pb updates 411/444 episodes, total num timesteps 74160000/80000000, FPS 2129.
+
+value loss of agent: 1.0035149335861206
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001756429672241211
+child_drop:  224
+add_hard_num:  2
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9568
+
+ Scenario push_ball Algo diversified_novelty_pb updates 412/444 episodes, total num timesteps 74340000/80000000, FPS 2129.
+
+value loss of agent: 1.044529136021932
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017883777618408203
+child_drop:  234
+add_hard_num:  0
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9622
+
+ Scenario push_ball Algo diversified_novelty_pb updates 413/444 episodes, total num timesteps 74520000/80000000, FPS 2130.
+
+value loss of agent: 1.1490281422932942
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018372535705566406
+child_drop:  214
+add_hard_num:  2
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9683999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 414/444 episodes, total num timesteps 74700000/80000000, FPS 2130.
+
+value loss of agent: 1.05647767384847
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0029151439666748047
+child_drop:  221
+add_hard_num:  2
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9692
+
+ Scenario push_ball Algo diversified_novelty_pb updates 415/444 episodes, total num timesteps 74880000/80000000, FPS 2130.
+
+value loss of agent: 1.105579956372579
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019576549530029297
+child_drop:  214
+add_hard_num:  1
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.966
+
+ Scenario push_ball Algo diversified_novelty_pb updates 416/444 episodes, total num timesteps 75060000/80000000, FPS 2130.
+
+value loss of agent: 1.2060778299967447
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018134117126464844
+child_drop:  245
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9793999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 417/444 episodes, total num timesteps 75240000/80000000, FPS 2131.
+
+value loss of agent: 1.1471819877624512
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018973350524902344
+child_drop:  227
+add_hard_num:  0
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9732000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 418/444 episodes, total num timesteps 75420000/80000000, FPS 2131.
+
+value loss of agent: 1.128810667991638
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017986297607421875
+child_drop:  237
+add_hard_num:  3
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9636
+
+ Scenario push_ball Algo diversified_novelty_pb updates 419/444 episodes, total num timesteps 75600000/80000000, FPS 2130.
+
+value loss of agent: 1.1645844380060832
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0028095245361328125
+child_drop:  233
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9618
+
+ Scenario push_ball Algo diversified_novelty_pb updates 420/444 episodes, total num timesteps 75780000/80000000, FPS 2130.
+
+value loss of agent: 1.2068414608637492
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017247200012207031
+child_drop:  231
+add_hard_num:  3
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.961
+
+ Scenario push_ball Algo diversified_novelty_pb updates 421/444 episodes, total num timesteps 75960000/80000000, FPS 2130.
+
+value loss of agent: 1.227083158493042
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017285346984863281
+child_drop:  239
+add_hard_num:  1
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9692000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 422/444 episodes, total num timesteps 76140000/80000000, FPS 2130.
+
+value loss of agent: 1.3026745875676473
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001804351806640625
+child_drop:  226
+add_hard_num:  1
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9638
+
+ Scenario push_ball Algo diversified_novelty_pb updates 423/444 episodes, total num timesteps 76320000/80000000, FPS 2131.
+
+value loss of agent: 1.2659133593241374
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017056465148925781
+child_drop:  230
+add_hard_num:  1
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9648000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 424/444 episodes, total num timesteps 76500000/80000000, FPS 2131.
+
+value loss of agent: 1.2589431285858155
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017478466033935547
+child_drop:  236
+add_hard_num:  2
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9678000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 425/444 episodes, total num timesteps 76680000/80000000, FPS 2132.
+
+value loss of agent: 1.2381645758946738
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018651485443115234
+child_drop:  206
+add_hard_num:  5
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9702000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 426/444 episodes, total num timesteps 76860000/80000000, FPS 2132.
+
+value loss of agent: 1.2380394697189332
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018813610076904297
+child_drop:  213
+add_hard_num:  2
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9664
+
+ Scenario push_ball Algo diversified_novelty_pb updates 427/444 episodes, total num timesteps 77040000/80000000, FPS 2132.
+
+value loss of agent: 1.1741069714228312
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018088817596435547
+child_drop:  223
+add_hard_num:  2
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9476
+
+ Scenario push_ball Algo diversified_novelty_pb updates 428/444 episodes, total num timesteps 77220000/80000000, FPS 2132.
+
+value loss of agent: 1.2636550188064575
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017652511596679688
+child_drop:  211
+add_hard_num:  1
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9616
+
+ Scenario push_ball Algo diversified_novelty_pb updates 429/444 episodes, total num timesteps 77400000/80000000, FPS 2132.
+
+value loss of agent: 1.280569036801656
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002596616744995117
+child_drop:  229
+add_hard_num:  2
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9674
+
+ Scenario push_ball Algo diversified_novelty_pb updates 430/444 episodes, total num timesteps 77580000/80000000, FPS 2132.
+
+value loss of agent: 1.2818246285120647
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017850399017333984
+child_drop:  240
+add_hard_num:  1
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9648
+
+ Scenario push_ball Algo diversified_novelty_pb updates 431/444 episodes, total num timesteps 77760000/80000000, FPS 2133.
+
+value loss of agent: 1.145238733291626
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017282962799072266
+child_drop:  226
+add_hard_num:  3
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.972
+
+ Scenario push_ball Algo diversified_novelty_pb updates 432/444 episodes, total num timesteps 77940000/80000000, FPS 2133.
+
+value loss of agent: 1.0687901258468628
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018291473388671875
+child_drop:  234
+add_hard_num:  0
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9742000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 433/444 episodes, total num timesteps 78120000/80000000, FPS 2133.
+
+value loss of agent: 1.0367257118225097
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020329952239990234
+child_drop:  226
+add_hard_num:  3
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9848
+
+ Scenario push_ball Algo diversified_novelty_pb updates 434/444 episodes, total num timesteps 78300000/80000000, FPS 2134.
+
+value loss of agent: 1.152374807993571
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019011497497558594
+child_drop:  239
+add_hard_num:  3
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9664
+
+ Scenario push_ball Algo diversified_novelty_pb updates 435/444 episodes, total num timesteps 78480000/80000000, FPS 2134.
+
+value loss of agent: 1.0588620821634929
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020067691802978516
+child_drop:  220
+add_hard_num:  4
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.966
+
+ Scenario push_ball Algo diversified_novelty_pb updates 436/444 episodes, total num timesteps 78660000/80000000, FPS 2134.
+
+value loss of agent: 1.0455700953801472
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002763032913208008
+child_drop:  221
+add_hard_num:  1
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9705999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 437/444 episodes, total num timesteps 78840000/80000000, FPS 2134.
+
+value loss of agent: 0.9610182325045268
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021514892578125
+child_drop:  222
+add_hard_num:  0
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9623999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 438/444 episodes, total num timesteps 79020000/80000000, FPS 2134.
+
+value loss of agent: 0.9121428410212199
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019767284393310547
+child_drop:  244
+add_hard_num:  2
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9696000000000001
+
+ Scenario push_ball Algo diversified_novelty_pb updates 439/444 episodes, total num timesteps 79200000/80000000, FPS 2134.
+
+value loss of agent: 0.8540893077850342
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017461776733398438
+child_drop:  247
+add_hard_num:  3
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9623999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 440/444 episodes, total num timesteps 79380000/80000000, FPS 2133.
+
+value loss of agent: 0.9187451521555583
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017054080963134766
+child_drop:  223
+add_hard_num:  0
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9825999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 441/444 episodes, total num timesteps 79560000/80000000, FPS 2133.
+
+value loss of agent: 0.8898451407750447
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018138885498046875
+child_drop:  222
+add_hard_num:  2
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9633999999999999
+
+ Scenario push_ball Algo diversified_novelty_pb updates 442/444 episodes, total num timesteps 79740000/80000000, FPS 2133.
+
+value loss of agent: 0.8611015439033508
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001850128173828125
+child_drop:  206
+add_hard_num:  1
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.973
+
+ Scenario push_ball Algo diversified_novelty_pb updates 443/444 episodes, total num timesteps 79920000/80000000, FPS 2133.
+
+value loss of agent: 0.8814544002215068

@@ -139,7 +139,7 @@ class node_buffer():
         # list1是需要求novelty的
         topk=5
         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
-        if len(list2) < topk+1 or len(list1) < topk+1:
+        if len(list2) < topk+1:
             dist_k = dist
             novelty = np.sum(dist_k,axis=1)/len(list2)
         else:

@@ -1,0 +1,14 @@
+2020-10-24 13:54:48,127 INFO    MainThread:59971 [wandb_init.py:_log_setup():292] Logging user logs to wandb/run-20201024_135448-u5an5tuu/logs/debug.log
+2020-10-24 13:54:48,128 INFO    MainThread:59971 [wandb_init.py:_log_setup():293] Logging internal logs to wandb/run-20201024_135448-u5an5tuu/logs/debug-internal.log
+2020-10-24 13:54:48,128 INFO    MainThread:59971 [wandb_setup.py:_flush():68] enabling code saving by default
+2020-10-24 13:54:48,128 INFO    MainThread:59971 [wandb_setup.py:_flush():68] setting env: {}
+2020-10-24 13:54:48,128 INFO    MainThread:59971 [wandb_setup.py:_flush():68] setting user settings: {'save_code': True}
+2020-10-24 13:54:48,128 INFO    MainThread:59971 [wandb_setup.py:_flush():68] multiprocessing start_methods=fork,spawn,forkserver
+2020-10-24 13:54:50,900 INFO    MainThread:59971 [wandb_run.py:_console_start():1265] atexit reg
+2020-10-24 13:54:50,901 INFO    MainThread:59971 [wandb_run.py:_redirect():1135] redirect: SettingsConsole.REDIRECT
+2020-10-24 13:54:50,902 INFO    MainThread:59971 [wandb_run.py:_redirect():1138] Redirecting console.
+2020-10-24 13:54:50,902 INFO    MainThread:59971 [redirect.py:install():196] install start
+2020-10-24 13:54:50,902 INFO    MainThread:59971 [redirect.py:install():211] install stop
+2020-10-24 13:54:50,902 INFO    MainThread:59971 [redirect.py:install():196] install start
+2020-10-24 13:54:50,903 INFO    MainThread:59971 [redirect.py:install():211] install stop
+2020-10-24 13:54:50,903 INFO    MainThread:59971 [wandb_run.py:_redirect():1182] Redirects installed.

@@ -1,0 +1,171 @@
+2020-10-23 19:12:43,456 INFO    MainThread:143620 [internal.py:wandb_internal():62] W&B internal server running at pid: 143620
+2020-10-23 19:12:43,459 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: check_version
+2020-10-23 19:12:43,460 INFO    WriterThread:143620 [datastore.py:open_for_write():76] open: wandb/run-20201023_191240-24v8hno0/run-24v8hno0.wandb
+2020-10-23 19:12:43,462 DEBUG   SenderThread:143620 [sender.py:send():88] send: header
+2020-10-23 19:12:43,462 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:43,462 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: check_version
+2020-10-23 19:12:43,465 DEBUG   Thread-4  :143620 [connectionpool.py:_new_conn():813] Starting new HTTPS connection (1): pypi.org:443
+2020-10-23 19:12:45,063 DEBUG   Thread-4  :143620 [connectionpool.py:_make_request():393] https://pypi.org:443 "GET /pypi/wandb/json HTTP/1.1" 200 51107
+2020-10-23 19:12:47,005 DEBUG   SenderThread:143620 [sender.py:send():88] send: run
+2020-10-23 19:12:47,357 DEBUG   SenderThread:143620 [cmd.py:execute():719] Popen(['git', 'cat-file', '--batch-check'], cwd=/home/tsing73/curriculum, universal_newlines=False, shell=None, istream=<valid stream>)
+2020-10-23 19:12:47,372 DEBUG   SenderThread:143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:47,431 DEBUG   SenderThread:143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 442
+2020-10-23 19:12:47,446 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: run_start
+2020-10-23 19:12:47,450 INFO    SenderThread:143620 [dir_watcher.py:__init__():167] watching files in: wandb/run-20201023_191240-24v8hno0/files
+2020-10-23 19:12:47,450 INFO    SenderThread:143620 [sender.py:_start_run_threads():464] run started: 24v8hno0 with start time 1603451560
+2020-10-23 19:12:47,451 DEBUG   SenderThread:143620 [sender.py:send():88] send: summary
+2020-10-23 19:12:47,452 INFO    SenderThread:143620 [sender.py:_save_file():542] saving file wandb-summary.json with policy end
+2020-10-23 19:12:47,465 DEBUG   HandlerThread:143620 [cmd.py:execute():719] Popen(['git', 'cat-file', '--batch-check'], cwd=/home/tsing73/curriculum, universal_newlines=False, shell=None, istream=<valid stream>)
+2020-10-23 19:12:47,496 DEBUG   HandlerThread:143620 [cmd.py:execute():719] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/home/tsing73/curriculum, universal_newlines=False, shell=None, istream=None)
+2020-10-23 19:12:47,503 DEBUG   HandlerThread:143620 [cmd.py:execute():719] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/home/tsing73/curriculum, universal_newlines=False, shell=None, istream=None)
+2020-10-23 19:12:48,751 INFO    Thread-8  :143620 [dir_watcher.py:_on_file_created():215] file/dir created: wandb/run-20201023_191240-24v8hno0/files/wandb-summary.json
+2020-10-23 19:12:48,751 INFO    Thread-8  :143620 [dir_watcher.py:_on_file_created():215] file/dir created: wandb/run-20201023_191240-24v8hno0/files/code
+2020-10-23 19:12:48,753 DEBUG   HandlerThread:143620 [cmd.py:execute():719] Popen(['git', 'rev-parse', '--show-toplevel'], cwd=/home/tsing73/curriculum, universal_newlines=False, shell=None, istream=None)
+2020-10-23 19:12:48,758 DEBUG   HandlerThread:143620 [cmd.py:execute():719] Popen(['git', 'version'], cwd=/home/tsing73/curriculum, universal_newlines=False, shell=None, istream=None)
+2020-10-23 19:12:48,762 DEBUG   HandlerThread:143620 [cmd.py:execute():719] Popen(['git', 'diff', '--cached', '--abbrev=40', '--full-index', '--raw'], cwd=/home/tsing73/curriculum, universal_newlines=False, shell=None, istream=None)
+2020-10-23 19:12:48,770 DEBUG   HandlerThread:143620 [cmd.py:execute():719] Popen(['git', 'diff', '--abbrev=40', '--full-index', '--raw'], cwd=/home/tsing73/curriculum, universal_newlines=False, shell=None, istream=None)
+2020-10-23 19:12:48,882 DEBUG   HandlerThread:143620 [cmd.py:execute():719] Popen(['git', 'merge-base', 'HEAD', '5d7980ae9a6ce0f09ce9f4c83f63d8eec9b261df'], cwd=/home/tsing73/curriculum, universal_newlines=False, shell=None, istream=None)
+2020-10-23 19:12:48,985 DEBUG   SenderThread:143620 [sender.py:send():88] send: files
+2020-10-23 19:12:48,985 INFO    SenderThread:143620 [sender.py:_save_file():542] saving file wandb-metadata.json with policy now
+2020-10-23 19:12:48,986 INFO    SenderThread:143620 [sender.py:_save_file():542] saving file code/train_mpe_curriculum_sp.py with policy now
+2020-10-23 19:12:48,986 INFO    SenderThread:143620 [sender.py:_save_file():542] saving file diff.patch with policy now
+2020-10-23 19:12:48,987 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: status
+2020-10-23 19:12:48,987 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:48,987 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: status
+2020-10-23 19:12:48,990 DEBUG   SenderThread:143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:48,995 DEBUG   Thread-11 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:49,000 DEBUG   Thread-12 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:49,008 DEBUG   Thread-13 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:49,019 DEBUG   SenderThread:143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 65
+2020-10-23 19:12:49,027 DEBUG   Thread-12 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 445
+2020-10-23 19:12:49,028 DEBUG   Thread-11 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 429
+2020-10-23 19:12:49,032 DEBUG   Thread-11 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:49,038 DEBUG   Thread-12 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:49,043 DEBUG   Thread-13 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 426
+2020-10-23 19:12:49,046 DEBUG   Thread-13 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:49,131 DEBUG   Thread-11 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "PUT /local-files/chenjy/sp_tricks/24v8hno0/wandb-metadata.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=Y3O%2BKEruP7BaBpsLbG7%2BAA%3D%3D%2F20201023%2Fwandb-local%2Fs3%2Faws4_request&X-Amz-Date=20201023T111249Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=5677f340316c256ad48448ce386147d023916b7e3a44ba205d1b5b7f413c8d15 HTTP/1.1" 200 0
+2020-10-23 19:12:49,132 INFO    Thread-11 :143620 [upload_job.py:push():112] Uploaded file /tmp/tmpf1lemgbdwandb/drh4t34e-wandb-metadata.json
+2020-10-23 19:12:49,168 DEBUG   Thread-13 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "PUT /local-files/chenjy/sp_tricks/24v8hno0/diff.patch?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=Y3O%2BKEruP7BaBpsLbG7%2BAA%3D%3D%2F20201023%2Fwandb-local%2Fs3%2Faws4_request&X-Amz-Date=20201023T111249Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=adf175ae87bd364e9cd1c70767be6068a0914b8778797550a27b29a072715e02 HTTP/1.1" 200 0
+2020-10-23 19:12:49,169 INFO    Thread-13 :143620 [upload_job.py:push():112] Uploaded file /tmp/tmpf1lemgbdwandb/os27h2zz-diff.patch
+2020-10-23 19:12:49,214 DEBUG   Thread-12 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "PUT /local-files/chenjy/sp_tricks/24v8hno0/code/train_mpe_curriculum_sp.py?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=Y3O%2BKEruP7BaBpsLbG7%2BAA%3D%3D%2F20201023%2Fwandb-local%2Fs3%2Faws4_request&X-Amz-Date=20201023T111249Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=cf73f1306bd5dd2eeed3e17fd982a1d15d6984793ac3cd6c74f49b96d697b81e HTTP/1.1" 200 0
+2020-10-23 19:12:49,214 INFO    Thread-12 :143620 [upload_job.py:push():112] Uploaded file /tmp/tmpf1lemgbdwandb/kllr4566-code/train_mpe_curriculum_sp.py
+2020-10-23 19:12:49,456 DEBUG   Thread-5  :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:49,524 DEBUG   Thread-5  :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /files/chenjy/sp_tricks/24v8hno0/file_stream HTTP/1.1" 200 225
+2020-10-23 19:12:49,751 INFO    Thread-8  :143620 [dir_watcher.py:_on_file_created():215] file/dir created: wandb/run-20201023_191240-24v8hno0/files/requirements.txt
+2020-10-23 19:12:49,751 INFO    Thread-8  :143620 [dir_watcher.py:_on_file_created():215] file/dir created: wandb/run-20201023_191240-24v8hno0/files/diff.patch
+2020-10-23 19:12:49,751 INFO    Thread-8  :143620 [dir_watcher.py:_on_file_created():215] file/dir created: wandb/run-20201023_191240-24v8hno0/files/wandb-metadata.json
+2020-10-23 19:12:49,753 INFO    Thread-8  :143620 [dir_watcher.py:_on_file_created():215] file/dir created: wandb/run-20201023_191240-24v8hno0/files/output.log
+2020-10-23 19:12:49,753 INFO    Thread-8  :143620 [dir_watcher.py:_on_file_created():215] file/dir created: wandb/run-20201023_191240-24v8hno0/files/code/train_mpe_curriculum_sp.py
+2020-10-23 19:12:49,754 INFO    Thread-8  :143620 [dir_watcher.py:_on_file_modified():228] file/dir modified: wandb/run-20201023_191240-24v8hno0/files/code
+2020-10-23 19:12:51,326 DEBUG   SenderThread:143620 [sender.py:send():88] send: exit
+2020-10-23 19:12:51,326 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: poll_exit
+2020-10-23 19:12:51,326 INFO    SenderThread:143620 [sender.py:send_exit():156] handling exit code: 1
+2020-10-23 19:12:51,327 INFO    SenderThread:143620 [sender.py:send_exit():164] send defer
+2020-10-23 19:12:51,327 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:51,327 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: poll_exit
+2020-10-23 19:12:51,327 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: defer
+2020-10-23 19:12:51,327 INFO    HandlerThread:143620 [handler.py:handle_request_defer():68] handle defer: 0
+2020-10-23 19:12:51,328 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:51,328 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: defer
+2020-10-23 19:12:51,328 INFO    SenderThread:143620 [sender.py:send_request_defer():173] handle sender defer: 0
+2020-10-23 19:12:51,328 INFO    SenderThread:143620 [sender.py:send_request_defer():209] send defer: 1
+2020-10-23 19:12:51,328 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: defer
+2020-10-23 19:12:51,328 INFO    HandlerThread:143620 [handler.py:handle_request_defer():68] handle defer: 1
+2020-10-23 19:12:51,566 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:51,566 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: defer
+2020-10-23 19:12:51,566 INFO    SenderThread:143620 [sender.py:send_request_defer():173] handle sender defer: 1
+2020-10-23 19:12:51,566 INFO    SenderThread:143620 [sender.py:send_request_defer():209] send defer: 2
+2020-10-23 19:12:51,566 DEBUG   SenderThread:143620 [sender.py:send():88] send: stats
+2020-10-23 19:12:51,569 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: defer
+2020-10-23 19:12:51,569 INFO    HandlerThread:143620 [handler.py:handle_request_defer():68] handle defer: 2
+2020-10-23 19:12:51,569 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:51,569 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: defer
+2020-10-23 19:12:51,569 INFO    SenderThread:143620 [sender.py:send_request_defer():173] handle sender defer: 2
+2020-10-23 19:12:51,569 INFO    SenderThread:143620 [sender.py:send_request_defer():209] send defer: 3
+2020-10-23 19:12:51,569 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: defer
+2020-10-23 19:12:51,570 INFO    HandlerThread:143620 [handler.py:handle_request_defer():68] handle defer: 3
+2020-10-23 19:12:51,570 DEBUG   SenderThread:143620 [sender.py:send():88] send: summary
+2020-10-23 19:12:51,572 INFO    SenderThread:143620 [sender.py:_save_file():542] saving file wandb-summary.json with policy end
+2020-10-23 19:12:51,572 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:51,572 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: defer
+2020-10-23 19:12:51,572 INFO    SenderThread:143620 [sender.py:send_request_defer():173] handle sender defer: 3
+2020-10-23 19:12:51,572 INFO    SenderThread:143620 [sender.py:send_request_defer():209] send defer: 4
+2020-10-23 19:12:51,572 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: defer
+2020-10-23 19:12:51,572 INFO    HandlerThread:143620 [handler.py:handle_request_defer():68] handle defer: 4
+2020-10-23 19:12:51,572 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:51,572 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: defer
+2020-10-23 19:12:51,573 INFO    SenderThread:143620 [sender.py:send_request_defer():173] handle sender defer: 4
+2020-10-23 19:12:51,573 INFO    SenderThread:143620 [dir_watcher.py:finish():280] shutting down directory watcher
+2020-10-23 19:12:51,727 DEBUG   Thread-5  :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /files/chenjy/sp_tricks/24v8hno0/file_stream HTTP/1.1" 200 225
+2020-10-23 19:12:51,752 INFO    Thread-8  :143620 [dir_watcher.py:_on_file_modified():228] file/dir modified: wandb/run-20201023_191240-24v8hno0/files/output.log
+2020-10-23 19:12:51,753 INFO    SenderThread:143620 [dir_watcher.py:_on_file_modified():228] file/dir modified: wandb/run-20201023_191240-24v8hno0/files/wandb-summary.json
+2020-10-23 19:12:51,755 INFO    SenderThread:143620 [dir_watcher.py:finish():309] scan: wandb/run-20201023_191240-24v8hno0/files
+2020-10-23 19:12:51,756 INFO    SenderThread:143620 [dir_watcher.py:finish():315] scan save: wandb/run-20201023_191240-24v8hno0/files/config.yaml config.yaml
+2020-10-23 19:12:51,756 INFO    SenderThread:143620 [dir_watcher.py:finish():315] scan save: wandb/run-20201023_191240-24v8hno0/files/wandb-summary.json wandb-summary.json
+2020-10-23 19:12:51,756 INFO    SenderThread:143620 [dir_watcher.py:finish():315] scan save: wandb/run-20201023_191240-24v8hno0/files/diff.patch diff.patch
+2020-10-23 19:12:51,756 INFO    SenderThread:143620 [dir_watcher.py:finish():315] scan save: wandb/run-20201023_191240-24v8hno0/files/requirements.txt requirements.txt
+2020-10-23 19:12:51,756 INFO    SenderThread:143620 [dir_watcher.py:finish():315] scan save: wandb/run-20201023_191240-24v8hno0/files/wandb-metadata.json wandb-metadata.json
+2020-10-23 19:12:51,756 INFO    SenderThread:143620 [dir_watcher.py:finish():315] scan save: wandb/run-20201023_191240-24v8hno0/files/output.log output.log
+2020-10-23 19:12:51,757 INFO    SenderThread:143620 [dir_watcher.py:finish():315] scan save: wandb/run-20201023_191240-24v8hno0/files/code/train_mpe_curriculum_sp.py code/train_mpe_curriculum_sp.py
+2020-10-23 19:12:51,757 INFO    SenderThread:143620 [sender.py:send_request_defer():209] send defer: 5
+2020-10-23 19:12:51,759 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: defer
+2020-10-23 19:12:51,759 INFO    HandlerThread:143620 [handler.py:handle_request_defer():68] handle defer: 5
+2020-10-23 19:12:51,759 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:51,759 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: defer
+2020-10-23 19:12:51,759 INFO    SenderThread:143620 [sender.py:send_request_defer():173] handle sender defer: 5
+2020-10-23 19:12:51,759 INFO    SenderThread:143620 [file_pusher.py:finish():169] shutting down file pusher
+2020-10-23 19:12:51,759 INFO    SenderThread:143620 [sender.py:send_request_defer():209] send defer: 6
+2020-10-23 19:12:51,759 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: defer
+2020-10-23 19:12:51,759 INFO    HandlerThread:143620 [handler.py:handle_request_defer():68] handle defer: 6
+2020-10-23 19:12:51,760 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:51,760 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: defer
+2020-10-23 19:12:51,760 INFO    SenderThread:143620 [sender.py:send_request_defer():173] handle sender defer: 6
+2020-10-23 19:12:51,766 DEBUG   Thread-14 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:51,770 DEBUG   Thread-15 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:51,774 DEBUG   Thread-16 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:51,778 DEBUG   Thread-17 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:51,800 DEBUG   Thread-15 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 429
+2020-10-23 19:12:51,801 DEBUG   Thread-16 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 430
+2020-10-23 19:12:51,802 DEBUG   Thread-14 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 427
+2020-10-23 19:12:51,804 DEBUG   Thread-15 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:51,805 DEBUG   Thread-17 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 426
+2020-10-23 19:12:51,807 DEBUG   Thread-16 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:51,809 DEBUG   Thread-14 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:51,811 DEBUG   Thread-17 :143620 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-23 19:12:51,834 DEBUG   Thread-5  :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /files/chenjy/sp_tricks/24v8hno0/file_stream HTTP/1.1" 200 225
+2020-10-23 19:12:51,884 DEBUG   Thread-16 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "PUT /local-files/chenjy/sp_tricks/24v8hno0/requirements.txt?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=Y3O%2BKEruP7BaBpsLbG7%2BAA%3D%3D%2F20201023%2Fwandb-local%2Fs3%2Faws4_request&X-Amz-Date=20201023T111251Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=003353215b25099f91870350395007de89f5a46bee5f984f6fc056a5e0d0c415 HTTP/1.1" 200 0
+2020-10-23 19:12:51,885 DEBUG   Thread-17 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "PUT /local-files/chenjy/sp_tricks/24v8hno0/output.log?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=Y3O%2BKEruP7BaBpsLbG7%2BAA%3D%3D%2F20201023%2Fwandb-local%2Fs3%2Faws4_request&X-Amz-Date=20201023T111251Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=ef727a7868278277490341c0e64410dd569153ada439bb89f925e006af414220 HTTP/1.1" 200 0
+2020-10-23 19:12:51,885 INFO    Thread-16 :143620 [upload_job.py:push():112] Uploaded file wandb/run-20201023_191240-24v8hno0/files/requirements.txt
+2020-10-23 19:12:51,886 DEBUG   Thread-15 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "PUT /local-files/chenjy/sp_tricks/24v8hno0/wandb-summary.json?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=Y3O%2BKEruP7BaBpsLbG7%2BAA%3D%3D%2F20201023%2Fwandb-local%2Fs3%2Faws4_request&X-Amz-Date=20201023T111251Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=7e6d54a528b4d141a436c44570233a4c7131620cff6750bbedcc669d9e0a9a26 HTTP/1.1" 200 0
+2020-10-23 19:12:51,886 DEBUG   Thread-14 :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "PUT /local-files/chenjy/sp_tricks/24v8hno0/config.yaml?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=Y3O%2BKEruP7BaBpsLbG7%2BAA%3D%3D%2F20201023%2Fwandb-local%2Fs3%2Faws4_request&X-Amz-Date=20201023T111251Z&X-Amz-Expires=86400&X-Amz-SignedHeaders=host&X-Amz-Signature=e725714af888a82d1291d2cec1fedbf177161c8d19c65d1d79eba29b5c16bf1a HTTP/1.1" 200 0
+2020-10-23 19:12:51,886 INFO    Thread-17 :143620 [upload_job.py:push():112] Uploaded file wandb/run-20201023_191240-24v8hno0/files/output.log
+2020-10-23 19:12:51,887 INFO    Thread-15 :143620 [upload_job.py:push():112] Uploaded file wandb/run-20201023_191240-24v8hno0/files/wandb-summary.json
+2020-10-23 19:12:51,888 INFO    Thread-14 :143620 [upload_job.py:push():112] Uploaded file wandb/run-20201023_191240-24v8hno0/files/config.yaml
+2020-10-23 19:12:51,902 DEBUG   Thread-5  :143620 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /files/chenjy/sp_tricks/24v8hno0/file_stream HTTP/1.1" 200 224
+2020-10-23 19:12:51,903 INFO    SenderThread:143620 [sender.py:send_request_defer():209] send defer: 7
+2020-10-23 19:12:51,903 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: defer
+2020-10-23 19:12:51,903 INFO    HandlerThread:143620 [handler.py:handle_request_defer():68] handle defer: 7
+2020-10-23 19:12:51,903 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:51,904 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: defer
+2020-10-23 19:12:51,904 INFO    SenderThread:143620 [sender.py:send_request_defer():173] handle sender defer: 7
+2020-10-23 19:12:51,904 INFO    SenderThread:143620 [sender.py:send_request_defer():209] send defer: 8
+2020-10-23 19:12:51,904 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: defer
+2020-10-23 19:12:51,904 DEBUG   SenderThread:143620 [sender.py:send():88] send: final
+2020-10-23 19:12:51,904 INFO    HandlerThread:143620 [handler.py:handle_request_defer():68] handle defer: 8
+2020-10-23 19:12:51,904 DEBUG   SenderThread:143620 [sender.py:send():88] send: footer
+2020-10-23 19:12:51,905 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:51,905 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: defer
+2020-10-23 19:12:51,905 INFO    SenderThread:143620 [sender.py:send_request_defer():173] handle sender defer: 8
+2020-10-23 19:12:53,331 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: poll_exit
+2020-10-23 19:12:53,332 DEBUG   SenderThread:143620 [sender.py:send():88] send: request
+2020-10-23 19:12:53,332 DEBUG   SenderThread:143620 [sender.py:send_request():97] send_request: poll_exit
+2020-10-23 19:12:53,332 INFO    SenderThread:143620 [file_pusher.py:join():174] waiting for file pusher
+2020-10-23 19:12:53,334 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: get_summary
+2020-10-23 19:12:53,335 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: sampled_history
+2020-10-23 19:12:53,336 DEBUG   HandlerThread:143620 [handler.py:handle_request():54] handle_request: shutdown
+2020-10-23 19:12:53,336 INFO    HandlerThread:143620 [handler.py:finish():267] shutting down handler
+2020-10-23 19:12:53,905 INFO    WriterThread:143620 [datastore.py:close():257] close: wandb/run-20201023_191240-24v8hno0/run-24v8hno0.wandb
+2020-10-23 19:12:54,335 INFO    SenderThread:143620 [sender.py:finish():583] shutting down sender
+2020-10-23 19:12:54,335 INFO    SenderThread:143620 [file_pusher.py:finish():169] shutting down file pusher
+2020-10-23 19:12:54,335 INFO    SenderThread:143620 [file_pusher.py:join():174] waiting for file pusher
+2020-10-23 19:12:54,338 INFO    Dummy-18  :143620 [internal.py:handle_exit():137] Internal process exited

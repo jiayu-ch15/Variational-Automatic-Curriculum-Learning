@@ -1,0 +1,12 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0385
+Traceback (most recent call last):
+  File "train_mpe_curriculum_sp.py", line 1005, in <module>
+    main()
+  File "train_mpe_curriculum_sp.py", line 777, in main
+    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False)
+  File "/home/tsing73/curriculum/algorithm/ppo.py", line 1405, in update_share_asynchronous
+    value_loss_epoch += value_loss.item()
+KeyboardInterrupt

@@ -1,0 +1,1380 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0313
+training_cover_rate:  0.036599999999999994
+training_cover_rate:  0.011
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Policy3. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type MLPBase. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type LayerNorm. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Sequential. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Linear. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Tanh. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_actor_dist_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ObsEncoder_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Categorical. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_critic_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+
+ Scenario simple_spread Algo diversified_sp updates 0/380 episodes, total num timesteps 105000/40000000, FPS 734.
+
+value loss of agent: 0.1664358561237653
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.004199999999999999
+training_cover_rate:  0.0002
+training_cover_rate:  0.0
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.002
+
+ Scenario simple_spread Algo diversified_sp updates 1/380 episodes, total num timesteps 210000/40000000, FPS 790.
+
+value loss of agent: 0.02302076971779267
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0
+training_cover_rate:  0.0007
+training_cover_rate:  0.0015
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0022
+
+ Scenario simple_spread Algo diversified_sp updates 2/380 episodes, total num timesteps 315000/40000000, FPS 807.
+
+value loss of agent: 0.012325445748865604
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0029
+training_cover_rate:  0.007000000000000001
+training_cover_rate:  0.011
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0072
+
+ Scenario simple_spread Algo diversified_sp updates 3/380 episodes, total num timesteps 420000/40000000, FPS 793.
+
+value loss of agent: 0.01145535393928488
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.01
+training_cover_rate:  0.0132
+training_cover_rate:  0.011599999999999997
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.007300000000000001
+
+ Scenario simple_spread Algo diversified_sp updates 4/380 episodes, total num timesteps 525000/40000000, FPS 779.
+
+value loss of agent: 0.008763783642401298
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.010600000000000002
+training_cover_rate:  0.0215
+training_cover_rate:  0.0123
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.008
+
+ Scenario simple_spread Algo diversified_sp updates 5/380 episodes, total num timesteps 630000/40000000, FPS 774.
+
+value loss of agent: 0.008310569745178024
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0181
+training_cover_rate:  0.0342
+training_cover_rate:  0.046900000000000004
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0055
+
+ Scenario simple_spread Algo diversified_sp updates 6/380 episodes, total num timesteps 735000/40000000, FPS 765.
+
+value loss of agent: 0.013076878680537144
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0605
+training_cover_rate:  0.081
+training_cover_rate:  0.12360000000000002
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.006
+
+ Scenario simple_spread Algo diversified_sp updates 7/380 episodes, total num timesteps 840000/40000000, FPS 750.
+
+value loss of agent: 0.0497317419697841
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.1605
+training_cover_rate:  0.19760000000000003
+training_cover_rate:  0.2361
+child_drop:  0
+add_hard_num:  0
+parent:  1
+last_node_parent:  1
+childlist:  0
+archive:  499
+test_agent_num:  4
+test_mean_cover_rate:  0.0103
+
+ Scenario simple_spread Algo diversified_sp updates 8/380 episodes, total num timesteps 945000/40000000, FPS 743.
+
+value loss of agent: 0.14076174596945445
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.18280000000000002
+training_cover_rate:  0.1965
+training_cover_rate:  0.22469999999999998
+child_drop:  0
+add_hard_num:  349
+parent:  2
+last_node_parent:  2
+childlist:  0
+archive:  498
+test_agent_num:  4
+test_mean_cover_rate:  0.0246
+
+ Scenario simple_spread Algo diversified_sp updates 9/380 episodes, total num timesteps 1050000/40000000, FPS 745.
+
+value loss of agent: 0.1437450458606084
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.2394
+training_cover_rate:  0.2456
+training_cover_rate:  0.2855
+child_drop:  1
+add_hard_num:  346
+parent:  14
+last_node_parent:  14
+childlist:  0
+archive:  487
+test_agent_num:  4
+test_mean_cover_rate:  0.0312
+
+ Scenario simple_spread Algo diversified_sp updates 10/380 episodes, total num timesteps 1155000/40000000, FPS 755.
+
+value loss of agent: 0.5464946230252584
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.3364
+training_cover_rate:  0.352
+training_cover_rate:  0.3883
+child_drop:  0
+add_hard_num:  330
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  445
+test_agent_num:  4
+test_mean_cover_rate:  0.056100000000000004
+
+ Scenario simple_spread Algo diversified_sp updates 11/380 episodes, total num timesteps 1260000/40000000, FPS 763.
+
+value loss of agent: 0.8911215901374817
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.41779999999999995
+training_cover_rate:  0.44620000000000004
+training_cover_rate:  0.46390000000000003
+child_drop:  5
+add_hard_num:  308
+parent:  108
+last_node_parent:  108
+childlist:  0
+archive:  374
+test_agent_num:  4
+test_mean_cover_rate:  0.0732
+
+ Scenario simple_spread Algo diversified_sp updates 12/380 episodes, total num timesteps 1365000/40000000, FPS 766.
+
+value loss of agent: 1.508751678466797
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.4433
+training_cover_rate:  0.4629
+training_cover_rate:  0.48719999999999997
+child_drop:  7
+add_hard_num:  309
+parent:  111
+last_node_parent:  111
+childlist:  0
+archive:  297
+test_agent_num:  4
+test_mean_cover_rate:  0.0738
+
+ Scenario simple_spread Algo diversified_sp updates 13/380 episodes, total num timesteps 1470000/40000000, FPS 754.
+
+value loss of agent: 1.685718047618866
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.486
+training_cover_rate:  0.49169999999999997
+training_cover_rate:  0.4898
+child_drop:  8
+add_hard_num:  286
+parent:  109
+last_node_parent:  109
+childlist:  0
+archive:  244
+test_agent_num:  4
+test_mean_cover_rate:  0.1115
+
+ Scenario simple_spread Algo diversified_sp updates 14/380 episodes, total num timesteps 1575000/40000000, FPS 740.
+
+value loss of agent: 1.7508777141571046
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.4532
+training_cover_rate:  0.4651
+training_cover_rate:  0.4623
+child_drop:  13
+add_hard_num:  280
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  224
+test_agent_num:  4
+test_mean_cover_rate:  0.15280000000000002
+
+ Scenario simple_spread Algo diversified_sp updates 15/380 episodes, total num timesteps 1680000/40000000, FPS 745.
+
+value loss of agent: 1.2680880029996235
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.45059999999999995
+training_cover_rate:  0.4595
+training_cover_rate:  0.4895
+child_drop:  17
+add_hard_num:  258
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  248
+test_agent_num:  4
+test_mean_cover_rate:  0.2088
+
+ Scenario simple_spread Algo diversified_sp updates 16/380 episodes, total num timesteps 1785000/40000000, FPS 742.
+
+value loss of agent: 1.0029208540916443
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.44
+training_cover_rate:  0.4455
+training_cover_rate:  0.4709
+child_drop:  17
+add_hard_num:  271
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  270
+test_agent_num:  4
+test_mean_cover_rate:  0.24719999999999998
+
+ Scenario simple_spread Algo diversified_sp updates 17/380 episodes, total num timesteps 1890000/40000000, FPS 740.
+
+value loss of agent: 0.7408817509810129
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.4595
+training_cover_rate:  0.4926
+training_cover_rate:  0.5004
+child_drop:  33
+add_hard_num:  225
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  325
+test_agent_num:  4
+test_mean_cover_rate:  0.2721
+
+ Scenario simple_spread Algo diversified_sp updates 18/380 episodes, total num timesteps 1995000/40000000, FPS 737.
+
+value loss of agent: 0.6452982425689697
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.47779999999999995
+training_cover_rate:  0.4808
+training_cover_rate:  0.4973
+child_drop:  23
+add_hard_num:  228
+parent:  30
+last_node_parent:  30
+childlist:  0
+archive:  394
+test_agent_num:  4
+test_mean_cover_rate:  0.2731
+
+ Scenario simple_spread Algo diversified_sp updates 19/380 episodes, total num timesteps 2100000/40000000, FPS 735.
+
+value loss of agent: 0.52434543967247
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.509
+training_cover_rate:  0.51
+training_cover_rate:  0.5176000000000001
+child_drop:  39
+add_hard_num:  201
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  462
+test_agent_num:  4
+test_mean_cover_rate:  0.28020000000000006
+
+ Scenario simple_spread Algo diversified_sp updates 20/380 episodes, total num timesteps 2205000/40000000, FPS 738.
+
+value loss of agent: 0.5546008268992106
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5113
+training_cover_rate:  0.5209
+training_cover_rate:  0.5124
+child_drop:  43
+add_hard_num:  206
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  527
+test_agent_num:  4
+test_mean_cover_rate:  0.29460000000000003
+
+ Scenario simple_spread Algo diversified_sp updates 21/380 episodes, total num timesteps 2310000/40000000, FPS 740.
+
+value loss of agent: 0.5159566899140676
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5097999999999999
+training_cover_rate:  0.531
+training_cover_rate:  0.5235
+child_drop:  46
+add_hard_num:  187
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  607
+test_agent_num:  4
+test_mean_cover_rate:  0.311
+
+ Scenario simple_spread Algo diversified_sp updates 22/380 episodes, total num timesteps 2415000/40000000, FPS 739.
+
+value loss of agent: 0.613470055659612
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5105
+training_cover_rate:  0.5229
+training_cover_rate:  0.5257
+child_drop:  42
+add_hard_num:  196
+parent:  43
+last_node_parent:  43
+childlist:  0
+archive:  676
+test_agent_num:  4
+test_mean_cover_rate:  0.3225
+
+ Scenario simple_spread Algo diversified_sp updates 23/380 episodes, total num timesteps 2520000/40000000, FPS 735.
+
+value loss of agent: 0.6132654845714569
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5256000000000001
+training_cover_rate:  0.5473
+training_cover_rate:  0.5579000000000001
+child_drop:  41
+add_hard_num:  174
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  757
+test_agent_num:  4
+test_mean_cover_rate:  0.3147
+
+ Scenario simple_spread Algo diversified_sp updates 24/380 episodes, total num timesteps 2625000/40000000, FPS 734.
+
+value loss of agent: 0.6815207123756408
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5286000000000001
+training_cover_rate:  0.5368999999999999
+training_cover_rate:  0.5528
+child_drop:  39
+add_hard_num:  174
+parent:  50
+last_node_parent:  50
+childlist:  0
+archive:  844
+test_agent_num:  4
+test_mean_cover_rate:  0.3212
+
+ Scenario simple_spread Algo diversified_sp updates 25/380 episodes, total num timesteps 2730000/40000000, FPS 730.
+
+value loss of agent: 0.6733635147412618
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5428
+training_cover_rate:  0.5639000000000001
+training_cover_rate:  0.5726
+child_drop:  43
+add_hard_num:  137
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  963
+test_agent_num:  4
+test_mean_cover_rate:  0.30960000000000004
+
+ Scenario simple_spread Algo diversified_sp updates 26/380 episodes, total num timesteps 2835000/40000000, FPS 730.
+
+value loss of agent: 0.7142768502235413
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5574
+training_cover_rate:  0.5649
+training_cover_rate:  0.5772999999999999
+child_drop:  69
+add_hard_num:  131
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  1075
+test_agent_num:  4
+test_mean_cover_rate:  0.3312
+
+ Scenario simple_spread Algo diversified_sp updates 27/380 episodes, total num timesteps 2940000/40000000, FPS 732.
+
+value loss of agent: 0.7606260259946187
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5825
+training_cover_rate:  0.5849
+training_cover_rate:  0.5963
+child_drop:  73
+add_hard_num:  124
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  1177
+test_agent_num:  4
+test_mean_cover_rate:  0.3378
+
+ Scenario simple_spread Algo diversified_sp updates 28/380 episodes, total num timesteps 3045000/40000000, FPS 731.
+
+value loss of agent: 0.8619560738404591
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5575
+training_cover_rate:  0.5665
+training_cover_rate:  0.5610999999999999
+child_drop:  52
+add_hard_num:  141
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  1283
+test_agent_num:  4
+test_mean_cover_rate:  0.3301
+
+ Scenario simple_spread Algo diversified_sp updates 29/380 episodes, total num timesteps 3150000/40000000, FPS 731.
+
+value loss of agent: 0.6835066258907319
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5942000000000001
+training_cover_rate:  0.5983
+training_cover_rate:  0.5972000000000001
+child_drop:  83
+add_hard_num:  103
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  1396
+test_agent_num:  4
+test_mean_cover_rate:  0.35660000000000003
+
+ Scenario simple_spread Algo diversified_sp updates 30/380 episodes, total num timesteps 3255000/40000000, FPS 730.
+
+value loss of agent: 0.8820663591225942
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6083999999999999
+training_cover_rate:  0.5995
+training_cover_rate:  0.613
+child_drop:  95
+add_hard_num:  97
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  1499
+test_agent_num:  4
+test_mean_cover_rate:  0.36210000000000003
+
+ Scenario simple_spread Algo diversified_sp updates 31/380 episodes, total num timesteps 3360000/40000000, FPS 728.
+
+value loss of agent: 0.9268438339233398
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6192000000000001
+training_cover_rate:  0.6140999999999999
+training_cover_rate:  0.6008
+child_drop:  99
+add_hard_num:  101
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  1589
+test_agent_num:  4
+test_mean_cover_rate:  0.35359999999999997
+
+ Scenario simple_spread Algo diversified_sp updates 32/380 episodes, total num timesteps 3465000/40000000, FPS 727.
+
+value loss of agent: 1.063653576374054
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6190999999999999
+training_cover_rate:  0.604
+training_cover_rate:  0.6170999999999999
+child_drop:  102
+add_hard_num:  89
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  1688
+test_agent_num:  4
+test_mean_cover_rate:  0.37179999999999996
+
+ Scenario simple_spread Algo diversified_sp updates 33/380 episodes, total num timesteps 3570000/40000000, FPS 728.
+
+value loss of agent: 1.3085529843966166
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6232
+training_cover_rate:  0.6187999999999999
+training_cover_rate:  0.6225
+child_drop:  102
+add_hard_num:  97
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  1782
+test_agent_num:  4
+test_mean_cover_rate:  0.3687
+
+ Scenario simple_spread Algo diversified_sp updates 34/380 episodes, total num timesteps 3675000/40000000, FPS 730.
+
+value loss of agent: 1.2303706288337708
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6557000000000001
+training_cover_rate:  0.6594
+training_cover_rate:  0.6497
+child_drop:  127
+add_hard_num:  59
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  1885
+test_agent_num:  4
+test_mean_cover_rate:  0.3872
+
+ Scenario simple_spread Algo diversified_sp updates 35/380 episodes, total num timesteps 3780000/40000000, FPS 729.
+
+value loss of agent: 1.371945281823476
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6244
+training_cover_rate:  0.6522
+training_cover_rate:  0.6608999999999999
+child_drop:  119
+add_hard_num:  74
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  1983
+test_agent_num:  4
+test_mean_cover_rate:  0.4011
+
+ Scenario simple_spread Algo diversified_sp updates 36/380 episodes, total num timesteps 3885000/40000000, FPS 729.
+
+value loss of agent: 1.5743413050969441
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6533
+training_cover_rate:  0.6476
+training_cover_rate:  0.6585
+child_drop:  117
+add_hard_num:  63
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3833000000000001
+
+ Scenario simple_spread Algo diversified_sp updates 37/380 episodes, total num timesteps 3990000/40000000, FPS 730.
+
+value loss of agent: 1.6539334774017334
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6617999999999999
+training_cover_rate:  0.6782999999999999
+training_cover_rate:  0.6825
+child_drop:  162
+add_hard_num:  61
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3992
+
+ Scenario simple_spread Algo diversified_sp updates 38/380 episodes, total num timesteps 4095000/40000000, FPS 731.
+
+value loss of agent: 1.811863934993744
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6742
+training_cover_rate:  0.6849
+training_cover_rate:  0.7077
+child_drop:  177
+add_hard_num:  52
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.40830000000000005
+
+ Scenario simple_spread Algo diversified_sp updates 39/380 episodes, total num timesteps 4200000/40000000, FPS 732.
+
+value loss of agent: 2.029735779762268
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6772
+training_cover_rate:  0.6978
+training_cover_rate:  0.7065
+child_drop:  170
+add_hard_num:  47
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.42269999999999996
+
+ Scenario simple_spread Algo diversified_sp updates 40/380 episodes, total num timesteps 4305000/40000000, FPS 732.
+
+value loss of agent: 2.2690103530883787
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6911999999999999
+training_cover_rate:  0.6899
+training_cover_rate:  0.6942
+child_drop:  173
+add_hard_num:  46
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.425
+
+ Scenario simple_spread Algo diversified_sp updates 41/380 episodes, total num timesteps 4410000/40000000, FPS 734.
+
+value loss of agent: 2.061043922106425
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6779
+training_cover_rate:  0.6805
+training_cover_rate:  0.6944000000000001
+child_drop:  165
+add_hard_num:  60
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.46280000000000004
+
+ Scenario simple_spread Algo diversified_sp updates 42/380 episodes, total num timesteps 4515000/40000000, FPS 734.
+
+value loss of agent: 2.2104754288991293
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6905
+training_cover_rate:  0.7004
+training_cover_rate:  0.7051000000000001
+child_drop:  166
+add_hard_num:  45
+parent:  83
+last_node_parent:  83
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.46740000000000004
+
+ Scenario simple_spread Algo diversified_sp updates 43/380 episodes, total num timesteps 4620000/40000000, FPS 732.
+
+value loss of agent: 2.176298960049947
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7013
+training_cover_rate:  0.6882
+training_cover_rate:  0.7158
+child_drop:  177
+add_hard_num:  52
+parent:  88
+last_node_parent:  88
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.4766
+
+ Scenario simple_spread Algo diversified_sp updates 44/380 episodes, total num timesteps 4725000/40000000, FPS 731.
+
+value loss of agent: 2.4106736818949384
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6984000000000001
+training_cover_rate:  0.6805
+training_cover_rate:  0.7061
+child_drop:  170
+add_hard_num:  46
+parent:  86
+last_node_parent:  86
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.4697
+
+ Scenario simple_spread Algo diversified_sp updates 45/380 episodes, total num timesteps 4830000/40000000, FPS 731.
+
+value loss of agent: 2.452181585629781
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7195999999999999
+training_cover_rate:  0.7278
+training_cover_rate:  0.7355
+child_drop:  226
+add_hard_num:  22
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.4892
+
+ Scenario simple_spread Algo diversified_sp updates 46/380 episodes, total num timesteps 4935000/40000000, FPS 731.
+
+value loss of agent: 2.4445799589157104
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7106
+training_cover_rate:  0.7156
+training_cover_rate:  0.7234
+child_drop:  195
+add_hard_num:  39
+parent:  94
+last_node_parent:  94
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.4927
+
+ Scenario simple_spread Algo diversified_sp updates 47/380 episodes, total num timesteps 5040000/40000000, FPS 729.
+
+value loss of agent: 2.5996905008951825
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7309000000000001
+training_cover_rate:  0.7159
+training_cover_rate:  0.7437999999999999
+child_drop:  203
+add_hard_num:  28
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5081
+
+ Scenario simple_spread Algo diversified_sp updates 48/380 episodes, total num timesteps 5145000/40000000, FPS 730.
+
+value loss of agent: 2.717051100730896
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7265
+training_cover_rate:  0.7415999999999999
+training_cover_rate:  0.7152000000000001
+child_drop:  198
+add_hard_num:  27
+parent:  85
+last_node_parent:  85
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.514
+
+ Scenario simple_spread Algo diversified_sp updates 49/380 episodes, total num timesteps 5250000/40000000, FPS 728.
+
+value loss of agent: 2.421754272778829
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.727
+training_cover_rate:  0.7267
+training_cover_rate:  0.7356
+child_drop:  200
+add_hard_num:  26
+parent:  89
+last_node_parent:  89
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5169000000000001
+
+ Scenario simple_spread Algo diversified_sp updates 50/380 episodes, total num timesteps 5355000/40000000, FPS 728.
+
+value loss of agent: 2.6445140202840167
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7104000000000001
+training_cover_rate:  0.7319000000000001
+training_cover_rate:  0.7430999999999999
+child_drop:  205
+add_hard_num:  32
+parent:  87
+last_node_parent:  87
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.518
+
+ Scenario simple_spread Algo diversified_sp updates 51/380 episodes, total num timesteps 5460000/40000000, FPS 729.
+
+value loss of agent: 2.8714078187942507
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7321
+training_cover_rate:  0.7429000000000001
+training_cover_rate:  0.7257
+child_drop:  209
+add_hard_num:  28
+parent:  92
+last_node_parent:  92
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5257000000000001
+
+ Scenario simple_spread Algo diversified_sp updates 52/380 episodes, total num timesteps 5565000/40000000, FPS 726.
+
+value loss of agent: 2.6847025553385415
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7037
+training_cover_rate:  0.718
+training_cover_rate:  0.717
+child_drop:  183
+add_hard_num:  52
+parent:  92
+last_node_parent:  92
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5327
+
+ Scenario simple_spread Algo diversified_sp updates 53/380 episodes, total num timesteps 5670000/40000000, FPS 725.
+
+value loss of agent: 2.655969174702962
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7308000000000001
+training_cover_rate:  0.7085999999999999
+training_cover_rate:  0.7367
+child_drop:  194
+add_hard_num:  38
+parent:  102
+last_node_parent:  102
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5210999999999999
+
+ Scenario simple_spread Algo diversified_sp updates 54/380 episodes, total num timesteps 5775000/40000000, FPS 723.
+
+value loss of agent: 3.1282311916351317
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7242000000000001
+training_cover_rate:  0.7473
+training_cover_rate:  0.7601
+child_drop:  211
+add_hard_num:  16
+parent:  96
+last_node_parent:  96
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5321
+
+ Scenario simple_spread Algo diversified_sp updates 55/380 episodes, total num timesteps 5880000/40000000, FPS 719.
+
+value loss of agent: 3.0476784706115723
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7343999999999999
+training_cover_rate:  0.7405999999999999
+training_cover_rate:  0.7527
+child_drop:  226
+add_hard_num:  26
+parent:  92
+last_node_parent:  92
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5504
+
+ Scenario simple_spread Algo diversified_sp updates 56/380 episodes, total num timesteps 5985000/40000000, FPS 716.
+
+value loss of agent: 2.9169689655303954
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7429000000000001
+training_cover_rate:  0.7413
+training_cover_rate:  0.7397
+child_drop:  214
+add_hard_num:  23
+parent:  87
+last_node_parent:  87
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5363
+
+ Scenario simple_spread Algo diversified_sp updates 57/380 episodes, total num timesteps 6090000/40000000, FPS 715.
+
+value loss of agent: 2.9432360251744587
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7407999999999999
+training_cover_rate:  0.7625
+training_cover_rate:  0.7683
+child_drop:  223
+add_hard_num:  15
+parent:  109
+last_node_parent:  109
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5394000000000001
+
+ Scenario simple_spread Algo diversified_sp updates 58/380 episodes, total num timesteps 6195000/40000000, FPS 714.
+
+value loss of agent: 3.3124617099761964
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7437
+training_cover_rate:  0.7617999999999999
+training_cover_rate:  0.7683
+child_drop:  219
+add_hard_num:  28
+parent:  109
+last_node_parent:  109
+childlist:  0
+archive:  1994
+test_agent_num:  4
+test_mean_cover_rate:  0.5418999999999999
+
+ Scenario simple_spread Algo diversified_sp updates 59/380 episodes, total num timesteps 6300000/40000000, FPS 715.
+
+value loss of agent: 3.385959752400716
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7524
+training_cover_rate:  0.7575
+training_cover_rate:  0.7345999999999999
+child_drop:  221
+add_hard_num:  16
+parent:  93
+last_node_parent:  93
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5752999999999999
+
+ Scenario simple_spread Algo diversified_sp updates 60/380 episodes, total num timesteps 6405000/40000000, FPS 714.
+
+value loss of agent: 2.8916433493296307
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7122999999999999
+training_cover_rate:  0.732
+training_cover_rate:  0.7389000000000001
+child_drop:  205
+add_hard_num:  34
+parent:  92
+last_node_parent:  92
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.583
+
+ Scenario simple_spread Algo diversified_sp updates 61/380 episodes, total num timesteps 6510000/40000000, FPS 714.
+
+value loss of agent: 3.1554027557373048
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7511
+training_cover_rate:  0.7474
+training_cover_rate:  0.7425
+child_drop:  234
+add_hard_num:  20
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5801000000000001
+
+ Scenario simple_spread Algo diversified_sp updates 62/380 episodes, total num timesteps 6615000/40000000, FPS 715.
+
+value loss of agent: 3.3585765918095905
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7332
+training_cover_rate:  0.738
+training_cover_rate:  0.7601
+child_drop:  216
+add_hard_num:  20
+parent:  98
+last_node_parent:  98
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5835999999999999
+
+ Scenario simple_spread Algo diversified_sp updates 63/380 episodes, total num timesteps 6720000/40000000, FPS 716.
+
+value loss of agent: 3.1935068130493165
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7462000000000001
+training_cover_rate:  0.7477
+training_cover_rate:  0.7455
+child_drop:  231
+add_hard_num:  22
+parent:  101
+last_node_parent:  101
+childlist:  0
+archive:  1996
+test_agent_num:  4
+test_mean_cover_rate:  0.5775
+
+ Scenario simple_spread Algo diversified_sp updates 64/380 episodes, total num timesteps 6825000/40000000, FPS 717.
+
+value loss of agent: 3.1923918883005777
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7434
+training_cover_rate:  0.7175999999999999
+training_cover_rate:  0.7348
+child_drop:  216
+add_hard_num:  30
+parent:  92
+last_node_parent:  92
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5674
+
+ Scenario simple_spread Algo diversified_sp updates 65/380 episodes, total num timesteps 6930000/40000000, FPS 716.
+
+value loss of agent: 3.0014800945917766
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7227
+training_cover_rate:  0.7123999999999999
+training_cover_rate:  0.7205
+child_drop:  197
+add_hard_num:  41
+parent:  86
+last_node_parent:  86
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5576
+
+ Scenario simple_spread Algo diversified_sp updates 66/380 episodes, total num timesteps 7035000/40000000, FPS 711.
+
+value loss of agent: 3.078901243209839
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7184
+training_cover_rate:  0.717
+training_cover_rate:  0.7216
+child_drop:  195
+add_hard_num:  34
+parent:  89
+last_node_parent:  89
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5694000000000001
+
+ Scenario simple_spread Algo diversified_sp updates 67/380 episodes, total num timesteps 7140000/40000000, FPS 706.
+
+value loss of agent: 3.1272494316101076
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7006999999999999
+training_cover_rate:  0.702
+training_cover_rate:  0.7253
+child_drop:  192
+add_hard_num:  29
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5839000000000001
+
+ Scenario simple_spread Algo diversified_sp updates 68/380 episodes, total num timesteps 7245000/40000000, FPS 704.
+
+value loss of agent: 2.8282018264134723
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7623
+training_cover_rate:  0.7472000000000001
+training_cover_rate:  0.7555
+child_drop:  230
+add_hard_num:  16
+parent:  96
+last_node_parent:  96
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5991000000000001
+
+ Scenario simple_spread Algo diversified_sp updates 69/380 episodes, total num timesteps 7350000/40000000, FPS 703.
+
+value loss of agent: 3.2567293643951416
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7321
+training_cover_rate:  0.7280999999999999
+training_cover_rate:  0.7453
+child_drop:  213
+add_hard_num:  22
+parent:  88
+last_node_parent:  88
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5852999999999999
+
+ Scenario simple_spread Algo diversified_sp updates 70/380 episodes, total num timesteps 7455000/40000000, FPS 692.
+
+value loss of agent: 3.2723260561625165
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7551000000000001
+training_cover_rate:  0.7538
+training_cover_rate:  0.7459000000000001
+child_drop:  222
+add_hard_num:  32
+parent:  101
+last_node_parent:  101
+childlist:  0
+archive:  1995
+test_agent_num:  4
+test_mean_cover_rate:  0.5987
+
+ Scenario simple_spread Algo diversified_sp updates 71/380 episodes, total num timesteps 7560000/40000000, FPS 691.
+
+value loss of agent: 3.127411945660909
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.721
+training_cover_rate:  0.7302000000000001
+training_cover_rate:  0.7437
+child_drop:  211
+add_hard_num:  22
+parent:  96
+last_node_parent:  96
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6124
+
+ Scenario simple_spread Algo diversified_sp updates 72/380 episodes, total num timesteps 7665000/40000000, FPS 680.
+
+value loss of agent: 3.2464684804280597
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7308
+training_cover_rate:  0.7268
+training_cover_rate:  0.7448
+child_drop:  206
+add_hard_num:  28
+parent:  87
+last_node_parent:  87
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.604
+
+ Scenario simple_spread Algo diversified_sp updates 73/380 episodes, total num timesteps 7770000/40000000, FPS 665.
+
+value loss of agent: 3.279503011703491
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.627
+training_cover_rate:  0.6313
+training_cover_rate:  0.6447999999999999
+child_drop:  94
+add_hard_num:  114
+parent:  102
+last_node_parent:  102
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6146
+
+ Scenario simple_spread Algo diversified_sp updates 74/380 episodes, total num timesteps 7875000/40000000, FPS 648.
+
+value loss of agent: 3.27553071975708
+Traceback (most recent call last):
+  File "train_mpe_curriculum_sp.py", line 1005, in <module>
+    main()
+  File "train_mpe_curriculum_sp.py", line 588, in main
+    last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+  File "train_mpe_curriculum_sp.py", line 191, in SampleNearby_novelty
+    if self.get_novelty([st],self.parent_all) > novelty_threshold:
+  File "train_mpe_curriculum_sp.py", line 141, in get_novelty
+    dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
+KeyboardInterrupt

@@ -1,0 +1,6860 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.040299999999999996
+training_cover_rate:  0.0308
+training_cover_rate:  0.0103
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Policy3. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type MLPBase. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type LayerNorm. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Sequential. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Linear. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Tanh. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_actor_dist_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ObsEncoder_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Categorical. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_critic_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+
+ Scenario simple_spread Algo solved_sp updates 0/380 episodes, total num timesteps 105000/40000000, FPS 676.
+
+value loss of agent: 0.130068326741457
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0025
+training_cover_rate:  0.0003
+training_cover_rate:  0.00030000000000000003
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0015
+
+ Scenario simple_spread Algo solved_sp updates 1/380 episodes, total num timesteps 210000/40000000, FPS 682.
+
+value loss of agent: 0.019033828005194663
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0025
+training_cover_rate:  0.001
+training_cover_rate:  0.0004
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0065
+
+ Scenario simple_spread Algo solved_sp updates 2/380 episodes, total num timesteps 315000/40000000, FPS 711.
+
+value loss of agent: 0.014545504624644915
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0
+training_cover_rate:  0.0
+training_cover_rate:  0.0
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.005
+
+ Scenario simple_spread Algo solved_sp updates 3/380 episodes, total num timesteps 420000/40000000, FPS 737.
+
+value loss of agent: 0.009767223273714383
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0
+training_cover_rate:  0.0
+training_cover_rate:  0.0
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0065
+
+ Scenario simple_spread Algo solved_sp updates 4/380 episodes, total num timesteps 525000/40000000, FPS 334.
+
+value loss of agent: 0.013693737455954154
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0
+training_cover_rate:  0.0
+training_cover_rate:  0.002
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0105
+
+ Scenario simple_spread Algo solved_sp updates 5/380 episodes, total num timesteps 630000/40000000, FPS 356.
+
+value loss of agent: 0.03418777659535408
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.0016
+training_cover_rate:  0.0134
+training_cover_rate:  0.0155
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.008
+
+ Scenario simple_spread Algo solved_sp updates 6/380 episodes, total num timesteps 735000/40000000, FPS 382.
+
+value loss of agent: 0.1290796582897504
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.04410000000000001
+training_cover_rate:  0.084
+training_cover_rate:  0.139
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.0129
+
+ Scenario simple_spread Algo solved_sp updates 7/380 episodes, total num timesteps 840000/40000000, FPS 408.
+
+value loss of agent: 0.7054649750391643
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.26289999999999997
+training_cover_rate:  0.40720000000000006
+training_cover_rate:  0.548
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500
+test_agent_num:  4
+test_mean_cover_rate:  0.025299999999999996
+
+ Scenario simple_spread Algo solved_sp updates 8/380 episodes, total num timesteps 945000/40000000, FPS 431.
+
+value loss of agent: 3.197664562861125
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+training_cover_rate:  0.6864000000000001
+training_cover_rate:  0.7495999999999999
+training_cover_rate:  0.8058
+child_drop:  0
+add_hard_num:  0
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  447
+test_agent_num:  4
+test_mean_cover_rate:  0.0517
+
+ Scenario simple_spread Algo solved_sp updates 9/380 episodes, total num timesteps 1050000/40000000, FPS 449.
+
+value loss of agent: 5.919475587209066
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.4512
+training_cover_rate:  0.4709
+training_cover_rate:  0.5103
+child_drop:  0
+add_hard_num:  293
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  451
+test_agent_num:  4
+test_mean_cover_rate:  0.0603
+
+ Scenario simple_spread Algo solved_sp updates 10/380 episodes, total num timesteps 1155000/40000000, FPS 467.
+
+value loss of agent: 2.4895611365636188
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5127
+training_cover_rate:  0.5364
+training_cover_rate:  0.5619000000000001
+child_drop:  0
+add_hard_num:  249
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  485
+test_agent_num:  4
+test_mean_cover_rate:  0.10069999999999998
+
+ Scenario simple_spread Algo solved_sp updates 11/380 episodes, total num timesteps 1260000/40000000, FPS 485.
+
+value loss of agent: 2.3867698828379313
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5437000000000001
+training_cover_rate:  0.5702
+training_cover_rate:  0.6007
+child_drop:  1
+add_hard_num:  216
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  552
+test_agent_num:  4
+test_mean_cover_rate:  0.1402
+
+ Scenario simple_spread Algo solved_sp updates 12/380 episodes, total num timesteps 1365000/40000000, FPS 499.
+
+value loss of agent: 2.489028890927633
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.5689000000000001
+training_cover_rate:  0.5831999999999999
+training_cover_rate:  0.6092000000000001
+child_drop:  2
+add_hard_num:  171
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  682
+test_agent_num:  4
+test_mean_cover_rate:  0.22
+
+ Scenario simple_spread Algo solved_sp updates 13/380 episodes, total num timesteps 1470000/40000000, FPS 509.
+
+value loss of agent: 2.3184333642323813
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6183
+training_cover_rate:  0.6399
+training_cover_rate:  0.6515
+child_drop:  7
+add_hard_num:  122
+parent:  43
+last_node_parent:  43
+childlist:  0
+archive:  860
+test_agent_num:  4
+test_mean_cover_rate:  0.2345
+
+ Scenario simple_spread Algo solved_sp updates 14/380 episodes, total num timesteps 1575000/40000000, FPS 519.
+
+value loss of agent: 2.4754519780476887
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6585
+training_cover_rate:  0.6567999999999999
+training_cover_rate:  0.6859
+child_drop:  10
+add_hard_num:  89
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  1075
+test_agent_num:  4
+test_mean_cover_rate:  0.254
+
+ Scenario simple_spread Algo solved_sp updates 15/380 episodes, total num timesteps 1680000/40000000, FPS 525.
+
+value loss of agent: 2.4738358815511066
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6689
+training_cover_rate:  0.6828
+training_cover_rate:  0.6818000000000001
+child_drop:  15
+add_hard_num:  82
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  1300
+test_agent_num:  4
+test_mean_cover_rate:  0.3073
+
+ Scenario simple_spread Algo solved_sp updates 16/380 episodes, total num timesteps 1785000/40000000, FPS 533.
+
+value loss of agent: 2.7533230781555176
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6845
+training_cover_rate:  0.6868000000000001
+training_cover_rate:  0.7002999999999999
+child_drop:  20
+add_hard_num:  66
+parent:  24
+last_node_parent:  24
+childlist:  0
+archive:  1540
+test_agent_num:  4
+test_mean_cover_rate:  0.33039999999999997
+
+ Scenario simple_spread Algo solved_sp updates 17/380 episodes, total num timesteps 1890000/40000000, FPS 539.
+
+value loss of agent: 2.5730801661809286
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.701
+training_cover_rate:  0.7029
+training_cover_rate:  0.6962999999999999
+child_drop:  16
+add_hard_num:  63
+parent:  20
+last_node_parent:  20
+childlist:  0
+archive:  1791
+test_agent_num:  4
+test_mean_cover_rate:  0.3205
+
+ Scenario simple_spread Algo solved_sp updates 18/380 episodes, total num timesteps 1995000/40000000, FPS 544.
+
+value loss of agent: 2.5301727135976155
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7022
+training_cover_rate:  0.6822999999999999
+training_cover_rate:  0.7031000000000002
+child_drop:  19
+add_hard_num:  61
+parent:  24
+last_node_parent:  24
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.31610000000000005
+
+ Scenario simple_spread Algo solved_sp updates 19/380 episodes, total num timesteps 2100000/40000000, FPS 550.
+
+value loss of agent: 2.523643199602763
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7132000000000001
+training_cover_rate:  0.7213999999999999
+training_cover_rate:  0.7082
+child_drop:  25
+add_hard_num:  58
+parent:  23
+last_node_parent:  23
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.30820000000000003
+
+ Scenario simple_spread Algo solved_sp updates 20/380 episodes, total num timesteps 2205000/40000000, FPS 558.
+
+value loss of agent: 2.505617356300354
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6636
+training_cover_rate:  0.6649
+training_cover_rate:  0.6795
+child_drop:  21
+add_hard_num:  76
+parent:  16
+last_node_parent:  16
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.2924
+
+ Scenario simple_spread Algo solved_sp updates 21/380 episodes, total num timesteps 2310000/40000000, FPS 563.
+
+value loss of agent: 2.170449169476827
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6737000000000001
+training_cover_rate:  0.6787000000000001
+training_cover_rate:  0.6835
+child_drop:  21
+add_hard_num:  67
+parent:  12
+last_node_parent:  12
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.2927
+
+ Scenario simple_spread Algo solved_sp updates 22/380 episodes, total num timesteps 2415000/40000000, FPS 569.
+
+value loss of agent: 2.1645435333251952
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6584000000000001
+training_cover_rate:  0.6718
+training_cover_rate:  0.6974000000000001
+child_drop:  16
+add_hard_num:  55
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.32089999999999996
+
+ Scenario simple_spread Algo solved_sp updates 23/380 episodes, total num timesteps 2520000/40000000, FPS 575.
+
+value loss of agent: 2.0901501973470054
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6768000000000001
+training_cover_rate:  0.6735
+training_cover_rate:  0.6962999999999999
+child_drop:  22
+add_hard_num:  69
+parent:  16
+last_node_parent:  16
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3461
+
+ Scenario simple_spread Algo solved_sp updates 24/380 episodes, total num timesteps 2625000/40000000, FPS 578.
+
+value loss of agent: 2.183944018681844
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7036999999999999
+training_cover_rate:  0.7024
+training_cover_rate:  0.7122
+child_drop:  27
+add_hard_num:  54
+parent:  22
+last_node_parent:  22
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.34720000000000006
+
+ Scenario simple_spread Algo solved_sp updates 25/380 episodes, total num timesteps 2730000/40000000, FPS 583.
+
+value loss of agent: 2.4939508199691773
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7108
+training_cover_rate:  0.7012999999999999
+training_cover_rate:  0.7139
+child_drop:  28
+add_hard_num:  46
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3638
+
+ Scenario simple_spread Algo solved_sp updates 26/380 episodes, total num timesteps 2835000/40000000, FPS 589.
+
+value loss of agent: 2.411375951766968
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6867000000000001
+training_cover_rate:  0.6854000000000001
+training_cover_rate:  0.6930999999999999
+child_drop:  17
+add_hard_num:  46
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.31239999999999996
+
+ Scenario simple_spread Algo solved_sp updates 27/380 episodes, total num timesteps 2940000/40000000, FPS 592.
+
+value loss of agent: 2.044062860806783
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6967000000000001
+training_cover_rate:  0.6885
+training_cover_rate:  0.6847000000000001
+child_drop:  32
+add_hard_num:  61
+parent:  8
+last_node_parent:  8
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3182
+
+ Scenario simple_spread Algo solved_sp updates 28/380 episodes, total num timesteps 3045000/40000000, FPS 596.
+
+value loss of agent: 2.1247725089391074
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7185
+training_cover_rate:  0.7254
+training_cover_rate:  0.7091
+child_drop:  29
+add_hard_num:  33
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.32259999999999994
+
+ Scenario simple_spread Algo solved_sp updates 29/380 episodes, total num timesteps 3150000/40000000, FPS 597.
+
+value loss of agent: 2.2421380281448364
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6952
+training_cover_rate:  0.6962999999999999
+training_cover_rate:  0.703
+child_drop:  27
+add_hard_num:  58
+parent:  13
+last_node_parent:  13
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3286
+
+ Scenario simple_spread Algo solved_sp updates 30/380 episodes, total num timesteps 3255000/40000000, FPS 602.
+
+value loss of agent: 2.1291699171066285
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.6986999999999999
+training_cover_rate:  0.7151000000000001
+training_cover_rate:  0.724
+child_drop:  30
+add_hard_num:  44
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3204
+
+ Scenario simple_spread Algo solved_sp updates 31/380 episodes, total num timesteps 3360000/40000000, FPS 606.
+
+value loss of agent: 2.324368866284688
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.735
+training_cover_rate:  0.7308
+training_cover_rate:  0.749
+child_drop:  36
+add_hard_num:  32
+parent:  21
+last_node_parent:  21
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3458
+
+ Scenario simple_spread Algo solved_sp updates 32/380 episodes, total num timesteps 3465000/40000000, FPS 611.
+
+value loss of agent: 2.5582035382588706
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7126999999999999
+training_cover_rate:  0.7078
+training_cover_rate:  0.7104000000000001
+child_drop:  33
+add_hard_num:  53
+parent:  20
+last_node_parent:  20
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.32119999999999993
+
+ Scenario simple_spread Algo solved_sp updates 33/380 episodes, total num timesteps 3570000/40000000, FPS 612.
+
+value loss of agent: 2.3299503326416016
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7306999999999999
+training_cover_rate:  0.7292000000000001
+training_cover_rate:  0.7447
+child_drop:  44
+add_hard_num:  33
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.294
+
+ Scenario simple_spread Algo solved_sp updates 34/380 episodes, total num timesteps 3675000/40000000, FPS 613.
+
+value loss of agent: 2.6905731757481894
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7303999999999998
+training_cover_rate:  0.7367999999999999
+training_cover_rate:  0.7329000000000001
+child_drop:  38
+add_hard_num:  40
+parent:  12
+last_node_parent:  12
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.26409999999999995
+
+ Scenario simple_spread Algo solved_sp updates 35/380 episodes, total num timesteps 3780000/40000000, FPS 615.
+
+value loss of agent: 2.455116120974223
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.72
+training_cover_rate:  0.7504
+training_cover_rate:  0.7353999999999999
+child_drop:  36
+add_hard_num:  39
+parent:  17
+last_node_parent:  17
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3057
+
+ Scenario simple_spread Algo solved_sp updates 36/380 episodes, total num timesteps 3885000/40000000, FPS 619.
+
+value loss of agent: 2.3712260564168295
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7208
+training_cover_rate:  0.7264
+training_cover_rate:  0.7379000000000001
+child_drop:  35
+add_hard_num:  38
+parent:  19
+last_node_parent:  19
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3037
+
+ Scenario simple_spread Algo solved_sp updates 37/380 episodes, total num timesteps 3990000/40000000, FPS 622.
+
+value loss of agent: 2.424178886413574
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.73
+training_cover_rate:  0.7239
+training_cover_rate:  0.7291
+child_drop:  28
+add_hard_num:  32
+parent:  17
+last_node_parent:  17
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3431
+
+ Scenario simple_spread Algo solved_sp updates 38/380 episodes, total num timesteps 4095000/40000000, FPS 625.
+
+value loss of agent: 2.423813470204671
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7697
+training_cover_rate:  0.7751999999999999
+training_cover_rate:  0.7781
+child_drop:  45
+add_hard_num:  13
+parent:  13
+last_node_parent:  13
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3625
+
+ Scenario simple_spread Algo solved_sp updates 39/380 episodes, total num timesteps 4200000/40000000, FPS 628.
+
+value loss of agent: 2.923186008135478
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7941
+training_cover_rate:  0.7927000000000001
+training_cover_rate:  0.7825
+child_drop:  50
+add_hard_num:  8
+parent:  16
+last_node_parent:  16
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.37039999999999995
+
+ Scenario simple_spread Algo solved_sp updates 40/380 episodes, total num timesteps 4305000/40000000, FPS 630.
+
+value loss of agent: 2.6893418709437054
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7785
+training_cover_rate:  0.7865
+training_cover_rate:  0.7813
+child_drop:  57
+add_hard_num:  16
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.38420000000000004
+
+ Scenario simple_spread Algo solved_sp updates 41/380 episodes, total num timesteps 4410000/40000000, FPS 632.
+
+value loss of agent: 2.7926114797592163
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7806
+training_cover_rate:  0.7805
+training_cover_rate:  0.8005999999999999
+child_drop:  41
+add_hard_num:  13
+parent:  16
+last_node_parent:  16
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.37879999999999997
+
+ Scenario simple_spread Algo solved_sp updates 42/380 episodes, total num timesteps 4515000/40000000, FPS 634.
+
+value loss of agent: 2.8262260516484576
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7962
+training_cover_rate:  0.7964000000000001
+training_cover_rate:  0.8000999999999999
+child_drop:  58
+add_hard_num:  16
+parent:  22
+last_node_parent:  22
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.3843
+
+ Scenario simple_spread Algo solved_sp updates 43/380 episodes, total num timesteps 4620000/40000000, FPS 637.
+
+value loss of agent: 2.9852851072947186
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8019
+training_cover_rate:  0.7968
+training_cover_rate:  0.799
+child_drop:  52
+add_hard_num:  11
+parent:  20
+last_node_parent:  20
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.39069999999999994
+
+ Scenario simple_spread Algo solved_sp updates 44/380 episodes, total num timesteps 4725000/40000000, FPS 640.
+
+value loss of agent: 2.9940234422683716
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8015
+training_cover_rate:  0.7933
+training_cover_rate:  0.7943000000000001
+child_drop:  47
+add_hard_num:  15
+parent:  23
+last_node_parent:  23
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.42010000000000003
+
+ Scenario simple_spread Algo solved_sp updates 45/380 episodes, total num timesteps 4830000/40000000, FPS 642.
+
+value loss of agent: 2.8845756610234576
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8075
+training_cover_rate:  0.8051
+training_cover_rate:  0.8242
+child_drop:  59
+add_hard_num:  9
+parent:  22
+last_node_parent:  22
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.43079999999999996
+
+ Scenario simple_spread Algo solved_sp updates 46/380 episodes, total num timesteps 4935000/40000000, FPS 642.
+
+value loss of agent: 3.074220140775045
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.7935999999999999
+training_cover_rate:  0.8062999999999999
+training_cover_rate:  0.7988999999999999
+child_drop:  50
+add_hard_num:  12
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.43770000000000003
+
+ Scenario simple_spread Algo solved_sp updates 47/380 episodes, total num timesteps 5040000/40000000, FPS 644.
+
+value loss of agent: 3.105557584762573
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8034
+training_cover_rate:  0.7928
+training_cover_rate:  0.8098
+child_drop:  66
+add_hard_num:  10
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.4453
+
+ Scenario simple_spread Algo solved_sp updates 48/380 episodes, total num timesteps 5145000/40000000, FPS 647.
+
+value loss of agent: 3.201511534055074
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.811
+training_cover_rate:  0.8242
+training_cover_rate:  0.8135
+child_drop:  62
+add_hard_num:  7
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.4492
+
+ Scenario simple_spread Algo solved_sp updates 49/380 episodes, total num timesteps 5250000/40000000, FPS 649.
+
+value loss of agent: 3.1602222681045533
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.821
+training_cover_rate:  0.8087000000000001
+training_cover_rate:  0.8272999999999999
+child_drop:  58
+add_hard_num:  14
+parent:  27
+last_node_parent:  27
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.4506
+
+ Scenario simple_spread Algo solved_sp updates 50/380 episodes, total num timesteps 5355000/40000000, FPS 651.
+
+value loss of agent: 3.1898730198542276
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8218
+training_cover_rate:  0.8128
+training_cover_rate:  0.8176
+child_drop:  65
+add_hard_num:  2
+parent:  15
+last_node_parent:  15
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.4732
+
+ Scenario simple_spread Algo solved_sp updates 51/380 episodes, total num timesteps 5460000/40000000, FPS 653.
+
+value loss of agent: 3.3294736464818318
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8168999999999998
+training_cover_rate:  0.8238
+training_cover_rate:  0.8308
+child_drop:  79
+add_hard_num:  3
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.4517
+
+ Scenario simple_spread Algo solved_sp updates 52/380 episodes, total num timesteps 5565000/40000000, FPS 655.
+
+value loss of agent: 3.408784548441569
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8184
+training_cover_rate:  0.8187000000000001
+training_cover_rate:  0.8222
+child_drop:  62
+add_hard_num:  5
+parent:  20
+last_node_parent:  20
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.494
+
+ Scenario simple_spread Algo solved_sp updates 53/380 episodes, total num timesteps 5670000/40000000, FPS 656.
+
+value loss of agent: 3.4109315474828086
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8141
+training_cover_rate:  0.8415
+training_cover_rate:  0.8210999999999999
+child_drop:  58
+add_hard_num:  5
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.49489999999999995
+
+ Scenario simple_spread Algo solved_sp updates 54/380 episodes, total num timesteps 5775000/40000000, FPS 658.
+
+value loss of agent: 3.4140856742858885
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8324
+training_cover_rate:  0.8368000000000001
+training_cover_rate:  0.8362
+child_drop:  81
+add_hard_num:  0
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.48710000000000003
+
+ Scenario simple_spread Algo solved_sp updates 55/380 episodes, total num timesteps 5880000/40000000, FPS 660.
+
+value loss of agent: 3.480785290400187
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8299
+training_cover_rate:  0.8408
+training_cover_rate:  0.8335
+child_drop:  79
+add_hard_num:  6
+parent:  25
+last_node_parent:  25
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5205
+
+ Scenario simple_spread Algo solved_sp updates 56/380 episodes, total num timesteps 5985000/40000000, FPS 662.
+
+value loss of agent: 3.334334373474121
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8428
+training_cover_rate:  0.8362999999999999
+training_cover_rate:  0.8412999999999999
+child_drop:  75
+add_hard_num:  1
+parent:  20
+last_node_parent:  20
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5142
+
+ Scenario simple_spread Algo solved_sp updates 57/380 episodes, total num timesteps 6090000/40000000, FPS 664.
+
+value loss of agent: 3.632235304514567
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8508
+training_cover_rate:  0.8403999999999999
+training_cover_rate:  0.8454
+child_drop:  102
+add_hard_num:  4
+parent:  23
+last_node_parent:  23
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5141
+
+ Scenario simple_spread Algo solved_sp updates 58/380 episodes, total num timesteps 6195000/40000000, FPS 666.
+
+value loss of agent: 3.7858603795369468
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8541
+training_cover_rate:  0.8555
+training_cover_rate:  0.8475
+child_drop:  96
+add_hard_num:  2
+parent:  22
+last_node_parent:  22
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5093
+
+ Scenario simple_spread Algo solved_sp updates 59/380 episodes, total num timesteps 6300000/40000000, FPS 668.
+
+value loss of agent: 3.864746880531311
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8226
+training_cover_rate:  0.8225
+training_cover_rate:  0.8474
+child_drop:  69
+add_hard_num:  2
+parent:  25
+last_node_parent:  25
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5229
+
+ Scenario simple_spread Algo solved_sp updates 60/380 episodes, total num timesteps 6405000/40000000, FPS 669.
+
+value loss of agent: 3.5297597964604694
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8489
+training_cover_rate:  0.8505
+training_cover_rate:  0.8489999999999999
+child_drop:  88
+add_hard_num:  0
+parent:  34
+last_node_parent:  34
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5068
+
+ Scenario simple_spread Algo solved_sp updates 61/380 episodes, total num timesteps 6510000/40000000, FPS 670.
+
+value loss of agent: 3.8172333240509033
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.854
+training_cover_rate:  0.8530999999999999
+training_cover_rate:  0.8492000000000001
+child_drop:  87
+add_hard_num:  0
+parent:  22
+last_node_parent:  22
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5241
+
+ Scenario simple_spread Algo solved_sp updates 62/380 episodes, total num timesteps 6615000/40000000, FPS 671.
+
+value loss of agent: 3.7477360010147094
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8335999999999999
+training_cover_rate:  0.8261
+training_cover_rate:  0.8288
+child_drop:  57
+add_hard_num:  1
+parent:  25
+last_node_parent:  25
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5323
+
+ Scenario simple_spread Algo solved_sp updates 63/380 episodes, total num timesteps 6720000/40000000, FPS 672.
+
+value loss of agent: 3.730441172917684
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8436
+training_cover_rate:  0.8473999999999999
+training_cover_rate:  0.8324000000000001
+child_drop:  83
+add_hard_num:  2
+parent:  23
+last_node_parent:  23
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5596
+
+ Scenario simple_spread Algo solved_sp updates 64/380 episodes, total num timesteps 6825000/40000000, FPS 674.
+
+value loss of agent: 3.5535935084025065
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8585
+training_cover_rate:  0.8475999999999999
+training_cover_rate:  0.849
+child_drop:  80
+add_hard_num:  2
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5327000000000001
+
+ Scenario simple_spread Algo solved_sp updates 65/380 episodes, total num timesteps 6930000/40000000, FPS 675.
+
+value loss of agent: 3.597206211090088
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8565
+training_cover_rate:  0.8520999999999999
+training_cover_rate:  0.8569
+child_drop:  88
+add_hard_num:  2
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5316
+
+ Scenario simple_spread Algo solved_sp updates 66/380 episodes, total num timesteps 7035000/40000000, FPS 674.
+
+value loss of agent: 3.641086387634277
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8473999999999999
+training_cover_rate:  0.8503
+training_cover_rate:  0.8518
+child_drop:  80
+add_hard_num:  1
+parent:  23
+last_node_parent:  23
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5449
+
+ Scenario simple_spread Algo solved_sp updates 67/380 episodes, total num timesteps 7140000/40000000, FPS 676.
+
+value loss of agent: 3.6784804900487265
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8455
+training_cover_rate:  0.8666
+training_cover_rate:  0.8627
+child_drop:  92
+add_hard_num:  3
+parent:  30
+last_node_parent:  30
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5616
+
+ Scenario simple_spread Algo solved_sp updates 68/380 episodes, total num timesteps 7245000/40000000, FPS 677.
+
+value loss of agent: 3.8112828652064006
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8568
+training_cover_rate:  0.87
+training_cover_rate:  0.8638999999999999
+child_drop:  94
+add_hard_num:  1
+parent:  30
+last_node_parent:  30
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5724000000000001
+
+ Scenario simple_spread Algo solved_sp updates 69/380 episodes, total num timesteps 7350000/40000000, FPS 678.
+
+value loss of agent: 3.716794991493225
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.864
+training_cover_rate:  0.8647999999999999
+training_cover_rate:  0.8650999999999999
+child_drop:  111
+add_hard_num:  0
+parent:  21
+last_node_parent:  21
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5792999999999999
+
+ Scenario simple_spread Algo solved_sp updates 70/380 episodes, total num timesteps 7455000/40000000, FPS 679.
+
+value loss of agent: 3.6701918045679727
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8633000000000001
+training_cover_rate:  0.8762
+training_cover_rate:  0.8644
+child_drop:  86
+add_hard_num:  1
+parent:  41
+last_node_parent:  41
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6033
+
+ Scenario simple_spread Algo solved_sp updates 71/380 episodes, total num timesteps 7560000/40000000, FPS 680.
+
+value loss of agent: 3.3710652748743692
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8752000000000001
+training_cover_rate:  0.8646
+training_cover_rate:  0.8760999999999999
+child_drop:  94
+add_hard_num:  0
+parent:  24
+last_node_parent:  24
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6045
+
+ Scenario simple_spread Algo solved_sp updates 72/380 episodes, total num timesteps 7665000/40000000, FPS 682.
+
+value loss of agent: 3.6701842228571575
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8647
+training_cover_rate:  0.8702000000000001
+training_cover_rate:  0.8779000000000001
+child_drop:  102
+add_hard_num:  0
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.5934
+
+ Scenario simple_spread Algo solved_sp updates 73/380 episodes, total num timesteps 7770000/40000000, FPS 683.
+
+value loss of agent: 3.6825625896453857
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8669
+training_cover_rate:  0.8746
+training_cover_rate:  0.8725
+child_drop:  90
+add_hard_num:  0
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6115999999999999
+
+ Scenario simple_spread Algo solved_sp updates 74/380 episodes, total num timesteps 7875000/40000000, FPS 684.
+
+value loss of agent: 3.45667249361674
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8573999999999999
+training_cover_rate:  0.8720999999999999
+training_cover_rate:  0.8733
+child_drop:  100
+add_hard_num:  0
+parent:  24
+last_node_parent:  24
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6167
+
+ Scenario simple_spread Algo solved_sp updates 75/380 episodes, total num timesteps 7980000/40000000, FPS 687.
+
+value loss of agent: 3.445254921913147
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8742
+training_cover_rate:  0.879
+training_cover_rate:  0.8861999999999999
+child_drop:  104
+add_hard_num:  0
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6117
+
+ Scenario simple_spread Algo solved_sp updates 76/380 episodes, total num timesteps 8085000/40000000, FPS 687.
+
+value loss of agent: 3.3909822066624957
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8791
+training_cover_rate:  0.8823
+training_cover_rate:  0.8807
+child_drop:  110
+add_hard_num:  0
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6232
+
+ Scenario simple_spread Algo solved_sp updates 77/380 episodes, total num timesteps 8190000/40000000, FPS 689.
+
+value loss of agent: 3.256774171193441
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8673000000000001
+training_cover_rate:  0.8675
+training_cover_rate:  0.8641
+child_drop:  83
+add_hard_num:  1
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6247999999999999
+
+ Scenario simple_spread Algo solved_sp updates 78/380 episodes, total num timesteps 8295000/40000000, FPS 691.
+
+value loss of agent: 3.3084347089131674
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8762000000000001
+training_cover_rate:  0.8734
+training_cover_rate:  0.8807
+child_drop:  108
+add_hard_num:  0
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6226
+
+ Scenario simple_spread Algo solved_sp updates 79/380 episodes, total num timesteps 8400000/40000000, FPS 692.
+
+value loss of agent: 3.269183325767517
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8775
+training_cover_rate:  0.8845
+training_cover_rate:  0.8743000000000001
+child_drop:  107
+add_hard_num:  0
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6414
+
+ Scenario simple_spread Algo solved_sp updates 80/380 episodes, total num timesteps 8505000/40000000, FPS 693.
+
+value loss of agent: 3.317058237393697
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8781000000000001
+training_cover_rate:  0.8688
+training_cover_rate:  0.8775
+child_drop:  106
+add_hard_num:  1
+parent:  34
+last_node_parent:  34
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6295
+
+ Scenario simple_spread Algo solved_sp updates 81/380 episodes, total num timesteps 8610000/40000000, FPS 694.
+
+value loss of agent: 3.1188778082529702
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8725
+training_cover_rate:  0.8661
+training_cover_rate:  0.876
+child_drop:  97
+add_hard_num:  0
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6616000000000001
+
+ Scenario simple_spread Algo solved_sp updates 82/380 episodes, total num timesteps 8715000/40000000, FPS 696.
+
+value loss of agent: 2.8561312754948935
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.865
+training_cover_rate:  0.875
+training_cover_rate:  0.8636000000000001
+child_drop:  98
+add_hard_num:  1
+parent:  26
+last_node_parent:  26
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6466000000000001
+
+ Scenario simple_spread Algo solved_sp updates 83/380 episodes, total num timesteps 8820000/40000000, FPS 697.
+
+value loss of agent: 2.905408239364624
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8876999999999999
+training_cover_rate:  0.8867999999999999
+training_cover_rate:  0.8757999999999999
+child_drop:  112
+add_hard_num:  0
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.657
+
+ Scenario simple_spread Algo solved_sp updates 84/380 episodes, total num timesteps 8925000/40000000, FPS 698.
+
+value loss of agent: 3.147485931714376
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8750999999999999
+training_cover_rate:  0.8767
+training_cover_rate:  0.8755999999999999
+child_drop:  118
+add_hard_num:  0
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6452
+
+ Scenario simple_spread Algo solved_sp updates 85/380 episodes, total num timesteps 9030000/40000000, FPS 699.
+
+value loss of agent: 2.7690449078877766
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8802
+training_cover_rate:  0.8713
+training_cover_rate:  0.8767999999999999
+child_drop:  112
+add_hard_num:  0
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6255
+
+ Scenario simple_spread Algo solved_sp updates 86/380 episodes, total num timesteps 9135000/40000000, FPS 700.
+
+value loss of agent: 2.9448162078857423
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8717999999999999
+training_cover_rate:  0.8777999999999999
+training_cover_rate:  0.8717
+child_drop:  100
+add_hard_num:  0
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6457999999999999
+
+ Scenario simple_spread Algo solved_sp updates 87/380 episodes, total num timesteps 9240000/40000000, FPS 701.
+
+value loss of agent: 3.1236737171808877
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8757999999999999
+training_cover_rate:  0.8698
+training_cover_rate:  0.8806000000000002
+child_drop:  100
+add_hard_num:  0
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6573
+
+ Scenario simple_spread Algo solved_sp updates 88/380 episodes, total num timesteps 9345000/40000000, FPS 702.
+
+value loss of agent: 3.043865935007731
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8927999999999999
+training_cover_rate:  0.8907999999999999
+training_cover_rate:  0.8931
+child_drop:  140
+add_hard_num:  0
+parent:  34
+last_node_parent:  34
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6664000000000001
+
+ Scenario simple_spread Algo solved_sp updates 89/380 episodes, total num timesteps 9450000/40000000, FPS 702.
+
+value loss of agent: 2.880361382166545
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8882000000000001
+training_cover_rate:  0.8795
+training_cover_rate:  0.8855
+child_drop:  100
+add_hard_num:  1
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6898
+
+ Scenario simple_spread Algo solved_sp updates 90/380 episodes, total num timesteps 9555000/40000000, FPS 702.
+
+value loss of agent: 2.788208770751953
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8974
+training_cover_rate:  0.8932
+training_cover_rate:  0.9011
+child_drop:  142
+add_hard_num:  0
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6813
+
+ Scenario simple_spread Algo solved_sp updates 91/380 episodes, total num timesteps 9660000/40000000, FPS 703.
+
+value loss of agent: 2.8079517046610514
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9045
+training_cover_rate:  0.8954000000000001
+training_cover_rate:  0.8979
+child_drop:  145
+add_hard_num:  0
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6703000000000001
+
+ Scenario simple_spread Algo solved_sp updates 92/380 episodes, total num timesteps 9765000/40000000, FPS 703.
+
+value loss of agent: 2.8348448038101197
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8785
+training_cover_rate:  0.8897999999999999
+training_cover_rate:  0.8884
+child_drop:  109
+add_hard_num:  0
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6901
+
+ Scenario simple_spread Algo solved_sp updates 93/380 episodes, total num timesteps 9870000/40000000, FPS 704.
+
+value loss of agent: 2.734902254740397
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.878
+training_cover_rate:  0.8697
+training_cover_rate:  0.8781
+child_drop:  89
+add_hard_num:  0
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6742
+
+ Scenario simple_spread Algo solved_sp updates 94/380 episodes, total num timesteps 9975000/40000000, FPS 705.
+
+value loss of agent: 2.9059525887171427
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8865
+training_cover_rate:  0.8845
+training_cover_rate:  0.892
+child_drop:  117
+add_hard_num:  0
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6871
+
+ Scenario simple_spread Algo solved_sp updates 95/380 episodes, total num timesteps 10080000/40000000, FPS 706.
+
+value loss of agent: 2.7008443037668863
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8997999999999999
+training_cover_rate:  0.8994000000000001
+training_cover_rate:  0.9009000000000001
+child_drop:  151
+add_hard_num:  0
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6932
+
+ Scenario simple_spread Algo solved_sp updates 96/380 episodes, total num timesteps 10185000/40000000, FPS 707.
+
+value loss of agent: 2.723185110092163
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8721
+training_cover_rate:  0.8816999999999999
+training_cover_rate:  0.8869000000000001
+child_drop:  108
+add_hard_num:  0
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.694
+
+ Scenario simple_spread Algo solved_sp updates 97/380 episodes, total num timesteps 10290000/40000000, FPS 707.
+
+value loss of agent: 2.4013285398483277
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8947
+training_cover_rate:  0.8932
+training_cover_rate:  0.8898
+child_drop:  124
+add_hard_num:  0
+parent:  44
+last_node_parent:  44
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6782
+
+ Scenario simple_spread Algo solved_sp updates 98/380 episodes, total num timesteps 10395000/40000000, FPS 708.
+
+value loss of agent: 2.645458459854126
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8839
+training_cover_rate:  0.8863999999999999
+training_cover_rate:  0.8861
+child_drop:  121
+add_hard_num:  0
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6975
+
+ Scenario simple_spread Algo solved_sp updates 99/380 episodes, total num timesteps 10500000/40000000, FPS 708.
+
+value loss of agent: 2.5543779055277507
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8969000000000001
+training_cover_rate:  0.9004
+training_cover_rate:  0.8977
+child_drop:  136
+add_hard_num:  0
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.707
+
+ Scenario simple_spread Algo solved_sp updates 100/380 episodes, total num timesteps 10605000/40000000, FPS 708.
+
+value loss of agent: 2.6463399648666384
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8897
+training_cover_rate:  0.8916000000000001
+training_cover_rate:  0.8933
+child_drop:  139
+add_hard_num:  0
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6988
+
+ Scenario simple_spread Algo solved_sp updates 101/380 episodes, total num timesteps 10710000/40000000, FPS 709.
+
+value loss of agent: 2.4779845237731934
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8971
+training_cover_rate:  0.89
+training_cover_rate:  0.9013000000000001
+child_drop:  142
+add_hard_num:  2
+parent:  43
+last_node_parent:  43
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.6955999999999999
+
+ Scenario simple_spread Algo solved_sp updates 102/380 episodes, total num timesteps 10815000/40000000, FPS 709.
+
+value loss of agent: 2.6526252190272013
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9003000000000001
+training_cover_rate:  0.9033
+training_cover_rate:  0.9064
+child_drop:  145
+add_hard_num:  0
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7209
+
+ Scenario simple_spread Algo solved_sp updates 103/380 episodes, total num timesteps 10920000/40000000, FPS 710.
+
+value loss of agent: 2.4268255949020388
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8886
+training_cover_rate:  0.8989
+training_cover_rate:  0.889
+child_drop:  130
+add_hard_num:  1
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7034
+
+ Scenario simple_spread Algo solved_sp updates 104/380 episodes, total num timesteps 11025000/40000000, FPS 712.
+
+value loss of agent: 2.488655360539754
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9008999999999999
+training_cover_rate:  0.9
+training_cover_rate:  0.8986
+child_drop:  155
+add_hard_num:  2
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7239000000000001
+
+ Scenario simple_spread Algo solved_sp updates 105/380 episodes, total num timesteps 11130000/40000000, FPS 713.
+
+value loss of agent: 2.3445416053136188
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8984
+training_cover_rate:  0.8994
+training_cover_rate:  0.9108999999999999
+child_drop:  140
+add_hard_num:  1
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7228000000000001
+
+ Scenario simple_spread Algo solved_sp updates 106/380 episodes, total num timesteps 11235000/40000000, FPS 713.
+
+value loss of agent: 2.2516712745030723
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.899
+training_cover_rate:  0.9078999999999999
+training_cover_rate:  0.9097
+child_drop:  149
+add_hard_num:  0
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7276
+
+ Scenario simple_spread Algo solved_sp updates 107/380 episodes, total num timesteps 11340000/40000000, FPS 713.
+
+value loss of agent: 2.2787481625874837
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.903
+training_cover_rate:  0.8961
+training_cover_rate:  0.9006000000000001
+child_drop:  155
+add_hard_num:  0
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7437999999999999
+
+ Scenario simple_spread Algo solved_sp updates 108/380 episodes, total num timesteps 11445000/40000000, FPS 714.
+
+value loss of agent: 2.3561559756596884
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8939
+training_cover_rate:  0.9024000000000001
+training_cover_rate:  0.9061
+child_drop:  150
+add_hard_num:  2
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7524000000000001
+
+ Scenario simple_spread Algo solved_sp updates 109/380 episodes, total num timesteps 11550000/40000000, FPS 715.
+
+value loss of agent: 2.5408458073933917
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9043000000000001
+training_cover_rate:  0.9083000000000001
+training_cover_rate:  0.9046000000000001
+child_drop:  166
+add_hard_num:  0
+parent:  50
+last_node_parent:  50
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7395
+
+ Scenario simple_spread Algo solved_sp updates 110/380 episodes, total num timesteps 11655000/40000000, FPS 716.
+
+value loss of agent: 2.4302849849065145
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.893
+training_cover_rate:  0.8945
+training_cover_rate:  0.8953
+child_drop:  129
+add_hard_num:  0
+parent:  45
+last_node_parent:  45
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7435999999999999
+
+ Scenario simple_spread Algo solved_sp updates 111/380 episodes, total num timesteps 11760000/40000000, FPS 717.
+
+value loss of agent: 2.5238755385080975
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9007000000000001
+training_cover_rate:  0.9015
+training_cover_rate:  0.9054
+child_drop:  161
+add_hard_num:  1
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7393
+
+ Scenario simple_spread Algo solved_sp updates 112/380 episodes, total num timesteps 11865000/40000000, FPS 717.
+
+value loss of agent: 2.7215973218282064
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9135
+training_cover_rate:  0.914
+training_cover_rate:  0.9156
+child_drop:  156
+add_hard_num:  0
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7505000000000002
+
+ Scenario simple_spread Algo solved_sp updates 113/380 episodes, total num timesteps 11970000/40000000, FPS 718.
+
+value loss of agent: 2.636843037605286
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9016000000000001
+training_cover_rate:  0.9023
+training_cover_rate:  0.9074000000000001
+child_drop:  143
+add_hard_num:  0
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7302000000000001
+
+ Scenario simple_spread Algo solved_sp updates 114/380 episodes, total num timesteps 12075000/40000000, FPS 719.
+
+value loss of agent: 2.4655803283055624
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9050999999999999
+training_cover_rate:  0.9112
+training_cover_rate:  0.9110999999999999
+child_drop:  164
+add_hard_num:  0
+parent:  41
+last_node_parent:  41
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7667999999999999
+
+ Scenario simple_spread Algo solved_sp updates 115/380 episodes, total num timesteps 12180000/40000000, FPS 719.
+
+value loss of agent: 2.473043378194173
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9076000000000001
+training_cover_rate:  0.9048
+training_cover_rate:  0.9175
+child_drop:  149
+add_hard_num:  0
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7483000000000001
+
+ Scenario simple_spread Algo solved_sp updates 116/380 episodes, total num timesteps 12285000/40000000, FPS 720.
+
+value loss of agent: 2.336302940050761
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9130999999999999
+training_cover_rate:  0.9061
+training_cover_rate:  0.9175999999999999
+child_drop:  167
+add_hard_num:  0
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7537999999999999
+
+ Scenario simple_spread Algo solved_sp updates 117/380 episodes, total num timesteps 12390000/40000000, FPS 720.
+
+value loss of agent: 2.370339274406433
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.8976
+training_cover_rate:  0.9077999999999999
+training_cover_rate:  0.9113
+child_drop:  153
+add_hard_num:  0
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7777000000000001
+
+ Scenario simple_spread Algo solved_sp updates 118/380 episodes, total num timesteps 12495000/40000000, FPS 720.
+
+value loss of agent: 2.412389707565308
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9114000000000001
+training_cover_rate:  0.9113
+training_cover_rate:  0.9114
+child_drop:  166
+add_hard_num:  0
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7607
+
+ Scenario simple_spread Algo solved_sp updates 119/380 episodes, total num timesteps 12600000/40000000, FPS 721.
+
+value loss of agent: 2.5358252922693887
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9045
+training_cover_rate:  0.9103
+training_cover_rate:  0.9081999999999999
+child_drop:  167
+add_hard_num:  0
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7737999999999999
+
+ Scenario simple_spread Algo solved_sp updates 120/380 episodes, total num timesteps 12705000/40000000, FPS 722.
+
+value loss of agent: 2.638902115821838
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9178
+training_cover_rate:  0.9181
+training_cover_rate:  0.916
+child_drop:  170
+add_hard_num:  0
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7850999999999999
+
+ Scenario simple_spread Algo solved_sp updates 121/380 episodes, total num timesteps 12810000/40000000, FPS 722.
+
+value loss of agent: 2.563238596916199
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9094
+training_cover_rate:  0.9105999999999999
+training_cover_rate:  0.9145999999999999
+child_drop:  165
+add_hard_num:  0
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7658
+
+ Scenario simple_spread Algo solved_sp updates 122/380 episodes, total num timesteps 12915000/40000000, FPS 723.
+
+value loss of agent: 2.31613929271698
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.907
+training_cover_rate:  0.9081
+training_cover_rate:  0.9030999999999999
+child_drop:  147
+add_hard_num:  1
+parent:  44
+last_node_parent:  44
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7883
+
+ Scenario simple_spread Algo solved_sp updates 123/380 episodes, total num timesteps 13020000/40000000, FPS 724.
+
+value loss of agent: 2.4748154481252036
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9101
+training_cover_rate:  0.9172
+training_cover_rate:  0.9215999999999999
+child_drop:  169
+add_hard_num:  0
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7854000000000001
+
+ Scenario simple_spread Algo solved_sp updates 124/380 episodes, total num timesteps 13125000/40000000, FPS 724.
+
+value loss of agent: 2.411383279164632
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9066
+training_cover_rate:  0.9154000000000001
+training_cover_rate:  0.9067000000000001
+child_drop:  170
+add_hard_num:  0
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7938
+
+ Scenario simple_spread Algo solved_sp updates 125/380 episodes, total num timesteps 13230000/40000000, FPS 724.
+
+value loss of agent: 2.525367259979248
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9036
+training_cover_rate:  0.903
+training_cover_rate:  0.9132
+child_drop:  167
+add_hard_num:  0
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7816
+
+ Scenario simple_spread Algo solved_sp updates 126/380 episodes, total num timesteps 13335000/40000000, FPS 725.
+
+value loss of agent: 2.5124148607254027
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9160999999999999
+training_cover_rate:  0.9174
+training_cover_rate:  0.9147000000000001
+child_drop:  178
+add_hard_num:  0
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7774
+
+ Scenario simple_spread Algo solved_sp updates 127/380 episodes, total num timesteps 13440000/40000000, FPS 726.
+
+value loss of agent: 2.4875439087549847
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.918
+training_cover_rate:  0.9192
+training_cover_rate:  0.9161
+child_drop:  178
+add_hard_num:  0
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7868999999999998
+
+ Scenario simple_spread Algo solved_sp updates 128/380 episodes, total num timesteps 13545000/40000000, FPS 727.
+
+value loss of agent: 2.233283694585164
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.914
+training_cover_rate:  0.9206
+training_cover_rate:  0.9287000000000001
+child_drop:  190
+add_hard_num:  0
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7925999999999999
+
+ Scenario simple_spread Algo solved_sp updates 129/380 episodes, total num timesteps 13650000/40000000, FPS 727.
+
+value loss of agent: 2.2361769596735637
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9152
+training_cover_rate:  0.9198
+training_cover_rate:  0.9241
+child_drop:  183
+add_hard_num:  0
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7922
+
+ Scenario simple_spread Algo solved_sp updates 130/380 episodes, total num timesteps 13755000/40000000, FPS 728.
+
+value loss of agent: 2.508319441477458
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9007999999999999
+training_cover_rate:  0.9066
+training_cover_rate:  0.9063
+child_drop:  164
+add_hard_num:  0
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8172999999999999
+
+ Scenario simple_spread Algo solved_sp updates 131/380 episodes, total num timesteps 13860000/40000000, FPS 728.
+
+value loss of agent: 2.5508912801742554
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9162
+training_cover_rate:  0.9143
+training_cover_rate:  0.9204000000000001
+child_drop:  169
+add_hard_num:  1
+parent:  56
+last_node_parent:  56
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.7967
+
+ Scenario simple_spread Algo solved_sp updates 132/380 episodes, total num timesteps 13965000/40000000, FPS 728.
+
+value loss of agent: 2.4670654296875
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9219
+training_cover_rate:  0.9264000000000001
+training_cover_rate:  0.9232
+child_drop:  178
+add_hard_num:  0
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8128
+
+ Scenario simple_spread Algo solved_sp updates 133/380 episodes, total num timesteps 14070000/40000000, FPS 729.
+
+value loss of agent: 2.2506545623143515
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9148999999999999
+training_cover_rate:  0.9103
+training_cover_rate:  0.9222
+child_drop:  167
+add_hard_num:  0
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8165
+
+ Scenario simple_spread Algo solved_sp updates 134/380 episodes, total num timesteps 14175000/40000000, FPS 729.
+
+value loss of agent: 2.374018931388855
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.908
+training_cover_rate:  0.9124
+training_cover_rate:  0.9108
+child_drop:  170
+add_hard_num:  0
+parent:  44
+last_node_parent:  44
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8115
+
+ Scenario simple_spread Algo solved_sp updates 135/380 episodes, total num timesteps 14280000/40000000, FPS 730.
+
+value loss of agent: 2.3970213572184247
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9123
+training_cover_rate:  0.9153
+training_cover_rate:  0.9223000000000001
+child_drop:  163
+add_hard_num:  0
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8203
+
+ Scenario simple_spread Algo solved_sp updates 136/380 episodes, total num timesteps 14385000/40000000, FPS 730.
+
+value loss of agent: 2.3498984972635903
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.92
+training_cover_rate:  0.9158
+training_cover_rate:  0.9197000000000001
+child_drop:  186
+add_hard_num:  0
+parent:  44
+last_node_parent:  44
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8247000000000001
+
+ Scenario simple_spread Algo solved_sp updates 137/380 episodes, total num timesteps 14490000/40000000, FPS 731.
+
+value loss of agent: 2.5424605051676434
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9260999999999999
+training_cover_rate:  0.9248999999999999
+training_cover_rate:  0.9215999999999999
+child_drop:  190
+add_hard_num:  0
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8252
+
+ Scenario simple_spread Algo solved_sp updates 138/380 episodes, total num timesteps 14595000/40000000, FPS 731.
+
+value loss of agent: 2.562519399325053
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9222
+training_cover_rate:  0.9199
+training_cover_rate:  0.925
+child_drop:  184
+add_hard_num:  0
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8034000000000001
+
+ Scenario simple_spread Algo solved_sp updates 139/380 episodes, total num timesteps 14700000/40000000, FPS 732.
+
+value loss of agent: 2.3974026918411253
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9197
+training_cover_rate:  0.9209
+training_cover_rate:  0.9281999999999999
+child_drop:  177
+add_hard_num:  0
+parent:  45
+last_node_parent:  45
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8204000000000001
+
+ Scenario simple_spread Algo solved_sp updates 140/380 episodes, total num timesteps 14805000/40000000, FPS 732.
+
+value loss of agent: 2.622868839899699
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9168999999999998
+training_cover_rate:  0.9216
+training_cover_rate:  0.9169
+child_drop:  166
+add_hard_num:  1
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8292
+
+ Scenario simple_spread Algo solved_sp updates 141/380 episodes, total num timesteps 14910000/40000000, FPS 732.
+
+value loss of agent: 2.323334534962972
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9207000000000001
+training_cover_rate:  0.9220999999999999
+training_cover_rate:  0.9233
+child_drop:  191
+add_hard_num:  0
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8165
+
+ Scenario simple_spread Algo solved_sp updates 142/380 episodes, total num timesteps 15015000/40000000, FPS 732.
+
+value loss of agent: 2.404067309697469
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9217000000000001
+training_cover_rate:  0.9208000000000001
+training_cover_rate:  0.9318
+child_drop:  199
+add_hard_num:  1
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8228
+
+ Scenario simple_spread Algo solved_sp updates 143/380 episodes, total num timesteps 15120000/40000000, FPS 732.
+
+value loss of agent: 2.2668853759765626
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9208000000000001
+training_cover_rate:  0.9197000000000001
+training_cover_rate:  0.9224000000000001
+child_drop:  178
+add_hard_num:  0
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8268
+
+ Scenario simple_spread Algo solved_sp updates 144/380 episodes, total num timesteps 15225000/40000000, FPS 732.
+
+value loss of agent: 2.3273632923762
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9269
+training_cover_rate:  0.9237000000000001
+training_cover_rate:  0.9151
+child_drop:  186
+add_hard_num:  0
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8308
+
+ Scenario simple_spread Algo solved_sp updates 145/380 episodes, total num timesteps 15330000/40000000, FPS 733.
+
+value loss of agent: 2.441918436686198
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9122
+training_cover_rate:  0.9149
+training_cover_rate:  0.9235
+child_drop:  173
+add_hard_num:  0
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8246999999999999
+
+ Scenario simple_spread Algo solved_sp updates 146/380 episodes, total num timesteps 15435000/40000000, FPS 733.
+
+value loss of agent: 2.4155269622802735
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9262999999999999
+training_cover_rate:  0.9297000000000001
+training_cover_rate:  0.9388999999999998
+child_drop:  214
+add_hard_num:  0
+parent:  50
+last_node_parent:  50
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8409
+
+ Scenario simple_spread Algo solved_sp updates 147/380 episodes, total num timesteps 15540000/40000000, FPS 733.
+
+value loss of agent: 2.3674930334091187
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9222
+training_cover_rate:  0.9301
+training_cover_rate:  0.924
+child_drop:  192
+add_hard_num:  0
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8376
+
+ Scenario simple_spread Algo solved_sp updates 148/380 episodes, total num timesteps 15645000/40000000, FPS 734.
+
+value loss of agent: 2.421004637082418
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9271
+training_cover_rate:  0.9165999999999999
+training_cover_rate:  0.9248
+child_drop:  201
+add_hard_num:  0
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8438
+
+ Scenario simple_spread Algo solved_sp updates 149/380 episodes, total num timesteps 15750000/40000000, FPS 734.
+
+value loss of agent: 2.348214864730835
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9228
+training_cover_rate:  0.917
+training_cover_rate:  0.9158999999999999
+child_drop:  176
+add_hard_num:  0
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8489000000000001
+
+ Scenario simple_spread Algo solved_sp updates 150/380 episodes, total num timesteps 15855000/40000000, FPS 735.
+
+value loss of agent: 2.543984039624532
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9278
+training_cover_rate:  0.9278
+training_cover_rate:  0.9305999999999999
+child_drop:  206
+add_hard_num:  0
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8358
+
+ Scenario simple_spread Algo solved_sp updates 151/380 episodes, total num timesteps 15960000/40000000, FPS 735.
+
+value loss of agent: 2.4478374481201173
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9248
+training_cover_rate:  0.9234
+training_cover_rate:  0.9231
+child_drop:  191
+add_hard_num:  0
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8488
+
+ Scenario simple_spread Algo solved_sp updates 152/380 episodes, total num timesteps 16065000/40000000, FPS 736.
+
+value loss of agent: 2.4530948797861734
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9251999999999999
+training_cover_rate:  0.9298
+training_cover_rate:  0.934
+child_drop:  198
+add_hard_num:  0
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8366
+
+ Scenario simple_spread Algo solved_sp updates 153/380 episodes, total num timesteps 16170000/40000000, FPS 736.
+
+value loss of agent: 2.1063374439875284
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9205
+training_cover_rate:  0.9187000000000001
+training_cover_rate:  0.924
+child_drop:  170
+add_hard_num:  0
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.847
+
+ Scenario simple_spread Algo solved_sp updates 154/380 episodes, total num timesteps 16275000/40000000, FPS 736.
+
+value loss of agent: 2.189056984583537
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9237000000000001
+training_cover_rate:  0.9216
+training_cover_rate:  0.9307000000000001
+child_drop:  181
+add_hard_num:  0
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8507
+
+ Scenario simple_spread Algo solved_sp updates 155/380 episodes, total num timesteps 16380000/40000000, FPS 736.
+
+value loss of agent: 2.1552034775416056
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9254000000000001
+training_cover_rate:  0.9295999999999999
+training_cover_rate:  0.934
+child_drop:  208
+add_hard_num:  0
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8392999999999999
+
+ Scenario simple_spread Algo solved_sp updates 156/380 episodes, total num timesteps 16485000/40000000, FPS 736.
+
+value loss of agent: 2.2018086512883506
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9325
+training_cover_rate:  0.9344
+training_cover_rate:  0.9315
+child_drop:  214
+add_hard_num:  0
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8409
+
+ Scenario simple_spread Algo solved_sp updates 157/380 episodes, total num timesteps 16590000/40000000, FPS 736.
+
+value loss of agent: 2.3199872175852456
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9185
+training_cover_rate:  0.9235
+training_cover_rate:  0.9196
+child_drop:  183
+add_hard_num:  0
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.835
+
+ Scenario simple_spread Algo solved_sp updates 158/380 episodes, total num timesteps 16695000/40000000, FPS 737.
+
+value loss of agent: 2.1487935702006022
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.919
+training_cover_rate:  0.9111999999999999
+training_cover_rate:  0.9160999999999999
+child_drop:  181
+add_hard_num:  0
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8443999999999999
+
+ Scenario simple_spread Algo solved_sp updates 159/380 episodes, total num timesteps 16800000/40000000, FPS 737.
+
+value loss of agent: 2.3004937966664634
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9262999999999999
+training_cover_rate:  0.929
+training_cover_rate:  0.9242999999999999
+child_drop:  201
+add_hard_num:  0
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8507
+
+ Scenario simple_spread Algo solved_sp updates 160/380 episodes, total num timesteps 16905000/40000000, FPS 738.
+
+value loss of agent: 2.2864182869593304
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9214
+training_cover_rate:  0.9145
+training_cover_rate:  0.9259
+child_drop:  191
+add_hard_num:  0
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8421
+
+ Scenario simple_spread Algo solved_sp updates 161/380 episodes, total num timesteps 17010000/40000000, FPS 737.
+
+value loss of agent: 2.3164764881134032
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9310999999999999
+training_cover_rate:  0.9138
+training_cover_rate:  0.9327
+child_drop:  202
+add_hard_num:  0
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8497
+
+ Scenario simple_spread Algo solved_sp updates 162/380 episodes, total num timesteps 17115000/40000000, FPS 737.
+
+value loss of agent: 2.188718255360921
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9314
+training_cover_rate:  0.9296
+training_cover_rate:  0.9265
+child_drop:  210
+add_hard_num:  0
+parent:  56
+last_node_parent:  56
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8485999999999999
+
+ Scenario simple_spread Algo solved_sp updates 163/380 episodes, total num timesteps 17220000/40000000, FPS 736.
+
+value loss of agent: 2.2582948128382365
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9237000000000001
+training_cover_rate:  0.9193
+training_cover_rate:  0.9132
+child_drop:  187
+add_hard_num:  2
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8518999999999999
+
+ Scenario simple_spread Algo solved_sp updates 164/380 episodes, total num timesteps 17325000/40000000, FPS 737.
+
+value loss of agent: 2.368476899464925
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9274
+training_cover_rate:  0.9195
+training_cover_rate:  0.9294000000000001
+child_drop:  194
+add_hard_num:  0
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8372
+
+ Scenario simple_spread Algo solved_sp updates 165/380 episodes, total num timesteps 17430000/40000000, FPS 737.
+
+value loss of agent: 2.270737393697103
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9222
+training_cover_rate:  0.9255999999999999
+training_cover_rate:  0.9233
+child_drop:  193
+add_hard_num:  0
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8344000000000001
+
+ Scenario simple_spread Algo solved_sp updates 166/380 episodes, total num timesteps 17535000/40000000, FPS 737.
+
+value loss of agent: 2.1954529444376627
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9213
+training_cover_rate:  0.9274
+training_cover_rate:  0.9255
+child_drop:  195
+add_hard_num:  0
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8555
+
+ Scenario simple_spread Algo solved_sp updates 167/380 episodes, total num timesteps 17640000/40000000, FPS 737.
+
+value loss of agent: 2.3428733666737873
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9296
+training_cover_rate:  0.9205
+training_cover_rate:  0.925
+child_drop:  193
+add_hard_num:  2
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8546
+
+ Scenario simple_spread Algo solved_sp updates 168/380 episodes, total num timesteps 17745000/40000000, FPS 737.
+
+value loss of agent: 2.18559950987498
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9259
+training_cover_rate:  0.926
+training_cover_rate:  0.9225999999999999
+child_drop:  198
+add_hard_num:  0
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8438
+
+ Scenario simple_spread Algo solved_sp updates 169/380 episodes, total num timesteps 17850000/40000000, FPS 737.
+
+value loss of agent: 2.208591691652934
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9225
+training_cover_rate:  0.9289
+training_cover_rate:  0.9286
+child_drop:  200
+add_hard_num:  0
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8683
+
+ Scenario simple_spread Algo solved_sp updates 170/380 episodes, total num timesteps 17955000/40000000, FPS 737.
+
+value loss of agent: 2.232709209124247
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9349000000000001
+training_cover_rate:  0.9274000000000001
+training_cover_rate:  0.9328
+child_drop:  206
+add_hard_num:  0
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8664
+
+ Scenario simple_spread Algo solved_sp updates 171/380 episodes, total num timesteps 18060000/40000000, FPS 737.
+
+value loss of agent: 2.152248422304789
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9365
+training_cover_rate:  0.9254000000000001
+training_cover_rate:  0.9314
+child_drop:  196
+add_hard_num:  0
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8707999999999999
+
+ Scenario simple_spread Algo solved_sp updates 172/380 episodes, total num timesteps 18165000/40000000, FPS 737.
+
+value loss of agent: 2.234258460998535
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9299
+training_cover_rate:  0.9351
+training_cover_rate:  0.9352999999999999
+child_drop:  214
+add_hard_num:  0
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8667999999999999
+
+ Scenario simple_spread Algo solved_sp updates 173/380 episodes, total num timesteps 18270000/40000000, FPS 737.
+
+value loss of agent: 2.218004250526428
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9322
+training_cover_rate:  0.9309
+training_cover_rate:  0.9366
+child_drop:  206
+add_hard_num:  0
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8609000000000001
+
+ Scenario simple_spread Algo solved_sp updates 174/380 episodes, total num timesteps 18375000/40000000, FPS 737.
+
+value loss of agent: 2.070037563641866
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9344000000000001
+training_cover_rate:  0.9326
+training_cover_rate:  0.9342
+child_drop:  217
+add_hard_num:  0
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8655
+
+ Scenario simple_spread Algo solved_sp updates 175/380 episodes, total num timesteps 18480000/40000000, FPS 738.
+
+value loss of agent: 2.117480444908142
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9305999999999999
+training_cover_rate:  0.9358
+training_cover_rate:  0.936
+child_drop:  217
+add_hard_num:  0
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8663
+
+ Scenario simple_spread Algo solved_sp updates 176/380 episodes, total num timesteps 18585000/40000000, FPS 738.
+
+value loss of agent: 2.1065749486287433
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9421
+training_cover_rate:  0.9472999999999999
+training_cover_rate:  0.9364
+child_drop:  237
+add_hard_num:  0
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8673
+
+ Scenario simple_spread Algo solved_sp updates 177/380 episodes, total num timesteps 18690000/40000000, FPS 738.
+
+value loss of agent: 2.549620834986369
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9344
+training_cover_rate:  0.9375
+training_cover_rate:  0.9408
+child_drop:  217
+add_hard_num:  0
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8939000000000001
+
+ Scenario simple_spread Algo solved_sp updates 178/380 episodes, total num timesteps 18795000/40000000, FPS 738.
+
+value loss of agent: 2.6060392538706463
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.933
+training_cover_rate:  0.9355
+training_cover_rate:  0.9334000000000001
+child_drop:  224
+add_hard_num:  1
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8811
+
+ Scenario simple_spread Algo solved_sp updates 179/380 episodes, total num timesteps 18900000/40000000, FPS 739.
+
+value loss of agent: 2.476042056083679
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9372
+training_cover_rate:  0.9374000000000001
+training_cover_rate:  0.9412999999999999
+child_drop:  223
+add_hard_num:  0
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8886000000000001
+
+ Scenario simple_spread Algo solved_sp updates 180/380 episodes, total num timesteps 19005000/40000000, FPS 739.
+
+value loss of agent: 2.2678247610727946
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9286
+training_cover_rate:  0.9312
+training_cover_rate:  0.9449
+child_drop:  209
+add_hard_num:  0
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8856
+
+ Scenario simple_spread Algo solved_sp updates 181/380 episodes, total num timesteps 19110000/40000000, FPS 738.
+
+value loss of agent: 2.184102702140808
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9397000000000001
+training_cover_rate:  0.9476
+training_cover_rate:  0.9311
+child_drop:  217
+add_hard_num:  0
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8854
+
+ Scenario simple_spread Algo solved_sp updates 182/380 episodes, total num timesteps 19215000/40000000, FPS 739.
+
+value loss of agent: 2.2198116461435955
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9242999999999999
+training_cover_rate:  0.9158999999999999
+training_cover_rate:  0.9307000000000001
+child_drop:  193
+add_hard_num:  0
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8811
+
+ Scenario simple_spread Algo solved_sp updates 183/380 episodes, total num timesteps 19320000/40000000, FPS 739.
+
+value loss of agent: 2.2799818674723307
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9398
+training_cover_rate:  0.9352999999999999
+training_cover_rate:  0.9302
+child_drop:  220
+add_hard_num:  1
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8633
+
+ Scenario simple_spread Algo solved_sp updates 184/380 episodes, total num timesteps 19425000/40000000, FPS 740.
+
+value loss of agent: 2.2131451606750487
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9368
+training_cover_rate:  0.9382999999999999
+training_cover_rate:  0.9338999999999998
+child_drop:  205
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8886
+
+ Scenario simple_spread Algo solved_sp updates 185/380 episodes, total num timesteps 19530000/40000000, FPS 740.
+
+value loss of agent: 2.2774228413899738
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9311
+training_cover_rate:  0.9389
+training_cover_rate:  0.9301
+child_drop:  223
+add_hard_num:  0
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8842
+
+ Scenario simple_spread Algo solved_sp updates 186/380 episodes, total num timesteps 19635000/40000000, FPS 740.
+
+value loss of agent: 2.2315097490946454
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9400999999999999
+training_cover_rate:  0.9452
+training_cover_rate:  0.9425
+child_drop:  238
+add_hard_num:  0
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.8920999999999999
+
+ Scenario simple_spread Algo solved_sp updates 187/380 episodes, total num timesteps 19740000/40000000, FPS 740.
+
+value loss of agent: 1.997579562664032
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9489
+training_cover_rate:  0.9411
+training_cover_rate:  0.9408
+child_drop:  240
+add_hard_num:  0
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9007999999999999
+
+ Scenario simple_spread Algo solved_sp updates 188/380 episodes, total num timesteps 19845000/40000000, FPS 740.
+
+value loss of agent: 2.003768249352773
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.931
+training_cover_rate:  0.9337000000000001
+training_cover_rate:  0.9389000000000001
+child_drop:  212
+add_hard_num:  0
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9004000000000001
+
+ Scenario simple_spread Algo solved_sp updates 189/380 episodes, total num timesteps 19950000/40000000, FPS 741.
+
+value loss of agent: 1.9435540874799093
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9515
+training_cover_rate:  0.9521000000000001
+training_cover_rate:  0.9497000000000001
+child_drop:  243
+add_hard_num:  0
+parent:  83
+last_node_parent:  83
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9133
+
+ Scenario simple_spread Algo solved_sp updates 190/380 episodes, total num timesteps 20055000/40000000, FPS 741.
+
+value loss of agent: 2.0017799297968546
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9395999999999999
+training_cover_rate:  0.9415999999999999
+training_cover_rate:  0.9395
+child_drop:  239
+add_hard_num:  0
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9055
+
+ Scenario simple_spread Algo solved_sp updates 191/380 episodes, total num timesteps 20160000/40000000, FPS 741.
+
+value loss of agent: 2.21073792775472
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9529
+training_cover_rate:  0.9447000000000001
+training_cover_rate:  0.9472
+child_drop:  246
+add_hard_num:  0
+parent:  83
+last_node_parent:  83
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9036000000000001
+
+ Scenario simple_spread Algo solved_sp updates 192/380 episodes, total num timesteps 20265000/40000000, FPS 742.
+
+value loss of agent: 2.028692909081777
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9458
+training_cover_rate:  0.9501
+training_cover_rate:  0.9434
+child_drop:  235
+add_hard_num:  0
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9130999999999999
+
+ Scenario simple_spread Algo solved_sp updates 193/380 episodes, total num timesteps 20370000/40000000, FPS 742.
+
+value loss of agent: 2.0295466979344687
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9382
+training_cover_rate:  0.9418
+training_cover_rate:  0.9477000000000001
+child_drop:  234
+add_hard_num:  0
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9202
+
+ Scenario simple_spread Algo solved_sp updates 194/380 episodes, total num timesteps 20475000/40000000, FPS 743.
+
+value loss of agent: 1.9124681909879049
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9440999999999999
+training_cover_rate:  0.9459
+training_cover_rate:  0.945
+child_drop:  241
+add_hard_num:  0
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9186
+
+ Scenario simple_spread Algo solved_sp updates 195/380 episodes, total num timesteps 20580000/40000000, FPS 743.
+
+value loss of agent: 2.0663479725519815
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9452
+training_cover_rate:  0.9420999999999999
+training_cover_rate:  0.9384
+child_drop:  240
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9047999999999999
+
+ Scenario simple_spread Algo solved_sp updates 196/380 episodes, total num timesteps 20685000/40000000, FPS 743.
+
+value loss of agent: 2.172599736849467
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9366
+training_cover_rate:  0.9421999999999999
+training_cover_rate:  0.9499000000000001
+child_drop:  247
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9242999999999999
+
+ Scenario simple_spread Algo solved_sp updates 197/380 episodes, total num timesteps 20790000/40000000, FPS 743.
+
+value loss of agent: 1.979785712560018
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9472999999999999
+training_cover_rate:  0.9479
+training_cover_rate:  0.9392
+child_drop:  239
+add_hard_num:  0
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9038999999999999
+
+ Scenario simple_spread Algo solved_sp updates 198/380 episodes, total num timesteps 20895000/40000000, FPS 742.
+
+value loss of agent: 2.043506121635437
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9444
+training_cover_rate:  0.9499
+training_cover_rate:  0.9492999999999999
+child_drop:  251
+add_hard_num:  0
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9118999999999999
+
+ Scenario simple_spread Algo solved_sp updates 199/380 episodes, total num timesteps 21000000/40000000, FPS 742.
+
+value loss of agent: 1.9709513028462728
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9335
+training_cover_rate:  0.9388
+training_cover_rate:  0.9455999999999999
+child_drop:  229
+add_hard_num:  0
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9092
+
+ Scenario simple_spread Algo solved_sp updates 200/380 episodes, total num timesteps 21105000/40000000, FPS 742.
+
+value loss of agent: 1.9945181767145792
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9508
+training_cover_rate:  0.947
+training_cover_rate:  0.9475
+child_drop:  248
+add_hard_num:  0
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9268
+
+ Scenario simple_spread Algo solved_sp updates 201/380 episodes, total num timesteps 21210000/40000000, FPS 743.
+
+value loss of agent: 1.8773841261863708
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9483
+training_cover_rate:  0.9475999999999999
+training_cover_rate:  0.9482
+child_drop:  244
+add_hard_num:  0
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.909
+
+ Scenario simple_spread Algo solved_sp updates 202/380 episodes, total num timesteps 21315000/40000000, FPS 743.
+
+value loss of agent: 1.9026015400886536
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9425999999999999
+training_cover_rate:  0.9485
+training_cover_rate:  0.9508
+child_drop:  246
+add_hard_num:  0
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9182
+
+ Scenario simple_spread Algo solved_sp updates 203/380 episodes, total num timesteps 21420000/40000000, FPS 743.
+
+value loss of agent: 1.8212955832481383
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9408
+training_cover_rate:  0.945
+training_cover_rate:  0.9482
+child_drop:  240
+add_hard_num:  1
+parent:  84
+last_node_parent:  84
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9242
+
+ Scenario simple_spread Algo solved_sp updates 204/380 episodes, total num timesteps 21525000/40000000, FPS 743.
+
+value loss of agent: 1.9611626585324606
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9414000000000001
+training_cover_rate:  0.9441999999999999
+training_cover_rate:  0.9488
+child_drop:  249
+add_hard_num:  0
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9342999999999999
+
+ Scenario simple_spread Algo solved_sp updates 205/380 episodes, total num timesteps 21630000/40000000, FPS 743.
+
+value loss of agent: 1.8991251548131307
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9494
+training_cover_rate:  0.9548
+training_cover_rate:  0.957
+child_drop:  242
+add_hard_num:  0
+parent:  86
+last_node_parent:  86
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9226
+
+ Scenario simple_spread Algo solved_sp updates 206/380 episodes, total num timesteps 21735000/40000000, FPS 743.
+
+value loss of agent: 1.8125622669855754
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.944
+training_cover_rate:  0.9488
+training_cover_rate:  0.942
+child_drop:  239
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9358
+
+ Scenario simple_spread Algo solved_sp updates 207/380 episodes, total num timesteps 21840000/40000000, FPS 744.
+
+value loss of agent: 1.8828693826993306
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9425
+training_cover_rate:  0.9347000000000001
+training_cover_rate:  0.9487000000000001
+child_drop:  241
+add_hard_num:  1
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9223
+
+ Scenario simple_spread Algo solved_sp updates 208/380 episodes, total num timesteps 21945000/40000000, FPS 744.
+
+value loss of agent: 1.7209504048029582
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9407000000000001
+training_cover_rate:  0.9452999999999999
+training_cover_rate:  0.9529
+child_drop:  230
+add_hard_num:  1
+parent:  86
+last_node_parent:  86
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9324
+
+ Scenario simple_spread Algo solved_sp updates 209/380 episodes, total num timesteps 22050000/40000000, FPS 744.
+
+value loss of agent: 1.7285746852556865
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9409
+training_cover_rate:  0.9462999999999999
+training_cover_rate:  0.9555999999999999
+child_drop:  245
+add_hard_num:  0
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9425999999999999
+
+ Scenario simple_spread Algo solved_sp updates 210/380 episodes, total num timesteps 22155000/40000000, FPS 744.
+
+value loss of agent: 1.7616436004638671
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.948
+training_cover_rate:  0.9465
+training_cover_rate:  0.9467000000000001
+child_drop:  259
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9257
+
+ Scenario simple_spread Algo solved_sp updates 211/380 episodes, total num timesteps 22260000/40000000, FPS 745.
+
+value loss of agent: 1.996920887629191
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9524
+training_cover_rate:  0.9515
+training_cover_rate:  0.9514
+child_drop:  249
+add_hard_num:  0
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9315
+
+ Scenario simple_spread Algo solved_sp updates 212/380 episodes, total num timesteps 22365000/40000000, FPS 745.
+
+value loss of agent: 1.9069921056429544
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.955
+training_cover_rate:  0.953
+training_cover_rate:  0.9489
+child_drop:  275
+add_hard_num:  0
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9187000000000001
+
+ Scenario simple_spread Algo solved_sp updates 213/380 episodes, total num timesteps 22470000/40000000, FPS 745.
+
+value loss of agent: 1.8434648235638937
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9522999999999999
+training_cover_rate:  0.9502
+training_cover_rate:  0.9475
+child_drop:  259
+add_hard_num:  0
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9378
+
+ Scenario simple_spread Algo solved_sp updates 214/380 episodes, total num timesteps 22575000/40000000, FPS 745.
+
+value loss of agent: 1.8398335178693135
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9501999999999999
+training_cover_rate:  0.9488
+training_cover_rate:  0.9574
+child_drop:  257
+add_hard_num:  0
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9356
+
+ Scenario simple_spread Algo solved_sp updates 215/380 episodes, total num timesteps 22680000/40000000, FPS 746.
+
+value loss of agent: 1.9626402378082275
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9417000000000001
+training_cover_rate:  0.9512999999999999
+training_cover_rate:  0.9331
+child_drop:  237
+add_hard_num:  0
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9362
+
+ Scenario simple_spread Algo solved_sp updates 216/380 episodes, total num timesteps 22785000/40000000, FPS 746.
+
+value loss of agent: 2.1420410235722858
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9534000000000001
+training_cover_rate:  0.9542999999999999
+training_cover_rate:  0.9561000000000001
+child_drop:  271
+add_hard_num:  1
+parent:  85
+last_node_parent:  85
+childlist:  0
+archive:  1993
+test_agent_num:  4
+test_mean_cover_rate:  0.9358999999999998
+
+ Scenario simple_spread Algo solved_sp updates 217/380 episodes, total num timesteps 22890000/40000000, FPS 746.
+
+value loss of agent: 1.774183162053426
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9481000000000002
+training_cover_rate:  0.9539
+training_cover_rate:  0.953
+child_drop:  264
+add_hard_num:  0
+parent:  84
+last_node_parent:  84
+childlist:  0
+archive:  1995
+test_agent_num:  4
+test_mean_cover_rate:  0.9515
+
+ Scenario simple_spread Algo solved_sp updates 218/380 episodes, total num timesteps 22995000/40000000, FPS 747.
+
+value loss of agent: 1.8856510321299236
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9565
+training_cover_rate:  0.953
+training_cover_rate:  0.9581999999999999
+child_drop:  276
+add_hard_num:  0
+parent:  84
+last_node_parent:  84
+childlist:  0
+archive:  1985
+test_agent_num:  4
+test_mean_cover_rate:  0.9489
+
+ Scenario simple_spread Algo solved_sp updates 219/380 episodes, total num timesteps 23100000/40000000, FPS 747.
+
+value loss of agent: 1.745533569653829
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9582999999999999
+training_cover_rate:  0.9504000000000001
+training_cover_rate:  0.9568999999999999
+child_drop:  263
+add_hard_num:  0
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  1993
+test_agent_num:  4
+test_mean_cover_rate:  0.9455999999999999
+
+ Scenario simple_spread Algo solved_sp updates 220/380 episodes, total num timesteps 23205000/40000000, FPS 747.
+
+value loss of agent: 1.7333690841992697
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9492999999999999
+training_cover_rate:  0.953
+training_cover_rate:  0.9525999999999999
+child_drop:  253
+add_hard_num:  0
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9508
+
+ Scenario simple_spread Algo solved_sp updates 221/380 episodes, total num timesteps 23310000/40000000, FPS 747.
+
+value loss of agent: 1.7220775564511617
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9451999999999999
+training_cover_rate:  0.9460999999999999
+training_cover_rate:  0.9555999999999999
+child_drop:  258
+add_hard_num:  0
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9334000000000001
+
+ Scenario simple_spread Algo solved_sp updates 222/380 episodes, total num timesteps 23415000/40000000, FPS 747.
+
+value loss of agent: 1.7386449337005616
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9492
+training_cover_rate:  0.951
+training_cover_rate:  0.9425
+child_drop:  253
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9430999999999999
+
+ Scenario simple_spread Algo solved_sp updates 223/380 episodes, total num timesteps 23520000/40000000, FPS 747.
+
+value loss of agent: 2.054902942975362
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9495
+training_cover_rate:  0.9554
+training_cover_rate:  0.9545
+child_drop:  266
+add_hard_num:  0
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9478
+
+ Scenario simple_spread Algo solved_sp updates 224/380 episodes, total num timesteps 23625000/40000000, FPS 748.
+
+value loss of agent: 1.7975045482317606
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9669
+training_cover_rate:  0.9569
+training_cover_rate:  0.9565
+child_drop:  286
+add_hard_num:  0
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  1983
+test_agent_num:  4
+test_mean_cover_rate:  0.9447000000000001
+
+ Scenario simple_spread Algo solved_sp updates 225/380 episodes, total num timesteps 23730000/40000000, FPS 748.
+
+value loss of agent: 1.5951139052708945
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9588
+training_cover_rate:  0.9516
+training_cover_rate:  0.9567
+child_drop:  271
+add_hard_num:  0
+parent:  85
+last_node_parent:  85
+childlist:  0
+archive:  1977
+test_agent_num:  4
+test_mean_cover_rate:  0.9461
+
+ Scenario simple_spread Algo solved_sp updates 226/380 episodes, total num timesteps 23835000/40000000, FPS 748.
+
+value loss of agent: 1.6964975277582803
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9518999999999999
+training_cover_rate:  0.9535
+training_cover_rate:  0.9515999999999999
+child_drop:  273
+add_hard_num:  1
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  1973
+test_agent_num:  4
+test_mean_cover_rate:  0.9425
+
+ Scenario simple_spread Algo solved_sp updates 227/380 episodes, total num timesteps 23940000/40000000, FPS 748.
+
+value loss of agent: 1.7031863411267598
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9432
+training_cover_rate:  0.9444
+training_cover_rate:  0.9531999999999999
+child_drop:  261
+add_hard_num:  0
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  1994
+test_agent_num:  4
+test_mean_cover_rate:  0.9414000000000001
+
+ Scenario simple_spread Algo solved_sp updates 228/380 episodes, total num timesteps 24045000/40000000, FPS 748.
+
+value loss of agent: 1.819599175453186
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9511999999999999
+training_cover_rate:  0.9594
+training_cover_rate:  0.96
+child_drop:  273
+add_hard_num:  0
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  1993
+test_agent_num:  4
+test_mean_cover_rate:  0.9422999999999999
+
+ Scenario simple_spread Algo solved_sp updates 229/380 episodes, total num timesteps 24150000/40000000, FPS 748.
+
+value loss of agent: 1.7277497847874959
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9490999999999999
+training_cover_rate:  0.9464
+training_cover_rate:  0.9431
+child_drop:  269
+add_hard_num:  1
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  4
+test_mean_cover_rate:  0.9504000000000001
+
+ Scenario simple_spread Algo solved_sp updates 230/380 episodes, total num timesteps 24255000/40000000, FPS 748.
+
+value loss of agent: 1.9481725931167602
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9612999999999999
+training_cover_rate:  0.9584000000000001
+training_cover_rate:  0.9546
+child_drop:  275
+add_hard_num:  0
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  1993
+test_agent_num:  4
+test_mean_cover_rate:  0.9526
+
+ Scenario simple_spread Algo solved_sp updates 231/380 episodes, total num timesteps 24360000/40000000, FPS 749.
+
+value loss of agent: 1.8985314885775249
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9531
+training_cover_rate:  0.9575
+training_cover_rate:  0.9588999999999999
+child_drop:  279
+add_hard_num:  0
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  1982
+test_agent_num:  4
+test_mean_cover_rate:  0.9493
+
+ Scenario simple_spread Algo solved_sp updates 232/380 episodes, total num timesteps 24465000/40000000, FPS 749.
+
+value loss of agent: 1.8004389127095541
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9534
+training_cover_rate:  0.954
+training_cover_rate:  0.9545999999999999
+child_drop:  280
+add_hard_num:  1
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  1986
+test_agent_num:  4
+test_mean_cover_rate:  0.9482999999999999
+
+ Scenario simple_spread Algo solved_sp updates 233/380 episodes, total num timesteps 24570000/40000000, FPS 750.
+
+value loss of agent: 1.8204999923706056
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9567
+training_cover_rate:  0.9522999999999999
+training_cover_rate:  0.9566
+child_drop:  272
+add_hard_num:  0
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  1985
+test_agent_num:  4
+test_mean_cover_rate:  0.9542
+
+ Scenario simple_spread Algo solved_sp updates 234/380 episodes, total num timesteps 24675000/40000000, FPS 749.
+
+value loss of agent: 1.6545109868049621
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9597
+training_cover_rate:  0.9588
+training_cover_rate:  0.9576
+child_drop:  274
+add_hard_num:  0
+parent:  90
+last_node_parent:  90
+childlist:  0
+archive:  1971
+test_agent_num:  4
+test_mean_cover_rate:  0.9522999999999999
+
+ Scenario simple_spread Algo solved_sp updates 235/380 episodes, total num timesteps 24780000/40000000, FPS 750.
+
+value loss of agent: 1.6170101443926492
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9528
+training_cover_rate:  0.9593999999999998
+training_cover_rate:  0.958
+child_drop:  275
+add_hard_num:  0
+parent:  79
+last_node_parent:  79
+childlist:  0
+archive:  1967
+test_agent_num:  4
+test_mean_cover_rate:  0.9624000000000001
+
+ Scenario simple_spread Algo solved_sp updates 236/380 episodes, total num timesteps 24885000/40000000, FPS 750.
+
+value loss of agent: 1.7080551584561665
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.96
+training_cover_rate:  0.9652000000000001
+training_cover_rate:  0.9641
+child_drop:  276
+add_hard_num:  0
+parent:  97
+last_node_parent:  97
+childlist:  0
+archive:  1944
+test_agent_num:  4
+test_mean_cover_rate:  0.9596000000000001
+
+ Scenario simple_spread Algo solved_sp updates 237/380 episodes, total num timesteps 24990000/40000000, FPS 750.
+
+value loss of agent: 1.647843305269877
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9545
+training_cover_rate:  0.9515
+training_cover_rate:  0.9555999999999999
+child_drop:  278
+add_hard_num:  0
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  1934
+test_agent_num:  4
+test_mean_cover_rate:  0.9688
+
+ Scenario simple_spread Algo solved_sp updates 238/380 episodes, total num timesteps 25095000/40000000, FPS 750.
+
+value loss of agent: 1.6929493188858031
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9631000000000001
+training_cover_rate:  0.962
+training_cover_rate:  0.9657
+child_drop:  283
+add_hard_num:  0
+parent:  97
+last_node_parent:  97
+childlist:  0
+archive:  1904
+test_agent_num:  4
+test_mean_cover_rate:  0.9717
+
+ Scenario simple_spread Algo solved_sp updates 239/380 episodes, total num timesteps 25200000/40000000, FPS 750.
+
+value loss of agent: 1.4833661198616028
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9587
+training_cover_rate:  0.9589000000000001
+training_cover_rate:  0.961
+child_drop:  278
+add_hard_num:  0
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  1898
+test_agent_num:  4
+test_mean_cover_rate:  0.9784
+
+ Scenario simple_spread Algo solved_sp updates 240/380 episodes, total num timesteps 25305000/40000000, FPS 750.
+
+value loss of agent: 1.5285023331642151
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9597
+training_cover_rate:  0.9595
+training_cover_rate:  0.9639
+child_drop:  280
+add_hard_num:  0
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  1887
+test_agent_num:  4
+test_mean_cover_rate:  0.9803999999999999
+
+ Scenario simple_spread Algo solved_sp updates 241/380 episodes, total num timesteps 25410000/40000000, FPS 750.
+
+value loss of agent: 1.421044441064199
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9726
+training_cover_rate:  0.9635
+training_cover_rate:  0.967
+child_drop:  299
+add_hard_num:  0
+parent:  88
+last_node_parent:  88
+childlist:  0
+archive:  1850
+test_agent_num:  4
+test_mean_cover_rate:  0.9731000000000001
+
+ Scenario simple_spread Algo solved_sp updates 242/380 episodes, total num timesteps 25515000/40000000, FPS 750.
+
+value loss of agent: 1.3722773790359497
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9618999999999999
+training_cover_rate:  0.964
+training_cover_rate:  0.9625
+child_drop:  289
+add_hard_num:  0
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  1829
+test_agent_num:  4
+test_mean_cover_rate:  0.9728999999999999
+
+ Scenario simple_spread Algo solved_sp updates 243/380 episodes, total num timesteps 25620000/40000000, FPS 750.
+
+value loss of agent: 1.3771523396174112
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9644000000000001
+training_cover_rate:  0.9655
+training_cover_rate:  0.9619
+child_drop:  297
+add_hard_num:  0
+parent:  84
+last_node_parent:  84
+childlist:  0
+archive:  1798
+test_agent_num:  4
+test_mean_cover_rate:  0.9695
+
+ Scenario simple_spread Algo solved_sp updates 244/380 episodes, total num timesteps 25725000/40000000, FPS 751.
+
+value loss of agent: 1.456575882434845
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9618
+training_cover_rate:  0.9575
+training_cover_rate:  0.9625999999999999
+child_drop:  292
+add_hard_num:  0
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  1775
+test_agent_num:  4
+test_mean_cover_rate:  0.9728
+
+ Scenario simple_spread Algo solved_sp updates 245/380 episodes, total num timesteps 25830000/40000000, FPS 750.
+
+value loss of agent: 1.562729835510254
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9656
+training_cover_rate:  0.9649
+training_cover_rate:  0.9647
+child_drop:  293
+add_hard_num:  0
+parent:  93
+last_node_parent:  93
+childlist:  0
+archive:  1739
+test_agent_num:  4
+test_mean_cover_rate:  0.9682000000000001
+
+ Scenario simple_spread Algo solved_sp updates 246/380 episodes, total num timesteps 25935000/40000000, FPS 750.
+
+value loss of agent: 1.4154358665148417
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9652
+training_cover_rate:  0.9623
+training_cover_rate:  0.9601
+child_drop:  285
+add_hard_num:  1
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  1721
+test_agent_num:  4
+test_mean_cover_rate:  0.9701
+
+ Scenario simple_spread Algo solved_sp updates 247/380 episodes, total num timesteps 26040000/40000000, FPS 750.
+
+value loss of agent: 1.4558080315589905
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9555
+training_cover_rate:  0.9552
+training_cover_rate:  0.9595999999999999
+child_drop:  274
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  1721
+test_agent_num:  4
+test_mean_cover_rate:  0.9802000000000001
+
+ Scenario simple_spread Algo solved_sp updates 248/380 episodes, total num timesteps 26145000/40000000, FPS 750.
+
+value loss of agent: 1.528192671140035
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9612
+training_cover_rate:  0.9605
+training_cover_rate:  0.9629
+child_drop:  279
+add_hard_num:  0
+parent:  85
+last_node_parent:  85
+childlist:  0
+archive:  1707
+test_agent_num:  4
+test_mean_cover_rate:  0.975
+
+ Scenario simple_spread Algo solved_sp updates 249/380 episodes, total num timesteps 26250000/40000000, FPS 751.
+
+value loss of agent: 1.5218630353609721
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.963
+training_cover_rate:  0.9671
+training_cover_rate:  0.9657
+child_drop:  291
+add_hard_num:  0
+parent:  85
+last_node_parent:  85
+childlist:  0
+archive:  1681
+test_agent_num:  4
+test_mean_cover_rate:  0.9701000000000002
+
+ Scenario simple_spread Algo solved_sp updates 250/380 episodes, total num timesteps 26355000/40000000, FPS 751.
+
+value loss of agent: 1.3865715185801188
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9655999999999999
+training_cover_rate:  0.9598999999999999
+training_cover_rate:  0.9668
+child_drop:  287
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  1668
+test_agent_num:  4
+test_mean_cover_rate:  0.9739
+
+ Scenario simple_spread Algo solved_sp updates 251/380 episodes, total num timesteps 26460000/40000000, FPS 751.
+
+value loss of agent: 1.4407532493273416
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9611000000000001
+training_cover_rate:  0.9698999999999999
+training_cover_rate:  0.9625
+child_drop:  285
+add_hard_num:  0
+parent:  91
+last_node_parent:  91
+childlist:  0
+archive:  1642
+test_agent_num:  4
+test_mean_cover_rate:  0.9751000000000002
+
+ Scenario simple_spread Algo solved_sp updates 252/380 episodes, total num timesteps 26565000/40000000, FPS 751.
+
+value loss of agent: 1.5520899017651877
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9647
+training_cover_rate:  0.9631000000000001
+training_cover_rate:  0.9667
+child_drop:  296
+add_hard_num:  0
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  1616
+test_agent_num:  4
+test_mean_cover_rate:  0.9782000000000001
+
+ Scenario simple_spread Algo solved_sp updates 253/380 episodes, total num timesteps 26670000/40000000, FPS 751.
+
+value loss of agent: 1.4538462122281393
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9614000000000001
+training_cover_rate:  0.9656
+training_cover_rate:  0.9582999999999999
+child_drop:  287
+add_hard_num:  0
+parent:  85
+last_node_parent:  85
+childlist:  0
+archive:  1594
+test_agent_num:  4
+test_mean_cover_rate:  0.9782000000000001
+
+ Scenario simple_spread Algo solved_sp updates 254/380 episodes, total num timesteps 26775000/40000000, FPS 751.
+
+value loss of agent: 1.438310404618581
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9628
+training_cover_rate:  0.9657
+training_cover_rate:  0.9652000000000001
+child_drop:  296
+add_hard_num:  0
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  1566
+test_agent_num:  4
+test_mean_cover_rate:  0.9786999999999999
+
+ Scenario simple_spread Algo solved_sp updates 255/380 episodes, total num timesteps 26880000/40000000, FPS 751.
+
+value loss of agent: 1.5404505968093871
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9617
+training_cover_rate:  0.9661000000000001
+training_cover_rate:  0.9691
+child_drop:  308
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  1537
+test_agent_num:  4
+test_mean_cover_rate:  0.9757
+
+ Scenario simple_spread Algo solved_sp updates 256/380 episodes, total num timesteps 26985000/40000000, FPS 751.
+
+value loss of agent: 1.4849547505378724
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9678
+training_cover_rate:  0.9662000000000001
+training_cover_rate:  0.9659
+child_drop:  292
+add_hard_num:  0
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  1513
+test_agent_num:  4
+test_mean_cover_rate:  0.978
+
+ Scenario simple_spread Algo solved_sp updates 257/380 episodes, total num timesteps 27090000/40000000, FPS 752.
+
+value loss of agent: 1.5142210761706034
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9706
+training_cover_rate:  0.9692000000000001
+training_cover_rate:  0.9664
+child_drop:  291
+add_hard_num:  0
+parent:  89
+last_node_parent:  89
+childlist:  0
+archive:  1483
+test_agent_num:  4
+test_mean_cover_rate:  0.9823999999999999
+
+ Scenario simple_spread Algo solved_sp updates 258/380 episodes, total num timesteps 27195000/40000000, FPS 752.
+
+value loss of agent: 1.2773832519849142
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9678
+training_cover_rate:  0.961
+training_cover_rate:  0.9685999999999999
+child_drop:  292
+add_hard_num:  0
+parent:  89
+last_node_parent:  89
+childlist:  0
+archive:  1452
+test_agent_num:  4
+test_mean_cover_rate:  0.9770999999999999
+
+ Scenario simple_spread Algo solved_sp updates 259/380 episodes, total num timesteps 27300000/40000000, FPS 752.
+
+value loss of agent: 1.377156146367391
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9721
+training_cover_rate:  0.9695999999999999
+training_cover_rate:  0.9665
+child_drop:  305
+add_hard_num:  0
+parent:  93
+last_node_parent:  93
+childlist:  0
+archive:  1404
+test_agent_num:  4
+test_mean_cover_rate:  0.9786
+
+ Scenario simple_spread Algo solved_sp updates 260/380 episodes, total num timesteps 27405000/40000000, FPS 752.
+
+value loss of agent: 1.3096312204996745
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9602999999999999
+training_cover_rate:  0.965
+training_cover_rate:  0.9641
+child_drop:  296
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  1382
+test_agent_num:  4
+test_mean_cover_rate:  0.9778
+
+ Scenario simple_spread Algo solved_sp updates 261/380 episodes, total num timesteps 27510000/40000000, FPS 752.
+
+value loss of agent: 1.4160998980204265
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9662000000000001
+training_cover_rate:  0.9676
+training_cover_rate:  0.962
+child_drop:  303
+add_hard_num:  0
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  1354
+test_agent_num:  4
+test_mean_cover_rate:  0.9786999999999999
+
+ Scenario simple_spread Algo solved_sp updates 262/380 episodes, total num timesteps 27615000/40000000, FPS 753.
+
+value loss of agent: 1.4274244745572409
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9562999999999999
+training_cover_rate:  0.9584000000000001
+training_cover_rate:  0.9602
+child_drop:  268
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  1360
+test_agent_num:  4
+test_mean_cover_rate:  0.9782000000000001
+
+ Scenario simple_spread Algo solved_sp updates 263/380 episodes, total num timesteps 27720000/40000000, FPS 753.
+
+value loss of agent: 1.5506864428520202
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9608
+training_cover_rate:  0.9618
+training_cover_rate:  0.9645
+child_drop:  285
+add_hard_num:  0
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  1352
+test_agent_num:  4
+test_mean_cover_rate:  0.9801
+
+ Scenario simple_spread Algo solved_sp updates 264/380 episodes, total num timesteps 27825000/40000000, FPS 753.
+
+value loss of agent: 1.4751129666964213
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9584000000000001
+training_cover_rate:  0.961
+training_cover_rate:  0.9668
+child_drop:  302
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  1334
+test_agent_num:  4
+test_mean_cover_rate:  0.9760999999999999
+
+ Scenario simple_spread Algo solved_sp updates 265/380 episodes, total num timesteps 27930000/40000000, FPS 753.
+
+value loss of agent: 1.4221894224484761
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9629
+training_cover_rate:  0.962
+training_cover_rate:  0.9662000000000001
+child_drop:  296
+add_hard_num:  0
+parent:  83
+last_node_parent:  83
+childlist:  0
+archive:  1305
+test_agent_num:  4
+test_mean_cover_rate:  0.9741000000000001
+
+ Scenario simple_spread Algo solved_sp updates 266/380 episodes, total num timesteps 28035000/40000000, FPS 753.
+
+value loss of agent: 1.4201467355092368
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9662999999999999
+training_cover_rate:  0.9662
+training_cover_rate:  0.9653999999999999
+child_drop:  288
+add_hard_num:  0
+parent:  90
+last_node_parent:  90
+childlist:  0
+archive:  1277
+test_agent_num:  4
+test_mean_cover_rate:  0.9780999999999999
+
+ Scenario simple_spread Algo solved_sp updates 267/380 episodes, total num timesteps 28140000/40000000, FPS 754.
+
+value loss of agent: 1.4600504279136657
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9658
+training_cover_rate:  0.9671
+training_cover_rate:  0.9628
+child_drop:  294
+add_hard_num:  0
+parent:  85
+last_node_parent:  85
+childlist:  0
+archive:  1248
+test_agent_num:  4
+test_mean_cover_rate:  0.9802
+
+ Scenario simple_spread Algo solved_sp updates 268/380 episodes, total num timesteps 28245000/40000000, FPS 754.
+
+value loss of agent: 1.4769283453623454
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9615
+training_cover_rate:  0.9665
+training_cover_rate:  0.967
+child_drop:  285
+add_hard_num:  0
+parent:  84
+last_node_parent:  84
+childlist:  0
+archive:  1229
+test_agent_num:  4
+test_mean_cover_rate:  0.9736
+
+ Scenario simple_spread Algo solved_sp updates 269/380 episodes, total num timesteps 28350000/40000000, FPS 754.
+
+value loss of agent: 1.3382549126942953
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9669000000000001
+training_cover_rate:  0.9638
+training_cover_rate:  0.9672999999999999
+child_drop:  294
+add_hard_num:  0
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  1208
+test_agent_num:  4
+test_mean_cover_rate:  0.9798
+
+ Scenario simple_spread Algo solved_sp updates 270/380 episodes, total num timesteps 28455000/40000000, FPS 755.
+
+value loss of agent: 1.3419761300086974
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9652000000000001
+training_cover_rate:  0.9645999999999999
+training_cover_rate:  0.9636
+child_drop:  281
+add_hard_num:  0
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  1197
+test_agent_num:  4
+test_mean_cover_rate:  0.9794999999999999
+
+ Scenario simple_spread Algo solved_sp updates 271/380 episodes, total num timesteps 28560000/40000000, FPS 755.
+
+value loss of agent: 1.383547548453013
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9691
+training_cover_rate:  0.9656999999999999
+training_cover_rate:  0.9636999999999999
+child_drop:  299
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  1172
+test_agent_num:  4
+test_mean_cover_rate:  0.9805
+
+ Scenario simple_spread Algo solved_sp updates 272/380 episodes, total num timesteps 28665000/40000000, FPS 755.
+
+value loss of agent: 1.3804080526034037
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9684
+training_cover_rate:  0.9626999999999999
+training_cover_rate:  0.9669
+child_drop:  307
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  1139
+test_agent_num:  4
+test_mean_cover_rate:  0.9779
+
+ Scenario simple_spread Algo solved_sp updates 273/380 episodes, total num timesteps 28770000/40000000, FPS 755.
+
+value loss of agent: 1.2716066161791484
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9614000000000001
+training_cover_rate:  0.9585
+training_cover_rate:  0.9635
+child_drop:  287
+add_hard_num:  0
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  1132
+test_agent_num:  4
+test_mean_cover_rate:  0.9803
+
+ Scenario simple_spread Algo solved_sp updates 274/380 episodes, total num timesteps 28875000/40000000, FPS 755.
+
+value loss of agent: 1.3442473769187928
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9657
+training_cover_rate:  0.9673
+training_cover_rate:  0.9637
+child_drop:  302
+add_hard_num:  0
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  1103
+test_agent_num:  4
+test_mean_cover_rate:  0.9835999999999999
+
+ Scenario simple_spread Algo solved_sp updates 275/380 episodes, total num timesteps 28980000/40000000, FPS 755.
+
+value loss of agent: 1.3510056018829346
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9621
+training_cover_rate:  0.9646
+training_cover_rate:  0.9658
+child_drop:  292
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  1090
+test_agent_num:  4
+test_mean_cover_rate:  0.9796
+
+ Scenario simple_spread Algo solved_sp updates 276/380 episodes, total num timesteps 29085000/40000000, FPS 756.
+
+value loss of agent: 1.4229320367177327
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9651000000000001
+training_cover_rate:  0.9692
+training_cover_rate:  0.9645
+child_drop:  299
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  1065
+test_agent_num:  4
+test_mean_cover_rate:  0.9839
+
+ Scenario simple_spread Algo solved_sp updates 277/380 episodes, total num timesteps 29190000/40000000, FPS 756.
+
+value loss of agent: 1.2979751348495483
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9631000000000001
+training_cover_rate:  0.9662000000000001
+training_cover_rate:  0.965
+child_drop:  300
+add_hard_num:  0
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  1037
+test_agent_num:  4
+test_mean_cover_rate:  0.9783999999999999
+
+ Scenario simple_spread Algo solved_sp updates 278/380 episodes, total num timesteps 29295000/40000000, FPS 756.
+
+value loss of agent: 1.2636667251586915
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9661
+training_cover_rate:  0.9636
+training_cover_rate:  0.9643999999999999
+child_drop:  303
+add_hard_num:  0
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  1022
+test_agent_num:  4
+test_mean_cover_rate:  0.981
+
+ Scenario simple_spread Algo solved_sp updates 279/380 episodes, total num timesteps 29400000/40000000, FPS 756.
+
+value loss of agent: 1.313488781452179
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.969
+training_cover_rate:  0.971
+training_cover_rate:  0.9722000000000001
+child_drop:  312
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  989
+test_agent_num:  4
+test_mean_cover_rate:  0.9815999999999999
+
+ Scenario simple_spread Algo solved_sp updates 280/380 episodes, total num timesteps 29505000/40000000, FPS 756.
+
+value loss of agent: 1.2521572868029276
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9677
+training_cover_rate:  0.9658
+training_cover_rate:  0.9662999999999999
+child_drop:  299
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  966
+test_agent_num:  4
+test_mean_cover_rate:  0.9833
+
+ Scenario simple_spread Algo solved_sp updates 281/380 episodes, total num timesteps 29610000/40000000, FPS 757.
+
+value loss of agent: 1.409736955165863
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9647
+training_cover_rate:  0.9638
+training_cover_rate:  0.9666
+child_drop:  302
+add_hard_num:  0
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  939
+test_agent_num:  4
+test_mean_cover_rate:  0.9813
+
+ Scenario simple_spread Algo solved_sp updates 282/380 episodes, total num timesteps 29715000/40000000, FPS 757.
+
+value loss of agent: 1.3438045779863994
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9632999999999999
+training_cover_rate:  0.9652000000000001
+training_cover_rate:  0.9622
+child_drop:  293
+add_hard_num:  0
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  929
+test_agent_num:  4
+test_mean_cover_rate:  0.9823
+
+ Scenario simple_spread Algo solved_sp updates 283/380 episodes, total num timesteps 29820000/40000000, FPS 757.
+
+value loss of agent: 1.3293239275614421
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9685999999999999
+training_cover_rate:  0.9631000000000001
+training_cover_rate:  0.9691000000000001
+child_drop:  294
+add_hard_num:  0
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  904
+test_agent_num:  4
+test_mean_cover_rate:  0.9766
+
+ Scenario simple_spread Algo solved_sp updates 284/380 episodes, total num timesteps 29925000/40000000, FPS 757.
+
+value loss of agent: 1.3161929289499918
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9662999999999999
+training_cover_rate:  0.9658
+training_cover_rate:  0.97
+child_drop:  293
+add_hard_num:  0
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  884
+test_agent_num:  4
+test_mean_cover_rate:  0.984
+
+ Scenario simple_spread Algo solved_sp updates 285/380 episodes, total num timesteps 30030000/40000000, FPS 757.
+
+value loss of agent: 1.2493812521298726
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9597
+training_cover_rate:  0.9646
+training_cover_rate:  0.9702999999999999
+child_drop:  293
+add_hard_num:  0
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  869
+test_agent_num:  4
+test_mean_cover_rate:  0.9852000000000001
+
+ Scenario simple_spread Algo solved_sp updates 286/380 episodes, total num timesteps 30135000/40000000, FPS 757.
+
+value loss of agent: 1.1974420030911763
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.966
+training_cover_rate:  0.9688
+training_cover_rate:  0.9685
+child_drop:  309
+add_hard_num:  0
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  842
+test_agent_num:  4
+test_mean_cover_rate:  0.9755
+
+ Scenario simple_spread Algo solved_sp updates 287/380 episodes, total num timesteps 30240000/40000000, FPS 757.
+
+value loss of agent: 1.2086742599805196
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9622
+training_cover_rate:  0.9627
+training_cover_rate:  0.9685999999999999
+child_drop:  285
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  831
+test_agent_num:  4
+test_mean_cover_rate:  0.9786
+
+ Scenario simple_spread Algo solved_sp updates 288/380 episodes, total num timesteps 30345000/40000000, FPS 757.
+
+value loss of agent: 1.220197574297587
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9638
+training_cover_rate:  0.9659
+training_cover_rate:  0.9619000000000001
+child_drop:  290
+add_hard_num:  0
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  819
+test_agent_num:  4
+test_mean_cover_rate:  0.9775999999999999
+
+ Scenario simple_spread Algo solved_sp updates 289/380 episodes, total num timesteps 30450000/40000000, FPS 757.
+
+value loss of agent: 1.2463762323061625
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9637
+training_cover_rate:  0.9599
+training_cover_rate:  0.9596
+child_drop:  283
+add_hard_num:  0
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  814
+test_agent_num:  4
+test_mean_cover_rate:  0.9715
+
+ Scenario simple_spread Algo solved_sp updates 290/380 episodes, total num timesteps 30555000/40000000, FPS 758.
+
+value loss of agent: 1.3189317345619203
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9691000000000001
+training_cover_rate:  0.9618
+training_cover_rate:  0.9628
+child_drop:  289
+add_hard_num:  0
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  806
+test_agent_num:  4
+test_mean_cover_rate:  0.9681
+
+ Scenario simple_spread Algo solved_sp updates 291/380 episodes, total num timesteps 30660000/40000000, FPS 758.
+
+value loss of agent: 1.2917078097661336
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9599
+training_cover_rate:  0.9621
+training_cover_rate:  0.9649
+child_drop:  288
+add_hard_num:  0
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  800
+test_agent_num:  4
+test_mean_cover_rate:  0.9753
+
+ Scenario simple_spread Algo solved_sp updates 292/380 episodes, total num timesteps 30765000/40000000, FPS 758.
+
+value loss of agent: 1.1949405511220297
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9621000000000001
+training_cover_rate:  0.9617
+training_cover_rate:  0.9632000000000001
+child_drop:  295
+add_hard_num:  0
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  794
+test_agent_num:  4
+test_mean_cover_rate:  0.9721000000000001
+
+ Scenario simple_spread Algo solved_sp updates 293/380 episodes, total num timesteps 30870000/40000000, FPS 758.
+
+value loss of agent: 1.2599188288052876
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.963
+training_cover_rate:  0.961
+training_cover_rate:  0.9685999999999999
+child_drop:  290
+add_hard_num:  0
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  776
+test_agent_num:  4
+test_mean_cover_rate:  0.9765999999999999
+
+ Scenario simple_spread Algo solved_sp updates 294/380 episodes, total num timesteps 30975000/40000000, FPS 758.
+
+value loss of agent: 1.1558761715888977
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9571999999999999
+training_cover_rate:  0.9621
+training_cover_rate:  0.9601000000000002
+child_drop:  286
+add_hard_num:  0
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  779
+test_agent_num:  4
+test_mean_cover_rate:  0.9798
+
+ Scenario simple_spread Algo solved_sp updates 295/380 episodes, total num timesteps 31080000/40000000, FPS 758.
+
+value loss of agent: 1.2413425167401633
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9665999999999999
+training_cover_rate:  0.9673999999999999
+training_cover_rate:  0.9702999999999999
+child_drop:  310
+add_hard_num:  0
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  756
+test_agent_num:  4
+test_mean_cover_rate:  0.9795
+
+ Scenario simple_spread Algo solved_sp updates 296/380 episodes, total num timesteps 31185000/40000000, FPS 758.
+
+value loss of agent: 1.07479217449824
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9592
+training_cover_rate:  0.9652999999999999
+training_cover_rate:  0.9616
+child_drop:  287
+add_hard_num:  0
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  759
+test_agent_num:  4
+test_mean_cover_rate:  0.9819
+
+ Scenario simple_spread Algo solved_sp updates 297/380 episodes, total num timesteps 31290000/40000000, FPS 758.
+
+value loss of agent: 1.1850061337153117
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9612999999999999
+training_cover_rate:  0.9607
+training_cover_rate:  0.9611000000000001
+child_drop:  290
+add_hard_num:  0
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  761
+test_agent_num:  4
+test_mean_cover_rate:  0.9715
+
+ Scenario simple_spread Algo solved_sp updates 298/380 episodes, total num timesteps 31395000/40000000, FPS 759.
+
+value loss of agent: 1.1658288637797039
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.964
+training_cover_rate:  0.9647
+training_cover_rate:  0.9659
+child_drop:  286
+add_hard_num:  0
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  758
+test_agent_num:  4
+test_mean_cover_rate:  0.9795
+
+ Scenario simple_spread Algo solved_sp updates 299/380 episodes, total num timesteps 31500000/40000000, FPS 759.
+
+value loss of agent: 1.2727885802586874
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9575
+training_cover_rate:  0.9607
+training_cover_rate:  0.9619000000000001
+child_drop:  273
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  764
+test_agent_num:  4
+test_mean_cover_rate:  0.9735999999999999
+
+ Scenario simple_spread Algo solved_sp updates 300/380 episodes, total num timesteps 31605000/40000000, FPS 759.
+
+value loss of agent: 1.28361421028773
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9584
+training_cover_rate:  0.9735999999999999
+training_cover_rate:  0.9667
+child_drop:  292
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  751
+test_agent_num:  4
+test_mean_cover_rate:  0.9775999999999999
+
+ Scenario simple_spread Algo solved_sp updates 301/380 episodes, total num timesteps 31710000/40000000, FPS 759.
+
+value loss of agent: 1.2464027404785156
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9611000000000001
+training_cover_rate:  0.9631000000000001
+training_cover_rate:  0.9665999999999999
+child_drop:  287
+add_hard_num:  0
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  737
+test_agent_num:  4
+test_mean_cover_rate:  0.9782000000000001
+
+ Scenario simple_spread Algo solved_sp updates 302/380 episodes, total num timesteps 31815000/40000000, FPS 759.
+
+value loss of agent: 1.1460237503051758
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9594000000000001
+training_cover_rate:  0.9565
+training_cover_rate:  0.961
+child_drop:  277
+add_hard_num:  0
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  742
+test_agent_num:  4
+test_mean_cover_rate:  0.9793999999999999
+
+ Scenario simple_spread Algo solved_sp updates 303/380 episodes, total num timesteps 31920000/40000000, FPS 759.
+
+value loss of agent: 1.2291213750839234
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9621
+training_cover_rate:  0.9633999999999998
+training_cover_rate:  0.9628
+child_drop:  282
+add_hard_num:  0
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  743
+test_agent_num:  4
+test_mean_cover_rate:  0.9843
+
+ Scenario simple_spread Algo solved_sp updates 304/380 episodes, total num timesteps 32025000/40000000, FPS 759.
+
+value loss of agent: 1.2539387543996174
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9638
+training_cover_rate:  0.9602
+training_cover_rate:  0.963
+child_drop:  288
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  734
+test_agent_num:  4
+test_mean_cover_rate:  0.9851
+
+ Scenario simple_spread Algo solved_sp updates 305/380 episodes, total num timesteps 32130000/40000000, FPS 759.
+
+value loss of agent: 1.2493658939997354
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.957
+training_cover_rate:  0.9575
+training_cover_rate:  0.9607
+child_drop:  286
+add_hard_num:  0
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  737
+test_agent_num:  4
+test_mean_cover_rate:  0.985
+
+ Scenario simple_spread Algo solved_sp updates 306/380 episodes, total num timesteps 32235000/40000000, FPS 759.
+
+value loss of agent: 1.2223050395647685
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9608
+training_cover_rate:  0.9631000000000001
+training_cover_rate:  0.9571
+child_drop:  291
+add_hard_num:  0
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  739
+test_agent_num:  4
+test_mean_cover_rate:  0.9762000000000001
+
+ Scenario simple_spread Algo solved_sp updates 307/380 episodes, total num timesteps 32340000/40000000, FPS 759.
+
+value loss of agent: 1.2788293600082397
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9648
+training_cover_rate:  0.9571000000000001
+training_cover_rate:  0.9588
+child_drop:  284
+add_hard_num:  0
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  742
+test_agent_num:  4
+test_mean_cover_rate:  0.9842000000000001
+
+ Scenario simple_spread Algo solved_sp updates 308/380 episodes, total num timesteps 32445000/40000000, FPS 759.
+
+value loss of agent: 1.3009441216786704
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9601000000000001
+training_cover_rate:  0.9609
+training_cover_rate:  0.9558
+child_drop:  289
+add_hard_num:  0
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  739
+test_agent_num:  4
+test_mean_cover_rate:  0.9867999999999999
+
+ Scenario simple_spread Algo solved_sp updates 309/380 episodes, total num timesteps 32550000/40000000, FPS 760.
+
+value loss of agent: 1.2918665568033854
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9594
+training_cover_rate:  0.9672999999999999
+training_cover_rate:  0.9667
+child_drop:  290
+add_hard_num:  0
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  719
+test_agent_num:  4
+test_mean_cover_rate:  0.9805
+
+ Scenario simple_spread Algo solved_sp updates 310/380 episodes, total num timesteps 32655000/40000000, FPS 759.
+
+value loss of agent: 1.343453574180603
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9652999999999999
+training_cover_rate:  0.9606999999999999
+training_cover_rate:  0.9602999999999999
+child_drop:  288
+add_hard_num:  0
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  722
+test_agent_num:  4
+test_mean_cover_rate:  0.9798
+
+ Scenario simple_spread Algo solved_sp updates 311/380 episodes, total num timesteps 32760000/40000000, FPS 759.
+
+value loss of agent: 1.2669728875160218
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9631000000000001
+training_cover_rate:  0.9647
+training_cover_rate:  0.9622
+child_drop:  283
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  713
+test_agent_num:  4
+test_mean_cover_rate:  0.9783
+
+ Scenario simple_spread Algo solved_sp updates 312/380 episodes, total num timesteps 32865000/40000000, FPS 759.
+
+value loss of agent: 1.2217063268025716
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9644000000000001
+training_cover_rate:  0.9568
+training_cover_rate:  0.9669
+child_drop:  290
+add_hard_num:  0
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  704
+test_agent_num:  4
+test_mean_cover_rate:  0.9745
+
+ Scenario simple_spread Algo solved_sp updates 313/380 episodes, total num timesteps 32970000/40000000, FPS 759.
+
+value loss of agent: 1.1891329844792684
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9611000000000001
+training_cover_rate:  0.9587
+training_cover_rate:  0.9595
+child_drop:  275
+add_hard_num:  1
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  709
+test_agent_num:  4
+test_mean_cover_rate:  0.9835
+
+ Scenario simple_spread Algo solved_sp updates 314/380 episodes, total num timesteps 33075000/40000000, FPS 759.
+
+value loss of agent: 1.2812005956967671
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9607
+training_cover_rate:  0.9628
+training_cover_rate:  0.9692999999999999
+child_drop:  275
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  710
+test_agent_num:  4
+test_mean_cover_rate:  0.9806999999999999
+
+ Scenario simple_spread Algo solved_sp updates 315/380 episodes, total num timesteps 33180000/40000000, FPS 759.
+
+value loss of agent: 1.1079958160718282
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.961
+training_cover_rate:  0.9669000000000001
+training_cover_rate:  0.9634000000000001
+child_drop:  287
+add_hard_num:  0
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  704
+test_agent_num:  4
+test_mean_cover_rate:  0.9854
+
+ Scenario simple_spread Algo solved_sp updates 316/380 episodes, total num timesteps 33285000/40000000, FPS 758.
+
+value loss of agent: 1.1523787419001261
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9653999999999999
+training_cover_rate:  0.9647
+training_cover_rate:  0.9597
+child_drop:  298
+add_hard_num:  0
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  688
+test_agent_num:  4
+test_mean_cover_rate:  0.9833000000000001
+
+ Scenario simple_spread Algo solved_sp updates 317/380 episodes, total num timesteps 33390000/40000000, FPS 758.
+
+value loss of agent: 1.2117944955825806
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9605
+training_cover_rate:  0.9643
+training_cover_rate:  0.965
+child_drop:  290
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  674
+test_agent_num:  4
+test_mean_cover_rate:  0.9883999999999998
+
+ Scenario simple_spread Algo solved_sp updates 318/380 episodes, total num timesteps 33495000/40000000, FPS 759.
+
+value loss of agent: 1.197584835688273
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9541000000000001
+training_cover_rate:  0.9577
+training_cover_rate:  0.9609
+child_drop:  282
+add_hard_num:  0
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  681
+test_agent_num:  4
+test_mean_cover_rate:  0.9764
+
+ Scenario simple_spread Algo solved_sp updates 319/380 episodes, total num timesteps 33600000/40000000, FPS 758.
+
+value loss of agent: 1.205670424302419
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9575999999999999
+training_cover_rate:  0.9617
+training_cover_rate:  0.9645
+child_drop:  292
+add_hard_num:  0
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  681
+test_agent_num:  4
+test_mean_cover_rate:  0.9894
+
+ Scenario simple_spread Algo solved_sp updates 320/380 episodes, total num timesteps 33705000/40000000, FPS 758.
+
+value loss of agent: 1.080432152748108
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9554
+training_cover_rate:  0.9588
+training_cover_rate:  0.9582
+child_drop:  258
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  699
+test_agent_num:  4
+test_mean_cover_rate:  0.9756
+
+ Scenario simple_spread Algo solved_sp updates 321/380 episodes, total num timesteps 33810000/40000000, FPS 759.
+
+value loss of agent: 1.3148281693458557
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9623999999999999
+training_cover_rate:  0.9621999999999999
+training_cover_rate:  0.9588
+child_drop:  280
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  703
+test_agent_num:  4
+test_mean_cover_rate:  0.9786
+
+ Scenario simple_spread Algo solved_sp updates 322/380 episodes, total num timesteps 33915000/40000000, FPS 759.
+
+value loss of agent: 1.206428349018097
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9542999999999999
+training_cover_rate:  0.9586
+training_cover_rate:  0.9615
+child_drop:  269
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  718
+test_agent_num:  4
+test_mean_cover_rate:  0.985
+
+ Scenario simple_spread Algo solved_sp updates 323/380 episodes, total num timesteps 34020000/40000000, FPS 759.
+
+value loss of agent: 1.086806603272756
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9614000000000001
+training_cover_rate:  0.9587
+training_cover_rate:  0.9662000000000001
+child_drop:  307
+add_hard_num:  0
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  709
+test_agent_num:  4
+test_mean_cover_rate:  0.9809
+
+ Scenario simple_spread Algo solved_sp updates 324/380 episodes, total num timesteps 34125000/40000000, FPS 759.
+
+value loss of agent: 1.1297964970270793
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9535
+training_cover_rate:  0.9564000000000001
+training_cover_rate:  0.9638999999999999
+child_drop:  281
+add_hard_num:  0
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  725
+test_agent_num:  4
+test_mean_cover_rate:  0.9804999999999999
+
+ Scenario simple_spread Algo solved_sp updates 325/380 episodes, total num timesteps 34230000/40000000, FPS 759.
+
+value loss of agent: 1.02904012799263
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9628
+training_cover_rate:  0.9609
+training_cover_rate:  0.9595
+child_drop:  272
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  729
+test_agent_num:  4
+test_mean_cover_rate:  0.982
+
+ Scenario simple_spread Algo solved_sp updates 326/380 episodes, total num timesteps 34335000/40000000, FPS 759.
+
+value loss of agent: 1.101864512761434
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9595
+training_cover_rate:  0.9581
+training_cover_rate:  0.9599
+child_drop:  274
+add_hard_num:  0
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  738
+test_agent_num:  4
+test_mean_cover_rate:  0.9828
+
+ Scenario simple_spread Algo solved_sp updates 327/380 episodes, total num timesteps 34440000/40000000, FPS 759.
+
+value loss of agent: 1.2379106203715007
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9621
+training_cover_rate:  0.9581999999999999
+training_cover_rate:  0.9598999999999999
+child_drop:  281
+add_hard_num:  0
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  743
+test_agent_num:  4
+test_mean_cover_rate:  0.9807
+
+ Scenario simple_spread Algo solved_sp updates 328/380 episodes, total num timesteps 34545000/40000000, FPS 759.
+
+value loss of agent: 1.2019420623779298
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9657
+training_cover_rate:  0.9627
+training_cover_rate:  0.9662999999999999
+child_drop:  295
+add_hard_num:  0
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  725
+test_agent_num:  4
+test_mean_cover_rate:  0.9840999999999999
+
+ Scenario simple_spread Algo solved_sp updates 329/380 episodes, total num timesteps 34650000/40000000, FPS 759.
+
+value loss of agent: 1.1107638279596965
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9522
+training_cover_rate:  0.9579
+training_cover_rate:  0.962
+child_drop:  274
+add_hard_num:  0
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  737
+test_agent_num:  4
+test_mean_cover_rate:  0.9825
+
+ Scenario simple_spread Algo solved_sp updates 330/380 episodes, total num timesteps 34755000/40000000, FPS 759.
+
+value loss of agent: 1.1169971028963726
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9609
+training_cover_rate:  0.966
+training_cover_rate:  0.9668
+child_drop:  286
+add_hard_num:  0
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  728
+test_agent_num:  4
+test_mean_cover_rate:  0.9823
+
+ Scenario simple_spread Algo solved_sp updates 331/380 episodes, total num timesteps 34860000/40000000, FPS 760.
+
+value loss of agent: 1.0803860545158386
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9635
+training_cover_rate:  0.9612999999999999
+training_cover_rate:  0.9551
+child_drop:  274
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  738
+test_agent_num:  4
+test_mean_cover_rate:  0.9860999999999999
+
+ Scenario simple_spread Algo solved_sp updates 332/380 episodes, total num timesteps 34965000/40000000, FPS 760.
+
+value loss of agent: 1.2708590865135192
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9559
+training_cover_rate:  0.9547
+training_cover_rate:  0.9681
+child_drop:  282
+add_hard_num:  0
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  741
+test_agent_num:  4
+test_mean_cover_rate:  0.9862
+
+ Scenario simple_spread Algo solved_sp updates 333/380 episodes, total num timesteps 35070000/40000000, FPS 760.
+
+value loss of agent: 1.0882276972134908
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9598
+training_cover_rate:  0.958
+training_cover_rate:  0.9666
+child_drop:  272
+add_hard_num:  0
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  741
+test_agent_num:  4
+test_mean_cover_rate:  0.9805999999999999
+
+ Scenario simple_spread Algo solved_sp updates 334/380 episodes, total num timesteps 35175000/40000000, FPS 760.
+
+value loss of agent: 1.143290118376414
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9584
+training_cover_rate:  0.9652
+training_cover_rate:  0.9608
+child_drop:  272
+add_hard_num:  0
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  749
+test_agent_num:  4
+test_mean_cover_rate:  0.9852000000000001
+
+ Scenario simple_spread Algo solved_sp updates 335/380 episodes, total num timesteps 35280000/40000000, FPS 760.
+
+value loss of agent: 1.1470967769622802
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9619
+training_cover_rate:  0.957
+training_cover_rate:  0.9622
+child_drop:  289
+add_hard_num:  0
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  753
+test_agent_num:  4
+test_mean_cover_rate:  0.9838
+
+ Scenario simple_spread Algo solved_sp updates 336/380 episodes, total num timesteps 35385000/40000000, FPS 760.
+
+value loss of agent: 1.2227301637331645
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9668
+training_cover_rate:  0.9655
+training_cover_rate:  0.967
+child_drop:  297
+add_hard_num:  0
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  736
+test_agent_num:  4
+test_mean_cover_rate:  0.986
+
+ Scenario simple_spread Algo solved_sp updates 337/380 episodes, total num timesteps 35490000/40000000, FPS 760.
+
+value loss of agent: 1.060515546798706
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9682000000000001
+training_cover_rate:  0.9698
+training_cover_rate:  0.9632000000000001
+child_drop:  293
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  722
+test_agent_num:  4
+test_mean_cover_rate:  0.9856
+
+ Scenario simple_spread Algo solved_sp updates 338/380 episodes, total num timesteps 35595000/40000000, FPS 760.
+
+value loss of agent: 1.14643128712972
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9598000000000001
+training_cover_rate:  0.9631
+training_cover_rate:  0.9632999999999999
+child_drop:  282
+add_hard_num:  0
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  720
+test_agent_num:  4
+test_mean_cover_rate:  0.9860999999999999
+
+ Scenario simple_spread Algo solved_sp updates 339/380 episodes, total num timesteps 35700000/40000000, FPS 761.
+
+value loss of agent: 1.0776938398679097
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9678
+training_cover_rate:  0.9708
+training_cover_rate:  0.9676
+child_drop:  291
+add_hard_num:  0
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  704
+test_agent_num:  4
+test_mean_cover_rate:  0.9838
+
+ Scenario simple_spread Algo solved_sp updates 340/380 episodes, total num timesteps 35805000/40000000, FPS 761.
+
+value loss of agent: 0.9521813790003458
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.965
+training_cover_rate:  0.9638
+training_cover_rate:  0.9652999999999999
+child_drop:  292
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  688
+test_agent_num:  4
+test_mean_cover_rate:  0.9862000000000001
+
+ Scenario simple_spread Algo solved_sp updates 341/380 episodes, total num timesteps 35910000/40000000, FPS 760.
+
+value loss of agent: 0.929240345954895
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9662999999999999
+training_cover_rate:  0.9609000000000001
+training_cover_rate:  0.965
+child_drop:  293
+add_hard_num:  0
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  676
+test_agent_num:  4
+test_mean_cover_rate:  0.9848
+
+ Scenario simple_spread Algo solved_sp updates 342/380 episodes, total num timesteps 36015000/40000000, FPS 761.
+
+value loss of agent: 0.958254357179006
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9667
+training_cover_rate:  0.9624000000000001
+training_cover_rate:  0.9659000000000001
+child_drop:  296
+add_hard_num:  0
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  662
+test_agent_num:  4
+test_mean_cover_rate:  0.9891
+
+ Scenario simple_spread Algo solved_sp updates 343/380 episodes, total num timesteps 36120000/40000000, FPS 761.
+
+value loss of agent: 1.002558167775472
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9659000000000001
+training_cover_rate:  0.9628
+training_cover_rate:  0.9679000000000001
+child_drop:  293
+add_hard_num:  0
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  644
+test_agent_num:  4
+test_mean_cover_rate:  0.9855999999999999
+
+ Scenario simple_spread Algo solved_sp updates 344/380 episodes, total num timesteps 36225000/40000000, FPS 761.
+
+value loss of agent: 1.0020923654238383
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9606
+training_cover_rate:  0.9682999999999999
+training_cover_rate:  0.956
+child_drop:  290
+add_hard_num:  0
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  644
+test_agent_num:  4
+test_mean_cover_rate:  0.9867
+
+ Scenario simple_spread Algo solved_sp updates 345/380 episodes, total num timesteps 36330000/40000000, FPS 761.
+
+value loss of agent: 1.0876503944396974
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9618
+training_cover_rate:  0.9605
+training_cover_rate:  0.9638
+child_drop:  296
+add_hard_num:  0
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  637
+test_agent_num:  4
+test_mean_cover_rate:  0.9833
+
+ Scenario simple_spread Algo solved_sp updates 346/380 episodes, total num timesteps 36435000/40000000, FPS 761.
+
+value loss of agent: 0.9945116619269053
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9599
+training_cover_rate:  0.9632999999999999
+training_cover_rate:  0.9681000000000001
+child_drop:  289
+add_hard_num:  0
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  623
+test_agent_num:  4
+test_mean_cover_rate:  0.9891
+
+ Scenario simple_spread Algo solved_sp updates 347/380 episodes, total num timesteps 36540000/40000000, FPS 762.
+
+value loss of agent: 1.0317852397759755
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9678
+training_cover_rate:  0.969
+training_cover_rate:  0.9675
+child_drop:  291
+add_hard_num:  0
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  605
+test_agent_num:  4
+test_mean_cover_rate:  0.9850999999999999
+
+ Scenario simple_spread Algo solved_sp updates 348/380 episodes, total num timesteps 36645000/40000000, FPS 761.
+
+value loss of agent: 0.9850222746531169
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9612
+training_cover_rate:  0.9651000000000001
+training_cover_rate:  0.9659000000000001
+child_drop:  281
+add_hard_num:  0
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  594
+test_agent_num:  4
+test_mean_cover_rate:  0.9853999999999999
+
+ Scenario simple_spread Algo solved_sp updates 349/380 episodes, total num timesteps 36750000/40000000, FPS 762.
+
+value loss of agent: 0.950994877020518
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9608
+training_cover_rate:  0.9588000000000001
+training_cover_rate:  0.9605
+child_drop:  272
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  601
+test_agent_num:  4
+test_mean_cover_rate:  0.9858
+
+ Scenario simple_spread Algo solved_sp updates 350/380 episodes, total num timesteps 36855000/40000000, FPS 762.
+
+value loss of agent: 1.0497708956400553
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9594000000000001
+training_cover_rate:  0.9672999999999999
+training_cover_rate:  0.9622999999999999
+child_drop:  290
+add_hard_num:  0
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  586
+test_agent_num:  4
+test_mean_cover_rate:  0.9855
+
+ Scenario simple_spread Algo solved_sp updates 351/380 episodes, total num timesteps 36960000/40000000, FPS 762.
+
+value loss of agent: 1.0376076618830363
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9568
+training_cover_rate:  0.9611
+training_cover_rate:  0.9621000000000001
+child_drop:  277
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  588
+test_agent_num:  4
+test_mean_cover_rate:  0.9847
+
+ Scenario simple_spread Algo solved_sp updates 352/380 episodes, total num timesteps 37065000/40000000, FPS 761.
+
+value loss of agent: 1.0331681847572327
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9542999999999999
+training_cover_rate:  0.9546
+training_cover_rate:  0.9642000000000001
+child_drop:  283
+add_hard_num:  0
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  596
+test_agent_num:  4
+test_mean_cover_rate:  0.9817
+
+ Scenario simple_spread Algo solved_sp updates 353/380 episodes, total num timesteps 37170000/40000000, FPS 762.
+
+value loss of agent: 1.189717694123586
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.965
+training_cover_rate:  0.9658
+training_cover_rate:  0.9642999999999999
+child_drop:  293
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  579
+test_agent_num:  4
+test_mean_cover_rate:  0.9815
+
+ Scenario simple_spread Algo solved_sp updates 354/380 episodes, total num timesteps 37275000/40000000, FPS 762.
+
+value loss of agent: 0.9961820622285207
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9615
+training_cover_rate:  0.9615
+training_cover_rate:  0.9667
+child_drop:  291
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  572
+test_agent_num:  4
+test_mean_cover_rate:  0.9821
+
+ Scenario simple_spread Algo solved_sp updates 355/380 episodes, total num timesteps 37380000/40000000, FPS 762.
+
+value loss of agent: 0.9720885694026947
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9597
+training_cover_rate:  0.9631
+training_cover_rate:  0.9576999999999999
+child_drop:  273
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  575
+test_agent_num:  4
+test_mean_cover_rate:  0.9804
+
+ Scenario simple_spread Algo solved_sp updates 356/380 episodes, total num timesteps 37485000/40000000, FPS 762.
+
+value loss of agent: 1.0690324266751607
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9565
+training_cover_rate:  0.9618
+training_cover_rate:  0.9638
+child_drop:  284
+add_hard_num:  0
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  579
+test_agent_num:  4
+test_mean_cover_rate:  0.9835
+
+ Scenario simple_spread Algo solved_sp updates 357/380 episodes, total num timesteps 37590000/40000000, FPS 762.
+
+value loss of agent: 1.0656650900840758
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9636
+training_cover_rate:  0.9596999999999999
+training_cover_rate:  0.9621000000000001
+child_drop:  296
+add_hard_num:  0
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  571
+test_agent_num:  4
+test_mean_cover_rate:  0.9863
+
+ Scenario simple_spread Algo solved_sp updates 358/380 episodes, total num timesteps 37695000/40000000, FPS 762.
+
+value loss of agent: 1.0434037049611409
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9585999999999999
+training_cover_rate:  0.9631000000000001
+training_cover_rate:  0.962
+child_drop:  295
+add_hard_num:  0
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  562
+test_agent_num:  4
+test_mean_cover_rate:  0.9852
+
+ Scenario simple_spread Algo solved_sp updates 359/380 episodes, total num timesteps 37800000/40000000, FPS 762.
+
+value loss of agent: 0.9921095351378123
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.962
+training_cover_rate:  0.9555
+training_cover_rate:  0.958
+child_drop:  280
+add_hard_num:  0
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  570
+test_agent_num:  4
+test_mean_cover_rate:  0.9819
+
+ Scenario simple_spread Algo solved_sp updates 360/380 episodes, total num timesteps 37905000/40000000, FPS 763.
+
+value loss of agent: 1.058433175086975
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9639000000000001
+training_cover_rate:  0.9579
+training_cover_rate:  0.9651
+child_drop:  288
+add_hard_num:  0
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  564
+test_agent_num:  4
+test_mean_cover_rate:  0.9783
+
+ Scenario simple_spread Algo solved_sp updates 361/380 episodes, total num timesteps 38010000/40000000, FPS 763.
+
+value loss of agent: 1.069562828540802
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9582999999999999
+training_cover_rate:  0.9602999999999999
+training_cover_rate:  0.9581000000000002
+child_drop:  282
+add_hard_num:  0
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  567
+test_agent_num:  4
+test_mean_cover_rate:  0.9768
+
+ Scenario simple_spread Algo solved_sp updates 362/380 episodes, total num timesteps 38115000/40000000, FPS 763.
+
+value loss of agent: 1.1030283530553182
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9509
+training_cover_rate:  0.9582999999999999
+training_cover_rate:  0.9581
+child_drop:  267
+add_hard_num:  0
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  597
+test_agent_num:  4
+test_mean_cover_rate:  0.9856
+
+ Scenario simple_spread Algo solved_sp updates 363/380 episodes, total num timesteps 38220000/40000000, FPS 763.
+
+value loss of agent: 1.1107258478800455
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9499000000000001
+training_cover_rate:  0.9528
+training_cover_rate:  0.9579
+child_drop:  274
+add_hard_num:  0
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  622
+test_agent_num:  4
+test_mean_cover_rate:  0.9742999999999999
+
+ Scenario simple_spread Algo solved_sp updates 364/380 episodes, total num timesteps 38325000/40000000, FPS 763.
+
+value loss of agent: 1.1055896878242493
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9462
+training_cover_rate:  0.9532
+training_cover_rate:  0.9557
+child_drop:  254
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  652
+test_agent_num:  4
+test_mean_cover_rate:  0.9779000000000001
+
+ Scenario simple_spread Algo solved_sp updates 365/380 episodes, total num timesteps 38430000/40000000, FPS 763.
+
+value loss of agent: 1.2014469941457113
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9538
+training_cover_rate:  0.9552999999999999
+training_cover_rate:  0.9557
+child_drop:  264
+add_hard_num:  0
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  673
+test_agent_num:  4
+test_mean_cover_rate:  0.9853
+
+ Scenario simple_spread Algo solved_sp updates 366/380 episodes, total num timesteps 38535000/40000000, FPS 763.
+
+value loss of agent: 1.1865677078564962
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9545
+training_cover_rate:  0.9625999999999999
+training_cover_rate:  0.9612999999999999
+child_drop:  284
+add_hard_num:  0
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  677
+test_agent_num:  4
+test_mean_cover_rate:  0.9865999999999999
+
+ Scenario simple_spread Algo solved_sp updates 367/380 episodes, total num timesteps 38640000/40000000, FPS 763.
+
+value loss of agent: 1.063497793674469
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9592
+training_cover_rate:  0.96
+training_cover_rate:  0.9591000000000001
+child_drop:  277
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  679
+test_agent_num:  4
+test_mean_cover_rate:  0.9807
+
+ Scenario simple_spread Algo solved_sp updates 368/380 episodes, total num timesteps 38745000/40000000, FPS 763.
+
+value loss of agent: 1.1099717617034912
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9503
+training_cover_rate:  0.9575
+training_cover_rate:  0.9525
+child_drop:  251
+add_hard_num:  0
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  715
+test_agent_num:  4
+test_mean_cover_rate:  0.9798
+
+ Scenario simple_spread Algo solved_sp updates 369/380 episodes, total num timesteps 38850000/40000000, FPS 763.
+
+value loss of agent: 1.1628799319267273
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.964
+training_cover_rate:  0.9588
+training_cover_rate:  0.9686
+child_drop:  292
+add_hard_num:  0
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  699
+test_agent_num:  4
+test_mean_cover_rate:  0.9815
+
+ Scenario simple_spread Algo solved_sp updates 370/380 episodes, total num timesteps 38955000/40000000, FPS 763.
+
+value loss of agent: 0.9795010507106781
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9588
+training_cover_rate:  0.9638
+training_cover_rate:  0.9645
+child_drop:  271
+add_hard_num:  0
+parent:  85
+last_node_parent:  85
+childlist:  0
+archive:  693
+test_agent_num:  4
+test_mean_cover_rate:  0.9864
+
+ Scenario simple_spread Algo solved_sp updates 371/380 episodes, total num timesteps 39060000/40000000, FPS 763.
+
+value loss of agent: 1.0034371932347617
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.959
+training_cover_rate:  0.9604000000000001
+training_cover_rate:  0.9587
+child_drop:  278
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  689
+test_agent_num:  4
+test_mean_cover_rate:  0.9897
+
+ Scenario simple_spread Algo solved_sp updates 372/380 episodes, total num timesteps 39165000/40000000, FPS 763.
+
+value loss of agent: 1.090707536538442
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9636
+training_cover_rate:  0.9635999999999999
+training_cover_rate:  0.9635999999999999
+child_drop:  291
+add_hard_num:  0
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  673
+test_agent_num:  4
+test_mean_cover_rate:  0.9903999999999998
+
+ Scenario simple_spread Algo solved_sp updates 373/380 episodes, total num timesteps 39270000/40000000, FPS 763.
+
+value loss of agent: 1.0328376114368438
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9586
+training_cover_rate:  0.9636
+training_cover_rate:  0.9668
+child_drop:  287
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  670
+test_agent_num:  4
+test_mean_cover_rate:  0.9889000000000001
+
+ Scenario simple_spread Algo solved_sp updates 374/380 episodes, total num timesteps 39375000/40000000, FPS 764.
+
+value loss of agent: 1.0301879743734996
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9655
+training_cover_rate:  0.9608
+training_cover_rate:  0.9586
+child_drop:  283
+add_hard_num:  0
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  665
+test_agent_num:  4
+test_mean_cover_rate:  0.9865
+
+ Scenario simple_spread Algo solved_sp updates 375/380 episodes, total num timesteps 39480000/40000000, FPS 764.
+
+value loss of agent: 1.120644505818685
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9571000000000001
+training_cover_rate:  0.9577
+training_cover_rate:  0.9619000000000001
+child_drop:  269
+add_hard_num:  0
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  670
+test_agent_num:  4
+test_mean_cover_rate:  0.9846
+
+ Scenario simple_spread Algo solved_sp updates 376/380 episodes, total num timesteps 39585000/40000000, FPS 764.
+
+value loss of agent: 1.0222072839736938
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9497000000000001
+training_cover_rate:  0.9531000000000001
+training_cover_rate:  0.9628
+child_drop:  274
+add_hard_num:  0
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  680
+test_agent_num:  4
+test_mean_cover_rate:  0.9879
+
+ Scenario simple_spread Algo solved_sp updates 377/380 episodes, total num timesteps 39690000/40000000, FPS 764.
+
+value loss of agent: 1.018249237537384
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9548000000000001
+training_cover_rate:  0.9608000000000001
+training_cover_rate:  0.9565
+child_drop:  272
+add_hard_num:  0
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  687
+test_agent_num:  4
+test_mean_cover_rate:  0.9884
+
+ Scenario simple_spread Algo solved_sp updates 378/380 episodes, total num timesteps 39795000/40000000, FPS 764.
+
+value loss of agent: 1.117069939772288
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+training_cover_rate:  0.9564
+training_cover_rate:  0.9615
+training_cover_rate:  0.9671000000000001
+child_drop:  284
+add_hard_num:  0
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  684
+test_agent_num:  4
+test_mean_cover_rate:  0.9907
+
+ Scenario simple_spread Algo solved_sp updates 379/380 episodes, total num timesteps 39900000/40000000, FPS 764.
+
+value loss of agent: 0.9431541323661804

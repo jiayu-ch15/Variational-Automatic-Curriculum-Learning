@@ -1,0 +1,7124 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+sample_time:  0.004242658615112305
+child_drop:  0
+add_hard_num:  0
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  493
+test_agent_num:  2
+test_mean_cover_rate:  0.125
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Policy_pb_3. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type MLPBase. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type LayerNorm. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Sequential. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Linear. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Tanh. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_actor_dist_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ObsEncoder_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Categorical. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_critic_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+
+ Scenario push_ball Algo solved_pb updates 0/444 episodes, total num timesteps 180000/80000000, FPS 2258.
+
+value loss of agent: 1.4230246702829996
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0010223388671875
+child_drop:  72
+add_hard_num:  105
+parent:  4
+last_node_parent:  4
+childlist:  0
+archive:  662
+test_agent_num:  2
+test_mean_cover_rate:  0.119
+
+ Scenario push_ball Algo solved_pb updates 1/444 episodes, total num timesteps 360000/80000000, FPS 2337.
+
+value loss of agent: 1.9227700233459473
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014805793762207031
+child_drop:  48
+add_hard_num:  105
+parent:  6
+last_node_parent:  6
+childlist:  0
+archive:  853
+test_agent_num:  2
+test_mean_cover_rate:  0.111
+
+ Scenario push_ball Algo solved_pb updates 2/444 episodes, total num timesteps 540000/80000000, FPS 2216.
+
+value loss of agent: 1.4024011532465617
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001409769058227539
+child_drop:  65
+add_hard_num:  158
+parent:  2
+last_node_parent:  2
+childlist:  0
+archive:  978
+test_agent_num:  2
+test_mean_cover_rate:  0.089
+
+ Scenario push_ball Algo solved_pb updates 3/444 episodes, total num timesteps 720000/80000000, FPS 1994.
+
+value loss of agent: 1.4344041426976522
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014841556549072266
+child_drop:  31
+add_hard_num:  165
+parent:  6
+last_node_parent:  6
+childlist:  0
+archive:  1126
+test_agent_num:  2
+test_mean_cover_rate:  0.097
+
+ Scenario push_ball Algo solved_pb updates 4/444 episodes, total num timesteps 900000/80000000, FPS 1956.
+
+value loss of agent: 1.3509549697240193
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014390945434570312
+child_drop:  40
+add_hard_num:  157
+parent:  6
+last_node_parent:  6
+childlist:  0
+archive:  1273
+test_agent_num:  2
+test_mean_cover_rate:  0.096
+
+ Scenario push_ball Algo solved_pb updates 5/444 episodes, total num timesteps 1080000/80000000, FPS 1915.
+
+value loss of agent: 1.313136617342631
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014443397521972656
+child_drop:  81
+add_hard_num:  111
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  1424
+test_agent_num:  2
+test_mean_cover_rate:  0.11
+
+ Scenario push_ball Algo solved_pb updates 6/444 episodes, total num timesteps 1260000/80000000, FPS 1862.
+
+value loss of agent: 1.6940733035405477
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0023941993713378906
+child_drop:  48
+add_hard_num:  140
+parent:  14
+last_node_parent:  14
+childlist:  0
+archive:  1572
+test_agent_num:  2
+test_mean_cover_rate:  0.12
+
+ Scenario push_ball Algo solved_pb updates 7/444 episodes, total num timesteps 1440000/80000000, FPS 1835.
+
+value loss of agent: 1.4372055371602377
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014264583587646484
+child_drop:  75
+add_hard_num:  115
+parent:  6
+last_node_parent:  6
+childlist:  0
+archive:  1726
+test_agent_num:  2
+test_mean_cover_rate:  0.098
+
+ Scenario push_ball Algo solved_pb updates 8/444 episodes, total num timesteps 1620000/80000000, FPS 1828.
+
+value loss of agent: 1.5136280536651612
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001537322998046875
+child_drop:  60
+add_hard_num:  134
+parent:  11
+last_node_parent:  11
+childlist:  0
+archive:  1871
+test_agent_num:  2
+test_mean_cover_rate:  0.122
+
+ Scenario push_ball Algo solved_pb updates 9/444 episodes, total num timesteps 1800000/80000000, FPS 1836.
+
+value loss of agent: 1.3419621944427491
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014126300811767578
+child_drop:  95
+add_hard_num:  109
+parent:  7
+last_node_parent:  7
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.121
+
+ Scenario push_ball Algo solved_pb updates 10/444 episodes, total num timesteps 1980000/80000000, FPS 1808.
+
+value loss of agent: 1.6596559047698975
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002607583999633789
+child_drop:  70
+add_hard_num:  112
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.121
+
+ Scenario push_ball Algo solved_pb updates 11/444 episodes, total num timesteps 2160000/80000000, FPS 1810.
+
+value loss of agent: 1.6674744447072347
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001512765884399414
+child_drop:  89
+add_hard_num:  117
+parent:  5
+last_node_parent:  5
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.106
+
+ Scenario push_ball Algo solved_pb updates 12/444 episodes, total num timesteps 2340000/80000000, FPS 1799.
+
+value loss of agent: 1.835185448328654
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002517223358154297
+child_drop:  72
+add_hard_num:  126
+parent:  14
+last_node_parent:  14
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.118
+
+ Scenario push_ball Algo solved_pb updates 13/444 episodes, total num timesteps 2520000/80000000, FPS 1803.
+
+value loss of agent: 1.8712979475657145
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017390251159667969
+child_drop:  66
+add_hard_num:  134
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.133
+
+ Scenario push_ball Algo solved_pb updates 14/444 episodes, total num timesteps 2700000/80000000, FPS 1812.
+
+value loss of agent: 1.9445064385732016
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015218257904052734
+child_drop:  106
+add_hard_num:  90
+parent:  12
+last_node_parent:  12
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.102
+
+ Scenario push_ball Algo solved_pb updates 15/444 episodes, total num timesteps 2880000/80000000, FPS 1814.
+
+value loss of agent: 1.5884754339853921
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020575523376464844
+child_drop:  74
+add_hard_num:  123
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.13
+
+ Scenario push_ball Algo solved_pb updates 16/444 episodes, total num timesteps 3060000/80000000, FPS 1817.
+
+value loss of agent: 1.759848952293396
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014541149139404297
+child_drop:  83
+add_hard_num:  96
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.115
+
+ Scenario push_ball Algo solved_pb updates 17/444 episodes, total num timesteps 3240000/80000000, FPS 1817.
+
+value loss of agent: 1.7817510525385538
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015914440155029297
+child_drop:  82
+add_hard_num:  121
+parent:  13
+last_node_parent:  13
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.13
+
+ Scenario push_ball Algo solved_pb updates 18/444 episodes, total num timesteps 3420000/80000000, FPS 1821.
+
+value loss of agent: 1.7609851996103922
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016155242919921875
+child_drop:  84
+add_hard_num:  106
+parent:  19
+last_node_parent:  19
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.132
+
+ Scenario push_ball Algo solved_pb updates 19/444 episodes, total num timesteps 3600000/80000000, FPS 1816.
+
+value loss of agent: 1.5926807483037313
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014605522155761719
+child_drop:  80
+add_hard_num:  105
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.121
+
+ Scenario push_ball Algo solved_pb updates 20/444 episodes, total num timesteps 3780000/80000000, FPS 1808.
+
+value loss of agent: 1.5163685083389282
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0074672698974609375
+child_drop:  67
+add_hard_num:  118
+parent:  14
+last_node_parent:  14
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.12
+
+ Scenario push_ball Algo solved_pb updates 21/444 episodes, total num timesteps 3960000/80000000, FPS 1802.
+
+value loss of agent: 1.3643651644388834
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015730857849121094
+child_drop:  66
+add_hard_num:  118
+parent:  8
+last_node_parent:  8
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.126
+
+ Scenario push_ball Algo solved_pb updates 22/444 episodes, total num timesteps 4140000/80000000, FPS 1798.
+
+value loss of agent: 1.5592832485834758
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001529693603515625
+child_drop:  85
+add_hard_num:  114
+parent:  13
+last_node_parent:  13
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.118
+
+ Scenario push_ball Algo solved_pb updates 23/444 episodes, total num timesteps 4320000/80000000, FPS 1798.
+
+value loss of agent: 1.4029439210891723
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018682479858398438
+child_drop:  84
+add_hard_num:  88
+parent:  18
+last_node_parent:  18
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.119
+
+ Scenario push_ball Algo solved_pb updates 24/444 episodes, total num timesteps 4500000/80000000, FPS 1799.
+
+value loss of agent: 1.545025396347046
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014944076538085938
+child_drop:  80
+add_hard_num:  115
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.134
+
+ Scenario push_ball Algo solved_pb updates 25/444 episodes, total num timesteps 4680000/80000000, FPS 1803.
+
+value loss of agent: 1.6080273071924844
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015218257904052734
+child_drop:  68
+add_hard_num:  111
+parent:  19
+last_node_parent:  19
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.12
+
+ Scenario push_ball Algo solved_pb updates 26/444 episodes, total num timesteps 4860000/80000000, FPS 1805.
+
+value loss of agent: 1.799088191986084
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015723705291748047
+child_drop:  95
+add_hard_num:  113
+parent:  20
+last_node_parent:  20
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.134
+
+ Scenario push_ball Algo solved_pb updates 27/444 episodes, total num timesteps 5040000/80000000, FPS 1808.
+
+value loss of agent: 1.854322361946106
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015416145324707031
+child_drop:  86
+add_hard_num:  107
+parent:  19
+last_node_parent:  19
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.15
+
+ Scenario push_ball Algo solved_pb updates 28/444 episodes, total num timesteps 5220000/80000000, FPS 1805.
+
+value loss of agent: 2.0499436219533282
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001554250717163086
+child_drop:  84
+add_hard_num:  96
+parent:  15
+last_node_parent:  15
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.136
+
+ Scenario push_ball Algo solved_pb updates 29/444 episodes, total num timesteps 5400000/80000000, FPS 1801.
+
+value loss of agent: 1.8340576807657878
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014297962188720703
+child_drop:  89
+add_hard_num:  92
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.134
+
+ Scenario push_ball Algo solved_pb updates 30/444 episodes, total num timesteps 5580000/80000000, FPS 1801.
+
+value loss of agent: 2.0682368755340574
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018737316131591797
+child_drop:  99
+add_hard_num:  61
+parent:  9
+last_node_parent:  9
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.1554
+
+ Scenario push_ball Algo solved_pb updates 31/444 episodes, total num timesteps 5760000/80000000, FPS 1795.
+
+value loss of agent: 1.922299599647522
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015888214111328125
+child_drop:  107
+add_hard_num:  71
+parent:  22
+last_node_parent:  22
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.181
+
+ Scenario push_ball Algo solved_pb updates 32/444 episodes, total num timesteps 5940000/80000000, FPS 1792.
+
+value loss of agent: 2.3387022018432617
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015285015106201172
+child_drop:  80
+add_hard_num:  77
+parent:  16
+last_node_parent:  16
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.18059999999999998
+
+ Scenario push_ball Algo solved_pb updates 33/444 episodes, total num timesteps 6120000/80000000, FPS 1789.
+
+value loss of agent: 2.139816888173421
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015718936920166016
+child_drop:  89
+add_hard_num:  84
+parent:  20
+last_node_parent:  20
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.19240000000000002
+
+ Scenario push_ball Algo solved_pb updates 34/444 episodes, total num timesteps 6300000/80000000, FPS 1778.
+
+value loss of agent: 2.4790000120798745
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016243457794189453
+child_drop:  86
+add_hard_num:  62
+parent:  24
+last_node_parent:  24
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.198
+
+ Scenario push_ball Algo solved_pb updates 35/444 episodes, total num timesteps 6480000/80000000, FPS 1769.
+
+value loss of agent: 2.5431157906850177
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0034360885620117188
+child_drop:  104
+add_hard_num:  47
+parent:  22
+last_node_parent:  22
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.238
+
+ Scenario push_ball Algo solved_pb updates 36/444 episodes, total num timesteps 6660000/80000000, FPS 1762.
+
+value loss of agent: 2.7366411368052166
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015063285827636719
+child_drop:  95
+add_hard_num:  59
+parent:  26
+last_node_parent:  26
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.259
+
+ Scenario push_ball Algo solved_pb updates 37/444 episodes, total num timesteps 6840000/80000000, FPS 1762.
+
+value loss of agent: 2.6643998940785725
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001486063003540039
+child_drop:  123
+add_hard_num:  51
+parent:  30
+last_node_parent:  30
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.2778
+
+ Scenario push_ball Algo solved_pb updates 38/444 episodes, total num timesteps 7020000/80000000, FPS 1763.
+
+value loss of agent: 3.208073457082113
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015411376953125
+child_drop:  121
+add_hard_num:  52
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.2422
+
+ Scenario push_ball Algo solved_pb updates 39/444 episodes, total num timesteps 7200000/80000000, FPS 1763.
+
+value loss of agent: 3.350257142384847
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016717910766601562
+child_drop:  117
+add_hard_num:  44
+parent:  27
+last_node_parent:  27
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.31439999999999996
+
+ Scenario push_ball Algo solved_pb updates 40/444 episodes, total num timesteps 7380000/80000000, FPS 1762.
+
+value loss of agent: 3.1933876196543376
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019445419311523438
+child_drop:  126
+add_hard_num:  31
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.28720000000000007
+
+ Scenario push_ball Algo solved_pb updates 41/444 episodes, total num timesteps 7560000/80000000, FPS 1764.
+
+value loss of agent: 3.110785786310832
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015552043914794922
+child_drop:  119
+add_hard_num:  42
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.2902
+
+ Scenario push_ball Algo solved_pb updates 42/444 episodes, total num timesteps 7740000/80000000, FPS 1765.
+
+value loss of agent: 3.1136964639027913
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001659393310546875
+child_drop:  131
+add_hard_num:  19
+parent:  43
+last_node_parent:  43
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.278
+
+ Scenario push_ball Algo solved_pb updates 43/444 episodes, total num timesteps 7920000/80000000, FPS 1763.
+
+value loss of agent: 3.072402270634969
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003623485565185547
+child_drop:  143
+add_hard_num:  30
+parent:  45
+last_node_parent:  45
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.30960000000000004
+
+ Scenario push_ball Algo solved_pb updates 44/444 episodes, total num timesteps 8100000/80000000, FPS 1762.
+
+value loss of agent: 3.2668177922566732
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00853586196899414
+child_drop:  132
+add_hard_num:  31
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.33120000000000005
+
+ Scenario push_ball Algo solved_pb updates 45/444 episodes, total num timesteps 8280000/80000000, FPS 1762.
+
+value loss of agent: 3.1010270595550535
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019683837890625
+child_drop:  159
+add_hard_num:  18
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.32280000000000003
+
+ Scenario push_ball Algo solved_pb updates 46/444 episodes, total num timesteps 8460000/80000000, FPS 1762.
+
+value loss of agent: 2.8909268697102863
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015609264373779297
+child_drop:  152
+add_hard_num:  23
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3558
+
+ Scenario push_ball Algo solved_pb updates 47/444 episodes, total num timesteps 8640000/80000000, FPS 1759.
+
+value loss of agent: 2.9297725836435955
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015521049499511719
+child_drop:  159
+add_hard_num:  19
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3554
+
+ Scenario push_ball Algo solved_pb updates 48/444 episodes, total num timesteps 8820000/80000000, FPS 1753.
+
+value loss of agent: 3.0045441309611003
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016002655029296875
+child_drop:  151
+add_hard_num:  29
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3384
+
+ Scenario push_ball Algo solved_pb updates 49/444 episodes, total num timesteps 9000000/80000000, FPS 1749.
+
+value loss of agent: 3.017267847061157
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015807151794433594
+child_drop:  155
+add_hard_num:  26
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.342
+
+ Scenario push_ball Algo solved_pb updates 50/444 episodes, total num timesteps 9180000/80000000, FPS 1745.
+
+value loss of agent: 2.8158305644989015
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0024340152740478516
+child_drop:  164
+add_hard_num:  18
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.36119999999999997
+
+ Scenario push_ball Algo solved_pb updates 51/444 episodes, total num timesteps 9360000/80000000, FPS 1742.
+
+value loss of agent: 2.786245854695638
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015912055969238281
+child_drop:  172
+add_hard_num:  17
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.38720000000000004
+
+ Scenario push_ball Algo solved_pb updates 52/444 episodes, total num timesteps 9540000/80000000, FPS 1744.
+
+value loss of agent: 2.9001436869303387
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.01159214973449707
+child_drop:  172
+add_hard_num:  23
+parent:  44
+last_node_parent:  44
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3912
+
+ Scenario push_ball Algo solved_pb updates 53/444 episodes, total num timesteps 9720000/80000000, FPS 1740.
+
+value loss of agent: 2.6273438135782876
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016510486602783203
+child_drop:  156
+add_hard_num:  19
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.356
+
+ Scenario push_ball Algo solved_pb updates 54/444 episodes, total num timesteps 9900000/80000000, FPS 1735.
+
+value loss of agent: 2.7060486316680907
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015935897827148438
+child_drop:  155
+add_hard_num:  27
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3646
+
+ Scenario push_ball Algo solved_pb updates 55/444 episodes, total num timesteps 10080000/80000000, FPS 1737.
+
+value loss of agent: 2.667342456181844
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016436576843261719
+child_drop:  154
+add_hard_num:  21
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.36019999999999996
+
+ Scenario push_ball Algo solved_pb updates 56/444 episodes, total num timesteps 10260000/80000000, FPS 1738.
+
+value loss of agent: 2.6576045672098796
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002218961715698242
+child_drop:  147
+add_hard_num:  20
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.36760000000000004
+
+ Scenario push_ball Algo solved_pb updates 57/444 episodes, total num timesteps 10440000/80000000, FPS 1738.
+
+value loss of agent: 2.689854939778646
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001711130142211914
+child_drop:  182
+add_hard_num:  13
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.346
+
+ Scenario push_ball Algo solved_pb updates 58/444 episodes, total num timesteps 10620000/80000000, FPS 1739.
+
+value loss of agent: 2.7050151030222573
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017578601837158203
+child_drop:  166
+add_hard_num:  13
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.3954
+
+ Scenario push_ball Algo solved_pb updates 59/444 episodes, total num timesteps 10800000/80000000, FPS 1737.
+
+value loss of agent: 3.045479996999105
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017981529235839844
+child_drop:  171
+add_hard_num:  18
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4106
+
+ Scenario push_ball Algo solved_pb updates 60/444 episodes, total num timesteps 10980000/80000000, FPS 1734.
+
+value loss of agent: 2.704966990152995
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.008463621139526367
+child_drop:  154
+add_hard_num:  21
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.384
+
+ Scenario push_ball Algo solved_pb updates 61/444 episodes, total num timesteps 11160000/80000000, FPS 1733.
+
+value loss of agent: 2.6717475573221843
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002629995346069336
+child_drop:  148
+add_hard_num:  20
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4162
+
+ Scenario push_ball Algo solved_pb updates 62/444 episodes, total num timesteps 11340000/80000000, FPS 1728.
+
+value loss of agent: 3.004423173268636
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017981529235839844
+child_drop:  154
+add_hard_num:  18
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.384
+
+ Scenario push_ball Algo solved_pb updates 63/444 episodes, total num timesteps 11520000/80000000, FPS 1729.
+
+value loss of agent: 2.837965170542399
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.011503219604492188
+child_drop:  156
+add_hard_num:  22
+parent:  43
+last_node_parent:  43
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4238
+
+ Scenario push_ball Algo solved_pb updates 64/444 episodes, total num timesteps 11700000/80000000, FPS 1721.
+
+value loss of agent: 2.880808401107788
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018830299377441406
+child_drop:  153
+add_hard_num:  20
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.44360000000000005
+
+ Scenario push_ball Algo solved_pb updates 65/444 episodes, total num timesteps 11880000/80000000, FPS 1722.
+
+value loss of agent: 2.84248530069987
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002593994140625
+child_drop:  150
+add_hard_num:  22
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4054
+
+ Scenario push_ball Algo solved_pb updates 66/444 episodes, total num timesteps 12060000/80000000, FPS 1723.
+
+value loss of agent: 2.8193190892537436
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0036683082580566406
+child_drop:  170
+add_hard_num:  21
+parent:  26
+last_node_parent:  26
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4196
+
+ Scenario push_ball Algo solved_pb updates 67/444 episodes, total num timesteps 12240000/80000000, FPS 1721.
+
+value loss of agent: 2.76078298886617
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.008419036865234375
+child_drop:  140
+add_hard_num:  18
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.39679999999999993
+
+ Scenario push_ball Algo solved_pb updates 68/444 episodes, total num timesteps 12420000/80000000, FPS 1719.
+
+value loss of agent: 2.9431247234344484
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016434192657470703
+child_drop:  172
+add_hard_num:  18
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4546
+
+ Scenario push_ball Algo solved_pb updates 69/444 episodes, total num timesteps 12600000/80000000, FPS 1720.
+
+value loss of agent: 2.871204471588135
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017702579498291016
+child_drop:  168
+add_hard_num:  20
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4674
+
+ Scenario push_ball Algo solved_pb updates 70/444 episodes, total num timesteps 12780000/80000000, FPS 1722.
+
+value loss of agent: 2.6458253224690753
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018310546875
+child_drop:  161
+add_hard_num:  21
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.43539999999999995
+
+ Scenario push_ball Algo solved_pb updates 71/444 episodes, total num timesteps 12960000/80000000, FPS 1722.
+
+value loss of agent: 2.763768450419108
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017838478088378906
+child_drop:  166
+add_hard_num:  31
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.45659999999999995
+
+ Scenario push_ball Algo solved_pb updates 72/444 episodes, total num timesteps 13140000/80000000, FPS 1722.
+
+value loss of agent: 2.684831396738688
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015861988067626953
+child_drop:  157
+add_hard_num:  22
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4724
+
+ Scenario push_ball Algo solved_pb updates 73/444 episodes, total num timesteps 13320000/80000000, FPS 1723.
+
+value loss of agent: 2.4274933020273846
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016849040985107422
+child_drop:  165
+add_hard_num:  17
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.46459999999999996
+
+ Scenario push_ball Algo solved_pb updates 74/444 episodes, total num timesteps 13500000/80000000, FPS 1724.
+
+value loss of agent: 2.6253331502278647
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019502639770507812
+child_drop:  165
+add_hard_num:  43
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.476
+
+ Scenario push_ball Algo solved_pb updates 75/444 episodes, total num timesteps 13680000/80000000, FPS 1724.
+
+value loss of agent: 2.572085905075073
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00194549560546875
+child_drop:  139
+add_hard_num:  17
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.473
+
+ Scenario push_ball Algo solved_pb updates 76/444 episodes, total num timesteps 13860000/80000000, FPS 1725.
+
+value loss of agent: 2.6024496873219807
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017228126525878906
+child_drop:  155
+add_hard_num:  12
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4834
+
+ Scenario push_ball Algo solved_pb updates 77/444 episodes, total num timesteps 14040000/80000000, FPS 1725.
+
+value loss of agent: 2.789002561569214
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019364356994628906
+child_drop:  139
+add_hard_num:  19
+parent:  44
+last_node_parent:  44
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.49280000000000007
+
+ Scenario push_ball Algo solved_pb updates 78/444 episodes, total num timesteps 14220000/80000000, FPS 1724.
+
+value loss of agent: 2.801571480433146
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017390251159667969
+child_drop:  148
+add_hard_num:  26
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5212
+
+ Scenario push_ball Algo solved_pb updates 79/444 episodes, total num timesteps 14400000/80000000, FPS 1723.
+
+value loss of agent: 2.892570718129476
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002022266387939453
+child_drop:  146
+add_hard_num:  22
+parent:  30
+last_node_parent:  30
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5092000000000001
+
+ Scenario push_ball Algo solved_pb updates 80/444 episodes, total num timesteps 14580000/80000000, FPS 1721.
+
+value loss of agent: 2.6368958155314126
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021500587463378906
+child_drop:  155
+add_hard_num:  25
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5164
+
+ Scenario push_ball Algo solved_pb updates 81/444 episodes, total num timesteps 14760000/80000000, FPS 1720.
+
+value loss of agent: 2.5990016301472982
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0028929710388183594
+child_drop:  177
+add_hard_num:  16
+parent:  28
+last_node_parent:  28
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.49900000000000005
+
+ Scenario push_ball Algo solved_pb updates 82/444 episodes, total num timesteps 14940000/80000000, FPS 1717.
+
+value loss of agent: 2.71370538075765
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015370845794677734
+child_drop:  168
+add_hard_num:  16
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.49860000000000004
+
+ Scenario push_ball Algo solved_pb updates 83/444 episodes, total num timesteps 15120000/80000000, FPS 1716.
+
+value loss of agent: 2.7105987071990967
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002916097640991211
+child_drop:  168
+add_hard_num:  20
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5078
+
+ Scenario push_ball Algo solved_pb updates 84/444 episodes, total num timesteps 15300000/80000000, FPS 1712.
+
+value loss of agent: 2.7125125249226887
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002288818359375
+child_drop:  158
+add_hard_num:  21
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.4786
+
+ Scenario push_ball Algo solved_pb updates 85/444 episodes, total num timesteps 15480000/80000000, FPS 1713.
+
+value loss of agent: 2.771527814865112
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025167465209960938
+child_drop:  144
+add_hard_num:  22
+parent:  35
+last_node_parent:  35
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5085999999999999
+
+ Scenario push_ball Algo solved_pb updates 86/444 episodes, total num timesteps 15660000/80000000, FPS 1713.
+
+value loss of agent: 3.0828834056854246
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017993450164794922
+child_drop:  160
+add_hard_num:  11
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5236
+
+ Scenario push_ball Algo solved_pb updates 87/444 episodes, total num timesteps 15840000/80000000, FPS 1711.
+
+value loss of agent: 2.5589691480000814
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.013934135437011719
+child_drop:  148
+add_hard_num:  24
+parent:  34
+last_node_parent:  34
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5312
+
+ Scenario push_ball Algo solved_pb updates 88/444 episodes, total num timesteps 16020000/80000000, FPS 1707.
+
+value loss of agent: 2.438626511891683
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004664182662963867
+child_drop:  146
+add_hard_num:  26
+parent:  39
+last_node_parent:  39
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5306000000000001
+
+ Scenario push_ball Algo solved_pb updates 89/444 episodes, total num timesteps 16200000/80000000, FPS 1706.
+
+value loss of agent: 2.507195536295573
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018706321716308594
+child_drop:  138
+add_hard_num:  25
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5312
+
+ Scenario push_ball Algo solved_pb updates 90/444 episodes, total num timesteps 16380000/80000000, FPS 1702.
+
+value loss of agent: 2.3569332440694173
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0023047924041748047
+child_drop:  170
+add_hard_num:  20
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5058
+
+ Scenario push_ball Algo solved_pb updates 91/444 episodes, total num timesteps 16560000/80000000, FPS 1703.
+
+value loss of agent: 2.443497133255005
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025796890258789062
+child_drop:  141
+add_hard_num:  20
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5017999999999999
+
+ Scenario push_ball Algo solved_pb updates 92/444 episodes, total num timesteps 16740000/80000000, FPS 1703.
+
+value loss of agent: 2.634669478734334
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002688169479370117
+child_drop:  148
+add_hard_num:  20
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5346
+
+ Scenario push_ball Algo solved_pb updates 93/444 episodes, total num timesteps 16920000/80000000, FPS 1704.
+
+value loss of agent: 2.717365105946859
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016880035400390625
+child_drop:  150
+add_hard_num:  25
+parent:  32
+last_node_parent:  32
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5434
+
+ Scenario push_ball Algo solved_pb updates 94/444 episodes, total num timesteps 17100000/80000000, FPS 1705.
+
+value loss of agent: 2.7247475147247315
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017902851104736328
+child_drop:  143
+add_hard_num:  17
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5615999999999999
+
+ Scenario push_ball Algo solved_pb updates 95/444 episodes, total num timesteps 17280000/80000000, FPS 1706.
+
+value loss of agent: 2.5823349952697754
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016887187957763672
+child_drop:  131
+add_hard_num:  20
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5274
+
+ Scenario push_ball Algo solved_pb updates 96/444 episodes, total num timesteps 17460000/80000000, FPS 1706.
+
+value loss of agent: 2.5347137610117594
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002109050750732422
+child_drop:  157
+add_hard_num:  14
+parent:  36
+last_node_parent:  36
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5654000000000001
+
+ Scenario push_ball Algo solved_pb updates 97/444 episodes, total num timesteps 17640000/80000000, FPS 1705.
+
+value loss of agent: 2.6875242392222085
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017278194427490234
+child_drop:  164
+add_hard_num:  21
+parent:  29
+last_node_parent:  29
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5492
+
+ Scenario push_ball Algo solved_pb updates 98/444 episodes, total num timesteps 17820000/80000000, FPS 1707.
+
+value loss of agent: 2.947337770462036
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016868114471435547
+child_drop:  135
+add_hard_num:  17
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5684000000000001
+
+ Scenario push_ball Algo solved_pb updates 99/444 episodes, total num timesteps 18000000/80000000, FPS 1707.
+
+value loss of agent: 2.917804543177287
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016186237335205078
+child_drop:  158
+add_hard_num:  18
+parent:  40
+last_node_parent:  40
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5646
+
+ Scenario push_ball Algo solved_pb updates 100/444 episodes, total num timesteps 18180000/80000000, FPS 1706.
+
+value loss of agent: 2.954251686731974
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016586780548095703
+child_drop:  141
+add_hard_num:  20
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5404000000000001
+
+ Scenario push_ball Algo solved_pb updates 101/444 episodes, total num timesteps 18360000/80000000, FPS 1707.
+
+value loss of agent: 2.7768855253855387
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016357898712158203
+child_drop:  140
+add_hard_num:  14
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5812
+
+ Scenario push_ball Algo solved_pb updates 102/444 episodes, total num timesteps 18540000/80000000, FPS 1706.
+
+value loss of agent: 2.8595489184061686
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016503334045410156
+child_drop:  170
+add_hard_num:  9
+parent:  37
+last_node_parent:  37
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5648000000000001
+
+ Scenario push_ball Algo solved_pb updates 103/444 episodes, total num timesteps 18720000/80000000, FPS 1704.
+
+value loss of agent: 2.894405968983968
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0027091503143310547
+child_drop:  156
+add_hard_num:  14
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5822
+
+ Scenario push_ball Algo solved_pb updates 104/444 episodes, total num timesteps 18900000/80000000, FPS 1703.
+
+value loss of agent: 2.730842049916585
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001646280288696289
+child_drop:  144
+add_hard_num:  11
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5578
+
+ Scenario push_ball Algo solved_pb updates 105/444 episodes, total num timesteps 19080000/80000000, FPS 1703.
+
+value loss of agent: 2.8939706643422443
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002350330352783203
+child_drop:  143
+add_hard_num:  15
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5678
+
+ Scenario push_ball Algo solved_pb updates 106/444 episodes, total num timesteps 19260000/80000000, FPS 1704.
+
+value loss of agent: 2.915186357498169
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001967906951904297
+child_drop:  170
+add_hard_num:  10
+parent:  31
+last_node_parent:  31
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5842
+
+ Scenario push_ball Algo solved_pb updates 107/444 episodes, total num timesteps 19440000/80000000, FPS 1705.
+
+value loss of agent: 2.8751400470733643
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016582012176513672
+child_drop:  139
+add_hard_num:  11
+parent:  33
+last_node_parent:  33
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5861999999999999
+
+ Scenario push_ball Algo solved_pb updates 108/444 episodes, total num timesteps 19620000/80000000, FPS 1704.
+
+value loss of agent: 2.85650847752889
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015995502471923828
+child_drop:  141
+add_hard_num:  16
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5761999999999999
+
+ Scenario push_ball Algo solved_pb updates 109/444 episodes, total num timesteps 19800000/80000000, FPS 1702.
+
+value loss of agent: 2.6356348673502605
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002019643783569336
+child_drop:  139
+add_hard_num:  19
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.5904
+
+ Scenario push_ball Algo solved_pb updates 110/444 episodes, total num timesteps 19980000/80000000, FPS 1702.
+
+value loss of agent: 2.5618855476379396
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001829385757446289
+child_drop:  167
+add_hard_num:  15
+parent:  41
+last_node_parent:  41
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6154
+
+ Scenario push_ball Algo solved_pb updates 111/444 episodes, total num timesteps 20160000/80000000, FPS 1701.
+
+value loss of agent: 2.5157503763834637
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019621849060058594
+child_drop:  162
+add_hard_num:  11
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6042000000000001
+
+ Scenario push_ball Algo solved_pb updates 112/444 episodes, total num timesteps 20340000/80000000, FPS 1701.
+
+value loss of agent: 2.634038225809733
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017142295837402344
+child_drop:  142
+add_hard_num:  13
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6102000000000001
+
+ Scenario push_ball Algo solved_pb updates 113/444 episodes, total num timesteps 20520000/80000000, FPS 1701.
+
+value loss of agent: 2.548299503326416
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018732547760009766
+child_drop:  158
+add_hard_num:  8
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6078
+
+ Scenario push_ball Algo solved_pb updates 114/444 episodes, total num timesteps 20700000/80000000, FPS 1700.
+
+value loss of agent: 2.701560958226522
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017595291137695312
+child_drop:  152
+add_hard_num:  20
+parent:  38
+last_node_parent:  38
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.619
+
+ Scenario push_ball Algo solved_pb updates 115/444 episodes, total num timesteps 20880000/80000000, FPS 1700.
+
+value loss of agent: 2.4835766792297362
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018796920776367188
+child_drop:  176
+add_hard_num:  9
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6177999999999999
+
+ Scenario push_ball Algo solved_pb updates 116/444 episodes, total num timesteps 21060000/80000000, FPS 1702.
+
+value loss of agent: 2.354678424199422
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018706321716308594
+child_drop:  159
+add_hard_num:  6
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6644
+
+ Scenario push_ball Algo solved_pb updates 117/444 episodes, total num timesteps 21240000/80000000, FPS 1702.
+
+value loss of agent: 2.543870766957601
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017004013061523438
+child_drop:  162
+add_hard_num:  7
+parent:  49
+last_node_parent:  49
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.626
+
+ Scenario push_ball Algo solved_pb updates 118/444 episodes, total num timesteps 21420000/80000000, FPS 1703.
+
+value loss of agent: 2.4737137953440347
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019063949584960938
+child_drop:  173
+add_hard_num:  11
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6296
+
+ Scenario push_ball Algo solved_pb updates 119/444 episodes, total num timesteps 21600000/80000000, FPS 1704.
+
+value loss of agent: 2.3636847496032716
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001743316650390625
+child_drop:  191
+add_hard_num:  9
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6142000000000001
+
+ Scenario push_ball Algo solved_pb updates 120/444 episodes, total num timesteps 21780000/80000000, FPS 1702.
+
+value loss of agent: 2.3756267070770263
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019290447235107422
+child_drop:  155
+add_hard_num:  12
+parent:  43
+last_node_parent:  43
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6214000000000001
+
+ Scenario push_ball Algo solved_pb updates 121/444 episodes, total num timesteps 21960000/80000000, FPS 1701.
+
+value loss of agent: 2.2619307676951093
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0026085376739501953
+child_drop:  176
+add_hard_num:  10
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.631
+
+ Scenario push_ball Algo solved_pb updates 122/444 episodes, total num timesteps 22140000/80000000, FPS 1699.
+
+value loss of agent: 2.3238462448120116
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019118785858154297
+child_drop:  172
+add_hard_num:  11
+parent:  50
+last_node_parent:  50
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.655
+
+ Scenario push_ball Algo solved_pb updates 123/444 episodes, total num timesteps 22320000/80000000, FPS 1699.
+
+value loss of agent: 2.4664307753245036
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0027663707733154297
+child_drop:  194
+add_hard_num:  9
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6394000000000001
+
+ Scenario push_ball Algo solved_pb updates 124/444 episodes, total num timesteps 22500000/80000000, FPS 1699.
+
+value loss of agent: 2.426916758219401
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019178390502929688
+child_drop:  178
+add_hard_num:  7
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.637
+
+ Scenario push_ball Algo solved_pb updates 125/444 episodes, total num timesteps 22680000/80000000, FPS 1700.
+
+value loss of agent: 2.4357062498728435
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.008172273635864258
+child_drop:  189
+add_hard_num:  9
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6374
+
+ Scenario push_ball Algo solved_pb updates 126/444 episodes, total num timesteps 22860000/80000000, FPS 1699.
+
+value loss of agent: 2.3337684790293376
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00274658203125
+child_drop:  181
+add_hard_num:  11
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6467999999999999
+
+ Scenario push_ball Algo solved_pb updates 127/444 episodes, total num timesteps 23040000/80000000, FPS 1699.
+
+value loss of agent: 2.4500107447306316
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017621517181396484
+child_drop:  177
+add_hard_num:  11
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6882
+
+ Scenario push_ball Algo solved_pb updates 128/444 episodes, total num timesteps 23220000/80000000, FPS 1698.
+
+value loss of agent: 2.257951577504476
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00164794921875
+child_drop:  160
+add_hard_num:  10
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6691999999999999
+
+ Scenario push_ball Algo solved_pb updates 129/444 episodes, total num timesteps 23400000/80000000, FPS 1698.
+
+value loss of agent: 2.5664555549621584
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019631385803222656
+child_drop:  161
+add_hard_num:  3
+parent:  53
+last_node_parent:  53
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6624
+
+ Scenario push_ball Algo solved_pb updates 130/444 episodes, total num timesteps 23580000/80000000, FPS 1696.
+
+value loss of agent: 2.5240837732950845
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016732215881347656
+child_drop:  154
+add_hard_num:  11
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6775999999999999
+
+ Scenario push_ball Algo solved_pb updates 131/444 episodes, total num timesteps 23760000/80000000, FPS 1695.
+
+value loss of agent: 2.5001524607340495
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004632711410522461
+child_drop:  178
+add_hard_num:  12
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6784
+
+ Scenario push_ball Algo solved_pb updates 132/444 episodes, total num timesteps 23940000/80000000, FPS 1695.
+
+value loss of agent: 2.4938432216644286
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017638206481933594
+child_drop:  149
+add_hard_num:  6
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6856
+
+ Scenario push_ball Algo solved_pb updates 133/444 episodes, total num timesteps 24120000/80000000, FPS 1696.
+
+value loss of agent: 2.359243408838908
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019235610961914062
+child_drop:  169
+add_hard_num:  6
+parent:  47
+last_node_parent:  47
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6698
+
+ Scenario push_ball Algo solved_pb updates 134/444 episodes, total num timesteps 24300000/80000000, FPS 1696.
+
+value loss of agent: 2.2976022720336915
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.017600059509277344
+child_drop:  173
+add_hard_num:  9
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.704
+
+ Scenario push_ball Algo solved_pb updates 135/444 episodes, total num timesteps 24480000/80000000, FPS 1696.
+
+value loss of agent: 2.3918055216471354
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001859426498413086
+child_drop:  182
+add_hard_num:  9
+parent:  46
+last_node_parent:  46
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6566000000000001
+
+ Scenario push_ball Algo solved_pb updates 136/444 episodes, total num timesteps 24660000/80000000, FPS 1696.
+
+value loss of agent: 2.397665786743164
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017168521881103516
+child_drop:  173
+add_hard_num:  5
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6612
+
+ Scenario push_ball Algo solved_pb updates 137/444 episodes, total num timesteps 24840000/80000000, FPS 1696.
+
+value loss of agent: 2.4365654945373536
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019769668579101562
+child_drop:  183
+add_hard_num:  5
+parent:  48
+last_node_parent:  48
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6768
+
+ Scenario push_ball Algo solved_pb updates 138/444 episodes, total num timesteps 25020000/80000000, FPS 1695.
+
+value loss of agent: 2.250386667251587
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020341873168945312
+child_drop:  207
+add_hard_num:  5
+parent:  50
+last_node_parent:  50
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.709
+
+ Scenario push_ball Algo solved_pb updates 139/444 episodes, total num timesteps 25200000/80000000, FPS 1695.
+
+value loss of agent: 2.291168975830078
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016803741455078125
+child_drop:  179
+add_hard_num:  9
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6808
+
+ Scenario push_ball Algo solved_pb updates 140/444 episodes, total num timesteps 25380000/80000000, FPS 1694.
+
+value loss of agent: 2.237827444076538
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017685890197753906
+child_drop:  155
+add_hard_num:  7
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6688
+
+ Scenario push_ball Algo solved_pb updates 141/444 episodes, total num timesteps 25560000/80000000, FPS 1693.
+
+value loss of agent: 2.061210934321086
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.005876302719116211
+child_drop:  183
+add_hard_num:  1
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7018
+
+ Scenario push_ball Algo solved_pb updates 142/444 episodes, total num timesteps 25740000/80000000, FPS 1692.
+
+value loss of agent: 2.076780573527018
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018188953399658203
+child_drop:  174
+add_hard_num:  6
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.707
+
+ Scenario push_ball Algo solved_pb updates 143/444 episodes, total num timesteps 25920000/80000000, FPS 1692.
+
+value loss of agent: 2.0136324803034467
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0038509368896484375
+child_drop:  196
+add_hard_num:  5
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7148
+
+ Scenario push_ball Algo solved_pb updates 144/444 episodes, total num timesteps 26100000/80000000, FPS 1692.
+
+value loss of agent: 1.7831623872121176
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00998544692993164
+child_drop:  167
+add_hard_num:  11
+parent:  56
+last_node_parent:  56
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.6916
+
+ Scenario push_ball Algo solved_pb updates 145/444 episodes, total num timesteps 26280000/80000000, FPS 1691.
+
+value loss of agent: 1.9892489592234293
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016901493072509766
+child_drop:  191
+add_hard_num:  9
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7647999999999999
+
+ Scenario push_ball Algo solved_pb updates 146/444 episodes, total num timesteps 26460000/80000000, FPS 1692.
+
+value loss of agent: 1.8588461558024088
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002687692642211914
+child_drop:  193
+add_hard_num:  6
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7394
+
+ Scenario push_ball Algo solved_pb updates 147/444 episodes, total num timesteps 26640000/80000000, FPS 1690.
+
+value loss of agent: 1.866897694269816
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018610954284667969
+child_drop:  198
+add_hard_num:  8
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7504
+
+ Scenario push_ball Algo solved_pb updates 148/444 episodes, total num timesteps 26820000/80000000, FPS 1688.
+
+value loss of agent: 1.7908011674880981
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001828908920288086
+child_drop:  188
+add_hard_num:  3
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.727
+
+ Scenario push_ball Algo solved_pb updates 149/444 episodes, total num timesteps 27000000/80000000, FPS 1688.
+
+value loss of agent: 1.862653652826945
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001959085464477539
+child_drop:  202
+add_hard_num:  3
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7288
+
+ Scenario push_ball Algo solved_pb updates 150/444 episodes, total num timesteps 27180000/80000000, FPS 1688.
+
+value loss of agent: 1.7456918795903524
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016884803771972656
+child_drop:  195
+add_hard_num:  6
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7346
+
+ Scenario push_ball Algo solved_pb updates 151/444 episodes, total num timesteps 27360000/80000000, FPS 1688.
+
+value loss of agent: 1.803012196222941
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00518798828125
+child_drop:  183
+add_hard_num:  6
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7262000000000001
+
+ Scenario push_ball Algo solved_pb updates 152/444 episodes, total num timesteps 27540000/80000000, FPS 1687.
+
+value loss of agent: 1.7213995138804117
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.02063751220703125
+child_drop:  177
+add_hard_num:  7
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7228
+
+ Scenario push_ball Algo solved_pb updates 153/444 episodes, total num timesteps 27720000/80000000, FPS 1686.
+
+value loss of agent: 1.7873533328374227
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0033178329467773438
+child_drop:  187
+add_hard_num:  4
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7517999999999999
+
+ Scenario push_ball Algo solved_pb updates 154/444 episodes, total num timesteps 27900000/80000000, FPS 1686.
+
+value loss of agent: 1.8309863328933715
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018105506896972656
+child_drop:  166
+add_hard_num:  10
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7646000000000001
+
+ Scenario push_ball Algo solved_pb updates 155/444 episodes, total num timesteps 28080000/80000000, FPS 1686.
+
+value loss of agent: 1.8376323938369752
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016760826110839844
+child_drop:  187
+add_hard_num:  6
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.746
+
+ Scenario push_ball Algo solved_pb updates 156/444 episodes, total num timesteps 28260000/80000000, FPS 1687.
+
+value loss of agent: 1.8226474523544312
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016646385192871094
+child_drop:  157
+add_hard_num:  6
+parent:  52
+last_node_parent:  52
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7402000000000001
+
+ Scenario push_ball Algo solved_pb updates 157/444 episodes, total num timesteps 28440000/80000000, FPS 1688.
+
+value loss of agent: 1.805976144472758
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.020473957061767578
+child_drop:  185
+add_hard_num:  5
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7326
+
+ Scenario push_ball Algo solved_pb updates 158/444 episodes, total num timesteps 28620000/80000000, FPS 1689.
+
+value loss of agent: 1.7340469757715862
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0031435489654541016
+child_drop:  185
+add_hard_num:  5
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7446
+
+ Scenario push_ball Algo solved_pb updates 159/444 episodes, total num timesteps 28800000/80000000, FPS 1687.
+
+value loss of agent: 1.6490460554758708
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002288341522216797
+child_drop:  199
+add_hard_num:  3
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7624
+
+ Scenario push_ball Algo solved_pb updates 160/444 episodes, total num timesteps 28980000/80000000, FPS 1687.
+
+value loss of agent: 1.7294691324234008
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017580986022949219
+child_drop:  181
+add_hard_num:  9
+parent:  42
+last_node_parent:  42
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7376
+
+ Scenario push_ball Algo solved_pb updates 161/444 episodes, total num timesteps 29160000/80000000, FPS 1688.
+
+value loss of agent: 1.8030828317006429
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019276142120361328
+child_drop:  170
+add_hard_num:  8
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7312000000000001
+
+ Scenario push_ball Algo solved_pb updates 162/444 episodes, total num timesteps 29340000/80000000, FPS 1688.
+
+value loss of agent: 1.8171160538991293
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018320083618164062
+child_drop:  195
+add_hard_num:  7
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.78
+
+ Scenario push_ball Algo solved_pb updates 163/444 episodes, total num timesteps 29520000/80000000, FPS 1689.
+
+value loss of agent: 1.8226430733998618
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001691579818725586
+child_drop:  176
+add_hard_num:  4
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7736
+
+ Scenario push_ball Algo solved_pb updates 164/444 episodes, total num timesteps 29700000/80000000, FPS 1689.
+
+value loss of agent: 1.8041622002919515
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017201900482177734
+child_drop:  194
+add_hard_num:  8
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7604000000000001
+
+ Scenario push_ball Algo solved_pb updates 165/444 episodes, total num timesteps 29880000/80000000, FPS 1690.
+
+value loss of agent: 1.7356547037760417
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019745826721191406
+child_drop:  183
+add_hard_num:  9
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7768
+
+ Scenario push_ball Algo solved_pb updates 166/444 episodes, total num timesteps 30060000/80000000, FPS 1690.
+
+value loss of agent: 1.810354502995809
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017323493957519531
+child_drop:  177
+add_hard_num:  7
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7855999999999999
+
+ Scenario push_ball Algo solved_pb updates 167/444 episodes, total num timesteps 30240000/80000000, FPS 1690.
+
+value loss of agent: 1.763591512044271
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016980171203613281
+child_drop:  192
+add_hard_num:  9
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7936
+
+ Scenario push_ball Algo solved_pb updates 168/444 episodes, total num timesteps 30420000/80000000, FPS 1690.
+
+value loss of agent: 1.5858545541763305
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016705989837646484
+child_drop:  207
+add_hard_num:  7
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.804
+
+ Scenario push_ball Algo solved_pb updates 169/444 episodes, total num timesteps 30600000/80000000, FPS 1690.
+
+value loss of agent: 1.6875311295191446
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017654895782470703
+child_drop:  198
+add_hard_num:  5
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.7972
+
+ Scenario push_ball Algo solved_pb updates 170/444 episodes, total num timesteps 30780000/80000000, FPS 1691.
+
+value loss of agent: 1.6628010749816895
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001829385757446289
+child_drop:  188
+add_hard_num:  5
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.795
+
+ Scenario push_ball Algo solved_pb updates 171/444 episodes, total num timesteps 30960000/80000000, FPS 1691.
+
+value loss of agent: 1.6456033706665039
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017952919006347656
+child_drop:  189
+add_hard_num:  7
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8078
+
+ Scenario push_ball Algo solved_pb updates 172/444 episodes, total num timesteps 31140000/80000000, FPS 1692.
+
+value loss of agent: 1.5390707015991212
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001947641372680664
+child_drop:  206
+add_hard_num:  5
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8002
+
+ Scenario push_ball Algo solved_pb updates 173/444 episodes, total num timesteps 31320000/80000000, FPS 1692.
+
+value loss of agent: 1.6572960376739503
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017914772033691406
+child_drop:  217
+add_hard_num:  3
+parent:  50
+last_node_parent:  50
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8344
+
+ Scenario push_ball Algo solved_pb updates 174/444 episodes, total num timesteps 31500000/80000000, FPS 1692.
+
+value loss of agent: 1.5084472258885702
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018591880798339844
+child_drop:  207
+add_hard_num:  5
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8178
+
+ Scenario push_ball Algo solved_pb updates 175/444 episodes, total num timesteps 31680000/80000000, FPS 1691.
+
+value loss of agent: 1.515726884206136
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002378702163696289
+child_drop:  202
+add_hard_num:  6
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.813
+
+ Scenario push_ball Algo solved_pb updates 176/444 episodes, total num timesteps 31860000/80000000, FPS 1691.
+
+value loss of agent: 1.6789918581644694
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004011631011962891
+child_drop:  174
+add_hard_num:  7
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8084000000000001
+
+ Scenario push_ball Algo solved_pb updates 177/444 episodes, total num timesteps 32040000/80000000, FPS 1692.
+
+value loss of agent: 1.645133368174235
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018062591552734375
+child_drop:  199
+add_hard_num:  6
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8326
+
+ Scenario push_ball Algo solved_pb updates 178/444 episodes, total num timesteps 32220000/80000000, FPS 1692.
+
+value loss of agent: 1.5554209073384604
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016794204711914062
+child_drop:  228
+add_hard_num:  7
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8416
+
+ Scenario push_ball Algo solved_pb updates 179/444 episodes, total num timesteps 32400000/80000000, FPS 1692.
+
+value loss of agent: 1.4344506820042928
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016717910766601562
+child_drop:  215
+add_hard_num:  5
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.83
+
+ Scenario push_ball Algo solved_pb updates 180/444 episodes, total num timesteps 32580000/80000000, FPS 1692.
+
+value loss of agent: 1.5377003272374472
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016937255859375
+child_drop:  191
+add_hard_num:  5
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8208
+
+ Scenario push_ball Algo solved_pb updates 181/444 episodes, total num timesteps 32760000/80000000, FPS 1691.
+
+value loss of agent: 1.5827815612157186
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017049312591552734
+child_drop:  199
+add_hard_num:  10
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8298
+
+ Scenario push_ball Algo solved_pb updates 182/444 episodes, total num timesteps 32940000/80000000, FPS 1691.
+
+value loss of agent: 1.6026432911554973
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002231121063232422
+child_drop:  204
+add_hard_num:  5
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8142
+
+ Scenario push_ball Algo solved_pb updates 183/444 episodes, total num timesteps 33120000/80000000, FPS 1692.
+
+value loss of agent: 1.4557253996531168
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017046928405761719
+child_drop:  214
+add_hard_num:  3
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.806
+
+ Scenario push_ball Algo solved_pb updates 184/444 episodes, total num timesteps 33300000/80000000, FPS 1692.
+
+value loss of agent: 1.4247889598210652
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019028186798095703
+child_drop:  206
+add_hard_num:  8
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8292
+
+ Scenario push_ball Algo solved_pb updates 185/444 episodes, total num timesteps 33480000/80000000, FPS 1693.
+
+value loss of agent: 1.4323752323786418
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018804073333740234
+child_drop:  170
+add_hard_num:  6
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8423999999999998
+
+ Scenario push_ball Algo solved_pb updates 186/444 episodes, total num timesteps 33660000/80000000, FPS 1693.
+
+value loss of agent: 1.43833593527476
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019161701202392578
+child_drop:  228
+add_hard_num:  5
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8314
+
+ Scenario push_ball Algo solved_pb updates 187/444 episodes, total num timesteps 33840000/80000000, FPS 1694.
+
+value loss of agent: 1.228488270441691
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021724700927734375
+child_drop:  192
+add_hard_num:  9
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8284000000000001
+
+ Scenario push_ball Algo solved_pb updates 188/444 episodes, total num timesteps 34020000/80000000, FPS 1694.
+
+value loss of agent: 1.523377545674642
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017435550689697266
+child_drop:  194
+add_hard_num:  5
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8414
+
+ Scenario push_ball Algo solved_pb updates 189/444 episodes, total num timesteps 34200000/80000000, FPS 1694.
+
+value loss of agent: 1.4813554445902506
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018074512481689453
+child_drop:  190
+add_hard_num:  7
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8622
+
+ Scenario push_ball Algo solved_pb updates 190/444 episodes, total num timesteps 34380000/80000000, FPS 1693.
+
+value loss of agent: 1.6920049031575521
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020563602447509766
+child_drop:  200
+add_hard_num:  7
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8618000000000001
+
+ Scenario push_ball Algo solved_pb updates 191/444 episodes, total num timesteps 34560000/80000000, FPS 1694.
+
+value loss of agent: 1.5441747506459553
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017101764678955078
+child_drop:  192
+add_hard_num:  3
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8473999999999999
+
+ Scenario push_ball Algo solved_pb updates 192/444 episodes, total num timesteps 34740000/80000000, FPS 1695.
+
+value loss of agent: 1.4944298982620239
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018205642700195312
+child_drop:  195
+add_hard_num:  15
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8787999999999999
+
+ Scenario push_ball Algo solved_pb updates 193/444 episodes, total num timesteps 34920000/80000000, FPS 1695.
+
+value loss of agent: 1.4762523174285889
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020513534545898438
+child_drop:  202
+add_hard_num:  6
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8543999999999999
+
+ Scenario push_ball Algo solved_pb updates 194/444 episodes, total num timesteps 35100000/80000000, FPS 1695.
+
+value loss of agent: 1.4936355272928874
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019943714141845703
+child_drop:  198
+add_hard_num:  7
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8513999999999999
+
+ Scenario push_ball Algo solved_pb updates 195/444 episodes, total num timesteps 35280000/80000000, FPS 1695.
+
+value loss of agent: 1.6792503197987874
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004158496856689453
+child_drop:  212
+add_hard_num:  1
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8505999999999999
+
+ Scenario push_ball Algo solved_pb updates 196/444 episodes, total num timesteps 35460000/80000000, FPS 1696.
+
+value loss of agent: 1.5794814507166544
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002090930938720703
+child_drop:  208
+add_hard_num:  7
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.828
+
+ Scenario push_ball Algo solved_pb updates 197/444 episodes, total num timesteps 35640000/80000000, FPS 1694.
+
+value loss of agent: 1.6810062487920125
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.012224435806274414
+child_drop:  192
+add_hard_num:  7
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8448
+
+ Scenario push_ball Algo solved_pb updates 198/444 episodes, total num timesteps 35820000/80000000, FPS 1694.
+
+value loss of agent: 1.5677557547887166
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017898082733154297
+child_drop:  200
+add_hard_num:  10
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8462000000000001
+
+ Scenario push_ball Algo solved_pb updates 199/444 episodes, total num timesteps 36000000/80000000, FPS 1695.
+
+value loss of agent: 1.6529022932052613
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017857551574707031
+child_drop:  191
+add_hard_num:  4
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8767999999999999
+
+ Scenario push_ball Algo solved_pb updates 200/444 episodes, total num timesteps 36180000/80000000, FPS 1695.
+
+value loss of agent: 1.8288762410481771
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017609596252441406
+child_drop:  181
+add_hard_num:  12
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8652000000000001
+
+ Scenario push_ball Algo solved_pb updates 201/444 episodes, total num timesteps 36360000/80000000, FPS 1695.
+
+value loss of agent: 1.7325031916300455
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022079944610595703
+child_drop:  188
+add_hard_num:  5
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8588
+
+ Scenario push_ball Algo solved_pb updates 202/444 episodes, total num timesteps 36540000/80000000, FPS 1695.
+
+value loss of agent: 1.7908562024434407
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001875162124633789
+child_drop:  203
+add_hard_num:  6
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8646
+
+ Scenario push_ball Algo solved_pb updates 203/444 episodes, total num timesteps 36720000/80000000, FPS 1694.
+
+value loss of agent: 1.8483319520950316
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0029036998748779297
+child_drop:  193
+add_hard_num:  10
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8625999999999999
+
+ Scenario push_ball Algo solved_pb updates 204/444 episodes, total num timesteps 36900000/80000000, FPS 1693.
+
+value loss of agent: 1.7957504431406657
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019221305847167969
+child_drop:  202
+add_hard_num:  0
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8582000000000001
+
+ Scenario push_ball Algo solved_pb updates 205/444 episodes, total num timesteps 37080000/80000000, FPS 1692.
+
+value loss of agent: 1.7104618151982625
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002060413360595703
+child_drop:  190
+add_hard_num:  3
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8482000000000001
+
+ Scenario push_ball Algo solved_pb updates 206/444 episodes, total num timesteps 37260000/80000000, FPS 1690.
+
+value loss of agent: 1.880181900660197
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017364025115966797
+child_drop:  190
+add_hard_num:  5
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8415999999999999
+
+ Scenario push_ball Algo solved_pb updates 207/444 episodes, total num timesteps 37440000/80000000, FPS 1690.
+
+value loss of agent: 1.7701927820841472
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001741170883178711
+child_drop:  184
+add_hard_num:  6
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8556
+
+ Scenario push_ball Algo solved_pb updates 208/444 episodes, total num timesteps 37620000/80000000, FPS 1691.
+
+value loss of agent: 1.8494380871454874
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017428398132324219
+child_drop:  216
+add_hard_num:  3
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8524
+
+ Scenario push_ball Algo solved_pb updates 209/444 episodes, total num timesteps 37800000/80000000, FPS 1691.
+
+value loss of agent: 1.6978830337524413
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021767616271972656
+child_drop:  206
+add_hard_num:  4
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8722000000000001
+
+ Scenario push_ball Algo solved_pb updates 210/444 episodes, total num timesteps 37980000/80000000, FPS 1691.
+
+value loss of agent: 1.6423007090886435
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018668174743652344
+child_drop:  204
+add_hard_num:  6
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8656
+
+ Scenario push_ball Algo solved_pb updates 211/444 episodes, total num timesteps 38160000/80000000, FPS 1691.
+
+value loss of agent: 1.651519497235616
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020525455474853516
+child_drop:  198
+add_hard_num:  6
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8644000000000001
+
+ Scenario push_ball Algo solved_pb updates 212/444 episodes, total num timesteps 38340000/80000000, FPS 1691.
+
+value loss of agent: 1.6206376075744628
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001733541488647461
+child_drop:  196
+add_hard_num:  7
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.876
+
+ Scenario push_ball Algo solved_pb updates 213/444 episodes, total num timesteps 38520000/80000000, FPS 1690.
+
+value loss of agent: 1.6250714143117269
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001962423324584961
+child_drop:  205
+add_hard_num:  6
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8795999999999999
+
+ Scenario push_ball Algo solved_pb updates 214/444 episodes, total num timesteps 38700000/80000000, FPS 1689.
+
+value loss of agent: 1.5205517292022706
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016798973083496094
+child_drop:  182
+add_hard_num:  5
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8513999999999998
+
+ Scenario push_ball Algo solved_pb updates 215/444 episodes, total num timesteps 38880000/80000000, FPS 1689.
+
+value loss of agent: 1.485277485847473
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019991397857666016
+child_drop:  182
+add_hard_num:  5
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8712000000000001
+
+ Scenario push_ball Algo solved_pb updates 216/444 episodes, total num timesteps 39060000/80000000, FPS 1689.
+
+value loss of agent: 1.5132110436757407
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002131223678588867
+child_drop:  201
+add_hard_num:  5
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8887999999999999
+
+ Scenario push_ball Algo solved_pb updates 217/444 episodes, total num timesteps 39240000/80000000, FPS 1688.
+
+value loss of agent: 1.50654882589976
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001678466796875
+child_drop:  213
+add_hard_num:  2
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8677999999999999
+
+ Scenario push_ball Algo solved_pb updates 218/444 episodes, total num timesteps 39420000/80000000, FPS 1688.
+
+value loss of agent: 1.482571578025818
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021131038665771484
+child_drop:  193
+add_hard_num:  1
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8684000000000001
+
+ Scenario push_ball Algo solved_pb updates 219/444 episodes, total num timesteps 39600000/80000000, FPS 1687.
+
+value loss of agent: 1.4996566375096638
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017421245574951172
+child_drop:  194
+add_hard_num:  4
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8772000000000001
+
+ Scenario push_ball Algo solved_pb updates 220/444 episodes, total num timesteps 39780000/80000000, FPS 1686.
+
+value loss of agent: 1.4714255809783936
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018703937530517578
+child_drop:  188
+add_hard_num:  8
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.884
+
+ Scenario push_ball Algo solved_pb updates 221/444 episodes, total num timesteps 39960000/80000000, FPS 1685.
+
+value loss of agent: 1.4961069424947102
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001988649368286133
+child_drop:  220
+add_hard_num:  1
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.885
+
+ Scenario push_ball Algo solved_pb updates 222/444 episodes, total num timesteps 40140000/80000000, FPS 1684.
+
+value loss of agent: 1.300226052602132
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016863346099853516
+child_drop:  196
+add_hard_num:  4
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8766
+
+ Scenario push_ball Algo solved_pb updates 223/444 episodes, total num timesteps 40320000/80000000, FPS 1684.
+
+value loss of agent: 1.436138645807902
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018270015716552734
+child_drop:  175
+add_hard_num:  6
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8636
+
+ Scenario push_ball Algo solved_pb updates 224/444 episodes, total num timesteps 40500000/80000000, FPS 1683.
+
+value loss of agent: 1.476087458928426
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017862319946289062
+child_drop:  198
+add_hard_num:  3
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8834
+
+ Scenario push_ball Algo solved_pb updates 225/444 episodes, total num timesteps 40680000/80000000, FPS 1684.
+
+value loss of agent: 1.38234437306722
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018355846405029297
+child_drop:  204
+add_hard_num:  3
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8757999999999999
+
+ Scenario push_ball Algo solved_pb updates 226/444 episodes, total num timesteps 40860000/80000000, FPS 1685.
+
+value loss of agent: 1.4209631204605102
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002208709716796875
+child_drop:  183
+add_hard_num:  8
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8952
+
+ Scenario push_ball Algo solved_pb updates 227/444 episodes, total num timesteps 41040000/80000000, FPS 1685.
+
+value loss of agent: 1.5206557353337606
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016841888427734375
+child_drop:  201
+add_hard_num:  3
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8832000000000001
+
+ Scenario push_ball Algo solved_pb updates 228/444 episodes, total num timesteps 41220000/80000000, FPS 1686.
+
+value loss of agent: 1.4271742105484009
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002008676528930664
+child_drop:  208
+add_hard_num:  5
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8862000000000001
+
+ Scenario push_ball Algo solved_pb updates 229/444 episodes, total num timesteps 41400000/80000000, FPS 1686.
+
+value loss of agent: 1.4117368936538697
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016672611236572266
+child_drop:  209
+add_hard_num:  3
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8867999999999999
+
+ Scenario push_ball Algo solved_pb updates 230/444 episodes, total num timesteps 41580000/80000000, FPS 1686.
+
+value loss of agent: 1.2447521448135377
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017266273498535156
+child_drop:  214
+add_hard_num:  3
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8877999999999999
+
+ Scenario push_ball Algo solved_pb updates 231/444 episodes, total num timesteps 41760000/80000000, FPS 1685.
+
+value loss of agent: 1.3515539407730102
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017540454864501953
+child_drop:  203
+add_hard_num:  8
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8846
+
+ Scenario push_ball Algo solved_pb updates 232/444 episodes, total num timesteps 41940000/80000000, FPS 1685.
+
+value loss of agent: 1.4166752020517985
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020558834075927734
+child_drop:  204
+add_hard_num:  4
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8934
+
+ Scenario push_ball Algo solved_pb updates 233/444 episodes, total num timesteps 42120000/80000000, FPS 1686.
+
+value loss of agent: 1.2607428471247355
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001684427261352539
+child_drop:  208
+add_hard_num:  4
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8877999999999999
+
+ Scenario push_ball Algo solved_pb updates 234/444 episodes, total num timesteps 42300000/80000000, FPS 1686.
+
+value loss of agent: 1.2949830214182536
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002010822296142578
+child_drop:  197
+add_hard_num:  3
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8924000000000001
+
+ Scenario push_ball Algo solved_pb updates 235/444 episodes, total num timesteps 42480000/80000000, FPS 1686.
+
+value loss of agent: 1.324742309252421
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016582012176513672
+child_drop:  211
+add_hard_num:  6
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8926
+
+ Scenario push_ball Algo solved_pb updates 236/444 episodes, total num timesteps 42660000/80000000, FPS 1687.
+
+value loss of agent: 1.4301333665847777
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017709732055664062
+child_drop:  214
+add_hard_num:  4
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.89
+
+ Scenario push_ball Algo solved_pb updates 237/444 episodes, total num timesteps 42840000/80000000, FPS 1687.
+
+value loss of agent: 1.2997385660807292
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0036230087280273438
+child_drop:  193
+add_hard_num:  3
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.886
+
+ Scenario push_ball Algo solved_pb updates 238/444 episodes, total num timesteps 43020000/80000000, FPS 1686.
+
+value loss of agent: 1.4042177359263102
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.021584272384643555
+child_drop:  189
+add_hard_num:  3
+parent:  84
+last_node_parent:  84
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9115999999999999
+
+ Scenario push_ball Algo solved_pb updates 239/444 episodes, total num timesteps 43200000/80000000, FPS 1686.
+
+value loss of agent: 1.4533594528834024
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002008199691772461
+child_drop:  197
+add_hard_num:  8
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9172
+
+ Scenario push_ball Algo solved_pb updates 240/444 episodes, total num timesteps 43380000/80000000, FPS 1685.
+
+value loss of agent: 1.4192383607228598
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018281936645507812
+child_drop:  202
+add_hard_num:  2
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8956000000000001
+
+ Scenario push_ball Algo solved_pb updates 241/444 episodes, total num timesteps 43560000/80000000, FPS 1686.
+
+value loss of agent: 1.3316327969233195
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020923614501953125
+child_drop:  197
+add_hard_num:  2
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.896
+
+ Scenario push_ball Algo solved_pb updates 242/444 episodes, total num timesteps 43740000/80000000, FPS 1686.
+
+value loss of agent: 1.2145709991455078
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017850399017333984
+child_drop:  193
+add_hard_num:  6
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9116000000000001
+
+ Scenario push_ball Algo solved_pb updates 243/444 episodes, total num timesteps 43920000/80000000, FPS 1687.
+
+value loss of agent: 1.2987112204233806
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003347635269165039
+child_drop:  198
+add_hard_num:  6
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8971999999999999
+
+ Scenario push_ball Algo solved_pb updates 244/444 episodes, total num timesteps 44100000/80000000, FPS 1687.
+
+value loss of agent: 1.2564277489980062
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0024836063385009766
+child_drop:  190
+add_hard_num:  4
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8914
+
+ Scenario push_ball Algo solved_pb updates 245/444 episodes, total num timesteps 44280000/80000000, FPS 1687.
+
+value loss of agent: 1.3285717964172363
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020186901092529297
+child_drop:  205
+add_hard_num:  5
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8877999999999999
+
+ Scenario push_ball Algo solved_pb updates 246/444 episodes, total num timesteps 44460000/80000000, FPS 1687.
+
+value loss of agent: 1.3776058435440064
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0023419857025146484
+child_drop:  213
+add_hard_num:  4
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.907
+
+ Scenario push_ball Algo solved_pb updates 247/444 episodes, total num timesteps 44640000/80000000, FPS 1687.
+
+value loss of agent: 1.3638937950134278
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018544197082519531
+child_drop:  198
+add_hard_num:  10
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9062
+
+ Scenario push_ball Algo solved_pb updates 248/444 episodes, total num timesteps 44820000/80000000, FPS 1687.
+
+value loss of agent: 1.3060916185379028
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018801689147949219
+child_drop:  191
+add_hard_num:  8
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9262
+
+ Scenario push_ball Algo solved_pb updates 249/444 episodes, total num timesteps 45000000/80000000, FPS 1687.
+
+value loss of agent: 1.2977001508076986
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018236637115478516
+child_drop:  197
+add_hard_num:  9
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9061999999999999
+
+ Scenario push_ball Algo solved_pb updates 250/444 episodes, total num timesteps 45180000/80000000, FPS 1687.
+
+value loss of agent: 1.414664626121521
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002144336700439453
+child_drop:  212
+add_hard_num:  2
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.915
+
+ Scenario push_ball Algo solved_pb updates 251/444 episodes, total num timesteps 45360000/80000000, FPS 1687.
+
+value loss of agent: 1.3135578393936158
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022172927856445312
+child_drop:  184
+add_hard_num:  8
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9021999999999999
+
+ Scenario push_ball Algo solved_pb updates 252/444 episodes, total num timesteps 45540000/80000000, FPS 1686.
+
+value loss of agent: 1.4998552560806275
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020599365234375
+child_drop:  218
+add_hard_num:  5
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.907
+
+ Scenario push_ball Algo solved_pb updates 253/444 episodes, total num timesteps 45720000/80000000, FPS 1686.
+
+value loss of agent: 1.4385773897171021
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016913414001464844
+child_drop:  192
+add_hard_num:  3
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9202
+
+ Scenario push_ball Algo solved_pb updates 254/444 episodes, total num timesteps 45900000/80000000, FPS 1687.
+
+value loss of agent: 1.3379480838775635
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002212047576904297
+child_drop:  197
+add_hard_num:  3
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9128
+
+ Scenario push_ball Algo solved_pb updates 255/444 episodes, total num timesteps 46080000/80000000, FPS 1687.
+
+value loss of agent: 1.3050709168116252
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019958019256591797
+child_drop:  205
+add_hard_num:  5
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9066
+
+ Scenario push_ball Algo solved_pb updates 256/444 episodes, total num timesteps 46260000/80000000, FPS 1686.
+
+value loss of agent: 1.3190895318984985
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017709732055664062
+child_drop:  202
+add_hard_num:  6
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9142
+
+ Scenario push_ball Algo solved_pb updates 257/444 episodes, total num timesteps 46440000/80000000, FPS 1686.
+
+value loss of agent: 1.2706324815750123
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019404888153076172
+child_drop:  184
+add_hard_num:  6
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9032
+
+ Scenario push_ball Algo solved_pb updates 258/444 episodes, total num timesteps 46620000/80000000, FPS 1686.
+
+value loss of agent: 1.3543469270070394
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0023932456970214844
+child_drop:  202
+add_hard_num:  10
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9036000000000001
+
+ Scenario push_ball Algo solved_pb updates 259/444 episodes, total num timesteps 46800000/80000000, FPS 1686.
+
+value loss of agent: 1.3426374753316244
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018503665924072266
+child_drop:  193
+add_hard_num:  3
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9032
+
+ Scenario push_ball Algo solved_pb updates 260/444 episodes, total num timesteps 46980000/80000000, FPS 1686.
+
+value loss of agent: 1.2409441709518432
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017004013061523438
+child_drop:  195
+add_hard_num:  5
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9132
+
+ Scenario push_ball Algo solved_pb updates 261/444 episodes, total num timesteps 47160000/80000000, FPS 1686.
+
+value loss of agent: 1.2627358516057332
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002032756805419922
+child_drop:  187
+add_hard_num:  3
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9101999999999999
+
+ Scenario push_ball Algo solved_pb updates 262/444 episodes, total num timesteps 47340000/80000000, FPS 1686.
+
+value loss of agent: 1.2535411596298218
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022978782653808594
+child_drop:  186
+add_hard_num:  11
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.8986000000000001
+
+ Scenario push_ball Algo solved_pb updates 263/444 episodes, total num timesteps 47520000/80000000, FPS 1686.
+
+value loss of agent: 1.338381322224935
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002095937728881836
+child_drop:  196
+add_hard_num:  2
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9104
+
+ Scenario push_ball Algo solved_pb updates 264/444 episodes, total num timesteps 47700000/80000000, FPS 1686.
+
+value loss of agent: 1.3442524909973144
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018465518951416016
+child_drop:  213
+add_hard_num:  7
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9014000000000001
+
+ Scenario push_ball Algo solved_pb updates 265/444 episodes, total num timesteps 47880000/80000000, FPS 1685.
+
+value loss of agent: 1.26471160252889
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001745462417602539
+child_drop:  200
+add_hard_num:  6
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.899
+
+ Scenario push_ball Algo solved_pb updates 266/444 episodes, total num timesteps 48060000/80000000, FPS 1685.
+
+value loss of agent: 1.3326598803202312
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020110607147216797
+child_drop:  186
+add_hard_num:  6
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9122
+
+ Scenario push_ball Algo solved_pb updates 267/444 episodes, total num timesteps 48240000/80000000, FPS 1685.
+
+value loss of agent: 1.3035021702448526
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017962455749511719
+child_drop:  197
+add_hard_num:  16
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9158
+
+ Scenario push_ball Algo solved_pb updates 268/444 episodes, total num timesteps 48420000/80000000, FPS 1684.
+
+value loss of agent: 1.2896294514338176
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019075870513916016
+child_drop:  200
+add_hard_num:  8
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9204000000000001
+
+ Scenario push_ball Algo solved_pb updates 269/444 episodes, total num timesteps 48600000/80000000, FPS 1685.
+
+value loss of agent: 1.3002689361572266
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.009629011154174805
+child_drop:  210
+add_hard_num:  0
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9074000000000001
+
+ Scenario push_ball Algo solved_pb updates 270/444 episodes, total num timesteps 48780000/80000000, FPS 1685.
+
+value loss of agent: 1.2485568126042683
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017626285552978516
+child_drop:  190
+add_hard_num:  2
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.915
+
+ Scenario push_ball Algo solved_pb updates 271/444 episodes, total num timesteps 48960000/80000000, FPS 1685.
+
+value loss of agent: 1.186395494143168
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019268989562988281
+child_drop:  193
+add_hard_num:  2
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9132
+
+ Scenario push_ball Algo solved_pb updates 272/444 episodes, total num timesteps 49140000/80000000, FPS 1685.
+
+value loss of agent: 1.1025204102198283
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018131732940673828
+child_drop:  204
+add_hard_num:  4
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9172
+
+ Scenario push_ball Algo solved_pb updates 273/444 episodes, total num timesteps 49320000/80000000, FPS 1684.
+
+value loss of agent: 1.11862899462382
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.02224135398864746
+child_drop:  211
+add_hard_num:  2
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9094
+
+ Scenario push_ball Algo solved_pb updates 274/444 episodes, total num timesteps 49500000/80000000, FPS 1684.
+
+value loss of agent: 1.1515705903371176
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0030095577239990234
+child_drop:  180
+add_hard_num:  2
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9102
+
+ Scenario push_ball Algo solved_pb updates 275/444 episodes, total num timesteps 49680000/80000000, FPS 1683.
+
+value loss of agent: 1.123893713951111
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00176239013671875
+child_drop:  209
+add_hard_num:  6
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9166
+
+ Scenario push_ball Algo solved_pb updates 276/444 episodes, total num timesteps 49860000/80000000, FPS 1683.
+
+value loss of agent: 1.2236607869466145
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002837657928466797
+child_drop:  183
+add_hard_num:  4
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.924
+
+ Scenario push_ball Algo solved_pb updates 277/444 episodes, total num timesteps 50040000/80000000, FPS 1683.
+
+value loss of agent: 1.334698216120402
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018682479858398438
+child_drop:  197
+add_hard_num:  5
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9204
+
+ Scenario push_ball Algo solved_pb updates 278/444 episodes, total num timesteps 50220000/80000000, FPS 1684.
+
+value loss of agent: 1.2948113203048706
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017597675323486328
+child_drop:  195
+add_hard_num:  4
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9228
+
+ Scenario push_ball Algo solved_pb updates 279/444 episodes, total num timesteps 50400000/80000000, FPS 1683.
+
+value loss of agent: 1.3909895181655885
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017457008361816406
+child_drop:  180
+add_hard_num:  8
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.91
+
+ Scenario push_ball Algo solved_pb updates 280/444 episodes, total num timesteps 50580000/80000000, FPS 1684.
+
+value loss of agent: 1.303659693400065
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001993417739868164
+child_drop:  216
+add_hard_num:  2
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9348
+
+ Scenario push_ball Algo solved_pb updates 281/444 episodes, total num timesteps 50760000/80000000, FPS 1684.
+
+value loss of agent: 1.202751096089681
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017681121826171875
+child_drop:  207
+add_hard_num:  7
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9162
+
+ Scenario push_ball Algo solved_pb updates 282/444 episodes, total num timesteps 50940000/80000000, FPS 1684.
+
+value loss of agent: 1.3079580624898275
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018711090087890625
+child_drop:  206
+add_hard_num:  5
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9154
+
+ Scenario push_ball Algo solved_pb updates 283/444 episodes, total num timesteps 51120000/80000000, FPS 1685.
+
+value loss of agent: 1.232376480102539
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002341032028198242
+child_drop:  178
+add_hard_num:  10
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9228000000000001
+
+ Scenario push_ball Algo solved_pb updates 284/444 episodes, total num timesteps 51300000/80000000, FPS 1685.
+
+value loss of agent: 1.2296724637349448
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019729137420654297
+child_drop:  198
+add_hard_num:  10
+parent:  50
+last_node_parent:  50
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9302
+
+ Scenario push_ball Algo solved_pb updates 285/444 episodes, total num timesteps 51480000/80000000, FPS 1685.
+
+value loss of agent: 1.3057190974553425
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018374919891357422
+child_drop:  206
+add_hard_num:  5
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9295999999999999
+
+ Scenario push_ball Algo solved_pb updates 286/444 episodes, total num timesteps 51660000/80000000, FPS 1685.
+
+value loss of agent: 1.1996147155761718
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002059459686279297
+child_drop:  188
+add_hard_num:  8
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.918
+
+ Scenario push_ball Algo solved_pb updates 287/444 episodes, total num timesteps 51840000/80000000, FPS 1685.
+
+value loss of agent: 1.2763907670974732
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017619132995605469
+child_drop:  210
+add_hard_num:  7
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9222
+
+ Scenario push_ball Algo solved_pb updates 288/444 episodes, total num timesteps 52020000/80000000, FPS 1685.
+
+value loss of agent: 1.2896626869837442
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017838478088378906
+child_drop:  207
+add_hard_num:  0
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.927
+
+ Scenario push_ball Algo solved_pb updates 289/444 episodes, total num timesteps 52200000/80000000, FPS 1686.
+
+value loss of agent: 1.1518959283828736
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018143653869628906
+child_drop:  202
+add_hard_num:  5
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9268
+
+ Scenario push_ball Algo solved_pb updates 290/444 episodes, total num timesteps 52380000/80000000, FPS 1686.
+
+value loss of agent: 1.2992771784464519
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020170211791992188
+child_drop:  207
+add_hard_num:  8
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9288
+
+ Scenario push_ball Algo solved_pb updates 291/444 episodes, total num timesteps 52560000/80000000, FPS 1686.
+
+value loss of agent: 1.2642155726750692
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001847982406616211
+child_drop:  202
+add_hard_num:  5
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9174000000000001
+
+ Scenario push_ball Algo solved_pb updates 292/444 episodes, total num timesteps 52740000/80000000, FPS 1687.
+
+value loss of agent: 1.2768120845158895
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019805431365966797
+child_drop:  212
+add_hard_num:  3
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.945
+
+ Scenario push_ball Algo solved_pb updates 293/444 episodes, total num timesteps 52920000/80000000, FPS 1687.
+
+value loss of agent: 1.4144736846288046
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00612330436706543
+child_drop:  188
+add_hard_num:  5
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.922
+
+ Scenario push_ball Algo solved_pb updates 294/444 episodes, total num timesteps 53100000/80000000, FPS 1688.
+
+value loss of agent: 1.2230452696482341
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018496513366699219
+child_drop:  222
+add_hard_num:  1
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.938
+
+ Scenario push_ball Algo solved_pb updates 295/444 episodes, total num timesteps 53280000/80000000, FPS 1688.
+
+value loss of agent: 1.2134666760762534
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018172264099121094
+child_drop:  189
+add_hard_num:  8
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9344
+
+ Scenario push_ball Algo solved_pb updates 296/444 episodes, total num timesteps 53460000/80000000, FPS 1688.
+
+value loss of agent: 1.2037789503733316
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002948284149169922
+child_drop:  213
+add_hard_num:  12
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.933
+
+ Scenario push_ball Algo solved_pb updates 297/444 episodes, total num timesteps 53640000/80000000, FPS 1688.
+
+value loss of agent: 1.1998312950134278
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001844644546508789
+child_drop:  213
+add_hard_num:  2
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9312
+
+ Scenario push_ball Algo solved_pb updates 298/444 episodes, total num timesteps 53820000/80000000, FPS 1688.
+
+value loss of agent: 1.0895589669545491
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017735958099365234
+child_drop:  195
+add_hard_num:  5
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9224000000000001
+
+ Scenario push_ball Algo solved_pb updates 299/444 episodes, total num timesteps 54000000/80000000, FPS 1688.
+
+value loss of agent: 1.2037548859914144
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018756389617919922
+child_drop:  186
+add_hard_num:  4
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9278
+
+ Scenario push_ball Algo solved_pb updates 300/444 episodes, total num timesteps 54180000/80000000, FPS 1687.
+
+value loss of agent: 1.3107304255167642
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002061128616333008
+child_drop:  200
+add_hard_num:  4
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9368
+
+ Scenario push_ball Algo solved_pb updates 301/444 episodes, total num timesteps 54360000/80000000, FPS 1687.
+
+value loss of agent: 1.195774825414022
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002879619598388672
+child_drop:  199
+add_hard_num:  8
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.937
+
+ Scenario push_ball Algo solved_pb updates 302/444 episodes, total num timesteps 54540000/80000000, FPS 1687.
+
+value loss of agent: 1.1324952840805054
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018815994262695312
+child_drop:  198
+add_hard_num:  4
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9164
+
+ Scenario push_ball Algo solved_pb updates 303/444 episodes, total num timesteps 54720000/80000000, FPS 1687.
+
+value loss of agent: 1.2260606209437053
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002169370651245117
+child_drop:  214
+add_hard_num:  1
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9194
+
+ Scenario push_ball Algo solved_pb updates 304/444 episodes, total num timesteps 54900000/80000000, FPS 1687.
+
+value loss of agent: 1.1746050675710042
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001840353012084961
+child_drop:  200
+add_hard_num:  4
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.932
+
+ Scenario push_ball Algo solved_pb updates 305/444 episodes, total num timesteps 55080000/80000000, FPS 1687.
+
+value loss of agent: 1.2340015490849814
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020294189453125
+child_drop:  207
+add_hard_num:  2
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9356
+
+ Scenario push_ball Algo solved_pb updates 306/444 episodes, total num timesteps 55260000/80000000, FPS 1687.
+
+value loss of agent: 1.2339276472727458
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018868446350097656
+child_drop:  202
+add_hard_num:  1
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9338
+
+ Scenario push_ball Algo solved_pb updates 307/444 episodes, total num timesteps 55440000/80000000, FPS 1687.
+
+value loss of agent: 1.147682293256124
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017883777618408203
+child_drop:  217
+add_hard_num:  4
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.941
+
+ Scenario push_ball Algo solved_pb updates 308/444 episodes, total num timesteps 55620000/80000000, FPS 1688.
+
+value loss of agent: 1.2363249699274699
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021944046020507812
+child_drop:  209
+add_hard_num:  4
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.931
+
+ Scenario push_ball Algo solved_pb updates 309/444 episodes, total num timesteps 55800000/80000000, FPS 1688.
+
+value loss of agent: 1.3311949491500854
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017194747924804688
+child_drop:  198
+add_hard_num:  5
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9392
+
+ Scenario push_ball Algo solved_pb updates 310/444 episodes, total num timesteps 55980000/80000000, FPS 1688.
+
+value loss of agent: 1.255533504486084
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017600059509277344
+child_drop:  186
+add_hard_num:  3
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.94
+
+ Scenario push_ball Algo solved_pb updates 311/444 episodes, total num timesteps 56160000/80000000, FPS 1688.
+
+value loss of agent: 1.1866893927256266
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0023043155670166016
+child_drop:  203
+add_hard_num:  4
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9272
+
+ Scenario push_ball Algo solved_pb updates 312/444 episodes, total num timesteps 56340000/80000000, FPS 1688.
+
+value loss of agent: 1.1918601671854654
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003289461135864258
+child_drop:  174
+add_hard_num:  9
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9204
+
+ Scenario push_ball Algo solved_pb updates 313/444 episodes, total num timesteps 56520000/80000000, FPS 1687.
+
+value loss of agent: 1.3522945324579874
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001786947250366211
+child_drop:  206
+add_hard_num:  10
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.922
+
+ Scenario push_ball Algo solved_pb updates 314/444 episodes, total num timesteps 56700000/80000000, FPS 1686.
+
+value loss of agent: 1.1885577996571859
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018649101257324219
+child_drop:  191
+add_hard_num:  7
+parent:  59
+last_node_parent:  59
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9432
+
+ Scenario push_ball Algo solved_pb updates 315/444 episodes, total num timesteps 56880000/80000000, FPS 1687.
+
+value loss of agent: 1.2528180440266927
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002027750015258789
+child_drop:  215
+add_hard_num:  11
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.937
+
+ Scenario push_ball Algo solved_pb updates 316/444 episodes, total num timesteps 57060000/80000000, FPS 1687.
+
+value loss of agent: 1.2426674127578736
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001855611801147461
+child_drop:  212
+add_hard_num:  5
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9208
+
+ Scenario push_ball Algo solved_pb updates 317/444 episodes, total num timesteps 57240000/80000000, FPS 1687.
+
+value loss of agent: 1.3240660905838013
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0024585723876953125
+child_drop:  197
+add_hard_num:  4
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9294000000000001
+
+ Scenario push_ball Algo solved_pb updates 318/444 episodes, total num timesteps 57420000/80000000, FPS 1687.
+
+value loss of agent: 1.3322474241256714
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019168853759765625
+child_drop:  199
+add_hard_num:  5
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9132
+
+ Scenario push_ball Algo solved_pb updates 319/444 episodes, total num timesteps 57600000/80000000, FPS 1687.
+
+value loss of agent: 1.3148512840270996
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022640228271484375
+child_drop:  180
+add_hard_num:  3
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9392
+
+ Scenario push_ball Algo solved_pb updates 320/444 episodes, total num timesteps 57780000/80000000, FPS 1686.
+
+value loss of agent: 1.2974278211593628
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001911163330078125
+child_drop:  190
+add_hard_num:  4
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9274
+
+ Scenario push_ball Algo solved_pb updates 321/444 episodes, total num timesteps 57960000/80000000, FPS 1686.
+
+value loss of agent: 1.3612253983815512
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017802715301513672
+child_drop:  171
+add_hard_num:  4
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9124
+
+ Scenario push_ball Algo solved_pb updates 322/444 episodes, total num timesteps 58140000/80000000, FPS 1686.
+
+value loss of agent: 1.4928635756174724
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.013615846633911133
+child_drop:  204
+add_hard_num:  3
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.929
+
+ Scenario push_ball Algo solved_pb updates 323/444 episodes, total num timesteps 58320000/80000000, FPS 1685.
+
+value loss of agent: 1.4381903966267904
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021245479583740234
+child_drop:  188
+add_hard_num:  8
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9185999999999999
+
+ Scenario push_ball Algo solved_pb updates 324/444 episodes, total num timesteps 58500000/80000000, FPS 1685.
+
+value loss of agent: 1.4429200410842895
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018455982208251953
+child_drop:  180
+add_hard_num:  10
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9258
+
+ Scenario push_ball Algo solved_pb updates 325/444 episodes, total num timesteps 58680000/80000000, FPS 1685.
+
+value loss of agent: 1.4572583119074503
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00180816650390625
+child_drop:  180
+add_hard_num:  4
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9176
+
+ Scenario push_ball Algo solved_pb updates 326/444 episodes, total num timesteps 58860000/80000000, FPS 1685.
+
+value loss of agent: 1.4122190078099568
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002047300338745117
+child_drop:  204
+add_hard_num:  6
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.944
+
+ Scenario push_ball Algo solved_pb updates 327/444 episodes, total num timesteps 59040000/80000000, FPS 1686.
+
+value loss of agent: 1.4972490549087525
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.008283615112304688
+child_drop:  211
+add_hard_num:  3
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.937
+
+ Scenario push_ball Algo solved_pb updates 328/444 episodes, total num timesteps 59220000/80000000, FPS 1686.
+
+value loss of agent: 1.5187761783599854
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017118453979492188
+child_drop:  211
+add_hard_num:  3
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9164
+
+ Scenario push_ball Algo solved_pb updates 329/444 episodes, total num timesteps 59400000/80000000, FPS 1686.
+
+value loss of agent: 1.4671623388926187
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017902851104736328
+child_drop:  197
+add_hard_num:  9
+parent:  56
+last_node_parent:  56
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9266
+
+ Scenario push_ball Algo solved_pb updates 330/444 episodes, total num timesteps 59580000/80000000, FPS 1686.
+
+value loss of agent: 1.4593379894892375
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018620491027832031
+child_drop:  183
+add_hard_num:  4
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9372
+
+ Scenario push_ball Algo solved_pb updates 331/444 episodes, total num timesteps 59760000/80000000, FPS 1686.
+
+value loss of agent: 1.4091695467631022
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017712116241455078
+child_drop:  198
+add_hard_num:  5
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9278
+
+ Scenario push_ball Algo solved_pb updates 332/444 episodes, total num timesteps 59940000/80000000, FPS 1686.
+
+value loss of agent: 1.3378194093704223
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001781463623046875
+child_drop:  189
+add_hard_num:  4
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.927
+
+ Scenario push_ball Algo solved_pb updates 333/444 episodes, total num timesteps 60120000/80000000, FPS 1686.
+
+value loss of agent: 1.4439114570617675
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001974821090698242
+child_drop:  186
+add_hard_num:  2
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9365999999999999
+
+ Scenario push_ball Algo solved_pb updates 334/444 episodes, total num timesteps 60300000/80000000, FPS 1686.
+
+value loss of agent: 1.3702457427978516
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004224300384521484
+child_drop:  213
+add_hard_num:  3
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.934
+
+ Scenario push_ball Algo solved_pb updates 335/444 episodes, total num timesteps 60480000/80000000, FPS 1686.
+
+value loss of agent: 1.2761571089426675
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.022519826889038086
+child_drop:  208
+add_hard_num:  1
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9314000000000001
+
+ Scenario push_ball Algo solved_pb updates 336/444 episodes, total num timesteps 60660000/80000000, FPS 1687.
+
+value loss of agent: 1.3336026668548584
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.005665779113769531
+child_drop:  201
+add_hard_num:  3
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9372
+
+ Scenario push_ball Algo solved_pb updates 337/444 episodes, total num timesteps 60840000/80000000, FPS 1687.
+
+value loss of agent: 1.5582828044891357
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001856088638305664
+child_drop:  194
+add_hard_num:  6
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9312
+
+ Scenario push_ball Algo solved_pb updates 338/444 episodes, total num timesteps 61020000/80000000, FPS 1687.
+
+value loss of agent: 1.4165018240610758
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020046234130859375
+child_drop:  227
+add_hard_num:  6
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9502
+
+ Scenario push_ball Algo solved_pb updates 339/444 episodes, total num timesteps 61200000/80000000, FPS 1688.
+
+value loss of agent: 1.3772655646006267
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001956462860107422
+child_drop:  200
+add_hard_num:  1
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9438
+
+ Scenario push_ball Algo solved_pb updates 340/444 episodes, total num timesteps 61380000/80000000, FPS 1688.
+
+value loss of agent: 1.265207290649414
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018928050994873047
+child_drop:  180
+add_hard_num:  6
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.954
+
+ Scenario push_ball Algo solved_pb updates 341/444 episodes, total num timesteps 61560000/80000000, FPS 1688.
+
+value loss of agent: 1.33137899239858
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017940998077392578
+child_drop:  185
+add_hard_num:  6
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9398
+
+ Scenario push_ball Algo solved_pb updates 342/444 episodes, total num timesteps 61740000/80000000, FPS 1688.
+
+value loss of agent: 1.2826026280721028
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.005620479583740234
+child_drop:  204
+add_hard_num:  5
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.939
+
+ Scenario push_ball Algo solved_pb updates 343/444 episodes, total num timesteps 61920000/80000000, FPS 1689.
+
+value loss of agent: 1.2415250460306804
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018601417541503906
+child_drop:  194
+add_hard_num:  4
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9342
+
+ Scenario push_ball Algo solved_pb updates 344/444 episodes, total num timesteps 62100000/80000000, FPS 1688.
+
+value loss of agent: 1.2844629367192586
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001867532730102539
+child_drop:  217
+add_hard_num:  2
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.927
+
+ Scenario push_ball Algo solved_pb updates 345/444 episodes, total num timesteps 62280000/80000000, FPS 1688.
+
+value loss of agent: 1.0579171975453694
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020904541015625
+child_drop:  211
+add_hard_num:  2
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9401999999999999
+
+ Scenario push_ball Algo solved_pb updates 346/444 episodes, total num timesteps 62460000/80000000, FPS 1689.
+
+value loss of agent: 1.110957638422648
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018200874328613281
+child_drop:  210
+add_hard_num:  2
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.934
+
+ Scenario push_ball Algo solved_pb updates 347/444 episodes, total num timesteps 62640000/80000000, FPS 1689.
+
+value loss of agent: 1.12368004322052
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021202564239501953
+child_drop:  183
+add_hard_num:  3
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9415999999999999
+
+ Scenario push_ball Algo solved_pb updates 348/444 episodes, total num timesteps 62820000/80000000, FPS 1689.
+
+value loss of agent: 1.1457734982172647
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021071434020996094
+child_drop:  207
+add_hard_num:  4
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9368
+
+ Scenario push_ball Algo solved_pb updates 349/444 episodes, total num timesteps 63000000/80000000, FPS 1689.
+
+value loss of agent: 1.013017765680949
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021283626556396484
+child_drop:  209
+add_hard_num:  3
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9414
+
+ Scenario push_ball Algo solved_pb updates 350/444 episodes, total num timesteps 63180000/80000000, FPS 1689.
+
+value loss of agent: 1.0878632545471192
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.007865190505981445
+child_drop:  205
+add_hard_num:  3
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9438000000000001
+
+ Scenario push_ball Algo solved_pb updates 351/444 episodes, total num timesteps 63360000/80000000, FPS 1689.
+
+value loss of agent: 1.05763578414917
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018303394317626953
+child_drop:  199
+add_hard_num:  4
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9545999999999999
+
+ Scenario push_ball Algo solved_pb updates 352/444 episodes, total num timesteps 63540000/80000000, FPS 1689.
+
+value loss of agent: 1.017248276869456
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001981496810913086
+child_drop:  209
+add_hard_num:  1
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9396
+
+ Scenario push_ball Algo solved_pb updates 353/444 episodes, total num timesteps 63720000/80000000, FPS 1690.
+
+value loss of agent: 0.9192183017730713
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020782947540283203
+child_drop:  190
+add_hard_num:  3
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9515999999999999
+
+ Scenario push_ball Algo solved_pb updates 354/444 episodes, total num timesteps 63900000/80000000, FPS 1690.
+
+value loss of agent: 0.9873058199882507
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021283626556396484
+child_drop:  208
+add_hard_num:  1
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9555999999999999
+
+ Scenario push_ball Algo solved_pb updates 355/444 episodes, total num timesteps 64080000/80000000, FPS 1690.
+
+value loss of agent: 1.0014301816622415
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017650127410888672
+child_drop:  189
+add_hard_num:  5
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9366
+
+ Scenario push_ball Algo solved_pb updates 356/444 episodes, total num timesteps 64260000/80000000, FPS 1689.
+
+value loss of agent: 1.0103989402453104
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018494129180908203
+child_drop:  217
+add_hard_num:  4
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9504
+
+ Scenario push_ball Algo solved_pb updates 357/444 episodes, total num timesteps 64440000/80000000, FPS 1689.
+
+value loss of agent: 1.0014722386995951
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018382072448730469
+child_drop:  221
+add_hard_num:  3
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9358
+
+ Scenario push_ball Algo solved_pb updates 358/444 episodes, total num timesteps 64620000/80000000, FPS 1690.
+
+value loss of agent: 0.9645094871520996
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004124879837036133
+child_drop:  200
+add_hard_num:  3
+parent:  82
+last_node_parent:  82
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9355999999999999
+
+ Scenario push_ball Algo solved_pb updates 359/444 episodes, total num timesteps 64800000/80000000, FPS 1690.
+
+value loss of agent: 1.1670207182566326
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017993450164794922
+child_drop:  206
+add_hard_num:  3
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9274
+
+ Scenario push_ball Algo solved_pb updates 360/444 episodes, total num timesteps 64980000/80000000, FPS 1690.
+
+value loss of agent: 1.042036775747935
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001943349838256836
+child_drop:  216
+add_hard_num:  1
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.942
+
+ Scenario push_ball Algo solved_pb updates 361/444 episodes, total num timesteps 65160000/80000000, FPS 1691.
+
+value loss of agent: 0.9372011343638103
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001901388168334961
+child_drop:  198
+add_hard_num:  4
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9565999999999999
+
+ Scenario push_ball Algo solved_pb updates 362/444 episodes, total num timesteps 65340000/80000000, FPS 1691.
+
+value loss of agent: 1.0495900193850198
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022318363189697266
+child_drop:  200
+add_hard_num:  4
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9478
+
+ Scenario push_ball Algo solved_pb updates 363/444 episodes, total num timesteps 65520000/80000000, FPS 1691.
+
+value loss of agent: 1.0244330008824667
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017960071563720703
+child_drop:  209
+add_hard_num:  1
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9512
+
+ Scenario push_ball Algo solved_pb updates 364/444 episodes, total num timesteps 65700000/80000000, FPS 1691.
+
+value loss of agent: 1.133715526262919
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001733541488647461
+child_drop:  213
+add_hard_num:  3
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9304000000000001
+
+ Scenario push_ball Algo solved_pb updates 365/444 episodes, total num timesteps 65880000/80000000, FPS 1692.
+
+value loss of agent: 1.0933494806289672
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025870800018310547
+child_drop:  204
+add_hard_num:  8
+parent:  54
+last_node_parent:  54
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.944
+
+ Scenario push_ball Algo solved_pb updates 366/444 episodes, total num timesteps 66060000/80000000, FPS 1692.
+
+value loss of agent: 1.0471768379211426
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.01682901382446289
+child_drop:  201
+add_hard_num:  3
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9504
+
+ Scenario push_ball Algo solved_pb updates 367/444 episodes, total num timesteps 66240000/80000000, FPS 1692.
+
+value loss of agent: 1.044326917330424
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021080970764160156
+child_drop:  196
+add_hard_num:  4
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9274
+
+ Scenario push_ball Algo solved_pb updates 368/444 episodes, total num timesteps 66420000/80000000, FPS 1692.
+
+value loss of agent: 0.9052446722984314
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022649765014648438
+child_drop:  204
+add_hard_num:  2
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9476
+
+ Scenario push_ball Algo solved_pb updates 369/444 episodes, total num timesteps 66600000/80000000, FPS 1692.
+
+value loss of agent: 1.0367270350456237
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017971992492675781
+child_drop:  218
+add_hard_num:  1
+parent:  55
+last_node_parent:  55
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9565999999999999
+
+ Scenario push_ball Algo solved_pb updates 370/444 episodes, total num timesteps 66780000/80000000, FPS 1692.
+
+value loss of agent: 1.0835319995880126
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001962900161743164
+child_drop:  205
+add_hard_num:  6
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.945
+
+ Scenario push_ball Algo solved_pb updates 371/444 episodes, total num timesteps 66960000/80000000, FPS 1692.
+
+value loss of agent: 1.0873366912206015
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.00595855712890625
+child_drop:  201
+add_hard_num:  4
+parent:  60
+last_node_parent:  60
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9486
+
+ Scenario push_ball Algo solved_pb updates 372/444 episodes, total num timesteps 67140000/80000000, FPS 1692.
+
+value loss of agent: 1.0779049475987752
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018153190612792969
+child_drop:  204
+add_hard_num:  4
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9316
+
+ Scenario push_ball Algo solved_pb updates 373/444 episodes, total num timesteps 67320000/80000000, FPS 1692.
+
+value loss of agent: 1.104430913925171
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0025026798248291016
+child_drop:  196
+add_hard_num:  6
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9466
+
+ Scenario push_ball Algo solved_pb updates 374/444 episodes, total num timesteps 67500000/80000000, FPS 1691.
+
+value loss of agent: 1.182325839996338
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0024378299713134766
+child_drop:  216
+add_hard_num:  4
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9454
+
+ Scenario push_ball Algo solved_pb updates 375/444 episodes, total num timesteps 67680000/80000000, FPS 1691.
+
+value loss of agent: 1.1266859690348308
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0023927688598632812
+child_drop:  194
+add_hard_num:  8
+parent:  66
+last_node_parent:  66
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9354
+
+ Scenario push_ball Algo solved_pb updates 376/444 episodes, total num timesteps 67860000/80000000, FPS 1690.
+
+value loss of agent: 1.225868852933248
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002276182174682617
+child_drop:  171
+add_hard_num:  4
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9478
+
+ Scenario push_ball Algo solved_pb updates 377/444 episodes, total num timesteps 68040000/80000000, FPS 1690.
+
+value loss of agent: 1.2160974184672038
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0033032894134521484
+child_drop:  214
+add_hard_num:  2
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9366
+
+ Scenario push_ball Algo solved_pb updates 378/444 episodes, total num timesteps 68220000/80000000, FPS 1690.
+
+value loss of agent: 1.1405814170837403
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002162933349609375
+child_drop:  186
+add_hard_num:  7
+parent:  51
+last_node_parent:  51
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9316
+
+ Scenario push_ball Algo solved_pb updates 379/444 episodes, total num timesteps 68400000/80000000, FPS 1690.
+
+value loss of agent: 1.1587165117263794
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001779317855834961
+child_drop:  194
+add_hard_num:  6
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9494
+
+ Scenario push_ball Algo solved_pb updates 380/444 episodes, total num timesteps 68580000/80000000, FPS 1690.
+
+value loss of agent: 1.0893948475519817
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002181529998779297
+child_drop:  186
+add_hard_num:  11
+parent:  57
+last_node_parent:  57
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9444
+
+ Scenario push_ball Algo solved_pb updates 381/444 episodes, total num timesteps 68760000/80000000, FPS 1690.
+
+value loss of agent: 1.1681214412053427
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018351078033447266
+child_drop:  193
+add_hard_num:  6
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.95
+
+ Scenario push_ball Algo solved_pb updates 382/444 episodes, total num timesteps 68940000/80000000, FPS 1690.
+
+value loss of agent: 1.1240836302439372
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0028471946716308594
+child_drop:  192
+add_hard_num:  3
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.939
+
+ Scenario push_ball Algo solved_pb updates 383/444 episodes, total num timesteps 69120000/80000000, FPS 1690.
+
+value loss of agent: 1.1551093816757203
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0029189586639404297
+child_drop:  200
+add_hard_num:  7
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9402
+
+ Scenario push_ball Algo solved_pb updates 384/444 episodes, total num timesteps 69300000/80000000, FPS 1690.
+
+value loss of agent: 1.0836779514948527
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.004515409469604492
+child_drop:  217
+add_hard_num:  0
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9466
+
+ Scenario push_ball Algo solved_pb updates 385/444 episodes, total num timesteps 69480000/80000000, FPS 1690.
+
+value loss of agent: 1.0305747429529826
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001947641372680664
+child_drop:  191
+add_hard_num:  3
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9538
+
+ Scenario push_ball Algo solved_pb updates 386/444 episodes, total num timesteps 69660000/80000000, FPS 1690.
+
+value loss of agent: 1.1280455827713012
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.003813028335571289
+child_drop:  211
+add_hard_num:  4
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9528
+
+ Scenario push_ball Algo solved_pb updates 387/444 episodes, total num timesteps 69840000/80000000, FPS 1690.
+
+value loss of agent: 0.9427927811940511
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018694400787353516
+child_drop:  199
+add_hard_num:  2
+parent:  64
+last_node_parent:  64
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9438
+
+ Scenario push_ball Algo solved_pb updates 388/444 episodes, total num timesteps 70020000/80000000, FPS 1690.
+
+value loss of agent: 0.9823281129201253
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019516944885253906
+child_drop:  197
+add_hard_num:  5
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9584000000000001
+
+ Scenario push_ball Algo solved_pb updates 389/444 episodes, total num timesteps 70200000/80000000, FPS 1689.
+
+value loss of agent: 1.1112045923868814
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020661354064941406
+child_drop:  199
+add_hard_num:  5
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9196
+
+ Scenario push_ball Algo solved_pb updates 390/444 episodes, total num timesteps 70380000/80000000, FPS 1689.
+
+value loss of agent: 1.0610007921854654
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017828941345214844
+child_drop:  205
+add_hard_num:  2
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9392
+
+ Scenario push_ball Algo solved_pb updates 391/444 episodes, total num timesteps 70560000/80000000, FPS 1689.
+
+value loss of agent: 1.1326146841049194
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020246505737304688
+child_drop:  206
+add_hard_num:  2
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9458
+
+ Scenario push_ball Algo solved_pb updates 392/444 episodes, total num timesteps 70740000/80000000, FPS 1689.
+
+value loss of agent: 1.0399453560511271
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017595291137695312
+child_drop:  193
+add_hard_num:  3
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.939
+
+ Scenario push_ball Algo solved_pb updates 393/444 episodes, total num timesteps 70920000/80000000, FPS 1688.
+
+value loss of agent: 1.1001595417658487
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018048286437988281
+child_drop:  202
+add_hard_num:  3
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9454
+
+ Scenario push_ball Algo solved_pb updates 394/444 episodes, total num timesteps 71100000/80000000, FPS 1688.
+
+value loss of agent: 0.9351887385050456
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021555423736572266
+child_drop:  210
+add_hard_num:  4
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9426
+
+ Scenario push_ball Algo solved_pb updates 395/444 episodes, total num timesteps 71280000/80000000, FPS 1688.
+
+value loss of agent: 0.987280531724294
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0032188892364501953
+child_drop:  210
+add_hard_num:  2
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9388
+
+ Scenario push_ball Algo solved_pb updates 396/444 episodes, total num timesteps 71460000/80000000, FPS 1688.
+
+value loss of agent: 0.972996465365092
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018050670623779297
+child_drop:  204
+add_hard_num:  4
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.948
+
+ Scenario push_ball Algo solved_pb updates 397/444 episodes, total num timesteps 71640000/80000000, FPS 1688.
+
+value loss of agent: 0.9250266194343567
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017783641815185547
+child_drop:  194
+add_hard_num:  6
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9472
+
+ Scenario push_ball Algo solved_pb updates 398/444 episodes, total num timesteps 71820000/80000000, FPS 1687.
+
+value loss of agent: 0.9965095122655233
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020639896392822266
+child_drop:  198
+add_hard_num:  3
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9565999999999999
+
+ Scenario push_ball Algo solved_pb updates 399/444 episodes, total num timesteps 72000000/80000000, FPS 1687.
+
+value loss of agent: 1.1039916117986044
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001850128173828125
+child_drop:  202
+add_hard_num:  3
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9504
+
+ Scenario push_ball Algo solved_pb updates 400/444 episodes, total num timesteps 72180000/80000000, FPS 1687.
+
+value loss of agent: 1.0454046249389648
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002940654754638672
+child_drop:  203
+add_hard_num:  6
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9505999999999999
+
+ Scenario push_ball Algo solved_pb updates 401/444 episodes, total num timesteps 72360000/80000000, FPS 1687.
+
+value loss of agent: 0.9934665123621623
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018489360809326172
+child_drop:  205
+add_hard_num:  1
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9434
+
+ Scenario push_ball Algo solved_pb updates 402/444 episodes, total num timesteps 72540000/80000000, FPS 1687.
+
+value loss of agent: 0.9229712764422099
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017464160919189453
+child_drop:  194
+add_hard_num:  2
+parent:  61
+last_node_parent:  61
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9404
+
+ Scenario push_ball Algo solved_pb updates 403/444 episodes, total num timesteps 72720000/80000000, FPS 1687.
+
+value loss of agent: 1.0331320444742838
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018911361694335938
+child_drop:  195
+add_hard_num:  7
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9412
+
+ Scenario push_ball Algo solved_pb updates 404/444 episodes, total num timesteps 72900000/80000000, FPS 1687.
+
+value loss of agent: 0.9792397896448771
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017879009246826172
+child_drop:  208
+add_hard_num:  6
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.951
+
+ Scenario push_ball Algo solved_pb updates 405/444 episodes, total num timesteps 73080000/80000000, FPS 1687.
+
+value loss of agent: 0.9898136814435323
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017590522766113281
+child_drop:  197
+add_hard_num:  1
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9468
+
+ Scenario push_ball Algo solved_pb updates 406/444 episodes, total num timesteps 73260000/80000000, FPS 1688.
+
+value loss of agent: 0.9715928713480632
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0022115707397460938
+child_drop:  199
+add_hard_num:  2
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9452
+
+ Scenario push_ball Algo solved_pb updates 407/444 episodes, total num timesteps 73440000/80000000, FPS 1688.
+
+value loss of agent: 0.909352159500122
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017173290252685547
+child_drop:  196
+add_hard_num:  0
+parent:  68
+last_node_parent:  68
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9494
+
+ Scenario push_ball Algo solved_pb updates 408/444 episodes, total num timesteps 73620000/80000000, FPS 1688.
+
+value loss of agent: 0.9093824227650961
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017697811126708984
+child_drop:  191
+add_hard_num:  0
+parent:  69
+last_node_parent:  69
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9544000000000001
+
+ Scenario push_ball Algo solved_pb updates 409/444 episodes, total num timesteps 73800000/80000000, FPS 1688.
+
+value loss of agent: 0.9412679394086202
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021092891693115234
+child_drop:  201
+add_hard_num:  2
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.929
+
+ Scenario push_ball Algo solved_pb updates 410/444 episodes, total num timesteps 73980000/80000000, FPS 1689.
+
+value loss of agent: 1.0131224314371745
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018994808197021484
+child_drop:  172
+add_hard_num:  4
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9495999999999999
+
+ Scenario push_ball Algo solved_pb updates 411/444 episodes, total num timesteps 74160000/80000000, FPS 1689.
+
+value loss of agent: 1.0099732319513957
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020508766174316406
+child_drop:  192
+add_hard_num:  4
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9412
+
+ Scenario push_ball Algo solved_pb updates 412/444 episodes, total num timesteps 74340000/80000000, FPS 1689.
+
+value loss of agent: 1.0633652170499166
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020122528076171875
+child_drop:  211
+add_hard_num:  0
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9484
+
+ Scenario push_ball Algo solved_pb updates 413/444 episodes, total num timesteps 74520000/80000000, FPS 1689.
+
+value loss of agent: 0.9109438300132752
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002029895782470703
+child_drop:  193
+add_hard_num:  4
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.947
+
+ Scenario push_ball Algo solved_pb updates 414/444 episodes, total num timesteps 74700000/80000000, FPS 1689.
+
+value loss of agent: 0.991234815120697
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001878499984741211
+child_drop:  206
+add_hard_num:  1
+parent:  67
+last_node_parent:  67
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9344
+
+ Scenario push_ball Algo solved_pb updates 415/444 episodes, total num timesteps 74880000/80000000, FPS 1689.
+
+value loss of agent: 0.9629699230194092
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018532276153564453
+child_drop:  193
+add_hard_num:  0
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9338
+
+ Scenario push_ball Algo solved_pb updates 416/444 episodes, total num timesteps 75060000/80000000, FPS 1689.
+
+value loss of agent: 0.9528210202852885
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019047260284423828
+child_drop:  189
+add_hard_num:  2
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9514000000000001
+
+ Scenario push_ball Algo solved_pb updates 417/444 episodes, total num timesteps 75240000/80000000, FPS 1689.
+
+value loss of agent: 0.9634095708529155
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020630359649658203
+child_drop:  220
+add_hard_num:  2
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9385999999999999
+
+ Scenario push_ball Algo solved_pb updates 418/444 episodes, total num timesteps 75420000/80000000, FPS 1689.
+
+value loss of agent: 0.8590609828631083
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018322467803955078
+child_drop:  192
+add_hard_num:  1
+parent:  63
+last_node_parent:  63
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.947
+
+ Scenario push_ball Algo solved_pb updates 419/444 episodes, total num timesteps 75600000/80000000, FPS 1689.
+
+value loss of agent: 0.9683802048365275
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018711090087890625
+child_drop:  203
+add_hard_num:  0
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.948
+
+ Scenario push_ball Algo solved_pb updates 420/444 episodes, total num timesteps 75780000/80000000, FPS 1689.
+
+value loss of agent: 0.9060498714447022
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0020554065704345703
+child_drop:  213
+add_hard_num:  2
+parent:  62
+last_node_parent:  62
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9486
+
+ Scenario push_ball Algo solved_pb updates 421/444 episodes, total num timesteps 75960000/80000000, FPS 1689.
+
+value loss of agent: 0.8610302368799846
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017881393432617188
+child_drop:  214
+add_hard_num:  5
+parent:  74
+last_node_parent:  74
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9526
+
+ Scenario push_ball Algo solved_pb updates 422/444 episodes, total num timesteps 76140000/80000000, FPS 1688.
+
+value loss of agent: 0.9365416606267293
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002065896987915039
+child_drop:  221
+add_hard_num:  1
+parent:  77
+last_node_parent:  77
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.926
+
+ Scenario push_ball Algo solved_pb updates 423/444 episodes, total num timesteps 76320000/80000000, FPS 1689.
+
+value loss of agent: 0.9485382318496705
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017600059509277344
+child_drop:  210
+add_hard_num:  1
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.93
+
+ Scenario push_ball Algo solved_pb updates 424/444 episodes, total num timesteps 76500000/80000000, FPS 1689.
+
+value loss of agent: 0.9256957411766052
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002028226852416992
+child_drop:  197
+add_hard_num:  3
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9422
+
+ Scenario push_ball Algo solved_pb updates 425/444 episodes, total num timesteps 76680000/80000000, FPS 1689.
+
+value loss of agent: 0.931422233581543
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017919540405273438
+child_drop:  218
+add_hard_num:  5
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9382
+
+ Scenario push_ball Algo solved_pb updates 426/444 episodes, total num timesteps 76860000/80000000, FPS 1689.
+
+value loss of agent: 0.852918004989624
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002122640609741211
+child_drop:  185
+add_hard_num:  1
+parent:  85
+last_node_parent:  85
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.945
+
+ Scenario push_ball Algo solved_pb updates 427/444 episodes, total num timesteps 77040000/80000000, FPS 1689.
+
+value loss of agent: 0.9678031404813131
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018737316131591797
+child_drop:  221
+add_hard_num:  1
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9496
+
+ Scenario push_ball Algo solved_pb updates 428/444 episodes, total num timesteps 77220000/80000000, FPS 1689.
+
+value loss of agent: 0.7713640491167705
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018270015716552734
+child_drop:  213
+add_hard_num:  3
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9452
+
+ Scenario push_ball Algo solved_pb updates 429/444 episodes, total num timesteps 77400000/80000000, FPS 1689.
+
+value loss of agent: 0.6846415003140768
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018334388732910156
+child_drop:  198
+add_hard_num:  1
+parent:  81
+last_node_parent:  81
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.955
+
+ Scenario push_ball Algo solved_pb updates 430/444 episodes, total num timesteps 77580000/80000000, FPS 1689.
+
+value loss of agent: 0.8654725670814514
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018510818481445312
+child_drop:  210
+add_hard_num:  0
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9388
+
+ Scenario push_ball Algo solved_pb updates 431/444 episodes, total num timesteps 77760000/80000000, FPS 1689.
+
+value loss of agent: 0.8595146934191386
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018374919891357422
+child_drop:  203
+add_hard_num:  1
+parent:  76
+last_node_parent:  76
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9328
+
+ Scenario push_ball Algo solved_pb updates 432/444 episodes, total num timesteps 77940000/80000000, FPS 1689.
+
+value loss of agent: 0.9024799585342407
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018696784973144531
+child_drop:  201
+add_hard_num:  1
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9472
+
+ Scenario push_ball Algo solved_pb updates 433/444 episodes, total num timesteps 78120000/80000000, FPS 1689.
+
+value loss of agent: 0.9249180595080058
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018410682678222656
+child_drop:  233
+add_hard_num:  1
+parent:  58
+last_node_parent:  58
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.949
+
+ Scenario push_ball Algo solved_pb updates 434/444 episodes, total num timesteps 78300000/80000000, FPS 1689.
+
+value loss of agent: 0.7195769866307576
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017154216766357422
+child_drop:  201
+add_hard_num:  1
+parent:  70
+last_node_parent:  70
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9654
+
+ Scenario push_ball Algo solved_pb updates 435/444 episodes, total num timesteps 78480000/80000000, FPS 1690.
+
+value loss of agent: 0.9779204289118449
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018122196197509766
+child_drop:  222
+add_hard_num:  1
+parent:  83
+last_node_parent:  83
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9454000000000001
+
+ Scenario push_ball Algo solved_pb updates 436/444 episodes, total num timesteps 78660000/80000000, FPS 1690.
+
+value loss of agent: 0.916855255762736
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0018572807312011719
+child_drop:  204
+add_hard_num:  0
+parent:  78
+last_node_parent:  78
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9472
+
+ Scenario push_ball Algo solved_pb updates 437/444 episodes, total num timesteps 78840000/80000000, FPS 1690.
+
+value loss of agent: 1.0604676445325216
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.002752542495727539
+child_drop:  209
+add_hard_num:  4
+parent:  65
+last_node_parent:  65
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9286
+
+ Scenario push_ball Algo solved_pb updates 438/444 episodes, total num timesteps 79020000/80000000, FPS 1690.
+
+value loss of agent: 1.0488725185394288
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017709732055664062
+child_drop:  205
+add_hard_num:  1
+parent:  71
+last_node_parent:  71
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9434000000000001
+
+ Scenario push_ball Algo solved_pb updates 439/444 episodes, total num timesteps 79200000/80000000, FPS 1690.
+
+value loss of agent: 0.921060339609782
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019114017486572266
+child_drop:  230
+add_hard_num:  0
+parent:  73
+last_node_parent:  73
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9472
+
+ Scenario push_ball Algo solved_pb updates 440/444 episodes, total num timesteps 79380000/80000000, FPS 1690.
+
+value loss of agent: 0.9336988449096679
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001813650131225586
+child_drop:  217
+add_hard_num:  0
+parent:  80
+last_node_parent:  80
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.9458
+
+ Scenario push_ball Algo solved_pb updates 441/444 episodes, total num timesteps 79560000/80000000, FPS 1690.
+
+value loss of agent: 0.8793010115623474
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0019061565399169922
+child_drop:  204
+add_hard_num:  4
+parent:  72
+last_node_parent:  72
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.951
+
+ Scenario push_ball Algo solved_pb updates 442/444 episodes, total num timesteps 79740000/80000000, FPS 1691.
+
+value loss of agent: 0.9245605230331421
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0017375946044921875
+child_drop:  208
+add_hard_num:  2
+parent:  75
+last_node_parent:  75
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.946
+
+ Scenario push_ball Algo solved_pb updates 443/444 episodes, total num timesteps 79920000/80000000, FPS 1691.
+
+value loss of agent: 0.8484881401062012

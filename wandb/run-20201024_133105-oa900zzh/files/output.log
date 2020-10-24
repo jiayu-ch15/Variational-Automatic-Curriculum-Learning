@@ -1,0 +1,9 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+Traceback (most recent call last):
+  File "train_mpe_curriculum_sp.py", line 1005, in <module>
+    main()
+  File "train_mpe_curriculum_sp.py", line 707, in main
+    np.array(recurrent_hidden_statess).transpose(1,0,2),
+KeyboardInterrupt

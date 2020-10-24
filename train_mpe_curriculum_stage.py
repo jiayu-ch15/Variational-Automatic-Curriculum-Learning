@@ -54,7 +54,6 @@ class node_buffer():
         self.agent_num = agent_num
         self.buffer_length = buffer_length
         self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
-        # self.archive = self.produce_uniform_grid(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -91,7 +90,7 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size)
+        grid_num = int(start_boundary * 2 / cell_size) + 1
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_landmark_grid = []
@@ -139,7 +138,7 @@ class node_buffer():
         # list1是需要求novelty的
         topk=5
         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
-        if len(list2) < topk+1 or len(list1) < topk+1:
+        if len(list2) < topk+1:
             dist_k = dist
             novelty = np.sum(dist_k,axis=1)/len(list2)
         else:
@@ -162,8 +161,7 @@ class node_buffer():
         else:
             novelty_threshold = 0
         # novelty_threshold = child_novelty_threshold
-        writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
-                {'novelty_threshold': novelty_threshold},timestep)
+        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -323,14 +321,10 @@ class node_buffer():
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
         if len(self.parent_all) > self.buffer_length:
             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
-        writer.add_scalars(str(self.agent_num)+'agent/archive',
-                        {'archive_length': len(self.archive)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/childlist',
-                        {'childlist_length': len(self.childlist)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/parentlist',
-                        {'parentlist_length': len(self.parent)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/child_drop',
-                        {'drop_num': drop_num},timestep)
+        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
+        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
+        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
+        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
     
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
@@ -363,6 +357,7 @@ class node_buffer():
 
 def main():
     args = get_config()
+    run = wandb.init(project='phase_sp')
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -443,7 +438,7 @@ def main():
         actor_critic.to(device)
         # load model
         # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_bound95_seed1/run1/models/4agent_model.pt')['model'].to(device)
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_bound95_seed1_startbound_1/run1/models/4agent_model.pt')['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -532,9 +527,9 @@ def main():
     child_novelty_threshold = 5.0 #用于ablation
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 300
+    N_child = 325
     N_archive = 150
-    N_parent = 50
+    N_parent = 25
     max_step = 0.6
     TB = 1
     M = N_child
@@ -552,7 +547,7 @@ def main():
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
-    save_node_frequency = 1
+    save_node_frequency = 3
     save_node_flag = True
     historical_length = 5
     next_stage_flag = 0

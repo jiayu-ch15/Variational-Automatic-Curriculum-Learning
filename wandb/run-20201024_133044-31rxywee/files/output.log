@@ -1,0 +1,17 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+Traceback (most recent call last):
+  File "train_mpe_curriculum_sp.py", line 1005, in <module>
+    main()
+  File "train_mpe_curriculum_sp.py", line 684, in main
+    obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
+  File "/home/tsing73/curriculum/baselines/common/vec_env/vec_env.py", line 117, in step
+    return self.step_wait(now_num_processes)
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 211, in step_wait
+    return np.stack(obs), np.stack(rews), np.stack(dones), infos, np.stack(available_actions)
+  File "<__array_function__ internals>", line 6, in stack
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/numpy/core/shape_base.py", line 434, in stack
+    return _nx.concatenate(expanded_arrays, axis=axis, out=out)
+  File "<__array_function__ internals>", line 6, in concatenate
+KeyboardInterrupt

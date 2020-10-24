@@ -1,0 +1,834 @@
+diff --git a/train_mpe_curriculum_pb.py b/train_mpe_curriculum_pb.py
+index 670a85e..8da4118 100644
+--- a/train_mpe_curriculum_pb.py
++++ b/train_mpe_curriculum_pb.py
+@@ -29,6 +29,7 @@ import random
+ import copy
+ import matplotlib.pyplot as plt
+ import pdb
++import wandb
+ np.set_printoptions(linewidth=10000)
+ 
+ 
+@@ -167,8 +168,7 @@ class node_buffer():
+         else:
+             novelty_threshold = 0
+         # novelty_threshold = child_novelty_threshold
+-        writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
+-                {'novelty_threshold': novelty_threshold},timestep)
++        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
+         parents = parents + []
+         len_start = len(parents)
+         child_new = []
+@@ -328,14 +328,10 @@ class node_buffer():
+                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
+         if len(self.parent_all) > self.buffer_length:
+             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
+-        writer.add_scalars(str(self.agent_num)+'agent/archive',
+-                        {'archive_length': len(self.archive)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/childlist',
+-                        {'childlist_length': len(self.childlist)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/parentlist',
+-                        {'parentlist_length': len(self.parent)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/child_drop',
+-                        {'drop_num': drop_num},timestep)
++        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
++        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
++        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
++        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
+     
+     def save_node(self, dir_path, episode):
+         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
+@@ -367,6 +363,7 @@ class node_buffer():
+ 
+ def main():
+     args = get_config()
++    run = wandb.init(project='pb_tricks',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+     
+     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
+ 
+@@ -537,8 +534,8 @@ def main():
+     use_parent_novelty = False # 关闭
+     use_child_novelty = False # 关闭
+     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
+-    use_novelty_sample = True
+-    use_parent_sample = True
++    use_novelty_sample = False
++    use_parent_sample = False
+     del_switch = 'novelty'
+     child_novelty_threshold = 0.5 
+     starts = []
+@@ -565,7 +562,7 @@ def main():
+     mean_cover_rate = 0
+     eval_frequency = 3 #需要fix几个回合
+     check_frequency = 1
+-    save_node_frequency = 1
++    save_node_frequency = 5
+     save_node_flag = True
+     save_90_flag = True
+     historical_length = 5
+@@ -743,7 +740,7 @@ def main():
+                                 rewards[:,agent_id], 
+                                 np.array(masks)[:,agent_id])
+             # import pdb;pdb.set_trace()
+-            logger.add_scalars('agent/traing_cover_rate',{'training_cover_rate': np.mean(infos)}, current_timestep)
++            wandb.log({'training_cover_rate': np.mean(infos)}, current_timestep)
+             curriculum_episode += 1
+             current_timestep += args.episode_length * starts_length
+             last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
+@@ -788,13 +785,13 @@ def main():
+             if args.share_policy:
+                 actor_critic.train()
+                 value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
+-                logger.add_scalars('value_loss',
++                wandb.log(
+                     {'value_loss': value_loss},
+                     current_timestep)      
+                 rew = []
+                 for i in range(rollouts.rewards.shape[1]):
+                     rew.append(np.sum(rollouts.rewards[:,i]))
+-                logger.add_scalars('average_episode_reward',
++                wandb.log(
+                     {'average_episode_reward': np.mean(rew)},
+                     current_timestep)
+                 # clean the buffer and reset
+@@ -814,7 +811,7 @@ def main():
+                     rew = []
+                     for i in range(rollouts[agent_id].rewards.shape[1]):
+                         rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
+-                    logger.add_scalars('agent%i/average_episode_reward'%agent_id,
++                    wandb.log(
+                         {'average_episode_reward': np.mean(rew)},
+                         (episode+1) * args.episode_length * starts_length*eval_frequency)
+                     
+@@ -823,7 +820,7 @@ def main():
+         # move nodes
+         last_node.eval_score = last_node.eval_score / eval_frequency
+         if use_samplenearby:
+-            last_node.move_nodes(one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, logger, (episode+1) * args.episode_length * starts_length)
++            last_node.move_nodes(one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, logger, current_timestep)
+         print('last_node_parent: ', len(last_node.parent))
+         # 需要改路径
+         if (episode+1) % save_node_frequency ==0 and save_node_flag:
+@@ -963,8 +960,8 @@ def main():
+                                 rewards[:,agent_id], 
+                                 np.array(masks)[:,agent_id])
+             # import pdb;pdb.set_trace()
+-            logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
+-            logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
++            wandb.log({'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
++            wandb.log({'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
+             if mean_cover_rate >= 0.9 and args.algorithm_name=='ours_pb' and save_90_flag:
+                 torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")
+@@ -1003,14 +1000,6 @@ def main():
+             else:
+                 for agent_id in range(num_agents):
+                     print("value loss of agent%i: " % agent_id + str(value_losses[agent_id]))
+-
+-            # if args.env_name == "MPE":
+-            #     for agent_id in range(num_agents):
+-            #         show_rewards = []
+-            #         for info in infos:                        
+-            #             if 'individual_reward' in info[agent_id].keys():
+-            #                 show_rewards.append(info[agent_id]['individual_reward'])                    
+-            #         logger.add_scalars('agent%i/individual_reward' % agent_id, {'individual_reward': np.mean(show_rewards)}, total_num_steps)
+                 
+     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
+     logger.close()
+diff --git a/train_mpe_curriculum_pb.sh b/train_mpe_curriculum_pb.sh
+index 1c5c112..8160c70 100644
+--- a/train_mpe_curriculum_pb.sh
++++ b/train_mpe_curriculum_pb.sh
+@@ -4,16 +4,17 @@ env="MPE"
+ scenario="push_ball"
+ num_landmarks=2
+ num_agents=2
+-algo="diversified_novelty_parent_sampling_pb"
++# algo="diversified_novelty_parentsampling_pb"
++algo='diversified_pb'
+ # algo='check'
+-seed_max=1
++seed_max=3
+ 
+ echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"
+ 
+-for seed in `seq ${seed_max}`;
++for seed in {2,3};
+ do
+     echo "seed is ${seed}:"
+-    CUDA_VISIBLE_DEVICES=3 python train_mpe_curriculum_pb.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 1 --episode_length 120 --num_env_steps 100000000 --ppo_epoch 15 --recurrent_policy --use_popart
++    CUDA_VISIBLE_DEVICES=0 python train_mpe_curriculum_pb.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 1 --episode_length 120 --num_env_steps 80000000 --ppo_epoch 15 --recurrent_policy --use_popart
+     echo "training is done!"
+ done
+ # seed=3
+diff --git a/train_mpe_curriculum_pb_stage.py b/train_mpe_curriculum_pb_stage.py
+index 5d89f23..798d107 100644
+--- a/train_mpe_curriculum_pb_stage.py
++++ b/train_mpe_curriculum_pb_stage.py
+@@ -29,6 +29,7 @@ import random
+ import copy
+ import matplotlib.pyplot as plt
+ import pdb
++import wandb
+ np.set_printoptions(linewidth=10000)
+ 
+ 
+@@ -54,7 +55,7 @@ class node_buffer():
+         self.agent_num = agent_num
+         self.box_num = box_num
+         self.buffer_length = buffer_length
+-        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num, self.box_num)
++        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+         self.archive_novelty = self.get_novelty(self.archive,self.archive)
+         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
+         self.childlist = []
+@@ -167,8 +168,7 @@ class node_buffer():
+         else:
+             novelty_threshold = 0
+         # novelty_threshold = child_novelty_threshold
+-        writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
+-                {'novelty_threshold': novelty_threshold},timestep)
++        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
+         parents = parents + []
+         len_start = len(parents)
+         child_new = []
+@@ -328,19 +328,15 @@ class node_buffer():
+                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
+         if len(self.parent_all) > self.buffer_length:
+             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
+-        writer.add_scalars(str(self.agent_num)+'agent/archive',
+-                        {'archive_length': len(self.archive)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/childlist',
+-                        {'childlist_length': len(self.childlist)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/parentlist',
+-                        {'parentlist_length': len(self.parent)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/child_drop',
+-                        {'drop_num': drop_num},timestep)
++        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
++        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
++        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
++        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
+     
+     def save_node(self, dir_path, episode):
+         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
+-        if self.box_num!=0:
+-            save_path = dir_path / ('%iboxes' % (self.box_num))
++        if self.agent_num!=0:
++            save_path = dir_path / ('%iagents' % (self.agent_num))
+             if not os.path.exists(save_path):
+                 os.makedirs(save_path / 'childlist')
+                 os.makedirs(save_path / 'archive')
+@@ -367,6 +363,7 @@ class node_buffer():
+ 
+ def main():
+     args = get_config()
++    run = wandb.init(project='phase_pb')
+     
+     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
+ 
+@@ -536,9 +533,9 @@ def main():
+     child_novelty_threshold = 0.5
+     starts = []
+     buffer_length = 2000 # archive 长度
+-    N_child = 300
++    N_child = 325
+     N_archive = 150
+-    N_parent = 50
++    N_parent = 23
+     max_step = 0.2
+     TB = 1
+     M = N_child
+@@ -757,7 +754,7 @@ def main():
+                                     rewards[:,agent_id], 
+                                     np.array(masks)[:,agent_id])
+                 # import pdb;pdb.set_trace()
+-                logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
++                wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                 print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+                 current_timestep += now_episode_length * starts_length_now
+                 curriculum_episode += 1
+@@ -820,13 +817,13 @@ def main():
+                     else:
+                         value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, True, initial_optimizer=False)
+                         frozen_count += 1
+-                    logger.add_scalars('value_loss',
++                    wandb.log(
+                         {'value_loss': value_loss},
+                         current_timestep)
+                     rew = []
+                     for i in range(rollouts_now.rewards.shape[1]):
+                         rew.append(np.sum(rollouts_now.rewards[:,i]))
+-                    logger.add_scalars('average_episode_reward',
++                    wandb.log(
+                         {'average_episode_reward': np.mean(rew)},
+                         current_timestep)
+                     # clean the buffer and reset
+@@ -845,7 +842,7 @@ def main():
+                         rew = []
+                         for i in range(rollouts[agent_id].rewards.shape[1]):
+                             rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
+-                        logger.add_scalars('agent%i/average_episode_reward'%agent_id,
++                        wandb.log(
+                             {'average_episode_reward': np.mean(rew)},
+                             (episode+1) * args.episode_length * one_length*eval_frequency)
+                         rollouts[agent_id].after_update()
+@@ -997,7 +994,7 @@ def main():
+                                 np.array(values[agent_id]),
+                                 rewards[:,agent_id], 
+                                 np.array(masks)[:,agent_id])
+-            logger.add_scalars('%ibox/cover_rate' %now_node.box_num,{'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
++            wandb.log({str(now_node.agent_num)+'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
+             print('test_box_num: ', now_node.box_num)
+             print('test_mean_cover_rate: ', mean_cover_rate)
+@@ -1014,10 +1011,7 @@ def main():
+                     torch.save({'model': actor_critic}, str(save_dir) + "/%ibox_model.pt"%now_node.box_num)
+         if next_stage_flag==1:
+             next_stage_flag = 0
+-            if now_agent_num <= 4:
+-                start_boundary = 0.6
+-            else:
+-                start_boundary = 1.0
++            start_boundary = 1.0
+             now_node = node_buffer(now_agent_num, now_box_num, buffer_length,
+                            archive_initial_length=args.n_rollout_threads,
+                            reproduction_num=M,
+@@ -1066,14 +1060,6 @@ def main():
+             else:
+                 for agent_id in range(now_agent_num):
+                     print("value loss of agent%i: " % agent_id + str(value_losses[agent_id]))
+-
+-            # if args.env_name == "MPE":
+-            #     for agent_id in range(num_agents):
+-            #         show_rewards = []
+-            #         for info in infos:                        
+-            #             if 'individual_reward' in info[agent_id].keys():
+-            #                 show_rewards.append(info[agent_id]['individual_reward'])                    
+-            #         logger.add_scalars('agent%i/individual_reward' % agent_id, {'individual_reward': np.mean(show_rewards)}, total_num_steps)
+                 
+     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
+     logger.close()
+diff --git a/train_mpe_curriculum_pb_stage.sh b/train_mpe_curriculum_pb_stage.sh
+index e4328cb..1403e5e 100644
+--- a/train_mpe_curriculum_pb_stage.sh
++++ b/train_mpe_curriculum_pb_stage.sh
+@@ -8,7 +8,7 @@ num_boxes=2
+ # algo='stage95_warmup_3iter_pb_2to4_small'
+ # algo='add_landmark_obs_4to8'
+ # algo='stage95_map44'
+-algo='stage95_map44_step0.2'
++algo='phase_pb_2to4_startbound1'
+ # algo='check'
+ seed_max=1
+ 
+diff --git a/train_mpe_curriculum_sp.py b/train_mpe_curriculum_sp.py
+index 175de44..a7fc995 100644
+--- a/train_mpe_curriculum_sp.py
++++ b/train_mpe_curriculum_sp.py
+@@ -33,7 +33,6 @@ import wandb
+ # wandb.init(project="my-project")
+ np.set_printoptions(linewidth=1000)
+ 
+-
+ def make_parallel_env(args):
+     def get_env_fn(rank):
+         def init_env():
+@@ -140,7 +139,7 @@ class node_buffer():
+         # list1是需要求novelty的
+         topk=5
+         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
+-        if len(list2) < topk+1 or len(list1) < topk+1:
++        if len(list2) < topk+1:
+             dist_k = dist
+             novelty = np.sum(dist_k,axis=1)/len(list2)
+         else:
+@@ -163,8 +162,7 @@ class node_buffer():
+         else:
+             novelty_threshold = 0
+         # novelty_threshold = child_novelty_threshold
+-        writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
+-                {'novelty_threshold': novelty_threshold},timestep)
++        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
+         parents = parents + []
+         len_start = len(parents)
+         child_new = []
+@@ -324,14 +322,10 @@ class node_buffer():
+                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
+         if len(self.parent_all) > self.buffer_length:
+             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
+-        writer.add_scalars(str(self.agent_num)+'agent/archive',
+-                        {'archive_length': len(self.archive)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/childlist',
+-                        {'childlist_length': len(self.childlist)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/parentlist',
+-                        {'parentlist_length': len(self.parent)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/child_drop',
+-                        {'drop_num': drop_num},timestep)
++        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
++        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
++        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
++        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
+     
+     def save_node(self, dir_path, episode):
+         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
+@@ -364,6 +358,7 @@ class node_buffer():
+ 
+ def main():
+     args = get_config()
++    run = wandb.init(project='curriculum',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+     
+     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
+ 
+@@ -531,7 +526,7 @@ def main():
+     use_parent_novelty = False # 保持false
+     use_child_novelty = False # 保持false
+     use_novelty_sample = True
+-    use_parent_sample = True
++    use_parent_sample = False
+     del_switch = 'novelty'
+     child_novelty_threshold = 0.8
+     starts = []
+@@ -545,7 +540,7 @@ def main():
+     TB = 1
+     M = N_child
+     Rmin = 0.5
+-    Rmax = 0.95
++    Rmax = 0.7
+     boundary = 3
+     start_boundary = 0.3
+     max_step = 0.6
+@@ -558,7 +553,7 @@ def main():
+     mean_cover_rate = 0
+     eval_frequency = 3 #需要fix几个回合
+     check_frequency = 1
+-    save_node_frequency = 1
++    save_node_frequency = 5
+     save_node_flag = True
+     save_90_flag = True
+     historical_length = 5
+@@ -732,7 +727,8 @@ def main():
+                                 rewards[:,agent_id], 
+                                 np.array(masks)[:,agent_id])
+             # import pdb;pdb.set_trace()
+-            logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
++            # logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
++            wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+             print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+             current_timestep += args.episode_length * starts_length
+             curriculum_episode += 1
+@@ -779,13 +775,19 @@ def main():
+             if args.share_policy:
+                 actor_critic.train()
+                 value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
+-                logger.add_scalars('value_loss',
++                # logger.add_scalars('value_loss',
++                #     {'value_loss': value_loss},
++                #     current_timestep)
++                wandb.log(
+                     {'value_loss': value_loss},
+                     current_timestep)
+                 rew = []
+                 for i in range(rollouts.rewards.shape[1]):
+                     rew.append(np.sum(rollouts.rewards[:,i]))
+-                logger.add_scalars('average_episode_reward',
++                # logger.add_scalars('average_episode_reward',
++                #     {'average_episode_reward': np.mean(rew)},
++                #     current_timestep)
++                wandb.log(
+                     {'average_episode_reward': np.mean(rew)},
+                     current_timestep)
+                 # clean the buffer and reset
+@@ -953,8 +955,10 @@ def main():
+                                 rewards[:,agent_id], 
+                                 np.array(masks)[:,agent_id])
+             # import pdb;pdb.set_trace()
+-            logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
+-            logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
++            # logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
++            # logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
++            wandb.log({'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
++            wandb.log({'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
+             if mean_cover_rate >= 0.9 and args.algorithm_name=='ours' and save_90_flag:
+                 torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")
+@@ -993,14 +997,6 @@ def main():
+             else:
+                 for agent_id in range(num_agents):
+                     print("value loss of agent%i: " % agent_id + str(value_losses[agent_id]))
+-
+-            # if args.env_name == "MPE":
+-            #     for agent_id in range(num_agents):
+-            #         show_rewards = []
+-            #         for info in infos:                        
+-            #             if 'individual_reward' in info[agent_id].keys():
+-            #                 show_rewards.append(info[agent_id]['individual_reward'])                    
+-            #         logger.add_scalars('agent%i/individual_reward' % agent_id, {'individual_reward': np.mean(show_rewards)}, total_num_steps)
+                 
+     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
+     logger.close()
+diff --git a/train_mpe_curriculum_sp.sh b/train_mpe_curriculum_sp.sh
+index 97b01cf..729635a 100644
+--- a/train_mpe_curriculum_sp.sh
++++ b/train_mpe_curriculum_sp.sh
+@@ -4,8 +4,8 @@ env="MPE"
+ scenario="simple_spread"
+ num_landmarks=4
+ num_agents=4
+-algo="diversified_novelty_parent_sampling_sp"
+-# algo='check'
++# algo="solved_sp"
++algo='check_novelty_max'
+ seed_max=1
+ 
+ echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"
+@@ -13,7 +13,7 @@ echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_ma
+ for seed in `seq ${seed_max}`;
+ do
+     echo "seed is ${seed}:"
+-    CUDA_VISIBLE_DEVICES=1 python train_mpe_curriculum_sp.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 2 --episode_length 70 --num_env_steps 60000000 --ppo_epoch 15 --recurrent_policy --use_popart --use-max-grad-norm
++    CUDA_VISIBLE_DEVICES=3 python train_mpe_curriculum_sp.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 2 --episode_length 70 --num_env_steps 40000000 --ppo_epoch 15 --recurrent_policy --use_popart --use-max-grad-norm
+     echo "training is done!"
+ done
+ # seed=3
+diff --git a/train_mpe_curriculum_stage.py b/train_mpe_curriculum_stage.py
+index 3a2aabb..3b03b8a 100644
+--- a/train_mpe_curriculum_stage.py
++++ b/train_mpe_curriculum_stage.py
+@@ -54,7 +54,6 @@ class node_buffer():
+         self.agent_num = agent_num
+         self.buffer_length = buffer_length
+         self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
+-        # self.archive = self.produce_uniform_grid(archive_initial_length, start_boundary, self.agent_num)
+         self.archive_novelty = self.get_novelty(self.archive,self.archive)
+         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
+         self.childlist = []
+@@ -91,7 +90,7 @@ class node_buffer():
+     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
+         # agent_size=0.1
+         cell_size = 0.2
+-        grid_num = int(start_boundary * 2 / cell_size)
++        grid_num = int(start_boundary * 2 / cell_size) + 1
+         grid = np.zeros(shape=(grid_num,grid_num))
+         one_starts_landmark = []
+         one_starts_landmark_grid = []
+@@ -139,7 +138,7 @@ class node_buffer():
+         # list1是需要求novelty的
+         topk=5
+         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
+-        if len(list2) < topk+1 or len(list1) < topk+1:
++        if len(list2) < topk+1:
+             dist_k = dist
+             novelty = np.sum(dist_k,axis=1)/len(list2)
+         else:
+@@ -162,8 +161,7 @@ class node_buffer():
+         else:
+             novelty_threshold = 0
+         # novelty_threshold = child_novelty_threshold
+-        writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
+-                {'novelty_threshold': novelty_threshold},timestep)
++        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
+         parents = parents + []
+         len_start = len(parents)
+         child_new = []
+@@ -323,14 +321,10 @@ class node_buffer():
+                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
+         if len(self.parent_all) > self.buffer_length:
+             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
+-        writer.add_scalars(str(self.agent_num)+'agent/archive',
+-                        {'archive_length': len(self.archive)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/childlist',
+-                        {'childlist_length': len(self.childlist)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/parentlist',
+-                        {'parentlist_length': len(self.parent)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/child_drop',
+-                        {'drop_num': drop_num},timestep)
++        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
++        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
++        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
++        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
+     
+     def save_node(self, dir_path, episode):
+         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
+@@ -363,6 +357,7 @@ class node_buffer():
+ 
+ def main():
+     args = get_config()
++    run = wandb.init(project='phase_sp')
+     
+     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
+ 
+@@ -443,7 +438,7 @@ def main():
+         actor_critic.to(device)
+         # load model
+         # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
+-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_bound95_seed1/run1/models/4agent_model.pt')['model'].to(device)
++        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_bound95_seed1_startbound_1/run1/models/4agent_model.pt')['model'].to(device)
+         # algorithm
+         agents = PPO3(actor_critic,
+                    args.clip_param,
+@@ -532,9 +527,9 @@ def main():
+     child_novelty_threshold = 5.0 #用于ablation
+     starts = []
+     buffer_length = 2000 # archive 长度
+-    N_child = 300
++    N_child = 325
+     N_archive = 150
+-    N_parent = 50
++    N_parent = 25
+     max_step = 0.6
+     TB = 1
+     M = N_child
+@@ -552,7 +547,7 @@ def main():
+     mean_cover_rate = 0
+     eval_frequency = 3 #需要fix几个回合
+     check_frequency = 1
+-    save_node_frequency = 1
++    save_node_frequency = 3
+     save_node_flag = True
+     historical_length = 5
+     next_stage_flag = 0
+diff --git a/train_mpe_curriculum_stage_batch.py b/train_mpe_curriculum_stage_batch.py
+index dafa534..933a8c0 100644
+--- a/train_mpe_curriculum_stage_batch.py
++++ b/train_mpe_curriculum_stage_batch.py
+@@ -139,7 +139,7 @@ class node_buffer():
+         # list1是需要求novelty的
+         topk=5
+         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
+-        if len(list2) < topk+1 or len(list1) < topk+1:
++        if len(list2) < topk+1:
+             dist_k = dist
+             novelty = np.sum(dist_k,axis=1)/len(list2)
+         else:
+diff --git a/train_mpe_mix_curriculum.py b/train_mpe_mix_curriculum.py
+index dea7dfa..47833d9 100644
+--- a/train_mpe_mix_curriculum.py
++++ b/train_mpe_mix_curriculum.py
+@@ -29,6 +29,7 @@ import random
+ import copy
+ import matplotlib.pyplot as plt
+ import pdb
++import wandb
+ np.set_printoptions(linewidth=10000)
+ 
+ def make_parallel_env(args):
+@@ -53,7 +54,6 @@ class node_buffer():
+         self.agent_num = agent_num
+         self.buffer_length = buffer_length
+         self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
+-        # self.archive = self.produce_uniform_grid(archive_initial_length, start_boundary, self.agent_num)
+         self.archive_novelty = self.get_novelty(self.archive,self.archive)
+         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
+         self.childlist = []
+@@ -90,7 +90,7 @@ class node_buffer():
+     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
+         # agent_size=0.1
+         cell_size = 0.2
+-        grid_num = int(start_boundary * 2 / cell_size)
++        grid_num = int(start_boundary * 2 / cell_size) + 1
+         grid = np.zeros(shape=(grid_num,grid_num))
+         one_starts_landmark = []
+         one_starts_landmark_grid = []
+@@ -138,7 +138,7 @@ class node_buffer():
+         # list1是需要求novelty的
+         topk=5
+         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
+-        if len(list2) < topk+1 or len(list1) < topk+1:
++        if len(list2) < topk+1:
+             dist_k = dist
+             novelty = np.sum(dist_k,axis=1)/len(list2)
+         else:
+@@ -161,8 +161,7 @@ class node_buffer():
+         else:
+             novelty_threshold = 0
+         # novelty_threshold = child_novelty_threshold
+-        writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
+-                {'novelty_threshold': novelty_threshold},timestep)
++        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
+         parents = parents + []
+         len_start = len(parents)
+         child_new = []
+@@ -322,14 +321,10 @@ class node_buffer():
+                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
+         if len(self.parent_all) > self.buffer_length:
+             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
+-        writer.add_scalars(str(self.agent_num)+'agent/archive',
+-                        {'archive_length': len(self.archive)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/childlist',
+-                        {'childlist_length': len(self.childlist)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/parentlist',
+-                        {'parentlist_length': len(self.parent)},timestep)
+-        writer.add_scalars(str(self.agent_num)+'agent/child_drop',
+-                        {'drop_num': drop_num},timestep)
++        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
++        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
++        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
++        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
+     
+     def save_node(self, dir_path, episode):
+         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
+@@ -362,6 +357,7 @@ class node_buffer():
+ 
+ def main():
+     args = get_config()
++    run = wandb.init(project='mix_sp')
+     
+     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
+ 
+@@ -535,9 +531,9 @@ def main():
+     child_novelty_threshold = 0.8
+     starts = []
+     buffer_length = 2000 # archive 长度
+-    N_child = 300
++    N_child = 325
+     N_archive = 150
+-    N_parent = 50
++    N_parent = 25
+     max_step = 0.6
+     TB = 1
+     M = N_child
+@@ -548,17 +544,18 @@ def main():
+     N_easy = 0
+     test_flag = 0
+     reproduce_flag = 0
+-    upper_bound = 0.95
++    upper_bound = 0.9
+     target_num = 8
+     last_agent_num = 0
+     now_agent_num = 4
+     mean_cover_rate = 0
+     eval_frequency = 3 #需要fix几个回合
+     check_frequency = 1
+-    save_node_frequency = 1
++    save_node_frequency = 3
+     save_node_flag = True
+     historical_length = 5
+     next_stage_flag = 0
++    second_start_timestep = 0
+     random.seed(args.seed)
+     np.random.seed(args.seed)
+     last_node = node_buffer(last_agent_num,buffer_length,
+@@ -757,7 +754,7 @@ def main():
+                                     rewards[:,agent_id], 
+                                     np.array(masks)[:,agent_id])
+                 # import pdb;pdb.set_trace()
+-                logger.add_scalars('%iagent/training_cover_rate'%last_node.agent_num,{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
++                wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                 print('training_cover_rate_%iagent: '%last_node.agent_num, np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+                 current_timestep += args.episode_length * starts_length_last
+                 last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
+@@ -931,7 +928,7 @@ def main():
+                                 rewards[:,agent_id], 
+                                 np.array(masks)[:,agent_id])
+             # import pdb;pdb.set_trace()
+-            logger.add_scalars('%iagent/training_cover_rate'%now_node.agent_num,{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
++            wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+             print('training_cover_rate_%iagent: '%now_node.agent_num, np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+             current_timestep += args.episode_length * starts_length_now
+             now_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
+@@ -982,8 +979,7 @@ def main():
+                     value_loss, action_loss, dist_entropy = agents.update_double_share(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
+                 else:
+                     value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now,False)
+-                logger.add_scalars('value_loss',
+-                    {'value_loss': value_loss},
++                wandb.log({'value_loss': value_loss},
+                     current_timestep)
+ 
+                 # clean the buffer and reset
+@@ -1005,8 +1001,7 @@ def main():
+                     rew = []
+                     for i in range(rollouts[agent_id].rewards.shape[1]):
+                         rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
+-                    logger.add_scalars('agent%i/average_episode_reward'%agent_id,
+-                        {'average_episode_reward': np.mean(rew)},
++                    wandb.log({'average_episode_reward': np.mean(rew)},
+                         (episode+1) * args.episode_length * one_length*eval_frequency)
+                     
+                     rollouts[agent_id].after_update()
+@@ -1164,7 +1159,7 @@ def main():
+                                 rewards[:,agent_id], 
+                                 np.array(masks)[:,agent_id])
+             # import pdb;pdb.set_trace()
+-            logger.add_scalars('%iagent/cover_rate' %now_node.agent_num,{'cover_rate': np.mean(infos)}, current_timestep)
++            wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(infos)}, current_timestep-second_start_timestep)
+             mean_cover_rate = np.mean(infos)
+             print('test_agent_num: ', now_node.agent_num)
+             print('test_mean_cover_rate: ', mean_cover_rate)
+@@ -1187,6 +1182,7 @@ def main():
+                 
+ 
+         if next_stage_flag==1:
++            second_start_timestep = current_timestep
+             next_stage_flag = 0
+             last_node = copy.deepcopy(now_node)
+             start_boundary = 1.0
+@@ -1232,14 +1228,6 @@ def main():
+             else:
+                 for agent_id in range(num_agents):
+                     print("value loss of agent%i: " % agent_id + str(value_losses[agent_id]))
+-
+-            # if args.env_name == "MPE":
+-            #     for agent_id in range(num_agents):
+-            #         show_rewards = []
+-            #         for info in infos:                        
+-            #             if 'individual_reward' in info[agent_id].keys():
+-            #                 show_rewards.append(info[agent_id]['individual_reward'])                    
+-            #         logger.add_scalars('agent%i/individual_reward' % agent_id, {'individual_reward': np.mean(show_rewards)}, total_num_steps)
+                 
+     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
+     logger.close()
+diff --git a/train_mpe_mix_curriculum.sh b/train_mpe_mix_curriculum.sh
+index 374a6db..19a8c8b 100644
+--- a/train_mpe_mix_curriculum.sh
++++ b/train_mpe_mix_curriculum.sh
+@@ -4,17 +4,17 @@ env="MPE"
+ scenario="simple_spread"
+ num_landmarks=4
+ num_agents=4
+-algo="mix4n8_bound95_seed1_startbound_1"
++algo="mix4n8_bound90"
+ # algo='check'
+-seed_max=1
++seed_max=3
+ 
+ echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"
+ 
+-# for seed in `seq ${seed_max}`;
+-# do
+-#     echo "seed is ${seed}:"
+-#     CUDA_VISIBLE_DEVICES=1 python train_mpe_mix_curriculum.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 2 --episode_length 70 --num_env_steps 70000000 --ppo_epoch 15 --recurrent_policy --use_popart
+-#     echo "training is done!"
+-# done
+-seed=1
+-CUDA_VISIBLE_DEVICES=0 python train_mpe_mix_curriculum.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 2 --episode_length 70 --num_env_steps 70000000 --ppo_epoch 15 --recurrent_policy --use_popart
++for seed in `seq ${seed_max}`;
++do
++    echo "seed is ${seed}:"
++    CUDA_VISIBLE_DEVICES=3 python train_mpe_mix_curriculum.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 2 --episode_length 70 --num_env_steps 70000000 --ppo_epoch 15 --recurrent_policy --use_popart
++    echo "training is done!"
++done
++# seed=1
++# CUDA_VISIBLE_DEVICES=0 python train_mpe_mix_curriculum.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 2 --episode_length 70 --num_env_steps 70000000 --ppo_epoch 15 --recurrent_policy --use_popart
+diff --git a/train_mpe_reverse.sh b/train_mpe_reverse.sh
+index f5d53f7..576b3e8 100644
+--- a/train_mpe_reverse.sh
++++ b/train_mpe_reverse.sh
+@@ -4,7 +4,7 @@ env="MPE"
+ scenario="simple_spread"
+ num_landmarks=4
+ num_agents=4
+-algo="reverse_eval1"
++algo="reverse"
+ # algo='check'
+ seed_max=3
+ 
+@@ -13,6 +13,6 @@ echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_ma
+ for seed in `seq ${seed_max}`;
+ do
+     echo "seed is ${seed}:"
+-    CUDA_VISIBLE_DEVICES=2 python train_mpe_reverse.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 2 --episode_length 70 --num_env_steps 50000000 --ppo_epoch 15 --recurrent_policy
++    CUDA_VISIBLE_DEVICES=2 python train_mpe_reverse.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 2 --episode_length 70 --num_env_steps 40000000 --ppo_epoch 15 --recurrent_policy
+     echo "training is done!"
+ done

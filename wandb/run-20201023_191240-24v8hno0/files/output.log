@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "train_mpe_curriculum_sp.py", line 1006, in <module>
+    main()
+  File "train_mpe_curriculum_sp.py", line 598, in main
+    starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive)
+  File "train_mpe_curriculum_sp.py", line 232, in sample_starts
+    self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/random.py", line 317, in sample
+    raise ValueError("Sample larger than population or is negative")
+ValueError: Sample larger than population or is negative

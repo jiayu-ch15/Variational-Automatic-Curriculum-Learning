@@ -1,0 +1,238 @@
+sample_archive:  500
+sample_childlist:  0
+sample_parent:  0
+sample_time:  0.0045168399810791016
+child_drop:  0
+add_hard_num:  0
+parent:  8
+last_node_parent:  8
+childlist:  0
+archive:  492
+test_agent_num:  2
+test_mean_cover_rate:  0.131
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Policy_pb_3. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type MLPBase. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type LayerNorm. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Sequential. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Linear. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Tanh. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_actor_dist_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ObsEncoder_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type Categorical. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/site-packages/torch/serialization.py:292: UserWarning: Couldn't retrieve source code for container of type ATTBase_critic_pb_add. It won't be checked for correctness upon loading.
+  "type " + obj.__name__ + ". It won't be checked "
+
+ Scenario push_ball Algo solved_pb updates 0/444 episodes, total num timesteps 180000/80000000, FPS 2696.
+
+value loss of agent: 1.6062252044677734
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0011131763458251953
+child_drop:  25
+add_hard_num:  154
+parent:  1
+last_node_parent:  1
+childlist:  0
+archive:  662
+test_agent_num:  2
+test_mean_cover_rate:  0.14
+
+ Scenario push_ball Algo solved_pb updates 1/444 episodes, total num timesteps 360000/80000000, FPS 2680.
+
+value loss of agent: 2.1674464066823322
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016376972198486328
+child_drop:  34
+add_hard_num:  152
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  816
+test_agent_num:  2
+test_mean_cover_rate:  0.114
+
+ Scenario push_ball Algo solved_pb updates 2/444 episodes, total num timesteps 540000/80000000, FPS 2711.
+
+value loss of agent: 2.1580424944559735
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0016002655029296875
+child_drop:  88
+add_hard_num:  121
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  947
+test_agent_num:  2
+test_mean_cover_rate:  0.129
+
+ Scenario push_ball Algo solved_pb updates 3/444 episodes, total num timesteps 720000/80000000, FPS 2630.
+
+value loss of agent: 2.4205058097839354
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0013375282287597656
+child_drop:  79
+add_hard_num:  95
+parent:  15
+last_node_parent:  15
+childlist:  0
+archive:  1108
+test_agent_num:  2
+test_mean_cover_rate:  0.112
+
+ Scenario push_ball Algo solved_pb updates 4/444 episodes, total num timesteps 900000/80000000, FPS 2539.
+
+value loss of agent: 2.14213285446167
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014793872833251953
+child_drop:  86
+add_hard_num:  103
+parent:  14
+last_node_parent:  14
+childlist:  0
+archive:  1255
+test_agent_num:  2
+test_mean_cover_rate:  0.107
+
+ Scenario push_ball Algo solved_pb updates 5/444 episodes, total num timesteps 1080000/80000000, FPS 2433.
+
+value loss of agent: 1.859070603052775
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0012881755828857422
+child_drop:  83
+add_hard_num:  119
+parent:  12
+last_node_parent:  12
+childlist:  0
+archive:  1391
+test_agent_num:  2
+test_mean_cover_rate:  0.143
+
+ Scenario push_ball Algo solved_pb updates 6/444 episodes, total num timesteps 1260000/80000000, FPS 2360.
+
+value loss of agent: 1.80946577390035
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015370845794677734
+child_drop:  111
+add_hard_num:  99
+parent:  17
+last_node_parent:  17
+childlist:  0
+archive:  1514
+test_agent_num:  2
+test_mean_cover_rate:  0.144
+
+ Scenario push_ball Algo solved_pb updates 7/444 episodes, total num timesteps 1440000/80000000, FPS 2326.
+
+value loss of agent: 1.9097128868103028
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015797615051269531
+child_drop:  106
+add_hard_num:  92
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  1656
+test_agent_num:  2
+test_mean_cover_rate:  0.139
+
+ Scenario push_ball Algo solved_pb updates 8/444 episodes, total num timesteps 1620000/80000000, FPS 2325.
+
+value loss of agent: 1.7491775353749592
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0021598339080810547
+child_drop:  92
+add_hard_num:  100
+parent:  15
+last_node_parent:  15
+childlist:  0
+archive:  1799
+test_agent_num:  2
+test_mean_cover_rate:  0.13
+
+ Scenario push_ball Algo solved_pb updates 9/444 episodes, total num timesteps 1800000/80000000, FPS 2269.
+
+value loss of agent: 1.683978271484375
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015277862548828125
+child_drop:  88
+add_hard_num:  97
+parent:  8
+last_node_parent:  8
+childlist:  0
+archive:  1956
+test_agent_num:  2
+test_mean_cover_rate:  0.139
+
+ Scenario push_ball Algo solved_pb updates 10/444 episodes, total num timesteps 1980000/80000000, FPS 2214.
+
+value loss of agent: 1.5635551452636718
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014035701751708984
+child_drop:  103
+add_hard_num:  92
+parent:  16
+last_node_parent:  16
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.139
+
+ Scenario push_ball Algo solved_pb updates 11/444 episodes, total num timesteps 2160000/80000000, FPS 2165.
+
+value loss of agent: 1.4492040157318116
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0014736652374267578
+child_drop:  75
+add_hard_num:  115
+parent:  10
+last_node_parent:  10
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.1336
+
+ Scenario push_ball Algo solved_pb updates 12/444 episodes, total num timesteps 2340000/80000000, FPS 2119.
+
+value loss of agent: 1.4978808085123698
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0015015602111816406
+child_drop:  96
+add_hard_num:  76
+parent:  16
+last_node_parent:  16
+childlist:  0
+archive:  2000

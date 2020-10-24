@@ -1,0 +1,1 @@
+{"2novelty_threshold": 0.5228168813029831, "training_cover_rate": 0.544, "_step": 1560000, "_runtime": 860, "_timestamp": 1603519681, "value_loss": 1.6164707978566488, "average_episode_reward": 33.1504020690918, "2archive_length": 1494, "2childlist_length": 0, "2parentlist_length": 13, "2drop_num": 71, "cover_rate_1step": 0.146, "cover_rate_5step": 0.146}

@@ -8,7 +8,7 @@ num_boxes=2
 # algo='stage95_warmup_3iter_pb_2to4_small'
 # algo='add_landmark_obs_4to8'
 # algo='stage95_map44'
-algo='stage95_map44_step0.2'
+algo='phase_pb_2to4_startbound1'
 # algo='check'
 seed_max=1
 

@@ -1,0 +1,1 @@
+{"training_cover_rate": 0.0, "_step": 420000, "_runtime": 358, "_timestamp": 1603451964, "value_loss": 0.009767223273714383, "average_episode_reward": 2.2018003463745117, "4archive_length": 500, "4childlist_length": 0, "4parentlist_length": 0, "4drop_num": 0, "cover_rate_1step": 0.0065, "cover_rate_5step": 0.0065}

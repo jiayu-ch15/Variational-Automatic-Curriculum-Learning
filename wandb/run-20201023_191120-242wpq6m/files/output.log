@@ -1,0 +1,29 @@
+Traceback (most recent call last):
+  File "train_mpe_curriculum_sp.py", line 1006, in <module>
+    main()
+  File "train_mpe_curriculum_sp.py", line 410, in main
+    envs = make_parallel_env(args)
+  File "train_mpe_curriculum_sp.py", line 51, in make_parallel_env
+    return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
+  File "/home/tsing73/curriculum/utils/env_wrappers.py", line 174, in __init__
+    p.start()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/process.py", line 105, in start
+    self._popen = self._Popen(self)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/context.py", line 223, in _Popen
+    return _default_context.get_context().Process._Popen(process_obj)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/context.py", line 277, in _Popen
+    return Popen(process_obj)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/popen_fork.py", line 20, in __init__
+    self._launch(process_obj)
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/popen_fork.py", line 67, in _launch
+    self.pid = os.fork()
+BlockingIOError: [Errno 11] Resource temporarily unavailable
+Error in atexit._run_exitfuncs:
+Traceback (most recent call last):
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/queues.py", line 87, in put
+    self._start_thread()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/multiprocessing/queues.py", line 169, in _start_thread
+    self._thread.start()
+  File "/home/tsing73/anaconda3/envs/curriculum/lib/python3.6/threading.py", line 846, in start
+    _start_new_thread(self._bootstrap, ())
+RuntimeError: can't start new thread

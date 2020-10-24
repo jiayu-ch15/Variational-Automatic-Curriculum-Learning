@@ -1,0 +1,67 @@
+2020-10-23 18:13:50,567 INFO    MainThread:142684 [wandb_init.py:_log_setup():292] Logging user logs to wandb/run-20201023_181350-33muhat9/logs/debug.log
+2020-10-23 18:13:50,567 INFO    MainThread:142684 [wandb_init.py:_log_setup():293] Logging internal logs to wandb/run-20201023_181350-33muhat9/logs/debug-internal.log
+2020-10-23 18:13:50,567 INFO    MainThread:142684 [wandb_setup.py:_flush():68] enabling code saving by default
+2020-10-23 18:13:50,567 INFO    MainThread:142684 [wandb_setup.py:_flush():68] setting env: {}
+2020-10-23 18:13:50,567 INFO    MainThread:142684 [wandb_setup.py:_flush():68] setting user settings: {'save_code': True}
+2020-10-23 18:13:50,567 INFO    MainThread:142684 [wandb_setup.py:_flush():68] multiprocessing start_methods=fork,spawn,forkserver
+2020-10-23 18:13:54,321 INFO    MainThread:142684 [wandb_run.py:_console_start():1265] atexit reg
+2020-10-23 18:13:54,322 INFO    MainThread:142684 [wandb_run.py:_redirect():1135] redirect: SettingsConsole.REDIRECT
+2020-10-23 18:13:54,323 INFO    MainThread:142684 [wandb_run.py:_redirect():1138] Redirecting console.
+2020-10-23 18:13:54,323 INFO    MainThread:142684 [redirect.py:install():196] install start
+2020-10-23 18:13:54,324 INFO    MainThread:142684 [redirect.py:install():211] install stop
+2020-10-23 18:13:54,324 INFO    MainThread:142684 [redirect.py:install():196] install start
+2020-10-23 18:13:54,324 INFO    MainThread:142684 [redirect.py:install():211] install stop
+2020-10-23 18:13:54,324 INFO    MainThread:142684 [wandb_run.py:_redirect():1182] Redirects installed.
+2020-10-24 07:28:57,069 INFO    Dummy-5   :142684 [wandb_run.py:_atexit_cleanup():1238] got exitcode: 0
+2020-10-24 07:28:57,071 INFO    Dummy-5   :142684 [wandb_run.py:_restore():1210] restore
+2020-10-24 07:28:57,071 INFO    Dummy-5   :142684 [redirect.py:uninstall():215] uninstall start
+2020-10-24 07:28:57,071 INFO    Dummy-5   :142684 [redirect.py:_stop():264] _stop: stdout
+2020-10-24 07:28:57,071 INFO    Dummy-5   :142684 [redirect.py:_stop():270] _stop closed: stdout
+2020-10-24 07:28:57,072 INFO    stdout    :142684 [redirect.py:_pipe_relay():119] relay done saw last write: stdout
+2020-10-24 07:28:57,072 INFO    stdout    :142684 [redirect.py:_pipe_relay():135] relay done done: stdout
+2020-10-24 07:28:57,074 INFO    Dummy-5   :142684 [redirect.py:_stop():276] _stop joined: stdout
+2020-10-24 07:28:57,074 INFO    Dummy-5   :142684 [redirect.py:_stop():278] _stop rd closed: stdout
+2020-10-24 07:28:57,074 INFO    Dummy-5   :142684 [redirect.py:uninstall():219] uninstall done
+2020-10-24 07:28:57,074 INFO    Dummy-5   :142684 [redirect.py:uninstall():215] uninstall start
+2020-10-24 07:28:57,075 INFO    Dummy-5   :142684 [redirect.py:_stop():264] _stop: stderr
+2020-10-24 07:28:57,075 INFO    Dummy-5   :142684 [redirect.py:_stop():270] _stop closed: stderr
+2020-10-24 07:28:57,075 INFO    stderr    :142684 [redirect.py:_pipe_relay():119] relay done saw last write: stderr
+2020-10-24 07:28:57,075 INFO    stderr    :142684 [redirect.py:_pipe_relay():135] relay done done: stderr
+2020-10-24 07:28:57,076 INFO    Dummy-5   :142684 [redirect.py:_stop():276] _stop joined: stderr
+2020-10-24 07:28:57,076 INFO    Dummy-5   :142684 [redirect.py:_stop():278] _stop rd closed: stderr
+2020-10-24 07:28:57,076 INFO    Dummy-5   :142684 [redirect.py:uninstall():219] uninstall done
+2020-10-24 07:28:57,091 INFO    Dummy-5   :142684 [wandb_run.py:_wait_for_finish():1349] got exit ret: uuid: "9c2f0fe9af0645aa8983bff4b8673e34"
+response {
+  poll_exit_response {
+    file_counts {
+      wandb_count: 2
+      other_count: 1
+    }
+    pusher_stats {
+      uploaded_bytes: 88558
+      total_bytes: 88558
+    }
+  }
+}
+
+2020-10-24 07:28:59,143 INFO    Dummy-5   :142684 [wandb_run.py:_wait_for_finish():1349] got exit ret: uuid: "775dbb64e7204c7c9740b22d4bd8ea34"
+response {
+  poll_exit_response {
+    done: true
+    exit_result {
+    }
+    file_counts {
+      wandb_count: 6
+      other_count: 1
+    }
+    pusher_stats {
+      uploaded_bytes: 272394
+      total_bytes: 272394
+    }
+  }
+}
+
+2020-10-24 07:29:00,241 INFO    Dummy-5   :142684 [wandb_run.py:_show_summary():1477] rendering summary
+2020-10-24 07:29:00,241 INFO    Dummy-5   :142684 [wandb_run.py:_show_history():1515] rendering history
+2020-10-24 07:29:00,243 INFO    Dummy-5   :142684 [wandb_run.py:_show_files():1543] logging synced files
+2020-10-24 07:29:00,244 INFO    Dummy-5   :142684 [internal.py:handle_exit():137] Internal process exited
