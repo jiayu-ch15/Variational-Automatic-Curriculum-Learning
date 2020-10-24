@@ -236,3 +236,13 @@ parent:  16
 last_node_parent:  16
 childlist:  0
 archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.155
+
+ Scenario push_ball Algo solved_pb updates 13/444 episodes, total num timesteps 2520000/80000000, FPS 2038.
+
+value loss of agent: 1.3707711696624756
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.001444101333618164

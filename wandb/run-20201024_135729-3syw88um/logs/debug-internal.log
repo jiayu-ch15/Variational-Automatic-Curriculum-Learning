@@ -515,3 +515,75 @@
 2020-10-24 14:08:33,115 DEBUG   SenderThread:85980 [sender.py:send_request():97] send_request: status
 2020-10-24 14:08:33,118 DEBUG   SenderThread:85980 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
 2020-10-24 14:08:33,151 DEBUG   SenderThread:85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 65
+2020-10-24 14:08:39,786 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:08:46,925 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:08:47,774 DEBUG   SenderThread:85980 [sender.py:send():88] send: history
+2020-10-24 14:08:47,774 DEBUG   SenderThread:85980 [sender.py:send():88] send: summary
+2020-10-24 14:08:47,776 DEBUG   Thread-5  :85980 [connectionpool.py:_get_conn():240] Resetting dropped connection: 111.207.104.144
+2020-10-24 14:08:47,803 INFO    SenderThread:85980 [sender.py:_save_file():542] saving file wandb-summary.json with policy end
+2020-10-24 14:08:47,919 DEBUG   Thread-5  :85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /files/chenjy/curriculum/3syw88um/file_stream HTTP/1.1" 200 225
+2020-10-24 14:08:48,167 DEBUG   HandlerThread:85980 [handler.py:handle_request():54] handle_request: status
+2020-10-24 14:08:48,167 DEBUG   SenderThread:85980 [sender.py:send():88] send: request
+2020-10-24 14:08:48,167 DEBUG   SenderThread:85980 [sender.py:send_request():97] send_request: status
+2020-10-24 14:08:48,170 DEBUG   SenderThread:85980 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-24 14:08:48,206 DEBUG   SenderThread:85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 65
+2020-10-24 14:08:48,733 INFO    Thread-9  :85980 [dir_watcher.py:_on_file_modified():228] file/dir modified: wandb/run-20201024_135729-3syw88um/files/wandb-summary.json
+2020-10-24 14:08:54,893 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:09:02,990 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:09:03,208 DEBUG   HandlerThread:85980 [handler.py:handle_request():54] handle_request: status
+2020-10-24 14:09:03,208 DEBUG   SenderThread:85980 [sender.py:send():88] send: request
+2020-10-24 14:09:03,208 DEBUG   SenderThread:85980 [sender.py:send_request():97] send_request: status
+2020-10-24 14:09:03,212 DEBUG   SenderThread:85980 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-24 14:09:03,270 DEBUG   SenderThread:85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 65
+2020-10-24 14:09:11,266 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:09:18,769 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:09:18,772 DEBUG   Thread-5  :85980 [connectionpool.py:_get_conn():240] Resetting dropped connection: 111.207.104.144
+2020-10-24 14:09:18,871 DEBUG   Thread-5  :85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /files/chenjy/curriculum/3syw88um/file_stream HTTP/1.1" 200 225
+2020-10-24 14:09:20,273 DEBUG   HandlerThread:85980 [handler.py:handle_request():54] handle_request: status
+2020-10-24 14:09:20,273 DEBUG   SenderThread:85980 [sender.py:send():88] send: request
+2020-10-24 14:09:20,273 DEBUG   SenderThread:85980 [sender.py:send_request():97] send_request: status
+2020-10-24 14:09:20,276 DEBUG   SenderThread:85980 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-24 14:09:20,323 DEBUG   SenderThread:85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 65
+2020-10-24 14:09:21,975 INFO    Thread-9  :85980 [dir_watcher.py:_on_file_modified():228] file/dir modified: wandb/run-20201024_135729-3syw88um/files/output.log
+2020-10-24 14:09:26,229 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:09:33,921 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:09:35,339 DEBUG   HandlerThread:85980 [handler.py:handle_request():54] handle_request: status
+2020-10-24 14:09:35,339 DEBUG   SenderThread:85980 [sender.py:send():88] send: request
+2020-10-24 14:09:35,339 DEBUG   SenderThread:85980 [sender.py:send_request():97] send_request: status
+2020-10-24 14:09:35,342 DEBUG   SenderThread:85980 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-24 14:09:35,373 DEBUG   SenderThread:85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 65
+2020-10-24 14:09:37,889 DEBUG   SenderThread:85980 [sender.py:send():88] send: history
+2020-10-24 14:09:37,890 DEBUG   SenderThread:85980 [sender.py:send():88] send: summary
+2020-10-24 14:09:37,917 INFO    SenderThread:85980 [sender.py:_save_file():542] saving file wandb-summary.json with policy end
+2020-10-24 14:09:38,160 INFO    Thread-9  :85980 [dir_watcher.py:_on_file_modified():228] file/dir modified: wandb/run-20201024_135729-3syw88um/files/wandb-summary.json
+2020-10-24 14:09:41,501 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:09:49,983 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:09:49,985 DEBUG   Thread-5  :85980 [connectionpool.py:_get_conn():240] Resetting dropped connection: 111.207.104.144
+2020-10-24 14:09:50,176 DEBUG   Thread-5  :85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /files/chenjy/curriculum/3syw88um/file_stream HTTP/1.1" 200 225
+2020-10-24 14:09:50,663 DEBUG   HandlerThread:85980 [handler.py:handle_request():54] handle_request: status
+2020-10-24 14:09:50,663 DEBUG   SenderThread:85980 [sender.py:send():88] send: request
+2020-10-24 14:09:50,663 DEBUG   SenderThread:85980 [sender.py:send_request():97] send_request: status
+2020-10-24 14:09:50,666 DEBUG   SenderThread:85980 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-24 14:09:50,705 DEBUG   SenderThread:85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 65
+2020-10-24 14:09:59,237 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:09:59,911 INFO    Thread-9  :85980 [dir_watcher.py:_on_file_modified():228] file/dir modified: wandb/run-20201024_135729-3syw88um/files/output.log
+2020-10-24 14:10:05,740 DEBUG   HandlerThread:85980 [handler.py:handle_request():54] handle_request: status
+2020-10-24 14:10:05,748 DEBUG   SenderThread:85980 [sender.py:send():88] send: request
+2020-10-24 14:10:05,748 DEBUG   SenderThread:85980 [sender.py:send_request():97] send_request: status
+2020-10-24 14:10:05,751 DEBUG   SenderThread:85980 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-24 14:10:05,783 DEBUG   SenderThread:85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 65
+2020-10-24 14:10:07,272 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:10:14,982 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:10:15,170 DEBUG   SenderThread:85980 [sender.py:send():88] send: history
+2020-10-24 14:10:15,170 DEBUG   SenderThread:85980 [sender.py:send():88] send: summary
+2020-10-24 14:10:15,172 INFO    SenderThread:85980 [sender.py:_save_file():542] saving file wandb-summary.json with policy end
+2020-10-24 14:10:16,054 INFO    Thread-9  :85980 [dir_watcher.py:_on_file_modified():228] file/dir modified: wandb/run-20201024_135729-3syw88um/files/wandb-summary.json
+2020-10-24 14:10:16,054 INFO    Thread-9  :85980 [dir_watcher.py:_on_file_modified():228] file/dir modified: wandb/run-20201024_135729-3syw88um/files/output.log
+2020-10-24 14:10:22,244 DEBUG   HandlerThread:85980 [handler.py:handle_request():54] handle_request: status
+2020-10-24 14:10:22,245 DEBUG   SenderThread:85980 [sender.py:send():88] send: request
+2020-10-24 14:10:22,245 DEBUG   SenderThread:85980 [sender.py:send_request():97] send_request: status
+2020-10-24 14:10:22,248 DEBUG   SenderThread:85980 [connectionpool.py:_new_conn():205] Starting new HTTP connection (1): 111.207.104.144:23333
+2020-10-24 14:10:22,298 DEBUG   SenderThread:85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /graphql HTTP/1.1" 200 65
+2020-10-24 14:10:22,944 DEBUG   SenderThread:85980 [sender.py:send():88] send: stats
+2020-10-24 14:10:22,946 DEBUG   Thread-5  :85980 [connectionpool.py:_get_conn():240] Resetting dropped connection: 111.207.104.144
+2020-10-24 14:10:23,071 DEBUG   Thread-5  :85980 [connectionpool.py:_make_request():393] http://111.207.104.144:23333 "POST /files/chenjy/curriculum/3syw88um/file_stream HTTP/1.1" 200 225

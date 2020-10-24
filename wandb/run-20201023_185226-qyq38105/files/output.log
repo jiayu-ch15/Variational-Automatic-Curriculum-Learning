@@ -11109,3 +11109,15 @@ training_cover_rate_4agent:  0.9332631578947368
 training_cover_rate_8agent:  0.9348947368421052
 training_cover_rate_4agent:  0.9212631578947369
 training_cover_rate_8agent:  0.9283157894736842
+child_drop:  207
+add_hard_num:  0
+parent:  43
+child_drop:  186
+add_hard_num:  0
+parent:  42
+last_node_parent:  43
+now_node_parent:  42
+last_node_childlist:  0
+last_node_archive:  2000
+now_node_childlist:  0
+now_node_archive:  671

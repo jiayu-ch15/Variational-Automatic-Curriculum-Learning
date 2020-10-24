@@ -182,3 +182,25 @@ sample_archive:  150
 sample_childlist:  350
 sample_parent:  0
 sample_time:  0.03285527229309082
+child_drop:  88
+add_hard_num:  97
+parent:  8
+last_node_parent:  8
+childlist:  0
+archive:  1956
+test_agent_num:  2
+test_mean_cover_rate:  0.139
+
+ Scenario push_ball Algo diversified_pb updates 10/444 episodes, total num timesteps 1980000/80000000, FPS 1913.
+
+value loss of agent: 1.5635551452636718
+sample_archive:  150
+sample_childlist:  350
+sample_parent:  0
+sample_time:  0.0013778209686279297
+child_drop:  103
+add_hard_num:  92
+parent:  16
+last_node_parent:  16
+childlist:  0
+archive:  2000

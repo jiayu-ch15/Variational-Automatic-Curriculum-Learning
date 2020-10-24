@@ -57,3 +57,12 @@ value loss of agent: 0.02302076971779267
 sample_archive:  500
 sample_childlist:  0
 sample_parent:  0
+training_cover_rate:  0.0
+training_cover_rate:  0.0007
+training_cover_rate:  0.0015
+child_drop:  0
+add_hard_num:  0
+parent:  0
+last_node_parent:  0
+childlist:  0
+archive:  500

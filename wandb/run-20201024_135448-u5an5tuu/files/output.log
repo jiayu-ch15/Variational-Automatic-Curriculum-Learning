@@ -214,3 +214,35 @@ sample_archive:  150
 sample_childlist:  325
 sample_parent:  25
 sample_time:  0.0016896724700927734
+child_drop:  71
+add_hard_num:  81
+parent:  13
+last_node_parent:  13
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.1352
+
+ Scenario push_ball Algo diversified_novelty_parentsampling_pb updates 12/444 episodes, total num timesteps 2340000/80000000, FPS 2806.
+
+value loss of agent: 1.6238494714101155
+sample_archive:  150
+sample_childlist:  325
+sample_parent:  25
+sample_time:  0.001695394515991211
+child_drop:  93
+add_hard_num:  78
+parent:  6
+last_node_parent:  6
+childlist:  0
+archive:  2000
+test_agent_num:  2
+test_mean_cover_rate:  0.1674
+
+ Scenario push_ball Algo diversified_novelty_parentsampling_pb updates 13/444 episodes, total num timesteps 2520000/80000000, FPS 2804.
+
+value loss of agent: 1.9206790367762248
+sample_archive:  150
+sample_childlist:  325
+sample_parent:  25
+sample_time:  0.0014753341674804688

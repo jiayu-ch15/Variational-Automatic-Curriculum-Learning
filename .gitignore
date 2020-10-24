@@ -4,3 +4,4 @@ node
 *.pyc
 /gifs/
 build
+wandb
