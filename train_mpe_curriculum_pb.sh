@@ -4,18 +4,18 @@ env="MPE"
 scenario="push_ball"
 num_landmarks=2
 num_agents=2
-algo="diversified_novelty_parentsampling_pb"
-# algo='diversified_novelty_pb'
+# algo="diversified_novelty_parentsampling_pb"
+algo='diversified_novelty_parentsampling_pb'
 # algo='check'
 seed_max=3
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"
 
-for seed in {2,3};
-do
-    echo "seed is ${seed}:"
-    CUDA_VISIBLE_DEVICES=0 python train_mpe_curriculum_pb.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 1 --episode_length 120 --num_env_steps 80000000 --ppo_epoch 15 --recurrent_policy --use_popart
-    echo "training is done!"
-done
-# seed=3
-# CUDA_VISIBLE_DEVICES=0 python train_mpe_curriculum_pb.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 2 --episode_length 120 --num_env_steps 80000000 --ppo_epoch 15 --recurrent_policy --use_popart
+# for seed in {2,3};
+# do
+#     echo "seed is ${seed}:"
+#     CUDA_VISIBLE_DEVICES=0 python train_mpe_curriculum_pb.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 1 --episode_length 120 --num_env_steps 80000000 --ppo_epoch 15 --recurrent_policy --use_popart
+#     echo "training is done!"
+# done
+seed=3
+CUDA_VISIBLE_DEVICES=0 python train_mpe_curriculum_pb.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 2 --episode_length 120 --num_env_steps 80000000 --ppo_epoch 15 --recurrent_policy --use_popart --use-max-grad-norm

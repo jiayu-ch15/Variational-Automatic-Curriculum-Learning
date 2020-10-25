@@ -29,6 +29,7 @@ import random
 import copy
 import matplotlib.pyplot as plt
 import pdb
+import wandb
 np.set_printoptions(linewidth=10000)
 
 
@@ -357,7 +358,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    run = wandb.init(project='phase_sp')
+    run = wandb.init(project='phase_sp',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -438,7 +439,7 @@ def main():
         actor_critic.to(device)
         # load model
         # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_bound95_seed1_startbound_1/run1/models/4agent_model.pt')['model'].to(device)
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_bound90/run%i/models/4agent_model.pt'%(args.seed+3))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -756,11 +757,11 @@ def main():
                 # import pdb;pdb.set_trace()
                 if use_uniform:
                     mean_cover_rate = np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))
-                    logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': mean_cover_rate}, current_timestep)
+                    wandb.log({'training_cover_rate': mean_cover_rate}, current_timestep)
                     current_timestep += now_episode_length * starts_length_now
                     curriculum_episode += 1
                 else:
-                    logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                    wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
                     print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
                     current_timestep += now_episode_length * starts_length_now
                     curriculum_episode += 1
@@ -822,13 +823,13 @@ def main():
                         frozen_count += 1
                         print('critic update') 
                     print('value_loss: ', value_loss)
-                    logger.add_scalars('value_loss',
+                    wandb.log(
                         {'value_loss': value_loss},
                         current_timestep)
                     rew = []
                     for i in range(rollouts_now.rewards.shape[1]):
                         rew.append(np.sum(rollouts_now.rewards[:,i]))
-                    logger.add_scalars('average_episode_reward',
+                    wandb.log(
                         {'average_episode_reward': np.mean(rew)},
                         current_timestep)
                     print('average_episode_reward: ', np.mean(rew))
@@ -848,8 +849,7 @@ def main():
                         rew = []
                         for i in range(rollouts[agent_id].rewards.shape[1]):
                             rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
-                        logger.add_scalars('agent%i/average_episode_reward'%agent_id,
-                            {'average_episode_reward': np.mean(rew)},
+                        wandb.log({'average_episode_reward': np.mean(rew)},
                             (episode+1) * args.episode_length * one_length*eval_frequency)
                         rollouts[agent_id].after_update()
                 # end1=time.time()
@@ -1003,7 +1003,7 @@ def main():
                                     np.array(values[agent_id]),
                                     rewards[:,agent_id], 
                                     np.array(masks)[:,agent_id])
-                logger.add_scalars('%iagent/cover_rate' %now_node.agent_num,{'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                wandb.log({str(now_node.agent_num) +'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
                 mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
                 print('test_agent_num: ', now_node.agent_num)
                 print('test_mean_cover_rate: ', mean_cover_rate)
@@ -1023,7 +1023,6 @@ def main():
         if next_stage_flag==1:
             next_stage_flag = 0
             start_boundary = 1.0
-            max_step=0.6
             frozen_count = 0
             actor_critic.agents_num = now_node.agent_num
             check_frequency = 1
@@ -1076,14 +1075,6 @@ def main():
             else:
                 for agent_id in range(num_agents):
                     print("value loss of agent%i: " % agent_id + str(value_losses[agent_id]))
-
-            # if args.env_name == "MPE":
-            #     for agent_id in range(num_agents):
-            #         show_rewards = []
-            #         for info in infos:                        
-            #             if 'individual_reward' in info[agent_id].keys():
-            #                 show_rewards.append(info[agent_id]['individual_reward'])                    
-            #         logger.add_scalars('agent%i/individual_reward' % agent_id, {'individual_reward': np.mean(show_rewards)}, total_num_steps)
                 
     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
     logger.close()

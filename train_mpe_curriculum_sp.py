@@ -358,7 +358,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    run = wandb.init(project='curriculum',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    run = wandb.init(project='check',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -540,7 +540,7 @@ def main():
     TB = 1
     M = N_child
     Rmin = 0.5
-    Rmax = 0.7
+    Rmax = 0.95
     boundary = 3
     start_boundary = 0.3
     max_step = 0.6
@@ -775,18 +775,13 @@ def main():
             if args.share_policy:
                 actor_critic.train()
                 value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
-                # logger.add_scalars('value_loss',
-                #     {'value_loss': value_loss},
-                #     current_timestep)
+                print('value_loss: ', value_loss)
                 wandb.log(
                     {'value_loss': value_loss},
                     current_timestep)
                 rew = []
                 for i in range(rollouts.rewards.shape[1]):
                     rew.append(np.sum(rollouts.rewards[:,i]))
-                # logger.add_scalars('average_episode_reward',
-                #     {'average_episode_reward': np.mean(rew)},
-                #     current_timestep)
                 wandb.log(
                     {'average_episode_reward': np.mean(rew)},
                     current_timestep)

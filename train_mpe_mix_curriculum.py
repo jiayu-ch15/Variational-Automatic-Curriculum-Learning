@@ -357,7 +357,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    run = wandb.init(project='mix_sp')
+    run = wandb.init(project='mix_sp',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -555,7 +555,6 @@ def main():
     save_node_flag = True
     historical_length = 5
     next_stage_flag = 0
-    second_start_timestep = 0
     random.seed(args.seed)
     np.random.seed(args.seed)
     last_node = node_buffer(last_agent_num,buffer_length,
@@ -797,7 +796,10 @@ def main():
                                                     agents[agent_id].value_normalizer)
             # now_node  
             actor_critic.agents_num = now_node.agent_num  
-            agents.num_mini_batch = 16                           
+            if now_node.agent_num <=4:
+                agents.num_mini_batch = 2
+            else:
+                agents.num_mini_batch = 16                           
             obs = envs.new_starts_obs(starts_now, now_node.agent_num, starts_length_now)
             #replay buffer
             rollouts_now = RolloutStorage_share(now_node.agent_num,
@@ -969,7 +971,7 @@ def main():
                                                 args.use_proper_time_limits,
                                                 args.use_popart,
                                                 agents[agent_id].value_normalizer)
-                    
+                  
 
             # update the network
             # one_length需要改, log横坐标需要改
@@ -978,7 +980,8 @@ def main():
                 if last_node.agent_num!=0:
                     value_loss, action_loss, dist_entropy = agents.update_double_share(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
                 else:
-                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now,False)
+                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now,False,initial_optimizer=False)
+                print('value_loss: ', value_loss)
                 wandb.log({'value_loss': value_loss},
                     current_timestep)
 
@@ -1159,7 +1162,7 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(infos)}, current_timestep-second_start_timestep)
+            wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(infos)}, current_timestep)
             mean_cover_rate = np.mean(infos)
             print('test_agent_num: ', now_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
@@ -1182,7 +1185,6 @@ def main():
                 
 
         if next_stage_flag==1:
-            second_start_timestep = current_timestep
             next_stage_flag = 0
             last_node = copy.deepcopy(now_node)
             start_boundary = 1.0

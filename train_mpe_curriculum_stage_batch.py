@@ -54,7 +54,6 @@ class node_buffer():
         self.agent_num = agent_num
         self.buffer_length = buffer_length
         self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
-        # self.archive = self.produce_uniform_grid(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -91,7 +90,7 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
         # agent_size=0.1
         cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size)
+        grid_num = int(start_boundary * 2 / cell_size) + 1
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_landmark_grid = []
@@ -162,8 +161,7 @@ class node_buffer():
         else:
             novelty_threshold = 0
         # novelty_threshold = child_novelty_threshold
-        writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
-                {'novelty_threshold': novelty_threshold},timestep)
+        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -323,14 +321,10 @@ class node_buffer():
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
         if len(self.parent_all) > self.buffer_length:
             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
-        writer.add_scalars(str(self.agent_num)+'agent/archive',
-                        {'archive_length': len(self.archive)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/childlist',
-                        {'childlist_length': len(self.childlist)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/parentlist',
-                        {'parentlist_length': len(self.parent)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/child_drop',
-                        {'drop_num': drop_num},timestep)
+        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
+        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
+        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
+        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
     
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
@@ -363,6 +357,7 @@ class node_buffer():
 
 def main():
     args = get_config()
+    run = wandb.init(project='check',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 

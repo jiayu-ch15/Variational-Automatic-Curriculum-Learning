@@ -12,3 +12,32 @@
 2020-10-24 13:57:34,047 INFO    MainThread:85966 [redirect.py:install():196] install start
 2020-10-24 13:57:34,047 INFO    MainThread:85966 [redirect.py:install():211] install stop
 2020-10-24 13:57:34,047 INFO    MainThread:85966 [wandb_run.py:_redirect():1182] Redirects installed.
+2020-10-24 14:35:56,008 INFO    Dummy-5   :85966 [wandb_run.py:_atexit_cleanup():1238] got exitcode: 255
+2020-10-24 14:35:56,022 INFO    Dummy-5   :85966 [wandb_run.py:_restore():1210] restore
+2020-10-24 14:35:56,174 INFO    Dummy-5   :85966 [redirect.py:uninstall():215] uninstall start
+2020-10-24 14:35:56,174 INFO    Dummy-5   :85966 [redirect.py:_stop():264] _stop: stdout
+2020-10-24 14:35:56,175 INFO    Dummy-5   :85966 [redirect.py:_stop():270] _stop closed: stdout
+2020-10-24 14:35:56,175 INFO    stdout    :85966 [redirect.py:_pipe_relay():119] relay done saw last write: stdout
+2020-10-24 14:35:56,175 INFO    stdout    :85966 [redirect.py:_pipe_relay():135] relay done done: stdout
+2020-10-24 14:35:56,175 INFO    Dummy-5   :85966 [redirect.py:_stop():276] _stop joined: stdout
+2020-10-24 14:35:56,175 INFO    Dummy-5   :85966 [redirect.py:_stop():278] _stop rd closed: stdout
+2020-10-24 14:35:56,175 INFO    Dummy-5   :85966 [redirect.py:uninstall():219] uninstall done
+2020-10-24 14:35:56,175 INFO    Dummy-5   :85966 [redirect.py:uninstall():215] uninstall start
+2020-10-24 14:35:56,176 INFO    Dummy-5   :85966 [redirect.py:_stop():264] _stop: stderr
+2020-10-24 14:35:56,176 INFO    Dummy-5   :85966 [redirect.py:_stop():270] _stop closed: stderr
+2020-10-24 14:35:56,909 INFO    Dummy-5   :86373 [wandb_run.py:_atexit_cleanup():1238] got exitcode: 255
+2020-10-24 14:35:56,913 INFO    Dummy-5   :86373 [wandb_run.py:_restore():1210] restore
+2020-10-24 14:35:56,913 INFO    Dummy-5   :86373 [redirect.py:uninstall():215] uninstall start
+2020-10-24 14:35:56,913 INFO    Dummy-5   :86373 [redirect.py:_stop():264] _stop: stdout
+2020-10-24 14:35:56,914 INFO    Dummy-5   :86373 [redirect.py:_stop():270] _stop closed: stdout
+2020-10-24 14:35:56,914 INFO    Dummy-5   :86373 [redirect.py:_stop():276] _stop joined: stdout
+2020-10-24 14:35:56,914 INFO    Dummy-5   :86373 [redirect.py:_stop():278] _stop rd closed: stdout
+2020-10-24 14:35:56,914 INFO    Dummy-5   :86373 [redirect.py:uninstall():219] uninstall done
+2020-10-24 14:35:56,914 INFO    Dummy-5   :86373 [redirect.py:uninstall():215] uninstall start
+2020-10-24 14:35:56,914 INFO    Dummy-5   :86373 [redirect.py:_stop():264] _stop: stderr
+2020-10-24 14:35:56,914 INFO    Dummy-5   :86373 [redirect.py:_stop():270] _stop closed: stderr
+2020-10-24 14:35:56,914 INFO    Dummy-5   :86373 [redirect.py:_stop():276] _stop joined: stderr
+2020-10-24 14:35:56,915 INFO    Dummy-5   :86373 [redirect.py:_stop():278] _stop rd closed: stderr
+2020-10-24 14:35:56,915 INFO    Dummy-5   :86373 [redirect.py:uninstall():219] uninstall done
+2020-10-24 14:35:56,917 INFO    Dummy-5   :86373 [wandb_run.py:_restore():1210] restore
+2020-10-24 14:35:57,480 INFO    Dummy-5   :86373 [internal.py:handle_exit():137] Internal process exited

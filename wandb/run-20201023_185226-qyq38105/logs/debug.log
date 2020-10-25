@@ -12,3 +12,69 @@
 2020-10-23 18:52:32,182 INFO    MainThread:155227 [redirect.py:install():196] install start
 2020-10-23 18:52:32,182 INFO    MainThread:155227 [redirect.py:install():211] install stop
 2020-10-23 18:52:32,182 INFO    MainThread:155227 [wandb_run.py:_redirect():1182] Redirects installed.
+2020-10-24 14:22:30,301 INFO    Dummy-5   :155227 [wandb_run.py:_atexit_cleanup():1238] got exitcode: 255
+2020-10-24 14:22:30,313 INFO    Dummy-5   :155227 [wandb_run.py:_restore():1210] restore
+2020-10-24 14:22:30,313 INFO    Dummy-5   :155227 [redirect.py:uninstall():215] uninstall start
+2020-10-24 14:22:30,314 INFO    Dummy-5   :155227 [redirect.py:_stop():264] _stop: stdout
+2020-10-24 14:22:30,314 INFO    stdout    :155227 [redirect.py:_pipe_relay():119] relay done saw last write: stdout
+2020-10-24 14:22:30,314 INFO    stdout    :155227 [redirect.py:_pipe_relay():135] relay done done: stdout
+2020-10-24 14:22:30,325 INFO    Dummy-5   :155227 [redirect.py:_stop():270] _stop closed: stdout
+2020-10-24 14:22:30,325 INFO    Dummy-5   :155227 [redirect.py:_stop():276] _stop joined: stdout
+2020-10-24 14:22:30,325 INFO    Dummy-5   :155227 [redirect.py:_stop():278] _stop rd closed: stdout
+2020-10-24 14:22:30,325 INFO    Dummy-5   :155227 [redirect.py:uninstall():219] uninstall done
+2020-10-24 14:22:30,325 INFO    Dummy-5   :155227 [redirect.py:uninstall():215] uninstall start
+2020-10-24 14:22:30,325 INFO    Dummy-5   :155227 [redirect.py:_stop():264] _stop: stderr
+2020-10-24 14:22:30,326 INFO    Dummy-5   :155227 [redirect.py:_stop():270] _stop closed: stderr
+2020-10-24 14:22:30,756 INFO    stderr    :155227 [redirect.py:_pipe_relay():135] relay done done: stderr
+2020-10-24 14:22:30,756 INFO    Dummy-5   :155227 [redirect.py:_stop():276] _stop joined: stderr
+2020-10-24 14:22:30,757 INFO    Dummy-5   :155227 [redirect.py:_stop():278] _stop rd closed: stderr
+2020-10-24 14:22:30,757 INFO    Dummy-5   :155227 [redirect.py:uninstall():219] uninstall done
+2020-10-24 14:22:30,762 INFO    Dummy-5   :155227 [wandb_run.py:_wait_for_finish():1349] got exit ret: uuid: "2ce23f7c024446ee9a1855fb187e11e2"
+response {
+  poll_exit_response {
+    file_counts {
+      wandb_count: 2
+      other_count: 1
+    }
+    pusher_stats {
+      uploaded_bytes: 114434
+      total_bytes: 114434
+    }
+  }
+}
+
+2020-10-24 14:22:34,076 INFO    Dummy-5   :155227 [wandb_run.py:_wait_for_finish():1349] got exit ret: uuid: "ec5a7e8ab1e942e1b8ce3af1b9d59517"
+response {
+  poll_exit_response {
+    file_counts {
+      wandb_count: 6
+      other_count: 1
+    }
+    pusher_stats {
+      uploaded_bytes: 885064
+      total_bytes: 885064
+    }
+  }
+}
+
+2020-10-24 14:22:36,090 INFO    Dummy-5   :155227 [wandb_run.py:_wait_for_finish():1349] got exit ret: uuid: "ce8ed1dbea2548ea861d7f3c300667cc"
+response {
+  poll_exit_response {
+    done: true
+    exit_result {
+    }
+    file_counts {
+      wandb_count: 6
+      other_count: 1
+    }
+    pusher_stats {
+      uploaded_bytes: 885064
+      total_bytes: 885064
+    }
+  }
+}
+
+2020-10-24 14:22:37,281 INFO    Dummy-5   :155227 [wandb_run.py:_show_summary():1477] rendering summary
+2020-10-24 14:22:37,283 INFO    Dummy-5   :155227 [wandb_run.py:_show_history():1515] rendering history
+2020-10-24 14:22:37,285 INFO    Dummy-5   :155227 [wandb_run.py:_show_files():1543] logging synced files
+2020-10-24 14:22:37,286 INFO    Dummy-5   :155227 [internal.py:handle_exit():137] Internal process exited
