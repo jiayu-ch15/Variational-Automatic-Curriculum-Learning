@@ -682,8 +682,8 @@ def main():
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
                 cover_rate_list = []
-                for thread_id in range(one_length_now):
-                    cover_rate_list.append(infos[i][0]['cover_rate'])
+                for env_id in range(one_length_now):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
                 step_cover_rate[:,step] = np.array(cover_rate_list)
                 # step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
 
@@ -907,8 +907,8 @@ def main():
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
                 cover_rate_list = []
-                for thread_id in range(one_length_now):
-                    cover_rate_list.append(infos[i][0]['cover_rate'])
+                for env_id in range(args.n_rollout_threads):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
                 test_cover_rate[:,step] = np.array(cover_rate_list)
                 # test_cover_rate[:,step] = np.array(infos)[:,0]
 

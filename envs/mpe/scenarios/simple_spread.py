@@ -111,7 +111,7 @@ class Scenario(BaseScenario):
                     if self.is_collision(a, agent) and a!=agent:
                         collision_num += 1
                         break
-        info_list = {'cover_rate':num/len(world.landmarks),'collision':collision_num}
+        info_list = {'cover_rate': num/len(world.landmarks),'collision': collision_num}
         return info_list
 
     def observation(self, agent, world):
