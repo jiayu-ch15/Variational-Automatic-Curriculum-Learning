@@ -552,7 +552,7 @@ def main():
     save_node_flag = True
     historical_length = 5
     next_stage_flag = 0
-    frozen_epoch = 0
+    frozen_epoch = 6
     frozen_count = 0
     initial_optimizer = False
     eval_flag = False # 只用evaluate
@@ -644,6 +644,7 @@ def main():
                         rollouts_now[agent_id].recurrent_hidden_states = np.zeros(rollouts_now[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                         rollouts_now[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts_now[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
                 step_cover_rate = np.zeros(shape=(one_length_now,now_episode_length))
+                step_collision_num = np.zeros(shape=one_length_now)
 
                 # start1 = time.time()
                 for step in range(now_episode_length):
@@ -710,7 +711,14 @@ def main():
                     obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length_now, now_node.agent_num)
                     # end1 = time.time()
                     # print('step: ',end1-start1)
-                    step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
+                    cover_rate_list = []
+                    collision_list = []
+                    for thread_id in range(one_length_now):
+                        cover_rate_list.append(infos[i][0]['cover_rate'])
+                        collision_list.append(infos[i][0]['collision'])
+                    step_cover_rate[:,step] = np.array(cover_rate_list)
+                    step_collision_num += np.array(collision_list)
+                    # step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
 
                     # If done then clean the history of observations.
                     # insert data in buffer
@@ -763,6 +771,7 @@ def main():
                 else:
                     wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
                     print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+                    wandb.log({'train_collision_num': np.mean(step_collision_num)})
                     current_timestep += now_episode_length * starts_length_now
                     curriculum_episode += 1
                     now_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
@@ -902,6 +911,7 @@ def main():
                         rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                         rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
                 test_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
+                test_collision_num = np.zeros(shape=args.n_rollout_threads)
                 for step in range(episode_length):
                     # Sample actions
                     values = []
@@ -959,7 +969,14 @@ def main():
                     
                     # Obser reward and next obs
                     obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, now_node.agent_num)
-                    test_cover_rate[:,step] = np.array(infos)[:,0]
+                    cover_rate_list = []
+                    collision_list = []
+                    for thread_id in range(one_length_now):
+                        cover_rate_list.append(infos[i][0]['cover_rate'])
+                        collision_list.append(infos[i][0]['collision'])
+                    test_cover_rate[:,step] = np.array(cover_rate_list)
+                    test_collision_num += np.array(collision_list)
+                    # test_cover_rate[:,step] = np.array(infos)[:,0]
 
                     # If done then clean the history of observations.
                     # insert data in buffer
@@ -1003,8 +1020,13 @@ def main():
                                     np.array(values[agent_id]),
                                     rewards[:,agent_id], 
                                     np.array(masks)[:,agent_id])
-                wandb.log({str(now_node.agent_num) +'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                wandb.log({'test_collision_num': np.mean(test_collision_num)})
                 mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
+                rew = []
+                for i in range(rollouts_now.rewards.shape[1]):
+                    rew.append(np.sum(rollouts_now.rewards[:,i]))
+                wandb.log({'eval_episode_reward': np.mean(rew)},current_timestep)
                 print('test_agent_num: ', now_node.agent_num)
                 print('test_mean_cover_rate: ', mean_cover_rate)
                 if mean_cover_rate > 0.9 and save_90_flag and now_node.agent_num==4:

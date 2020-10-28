@@ -544,7 +544,7 @@ def main():
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.9
+    upper_bound = 0.95
     target_num = 8
     last_agent_num = 0
     now_agent_num = 4

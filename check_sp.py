@@ -359,7 +359,7 @@ class node_buffer():
 def main():
     args = get_config()
     # run = wandb.init(project='curriculum',name=str(args.algorithm_name) + "_seed" + str(args.seed))
-    run = wandb.init(project='check',name='separate_reward')
+    run = wandb.init(project='check',name='batch_reward')
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -632,36 +632,27 @@ def main():
                 action_log_probs = []
                 recurrent_hidden_statess = []
                 recurrent_hidden_statess_critic = []
-                
-                with torch.no_grad():                
-                    for agent_id in range(num_agents):
-                        if args.share_policy:
-                            actor_critic.eval()
-                            value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
-                                torch.FloatTensor(rollouts.share_obs[step,:,agent_id]), 
-                                torch.FloatTensor(rollouts.obs[step,:,agent_id]), 
-                                torch.FloatTensor(rollouts.recurrent_hidden_states[step,:,agent_id]), 
-                                torch.FloatTensor(rollouts.recurrent_hidden_states_critic[step,:,agent_id]),
-                                torch.FloatTensor(rollouts.masks[step,:,agent_id]))
-                        else:
-                            actor_critic[agent_id].eval()
-                            value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic[agent_id].act(agent_id,
-                                torch.FloatTensor(rollouts[agent_id].share_obs[step,:]), 
-                                torch.FloatTensor(rollouts[agent_id].obs[step,:]), 
-                                torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states[step,:]), 
-                                torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states_critic[step,:]),
-                                torch.FloatTensor(rollouts[agent_id].masks[step,:]))
-                            
-                        values.append(value.detach().cpu().numpy())
-                        actions.append(action.detach().cpu().numpy())
-                        action_log_probs.append(action_log_prob.detach().cpu().numpy())
-                        recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
-                        recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
+                with torch.no_grad(): 
+                    actor_critic.eval()
+                    value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic \
+                        = actor_critic.act(0, torch.FloatTensor(np.concatenate(rollouts.share_obs[step])), 
+                                            torch.FloatTensor(np.concatenate(rollouts.obs[step])), 
+                                            torch.FloatTensor(np.concatenate(rollouts.recurrent_hidden_states[step])), 
+                                            torch.FloatTensor(np.concatenate(rollouts.recurrent_hidden_states_critic[step])),
+                                            torch.FloatTensor(np.concatenate(rollouts.masks[step])))
+                    
+                    # [envs, agents, dim]
+                    values = np.array(np.split(value.detach().cpu().numpy(),starts_length))
+                    actions = np.array(np.split(action.detach().cpu().numpy(),starts_length))
+                    action_log_probs = np.array(np.split(action_log_prob.detach().cpu().numpy(),starts_length))
+                    recurrent_hidden_statess = np.array(np.split(recurrent_hidden_states.detach().cpu().numpy(),starts_length))
+                    recurrent_hidden_statess_critic = np.array(np.split(recurrent_hidden_states_critic.detach().cpu().numpy(),starts_length))
+
                 # rearrange action
                 actions_env = []
                 for i in range(starts_length):
                     one_hot_action_env = []
-                    for agent_id in range(num_agents):
+                    for agent_id in range(last_node.agent_num):
                         if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
                             uc_action = []
                             for j in range(envs.action_space[agent_id].shape):
@@ -673,19 +664,60 @@ def main():
                                 
                         elif envs.action_space[agent_id].__class__.__name__ == 'Discrete':    
                             one_hot_action = np.zeros(envs.action_space[agent_id].n)
-                            one_hot_action[actions[agent_id][i]] = 1
+                            one_hot_action[actions[i][agent_id]] = 1
                             one_hot_action_env.append(one_hot_action)
                         else:
                             raise NotImplementedError
                     actions_env.append(one_hot_action_env)
+                # with torch.no_grad():                
+                #     for agent_id in range(num_agents):
+                #         if args.share_policy:
+                #             actor_critic.eval()
+                #             value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
+                #                 torch.FloatTensor(rollouts.share_obs[step,:,agent_id]), 
+                #                 torch.FloatTensor(rollouts.obs[step,:,agent_id]), 
+                #                 torch.FloatTensor(rollouts.recurrent_hidden_states[step,:,agent_id]), 
+                #                 torch.FloatTensor(rollouts.recurrent_hidden_states_critic[step,:,agent_id]),
+                #                 torch.FloatTensor(rollouts.masks[step,:,agent_id]))
+                #         else:
+                #             actor_critic[agent_id].eval()
+                #             value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic[agent_id].act(agent_id,
+                #                 torch.FloatTensor(rollouts[agent_id].share_obs[step,:]), 
+                #                 torch.FloatTensor(rollouts[agent_id].obs[step,:]), 
+                #                 torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states[step,:]), 
+                #                 torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states_critic[step,:]),
+                #                 torch.FloatTensor(rollouts[agent_id].masks[step,:]))
+                            
+                #         values.append(value.detach().cpu().numpy())
+                #         actions.append(action.detach().cpu().numpy())
+                #         action_log_probs.append(action_log_prob.detach().cpu().numpy())
+                #         recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
+                #         recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
+                # # rearrange action
+                # actions_env = []
+                # for i in range(starts_length):
+                #     one_hot_action_env = []
+                #     for agent_id in range(num_agents):
+                #         if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
+                #             uc_action = []
+                #             for j in range(envs.action_space[agent_id].shape):
+                #                 uc_one_hot_action = np.zeros(envs.action_space[agent_id].high[j]+1)
+                #                 uc_one_hot_action[actions[agent_id][i][j]] = 1
+                #                 uc_action.append(uc_one_hot_action)
+                #             uc_action = np.concatenate(uc_action)
+                #             one_hot_action_env.append(uc_action)
+                                
+                #         elif envs.action_space[agent_id].__class__.__name__ == 'Discrete':    
+                #             one_hot_action = np.zeros(envs.action_space[agent_id].n)
+                #             one_hot_action[actions[agent_id][i]] = 1
+                #             one_hot_action_env.append(one_hot_action)
+                #         else:
+                #             raise NotImplementedError
+                #     actions_env.append(one_hot_action_env)
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
-                cover_rate_list = []
-                for thread_id in range(one_length_now):
-                    cover_rate_list.append(infos[i][0]['cover_rate'])
-                step_cover_rate[:,step] = np.array(cover_rate_list)
-                # step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
+                step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -704,15 +736,25 @@ def main():
                 if args.share_policy: 
                     share_obs = obs.reshape(starts_length, -1)        
                     share_obs = np.expand_dims(share_obs,1).repeat(num_agents,axis=1)    
+                    
+                    # rollouts.insert(share_obs, 
+                    #             obs, 
+                    #             np.array(recurrent_hidden_statess).transpose(1,0,2), 
+                    #             np.array(recurrent_hidden_statess_critic).transpose(1,0,2), 
+                    #             np.array(actions).transpose(1,0,2),
+                    #             np.array(action_log_probs).transpose(1,0,2), 
+                    #             np.array(values).transpose(1,0,2),
+                    #             rewards, 
+                    #             masks)
                     rollouts.insert(share_obs, 
-                                obs, 
-                                np.array(recurrent_hidden_statess).transpose(1,0,2), 
-                                np.array(recurrent_hidden_statess_critic).transpose(1,0,2), 
-                                np.array(actions).transpose(1,0,2),
-                                np.array(action_log_probs).transpose(1,0,2), 
-                                np.array(values).transpose(1,0,2),
-                                rewards, 
-                                masks)
+                                        obs, 
+                                        recurrent_hidden_statess, 
+                                        recurrent_hidden_statess_critic, 
+                                        actions,
+                                        action_log_probs, 
+                                        values,
+                                        rewards, 
+                                        masks)
                 else:
                     share_obs = []
                     for o in obs:
@@ -906,11 +948,7 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
-                cover_rate_list = []
-                for thread_id in range(one_length_now):
-                    cover_rate_list.append(infos[i][0]['cover_rate'])
-                test_cover_rate[:,step] = np.array(cover_rate_list)
-                # test_cover_rate[:,step] = np.array(infos)[:,0]
+                test_cover_rate[:,step] = np.array(infos)[:,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer

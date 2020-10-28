@@ -358,7 +358,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    run = wandb.init(project='check',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    run = wandb.init(project='check',name='batch_reward')
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -523,14 +523,14 @@ def main():
     use_parent_novelty = False #关闭
     use_child_novelty = False #关闭
     use_novelty_sample = True
-    use_parent_sample = False
+    use_parent_sample = True
     del_switch = 'novelty'
     child_novelty_threshold = 5.0 #用于ablation
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 0
-    N_archive = 2
-    N_parent = 0
+    N_child = 325
+    N_archive = 150
+    N_parent = 25
     max_step = 0.6
     TB = 1
     M = N_child
@@ -642,26 +642,9 @@ def main():
                     action_log_probs = []
                     recurrent_hidden_statess = []
                     recurrent_hidden_statess_critic = []
-                    
-
+                
                     # start1 = time.time()
-                    with torch.no_grad():                
-                        # for agent_id in range(now_node.agent_num):
-                        #     actor_critic.eval()
-                        #     value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
-                        #         # torch.FloatTensor(rollouts_now.share_obs[step,:,agent_id]),
-                        #         torch.FloatTensor(rollouts_now.share_obs[step]), 
-                        #         torch.FloatTensor(rollouts_now.obs[step,:,agent_id]), 
-                        #         torch.FloatTensor(rollouts_now.recurrent_hidden_states[step,:,agent_id]), 
-                        #         torch.FloatTensor(rollouts_now.recurrent_hidden_states_critic[step,:,agent_id]),
-                        #         torch.FloatTensor(rollouts_now.masks[step,:,agent_id]),deterministic=True)
-                            
-                        #     values.append(value.detach().cpu().numpy())
-                        #     actions.append(action.detach().cpu().numpy())
-                        #     action_log_probs.append(action_log_prob.detach().cpu().numpy())
-                        #     recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
-                        #     recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
-                        
+                    with torch.no_grad(): 
                         actor_critic.eval()
                         step_share_obs = np.expand_dims(rollouts_now.share_obs[step],1).repeat(now_node.agent_num,axis=1) 
                         value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic \
@@ -669,7 +652,7 @@ def main():
                                                 torch.FloatTensor(np.concatenate(rollouts_now.obs[step])), 
                                                 torch.FloatTensor(np.concatenate(rollouts_now.recurrent_hidden_states[step])), 
                                                 torch.FloatTensor(np.concatenate(rollouts_now.recurrent_hidden_states_critic[step])),
-                                                torch.FloatTensor(np.concatenate(rollouts_now.masks[step])),deterministic=True)
+                                                torch.FloatTensor(np.concatenate(rollouts_now.masks[step])))
                         
                         # [envs, agents, dim]
                         values = np.array(np.split(value.detach().cpu().numpy(),starts_length_now))
@@ -699,6 +682,45 @@ def main():
                             else:
                                 raise NotImplementedError
                         actions_env.append(one_hot_action_env)
+
+                    # acient version
+                    # with torch.no_grad():                
+                    #     for agent_id in range(now_node.agent_num):
+                    #         actor_critic.eval()
+                    #         value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
+                    #             # torch.FloatTensor(rollouts_now.share_obs[step,:,agent_id]),
+                    #             torch.FloatTensor(rollouts_now.share_obs[step]), 
+                    #             torch.FloatTensor(rollouts_now.obs[step,:,agent_id]), 
+                    #             torch.FloatTensor(rollouts_now.recurrent_hidden_states[step,:,agent_id]), 
+                    #             torch.FloatTensor(rollouts_now.recurrent_hidden_states_critic[step,:,agent_id]),
+                    #             torch.FloatTensor(rollouts_now.masks[step,:,agent_id]),deterministic=True)
+                            
+                    #         values.append(value.detach().cpu().numpy())
+                    #         actions.append(action.detach().cpu().numpy())
+                    #         action_log_probs.append(action_log_prob.detach().cpu().numpy())
+                    #         recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
+                    #         recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
+                    # # rearrange action
+                    # actions_env = []
+                    # for i in range(starts_length_now):
+                    #     one_hot_action_env = []
+                    #     for agent_id in range(now_node.agent_num):
+                    #         if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
+                    #             uc_action = []
+                    #             for j in range(envs.action_space[agent_id].shape):
+                    #                 uc_one_hot_action = np.zeros(envs.action_space[agent_id].high[j]+1)
+                    #                 uc_one_hot_action[actions[agent_id][i][j]] = 1
+                    #                 uc_action.append(uc_one_hot_action)
+                    #             uc_action = np.concatenate(uc_action)
+                    #             one_hot_action_env.append(uc_action)
+                                    
+                    #         elif envs.action_space[agent_id].__class__.__name__ == 'Discrete':    
+                    #             one_hot_action = np.zeros(envs.action_space[agent_id].n)
+                    #             one_hot_action[actions[agent_id][i]] = 1
+                    #             one_hot_action_env.append(one_hot_action)
+                    #         else:
+                    #             raise NotImplementedError
+                    #     actions_env.append(one_hot_action_env)
                     
                     # Obser reward and next obs
                     # start1 = time.time()
@@ -720,11 +742,10 @@ def main():
                             else:
                                 mask.append([1.0])
                         masks.append(mask)
-   
+              
                     if args.share_policy: 
                         share_obs = obs.reshape(starts_length_now, -1)        
                         # share_obs = np.expand_dims(share_obs,1).repeat(now_node.agent_num,axis=1)    
-                        
                         # rollouts_now.insert(share_obs, 
                         #             obs, 
                         #             np.array(recurrent_hidden_statess).transpose(1,0,2), 
@@ -758,14 +779,13 @@ def main():
                                     np.array(values[agent_id]),
                                     rewards[:,agent_id], 
                                     np.array(masks)[:,agent_id])
-                # import pdb;pdb.set_trace()
                 if use_uniform:
                     mean_cover_rate = np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))
-                    logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': mean_cover_rate}, current_timestep)
+                    wandb.log({'training_cover_rate': mean_cover_rate}, current_timestep)
                     current_timestep += now_episode_length * starts_length_now
                     curriculum_episode += 1
                 else:
-                    logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                    wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
                     print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
                     current_timestep += now_episode_length * starts_length_now
                     curriculum_episode += 1
@@ -775,43 +795,41 @@ def main():
 
                 # start1 = time.time()                         
                 with torch.no_grad():  # get value and compute return
-                    # for agent_id in range(now_node.agent_num):         
-                    #     actor_critic.eval()                
-                    #     next_value,_,_ = actor_critic.get_value(agent_id,
-                    #                                 # torch.FloatTensor(rollouts_now.share_obs[-1,:,agent_id]), 
-                    #                                 torch.FloatTensor(rollouts_now.share_obs[-1]),
-                    #                                 torch.FloatTensor(rollouts_now.obs[-1,:,agent_id]), 
-                    #                                 torch.FloatTensor(rollouts_now.recurrent_hidden_states[-1,:,agent_id]),
-                    #                                 torch.FloatTensor(rollouts_now.recurrent_hidden_states_critic[-1,:,agent_id]),
-                    #                                 torch.FloatTensor(rollouts_now.masks[-1,:,agent_id]))
-                    #     next_value = next_value.detach().cpu().numpy()
-                    #     rollouts_now.compute_returns(agent_id,
-                    #                     next_value, 
-                    #                     args.use_gae, 
-                    #                     args.gamma,
-                    #                     args.gae_lambda, 
-                    #                     args.use_proper_time_limits,
-                    #                     args.use_popart,
-                    #                     agents.value_normalizer)
+                    for agent_id in range(now_node.agent_num):         
+                        actor_critic.eval()                
+                        next_value,_,_ = actor_critic.get_value(agent_id,
+                                                    # torch.FloatTensor(rollouts_now.share_obs[-1,:,agent_id]), 
+                                                    torch.FloatTensor(rollouts_now.share_obs[-1]),
+                                                    torch.FloatTensor(rollouts_now.obs[-1,:,agent_id]), 
+                                                    torch.FloatTensor(rollouts_now.recurrent_hidden_states[-1,:,agent_id]),
+                                                    torch.FloatTensor(rollouts_now.recurrent_hidden_states_critic[-1,:,agent_id]),
+                                                    torch.FloatTensor(rollouts_now.masks[-1,:,agent_id]))
+                        next_value = next_value.detach().cpu().numpy()
+                        rollouts_now.compute_returns(agent_id,
+                                        next_value, 
+                                        args.use_gae, 
+                                        args.gamma,
+                                        args.gae_lambda, 
+                                        args.use_proper_time_limits,
+                                        args.use_popart,
+                                        agents.value_normalizer)
 
-                    actor_critic.eval()        
-                    step_share_obs = np.expand_dims(rollouts_now.share_obs[-1],1).repeat(now_node.agent_num,axis=1)  
-                    next_value, _, _ = actor_critic.get_value(0, torch.FloatTensor(np.concatenate(step_share_obs)), 
-                                                            torch.FloatTensor(np.concatenate(rollouts_now.obs[-1])), 
-                                                            torch.FloatTensor(np.concatenate(rollouts_now.recurrent_hidden_states[-1])),
-                                                            torch.FloatTensor(np.concatenate(rollouts_now.recurrent_hidden_states_critic[-1])),
-                                                            torch.FloatTensor(np.concatenate(rollouts_now.masks[-1])))
-                    next_values = np.array(np.split(next_value.detach().cpu().numpy(), starts_length_now))
-                    rollouts_now.shared_compute_returns(
-                                    next_values, 
-                                    args.use_gae, 
-                                    args.gamma,
-                                    args.gae_lambda, 
-                                    args.use_proper_time_limits,
-                                    args.use_popart,
-                                    agents.value_normalizer)
-                # end1 = time.time()
-                # print('get_value: ', end1-start1)
+                    # actor_critic.eval()        
+                    # step_share_obs = np.expand_dims(rollouts_now.share_obs[-1],1).repeat(now_node.agent_num,axis=1)  
+                    # next_value, _, _ = actor_critic.get_value(0, torch.FloatTensor(np.concatenate(step_share_obs)), 
+                    #                                         torch.FloatTensor(np.concatenate(rollouts_now.obs[-1])), 
+                    #                                         torch.FloatTensor(np.concatenate(rollouts_now.recurrent_hidden_states[-1])),
+                    #                                         torch.FloatTensor(np.concatenate(rollouts_now.recurrent_hidden_states_critic[-1])),
+                    #                                         torch.FloatTensor(np.concatenate(rollouts_now.masks[-1])))
+                    # next_values = np.array(np.split(next_value.detach().cpu().numpy(), starts_length_now))
+                    # rollouts_now.shared_compute_returns(
+                    #                 next_values, 
+                    #                 args.use_gae, 
+                    #                 args.gamma,
+                    #                 args.gae_lambda, 
+                    #                 args.use_proper_time_limits,
+                    #                 args.use_popart,
+                    #                 agents.value_normalizer)
                 # start1 = time.time()
                 # update the network
                 if args.share_policy:
@@ -826,13 +844,13 @@ def main():
                         frozen_count += 1
                         print('critic update') 
                     print('value_loss: ', value_loss)
-                    logger.add_scalars('value_loss',
+                    wandb.log(
                         {'value_loss': value_loss},
                         current_timestep)
                     rew = []
                     for i in range(rollouts_now.rewards.shape[1]):
                         rew.append(np.sum(rollouts_now.rewards[:,i]))
-                    logger.add_scalars('average_episode_reward',
+                    wandb.log(
                         {'average_episode_reward': np.mean(rew)},
                         current_timestep)
                     print('average_episode_reward: ', np.mean(rew))
@@ -852,7 +870,7 @@ def main():
                         rew = []
                         for i in range(rollouts[agent_id].rewards.shape[1]):
                             rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
-                        logger.add_scalars('agent%i/average_episode_reward'%agent_id,
+                        wandb.log(
                             {'average_episode_reward': np.mean(rew)},
                             (episode+1) * args.episode_length * one_length*eval_frequency)
                         rollouts[agent_id].after_update()
@@ -1007,7 +1025,13 @@ def main():
                                     np.array(values[agent_id]),
                                     rewards[:,agent_id], 
                                     np.array(masks)[:,agent_id])
-                logger.add_scalars('%iagent/cover_rate' %now_node.agent_num,{'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                rew = []
+                for i in range(rollouts.rewards.shape[1]):
+                    rew.append(np.sum(rollouts.rewards[:,i]))
+                wandb.log(
+                    {'eval_episode_reward': np.mean(rew)},
+                    current_timestep)
+                wandb.log({'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
                 mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
                 print('test_agent_num: ', now_node.agent_num)
                 print('test_mean_cover_rate: ', mean_cover_rate)
@@ -1080,14 +1104,6 @@ def main():
             else:
                 for agent_id in range(num_agents):
                     print("value loss of agent%i: " % agent_id + str(value_losses[agent_id]))
-
-            # if args.env_name == "MPE":
-            #     for agent_id in range(num_agents):
-            #         show_rewards = []
-            #         for info in infos:                        
-            #             if 'individual_reward' in info[agent_id].keys():
-            #                 show_rewards.append(info[agent_id]['individual_reward'])                    
-            #         logger.add_scalars('agent%i/individual_reward' % agent_id, {'individual_reward': np.mean(show_rewards)}, total_num_steps)
                 
     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
     logger.close()

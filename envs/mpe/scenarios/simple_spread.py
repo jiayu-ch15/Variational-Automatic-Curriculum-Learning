@@ -92,6 +92,7 @@ class Scenario(BaseScenario):
         return 0.1*rew
 
     def info_coverage_rate(self, world):
+        # cover
         num = 0
         entity_cover_state = []
         infos = {}
@@ -102,7 +103,16 @@ class Scenario(BaseScenario):
                 entity_cover_state.append(1)
             else:
                 entity_cover_state.append(0)
-        return num/len(world.landmarks)
+        # collision
+        collision_num = 0
+        for agent in world.agents:
+            if agent.collide:
+                for a in world.agents:
+                    if self.is_collision(a, agent) and a!=agent:
+                        collision_num += 1
+                        break
+        info_list = {'cover_rate':num/len(world.landmarks),'collision':collision_num}
+        return info_list
 
     def observation(self, agent, world):
         # get positions of all entities in this agent's reference frame
