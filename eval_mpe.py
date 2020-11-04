@@ -1,15 +1,12 @@
 #!/usr/bin/env python
 
 import copy
-import glob
 import os
 import time
 import numpy as np
 from pathlib import Path
 
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
@@ -193,15 +190,6 @@ def main():
     os.makedirs(str(gifs_dir))
     
     num_agents = args.num_agents
-    #Policy network 
-    # if args.share_policy:   	       
-    #     actor_critic = torch.load(str(args.model_dir) + 'run' + str(args.seed) + "/models/agent_model.pt")['model'].to(device)
-    #     actor_critic.agents_num = num_agents
-    # else:
-    #     actor_critic = []
-    #     for agent_id in range(num_agents):
-    #         ac = torch.load(str(args.model_dir) + 'run' + str(args.seed) + "/models/agent" + str(agent_id) + "_model.pt")['model'].to(device)
-    #         actor_critic.append(ac)
    
     actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
     # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_shaped_reward' + '/run2' + "/models/agent_model.pt")['model'].to(device)

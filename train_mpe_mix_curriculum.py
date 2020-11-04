@@ -53,6 +53,7 @@ class node_buffer():
     def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
+        pdb.set_trace()
         self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
@@ -544,7 +545,7 @@ def main():
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.95
+    upper_bound = 0.9
     target_num = 8
     last_agent_num = 0
     now_agent_num = 4
@@ -557,12 +558,14 @@ def main():
     next_stage_flag = 0
     random.seed(args.seed)
     np.random.seed(args.seed)
+    pdb.set_trace()
     last_node = node_buffer(last_agent_num,buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
+    pdb.set_trace()
     now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
@@ -650,6 +653,8 @@ def main():
                         rollouts_last[agent_id].recurrent_hidden_states = np.zeros(rollouts_last[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                         rollouts_last[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts_last[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
                 step_cover_rate = np.zeros(shape=(one_length_last,args.episode_length))
+                step_collision_num = np.zeros(shape=one_length_last)
+                step_success = np.zeros(shape=(one_length_last,args.episode_length))
                 for step in range(args.episode_length):
                     # Sample actions
                     values = []
@@ -708,7 +713,17 @@ def main():
                     
                     # Obser reward and next obs
                     obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length_last, last_node.agent_num)
-                    step_cover_rate[:,step] = np.array(infos)[0:one_length_last,0]
+                    cover_rate_list = []
+                    collision_list = []
+                    success_list = []
+                    for env_id in range(one_length_last):
+                        cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                        collision_list.append(infos[env_id][0]['collision'])
+                        success_list.append(int(infos[env_id][0]['success']))
+                    step_cover_rate[:,step] = np.array(cover_rate_list)
+                    step_collision_num += np.array(collision_list)
+                    step_success[:,step] = np.array(success_list)
+                    # step_cover_rate[:,step] = np.array(infos)[0:one_length_last,0]
 
                     # If done then clean the history of observations.
                     # insert data in buffer
@@ -753,8 +768,10 @@ def main():
                                     rewards[:,agent_id], 
                                     np.array(masks)[:,agent_id])
                 # import pdb;pdb.set_trace()
-                wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
-                print('training_cover_rate_%iagent: '%last_node.agent_num, np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+                wandb.log({str(last_node.agent_num)+'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                wandb.log({str(last_node.agent_num)+'training_success_rate': np.mean(np.mean(step_success[:,-historical_length:],axis=1))}, current_timestep)
+                print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+                wandb.log({str(last_node.agent_num)+'train_collision_num': np.mean(step_collision_num)},current_timestep)
                 current_timestep += args.episode_length * starts_length_last
                 last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
                                             
@@ -827,6 +844,9 @@ def main():
                     rollouts_now[agent_id].recurrent_hidden_states = np.zeros(rollouts_now[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                     rollouts_now[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts_now[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
             step_cover_rate = np.zeros(shape=(one_length_now,args.episode_length))
+            step_collision_num = np.zeros(shape=one_length_now)
+            step_success = np.zeros(shape=(one_length_now,args.episode_length))
+
             for step in range(args.episode_length):
                 # Sample actions
                 values = []
@@ -885,7 +905,17 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length_now, now_node.agent_num)
-                step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
+                cover_rate_list = []
+                collision_list = []
+                success_list = []
+                for env_id in range(one_length_now):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                    collision_list.append(infos[env_id][0]['collision'])
+                    success_list.append(int(infos[env_id][0]['success']))
+                step_cover_rate[:,step] = np.array(cover_rate_list)
+                step_collision_num += np.array(collision_list)
+                step_success[:,step] = np.array(success_list)
+                # step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -930,8 +960,10 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
-            print('training_cover_rate_%iagent: '%now_node.agent_num, np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+            wandb.log({str(now_node.agent_num)+'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({str(now_node.agent_num)+'training_success_rate': np.mean(np.mean(step_success[:,-historical_length:],axis=1))}, current_timestep)
+            print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+            wandb.log({str(now_node.agent_num)+'train_collision_num': np.mean(step_collision_num)},current_timestep)
             current_timestep += args.episode_length * starts_length_now
             now_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
                                         
@@ -1058,7 +1090,9 @@ def main():
                     rollouts[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
                     rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                     rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
-            step_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
+            test_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
+            test_collision_num = np.zeros(shape=args.n_rollout_threads)
+            test_success = np.zeros(shape=(args.n_rollout_threads,episode_length))
             for step in range(episode_length):
                 # Sample actions
                 values = []
@@ -1117,7 +1151,17 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, now_node.agent_num)
-                step_cover_rate[:,step] = np.array(infos)[:,0]
+                cover_rate_list = []
+                collision_list = []
+                success_list = []
+                for env_id in range(args.n_rollout_threads):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                    collision_list.append(infos[env_id][0]['collision'])
+                    success_list.append(int(infos[env_id][0]['success']))
+                test_cover_rate[:,step] = np.array(cover_rate_list)
+                test_collision_num += np.array(collision_list)
+                test_success[:,step] = np.array(success_list)
+                # step_cover_rate[:,step] = np.array(infos)[:,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -1162,8 +1206,17 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(infos)}, current_timestep)
-            mean_cover_rate = np.mean(infos)
+            wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({str(now_node.agent_num) + 'success_rate': np.mean(np.mean(test_success[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({'test_collision_num': np.mean(test_collision_num)}, current_timestep)
+            mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
+            rew = []
+            for i in range(rollouts_now.rewards.shape[1]):
+                rew.append(np.sum(rollouts_now.rewards[:,i]))
+            wandb.log({'eval_episode_reward': np.mean(rew)}, current_timestep)
+
+            # wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(infos)}, current_timestep)
+            # mean_cover_rate = np.mean(infos)
             print('test_agent_num: ', now_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
         

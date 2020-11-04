@@ -682,7 +682,7 @@ def main():
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
                 cover_rate_list = []
-                for env_id in range(one_length_now):
+                for env_id in range(one_length):
                     cover_rate_list.append(infos[env_id][0]['cover_rate'])
                 step_cover_rate[:,step] = np.array(cover_rate_list)
                 # step_cover_rate[:,step] = np.array(infos)[0:one_length,0]

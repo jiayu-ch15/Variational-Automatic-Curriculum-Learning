@@ -94,6 +94,7 @@ class Scenario(BaseScenario):
     def info_coverage_rate(self, world):
         # cover
         num = 0
+        success = False
         entity_cover_state = []
         infos = {}
         for l in world.landmarks:
@@ -103,6 +104,9 @@ class Scenario(BaseScenario):
                 entity_cover_state.append(1)
             else:
                 entity_cover_state.append(0)
+        # success
+        if num==len(world.landmarks):
+            success = True
         # collision
         collision_num = 0
         for agent in world.agents:
@@ -111,7 +115,7 @@ class Scenario(BaseScenario):
                     if self.is_collision(a, agent) and a!=agent:
                         collision_num += 1
                         break
-        info_list = {'cover_rate': num/len(world.landmarks),'collision': collision_num}
+        info_list = {'cover_rate': num/len(world.landmarks),'collision': collision_num, 'success': success}
         return info_list
 
     def observation(self, agent, world):

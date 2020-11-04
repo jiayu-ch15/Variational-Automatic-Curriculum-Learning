@@ -439,7 +439,7 @@ def main():
         actor_critic.to(device)
         # load model
         # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_bound90/run%i/models/4agent_model.pt'%(args.seed+3))['model'].to(device)
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_bound90_check_true/run%i/models/4agent_model.pt'%(args.seed+1))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -552,7 +552,7 @@ def main():
     save_node_flag = True
     historical_length = 5
     next_stage_flag = 0
-    frozen_epoch = 6
+    frozen_epoch = 0
     frozen_count = 0
     initial_optimizer = False
     eval_flag = False # 只用evaluate
@@ -645,6 +645,7 @@ def main():
                         rollouts_now[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts_now[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
                 step_cover_rate = np.zeros(shape=(one_length_now,now_episode_length))
                 step_collision_num = np.zeros(shape=one_length_now)
+                step_success = np.zeros(shape=(one_length_now,now_episode_length))
 
                 # start1 = time.time()
                 for step in range(now_episode_length):
@@ -713,11 +714,14 @@ def main():
                     # print('step: ',end1-start1)
                     cover_rate_list = []
                     collision_list = []
+                    success_list = []
                     for env_id in range(one_length_now):
                         cover_rate_list.append(infos[env_id][0]['cover_rate'])
                         collision_list.append(infos[env_id][0]['collision'])
+                        success_list.append(int(infos[env_id][0]['success']))
                     step_cover_rate[:,step] = np.array(cover_rate_list)
                     step_collision_num += np.array(collision_list)
+                    step_success[:,step] = np.array(success_list)
                     # step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
 
                     # If done then clean the history of observations.
@@ -770,6 +774,7 @@ def main():
                     curriculum_episode += 1
                 else:
                     wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                    wandb.log({'training_success_rate': np.mean(np.mean(step_success[:,-historical_length:],axis=1))}, current_timestep)
                     print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
                     wandb.log({'train_collision_num': np.mean(step_collision_num)},current_timestep)
                     current_timestep += now_episode_length * starts_length_now
@@ -912,6 +917,7 @@ def main():
                         rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
                 test_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
                 test_collision_num = np.zeros(shape=args.n_rollout_threads)
+                test_success = np.zeros(shape=(args.n_rollout_threads,episode_length))
                 for step in range(episode_length):
                     # Sample actions
                     values = []
@@ -971,11 +977,14 @@ def main():
                     obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, now_node.agent_num)
                     cover_rate_list = []
                     collision_list = []
+                    success_list = []
                     for env_id in range(args.n_rollout_threads):
                         cover_rate_list.append(infos[env_id][0]['cover_rate'])
                         collision_list.append(infos[env_id][0]['collision'])
+                        success_list.append(int(infos[env_id][0]['success']))
                     test_cover_rate[:,step] = np.array(cover_rate_list)
                     test_collision_num += np.array(collision_list)
+                    test_success[:,step] = np.array(success_list)
                     # test_cover_rate[:,step] = np.array(infos)[:,0]
 
                     # If done then clean the history of observations.
@@ -1021,14 +1030,17 @@ def main():
                                     rewards[:,agent_id], 
                                     np.array(masks)[:,agent_id])
                 wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                wandb.log({str(now_node.agent_num) + 'success_rate': np.mean(np.mean(test_success[:,-historical_length:],axis=1))}, current_timestep)
                 wandb.log({'test_collision_num': np.mean(test_collision_num)}, current_timestep)
                 mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
+                mean_success_rate = np.mean(np.mean(test_success[:,-historical_length:],axis=1))
                 rew = []
                 for i in range(rollouts_now.rewards.shape[1]):
                     rew.append(np.sum(rollouts_now.rewards[:,i]))
                 wandb.log({'eval_episode_reward': np.mean(rew)}, current_timestep)
                 print('test_agent_num: ', now_node.agent_num)
-                print('test_mean_cover_rate: ', mean_cover_rate)
+                print('test_cover_rate: ', mean_cover_rate)
+                print('test_success_rate: ', mean_success_rate)
                 print('test_episode_reward: ', np.mean(rew))
                 if mean_cover_rate > 0.9 and save_90_flag and now_node.agent_num==4:
                     torch.save({'model': actor_critic}, str(save_dir) + "/cover90_agent_model.pt")

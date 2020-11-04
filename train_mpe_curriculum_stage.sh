@@ -4,8 +4,8 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-algo='ours_warmup6iter_collision'
-# algo='ours_withoutwarmup'
+# algo='ours_warmup6iter_check_true'
+algo='ours_withoutwarmup_check_true'
 # algo='check'
 seed_max=1
 
