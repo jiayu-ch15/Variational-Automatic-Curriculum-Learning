@@ -191,7 +191,7 @@ def main():
     
     num_agents = args.num_agents
    
-    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
+    actor_critic = torch.load('/home/chenjy/curriculum/results/MPE/simple_spread/check/run10/models/agent_model.pt')['model'].to(device)
     # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_shaped_reward' + '/run2' + "/models/agent_model.pt")['model'].to(device)
     actor_critic.agents_num = 4
     actor_critic.boxes_num = 4
@@ -199,26 +199,8 @@ def main():
     num_boxes = 4
     all_frames = []
     cover_rate = 0
-    random.seed(args.seed)
-    np.random.seed(args.seed)
-    # starts = produce_good_case(num_case=1, start_boundary=0.3, now_agent_num=2, now_box_num=2)
-    # archive 159
-    # model_dir = '/home/chenjy/mappo-sc/node/MPE/simple_spread/stage95_warmup_3M_mean_8agents_big_batch/run1'
-    # dir_path = model_dir  + '/8agents' + '/archive' + ('/archive_' + str(54))
-    # if os.path.exists(dir_path):
-    #     with open(dir_path,'r') as fp :
-    #         data = fp.readlines()
-    #     for i in range(len(data)):
-    #         if len(data[i])<100:
-    #             data[i-1] = data[i-1][:-1] + data[i]
-    #     for i in range(len(data)):
-    #         data[i] = np.array(data[i][1:-2].split(),dtype=float)
-    #     data_true = []
-    #     for i in range(len(data)):
-    #         if data[i].shape[0]>5:
-    #             data_true.append(data[i])
-    # starts = data_true
-    # starts = produce_good_case_grid_pb(500,0.3,num_agents,num_boxes)
+    random.seed(1)
+    np.random.seed(1)
     starts = produce_good_case_grid(500,3.0,num_agents)
     # starts = produce_hard_case(500,3,8)
     # starts = produce_uniform_case(500,3,16)
@@ -238,7 +220,6 @@ def main():
         eval_recurrent_hidden_states = np.zeros((num_agents,args.hidden_size)).astype(np.float32)
         eval_recurrent_hidden_states_critic = np.zeros((num_agents,args.hidden_size)).astype(np.float32)
         eval_masks = np.ones((num_agents,1)).astype(np.float32)
-        pdb.set_trace()
         
         for step in range(args.episode_length): 
             calc_start = time.time()              

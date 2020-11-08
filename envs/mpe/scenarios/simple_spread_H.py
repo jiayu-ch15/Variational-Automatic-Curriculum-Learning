@@ -1,5 +1,5 @@
 import numpy as np
-from envs.mpe.core import World, Agent, Landmark
+from envs.mpe.core import World, Agent, Landmark, Wall
 from envs.mpe.scenario import BaseScenario
 
 class Scenario(BaseScenario):
@@ -14,6 +14,20 @@ class Scenario(BaseScenario):
             num_agents = now_agent_num
             num_landmarks = now_agent_num
         # world.collaborative = True
+        # add walls
+        world.walls = [Wall(orient='V', axis_pos=-3.0, endpoints=(-3, 3),hard=True),
+                Wall(orient='V', axis_pos=3.0, endpoints=(-3, 3),hard=True),
+                Wall(orient='H', axis_pos=-3.0, endpoints=(-3, 3),hard=True),
+                Wall(orient='H', axis_pos=3.0, endpoints=(-3, 3),hard=True),
+                # up wall
+                Wall(orient='V', axis_pos=-1.5, endpoints=(0.25, 3), hard=True),
+                Wall(orient='H', axis_pos=0.25, endpoints=(-1.5, 1.5)),
+                Wall(orient='V', axis_pos=1.5, endpoints=(0.25, 3)),
+                # down wall
+                Wall(orient='V', axis_pos=-1.5, endpoints=(-0.25, -3), hard=True),
+                Wall(orient='H', axis_pos=-0.25, endpoints=(-1.5, 1.5)),
+                Wall(orient='V', axis_pos=1.5, endpoints=(-0.25, -3)),
+                ]
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
