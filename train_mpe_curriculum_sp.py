@@ -75,7 +75,8 @@ class node_buffer():
         archive = [] 
         for j in range(num_case):
             for i in range(now_agent_num):
-                landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2) 
+                # landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2) 
+                landmark_location = np.array([np.random.uniform(start_boundary[0],start_boundary[1]),np.random.uniform(start_boundary[2],start_boundary[3])])
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
             # index_sample = BatchSampler(SubsetRandomSampler(range(now_agent_num)),now_agent_num,drop_last=True)
             indices = random.sample(range(now_agent_num), now_agent_num)
@@ -358,8 +359,8 @@ class node_buffer():
 
 def main():
     args = get_config()
-    # run = wandb.init(project='curriculum',name=str(args.algorithm_name) + "_seed" + str(args.seed))
-    run = wandb.init(project='check',name='separate_reward')
+    run = wandb.init(project='curriculum',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    # run = wandb.init(project='check',name='separate_reward')
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -544,6 +545,8 @@ def main():
     Rmax = 0.95
     boundary = 3
     start_boundary = 0.3
+    # start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
+    start_boundary = [2.4,3.0,2.4,3.0]
     max_step = 0.6
     N_easy = 0
     test_flag = 0

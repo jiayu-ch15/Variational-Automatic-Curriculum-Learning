@@ -79,7 +79,8 @@ class node_buffer():
         archive = [] 
         for j in range(num_case):
             for i in range(now_box_num):
-                landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2)  
+                landmark_location = np.array([np.random.uniform(start_boundary[0],start_boundary[1]),np.random.uniform(start_boundary[2],start_boundary[3])])
+                # landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2)  
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
             indices = random.sample(range(now_box_num), now_box_num)
             for k in indices:
@@ -95,11 +96,12 @@ class node_buffer():
             one_starts_box = []
         return archive
 
-    def produce_good_case_grid(self, num_case, start_boundary,now_agent_num, now_box_num):
+    def produce_good_case_grid(self, num_case, start_boundary, now_agent_num, now_box_num):
         # agent_size=0.2, ball_size=0.2,landmark_size=0.3
         # box在内侧，agent在start_boundary和start_boundary_agent之间
         cell_size = 0.3
-        grid_num = int(start_boundary * 2 / cell_size) + 1
+        grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
+        init_origin_node = np.array([start_boundary[0],start_boundary[2]])
         assert grid_num ** 2 >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
@@ -114,7 +116,8 @@ class node_buffer():
                         continue
                     else:
                         grid[agent_location_grid[0],agent_location_grid[1]] = 1
-                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
+                        # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
+                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
                         one_starts_agent.append(copy.deepcopy(agent_location))
                         break
             for i in range(now_box_num):
@@ -124,7 +127,8 @@ class node_buffer():
                         continue
                     else:
                         grid[box_location_grid[0],box_location_grid[1]] = 1
-                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
+                        # box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
+                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size]) + init_origin_node
                         one_starts_box.append(copy.deepcopy(box_location))
                         break
             indices = random.sample(range(now_box_num), now_box_num)
@@ -552,7 +556,9 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    start_boundary = 0.3
+    # start_boundary = 0.3
+    start_boundary = [1.4,2.0,1.4,2.0]
+    # start_boundary = [-0.3,0.3,-0.3,0.3]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0

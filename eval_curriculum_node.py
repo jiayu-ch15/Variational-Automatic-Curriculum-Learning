@@ -64,7 +64,7 @@ def produce_good_case_sp(num_case, start_boundary, now_agent_num):
         one_starts_landmark = []
     return archive
 
-def produce_good_case_pb(self, num_case, start_boundary, now_agent_num, now_box_num):
+def produce_good_case_pb(num_case, start_boundary, now_agent_num, now_box_num):
     one_starts_landmark = []
     one_starts_agent = []
     one_starts_box = []
@@ -82,6 +82,29 @@ def produce_good_case_pb(self, num_case, start_boundary, now_agent_num, now_box_
         for k in indices:
             epsilon = -2 * 0.01 * random.random() + 0.01
             one_starts_box.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
+        # select_starts.append(one_starts_agent+one_starts_landmark)
+        archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
+        one_starts_agent = []
+        one_starts_landmark = []
+        one_starts_box = []
+    return archive
+
+def uniform_case_pb(num_case, start_boundary, now_agent_num, now_box_num):
+    one_starts_landmark = []
+    one_starts_agent = []
+    one_starts_box = []
+    archive = [] 
+    for j in range(num_case):
+        for i in range(now_box_num):
+            landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2)  
+            one_starts_landmark.append(copy.deepcopy(landmark_location))
+        for i in range(now_agent_num):
+            agent_location = np.random.uniform(-start_boundary, +start_boundary, 2)  
+            one_starts_agent.append(copy.deepcopy(agent_location))
+        for i in range(now_box_num):
+            box_location = np.random.uniform(-start_boundary, +start_boundary, 2)  
+            one_starts_box.append(copy.deepcopy(box_location))
+
         # select_starts.append(one_starts_agent+one_starts_landmark)
         archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
         one_starts_agent = []
@@ -111,13 +134,18 @@ if __name__ == '__main__':
     agent_num = 2
     box_num = 2
     # data = []
-    mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run1'
+    # uniform data
+    # starts = uniform_case_pb(10000, 2, 2, 2)
+    # with open('/home/tsing73/curriculum/node_data/pb_44_2people2box.txt','w') as fp:
+    #     for i in range(len(starts)):
+    #         fp.write(str(np.array(starts[i]).reshape(-1))+'\n')
+    mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run6'
     if args.scenario_name=='simple_spread':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp_66_%i.txt' %agent_num
     elif args.scenario_name=='push_ball':
         mode_path = mode_path / ('%iagents'%box_num)
-        data_dir = '/home/tsing73/curriculum/node_data/pb_22_2people%ibox.txt' %box_num
+        data_dir = '/home/tsing73/curriculum/node_data/pb_44_2people%ibox.txt' %box_num
     with open(data_dir,'r') as fp:
         data = fp.readlines()
     for i in range(len(data)):
@@ -202,6 +230,6 @@ if __name__ == '__main__':
         #         plt.scatter(uniform[:, 0], uniform[:, 1], marker='o')
         #         plt.scatter(archive_projection[:, 0], archive_projection[:, 1],marker='1')
         #         plt.savefig(mode_path / 'parent_all' / ('result_%i.jpg'%j))
-        j += 5
+        j += 1
 
 

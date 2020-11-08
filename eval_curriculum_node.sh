@@ -5,7 +5,7 @@ env="MPE"
 scenario="push_ball"
 num_landmarks=2
 num_agents=2
-algo="ours_pb_1_3"
+algo="diversified_novelty_pb"
 seed_max=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"

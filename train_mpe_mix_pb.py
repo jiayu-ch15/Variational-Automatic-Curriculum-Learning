@@ -29,6 +29,7 @@ import random
 import copy
 import matplotlib.pyplot as plt
 import pdb
+import wandb
 np.set_printoptions(linewidth=10000)
 
 def make_parallel_env(args):
@@ -53,7 +54,7 @@ class node_buffer():
         self.agent_num = agent_num
         self.box_num = box_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num, self.box_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -166,8 +167,7 @@ class node_buffer():
         else:
             novelty_threshold = 0
         # novelty_threshold = child_novelty_threshold
-        writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
-                {'novelty_threshold': novelty_threshold},timestep)
+        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -327,14 +327,10 @@ class node_buffer():
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
         if len(self.parent_all) > self.buffer_length:
             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
-        writer.add_scalars(str(self.agent_num)+'agent/archive',
-                        {'archive_length': len(self.archive)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/childlist',
-                        {'childlist_length': len(self.childlist)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/parentlist',
-                        {'parentlist_length': len(self.parent)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/child_drop',
-                        {'drop_num': drop_num},timestep)
+        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
+        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
+        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
+        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
     
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
@@ -366,7 +362,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    
+    run = wandb.init(project='mix_pb',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
     # seed
@@ -541,15 +537,15 @@ def main():
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
-    N_child = 300
+    N_child = 325
     N_archive = 150
-    N_parent = 50
-    max_step = 0.1
+    N_parent = 25
+    max_step = 0.2
     TB = 1
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = 1
+    boundary = 2.0
     start_boundary = 0.3
     N_easy = 0
     test_flag = 0
@@ -563,7 +559,7 @@ def main():
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
-    save_node_frequency = 1
+    save_node_frequency = 5
     save_node_flag = True
     historical_length = 5
     next_stage_flag = 0
@@ -766,7 +762,7 @@ def main():
                                     rewards[:,agent_id], 
                                     np.array(masks)[:,agent_id])
                 # import pdb;pdb.set_trace()
-                logger.add_scalars('%iagent/training_cover_rate'%last_node.agent_num,{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                wandb.log({'training_cover_rate%iagent'%last_node.agent_num: np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
                 print('training_cover_rate_%iagent: '%last_node.agent_num, np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
                 current_timestep += args.episode_length * starts_length_last
                 last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
@@ -940,7 +936,7 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            logger.add_scalars('%iagent/training_cover_rate'%now_node.agent_num,{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({'training_cover_rate%i'%now_node.agent_num: np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             print('training_cover_rate_%iagent: '%now_node.agent_num, np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
             current_timestep += args.episode_length * starts_length_now
             now_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
@@ -991,8 +987,7 @@ def main():
                     value_loss, action_loss, dist_entropy = agents.update_double_share_pb(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
                 else:
                     value_loss, action_loss, dist_entropy = agents.update_share(now_node.agent_num, rollouts_now)
-                logger.add_scalars('value_loss',
-                    {'value_loss': value_loss},
+                wandb.log({'value_loss': value_loss},
                     current_timestep)
 
                 # clean the buffer and reset
@@ -1014,7 +1009,7 @@ def main():
                     rew = []
                     for i in range(rollouts[agent_id].rewards.shape[1]):
                         rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
-                    logger.add_scalars('agent%i/average_episode_reward'%agent_id,
+                    wandb.log(
                         {'average_episode_reward': np.mean(rew)},
                         (episode+1) * args.episode_length * one_length*eval_frequency)
                     
@@ -1172,7 +1167,7 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            logger.add_scalars('%iagent/cover_rate' %now_node.agent_num,{'cover_rate': np.mean(infos)}, current_timestep)
+            wandb.log({'%icover_rate'%now_node.agent_num: np.mean(infos)}, current_timestep)
             mean_cover_rate = np.mean(infos)
             print('test_agent_num: ', now_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
@@ -1198,7 +1193,7 @@ def main():
 
         if next_stage_flag==1:
             next_stage_flag = 0
-            start_boundary = 0.6
+            start_boundary = 1.0
             last_node = copy.deepcopy(now_node)
             now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,
@@ -1239,14 +1234,6 @@ def main():
             else:
                 for agent_id in range(num_agents):
                     print("value loss of agent%i: " % agent_id + str(value_losses[agent_id]))
-
-            # if args.env_name == "MPE":
-            #     for agent_id in range(num_agents):
-            #         show_rewards = []
-            #         for info in infos:                        
-            #             if 'individual_reward' in info[agent_id].keys():
-            #                 show_rewards.append(info[agent_id]['individual_reward'])                    
-            #         logger.add_scalars('agent%i/individual_reward' % agent_id, {'individual_reward': np.mean(show_rewards)}, total_num_steps)
                 
     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
     logger.close()

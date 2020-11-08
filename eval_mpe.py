@@ -193,10 +193,10 @@ def main():
    
     actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
     # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_shaped_reward' + '/run2' + "/models/agent_model.pt")['model'].to(device)
-    actor_critic.agents_num = 50
-    actor_critic.boxes_num = 50
-    num_agents = 50
-    num_boxes = 50
+    actor_critic.agents_num = 4
+    actor_critic.boxes_num = 4
+    num_agents = 4
+    num_boxes = 4
     all_frames = []
     cover_rate = 0
     random.seed(args.seed)
@@ -238,6 +238,7 @@ def main():
         eval_recurrent_hidden_states = np.zeros((num_agents,args.hidden_size)).astype(np.float32)
         eval_recurrent_hidden_states_critic = np.zeros((num_agents,args.hidden_size)).astype(np.float32)
         eval_masks = np.ones((num_agents,1)).astype(np.float32)
+        pdb.set_trace()
         
         for step in range(args.episode_length): 
             calc_start = time.time()              
