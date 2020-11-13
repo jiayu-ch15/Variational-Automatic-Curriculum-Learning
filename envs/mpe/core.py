@@ -143,7 +143,6 @@ class World(object):
         self.decey_episode = 0
         self.critic_full_obs = False
         
-
     # return all entities in the world
     @property
     def entities(self):

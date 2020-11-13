@@ -139,8 +139,8 @@ if __name__ == '__main__':
     # with open('/home/tsing73/curriculum/node_data/pb_44_2people2box.txt','w') as fp:
     #     for i in range(len(starts)):
     #         fp.write(str(np.array(starts[i]).reshape(-1))+'\n')
-    mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run6'
-    if args.scenario_name=='simple_spread':
+    mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run1'
+    if args.scenario_name=='simple_spread' or args.scenario_name=='simple_spread_H':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp_66_%i.txt' %agent_num
     elif args.scenario_name=='push_ball':
