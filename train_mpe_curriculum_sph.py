@@ -89,46 +89,51 @@ class node_buffer():
         return archive
 
     def produce_good_case_H(self, num_case, now_agent_num): # 产生H_map的初始态
+        init_switch = 1 # 0 mid, 1 left, 2 left_right
         one_starts_landmark = []
         one_starts_agent = []
         archive = [] 
-        # # agent和landmark都在通道内
-        # start_boundary_x = [-1.7,1.7]
-        # start_boundary_y = [-0.25,0.25]
-        # # agent和landmark都在左边
-        # start_boundary_x = [-2.9,-1.8]
-        # start_boundary_y = [-2.9,2.9]
-        # for j in range(num_case):
-        #     for i in range(now_agent_num):
-        #         landmark_location_x = np.random.uniform(start_boundary_x[0],start_boundary_x[1])
-        #         landmark_location_y = np.random.uniform(start_boundary_y[0],start_boundary_y[1])
-        #         landmark_location = np.array([landmark_location_x,landmark_location_y])
-        #         one_starts_landmark.append(copy.deepcopy(landmark_location))
-        #     indices = random.sample(range(now_agent_num), now_agent_num)
-        #     for k in indices:
-        #         epsilon = -2 * 0.01 * random.random() + 0.01
-        #         one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
-        #     archive.append(one_starts_agent+one_starts_landmark)
-        #     one_starts_agent = []
-        #     one_starts_landmark = []
-
-        # 各在左右两边50%
-        start_boundary_x = [1.8, 2.9] # 范围绝对值
-        start_boundary_y = [-2.9,2.9]
-        for j in range(num_case):
-            for i in range(now_agent_num):
-                direction = np.random.choice([-1,1])
-                landmark_location_x = np.random.uniform(start_boundary_x[0],start_boundary_x[1]) * direction
-                landmark_location_y = np.random.uniform(start_boundary_y[0],start_boundary_y[1])
-                landmark_location = np.array([landmark_location_x,landmark_location_y])
-                one_starts_landmark.append(copy.deepcopy(landmark_location))
-            indices = random.sample(range(now_agent_num), now_agent_num)
-            for k in indices:
-                epsilon = -2 * 0.01 * random.random() + 0.01
-                one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
-            archive.append(one_starts_agent+one_starts_landmark)
-            one_starts_agent = []
-            one_starts_landmark = []
+        if init_switch ==0:
+            # agent和landmark都在通道内
+            start_boundary_x = [-1.5,1.5]
+            start_boundary_y = [-0.25,0.25]
+        elif init_switch==1:
+            # agent和landmark都在左边
+            start_boundary_x = [-2.9,-1.6]
+            start_boundary_y = [-2.9,2.9]
+        if init_switch==0 or init_switch==1:
+            for j in range(num_case):
+                for i in range(now_agent_num):
+                    landmark_location_x = np.random.uniform(start_boundary_x[0],start_boundary_x[1])
+                    landmark_location_y = np.random.uniform(start_boundary_y[0],start_boundary_y[1])
+                    landmark_location = np.array([landmark_location_x,landmark_location_y])
+                    one_starts_landmark.append(copy.deepcopy(landmark_location))
+                indices = random.sample(range(now_agent_num), now_agent_num)
+                for k in indices:
+                    epsilon = -2 * 0.01 * random.random() + 0.01
+                    one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
+                archive.append(one_starts_agent+one_starts_landmark)
+                one_starts_agent = []
+                one_starts_landmark = []
+       
+        if init_switch==2:
+            # 各在左右两边50%
+            start_boundary_x = [1.6, 2.9] # 范围绝对值
+            start_boundary_y = [-2.9,2.9]
+            for j in range(num_case):
+                for i in range(now_agent_num):
+                    direction = np.random.choice([-1,1])
+                    landmark_location_x = np.random.uniform(start_boundary_x[0],start_boundary_x[1]) * direction
+                    landmark_location_y = np.random.uniform(start_boundary_y[0],start_boundary_y[1])
+                    landmark_location = np.array([landmark_location_x,landmark_location_y])
+                    one_starts_landmark.append(copy.deepcopy(landmark_location))
+                indices = random.sample(range(now_agent_num), now_agent_num)
+                for k in indices:
+                    epsilon = -2 * 0.01 * random.random() + 0.01
+                    one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
+                archive.append(one_starts_agent+one_starts_landmark)
+                one_starts_agent = []
+                one_starts_landmark = []
 
         return archive
 
@@ -138,7 +143,7 @@ class node_buffer():
         archive = [] 
         # start_boundary_x x轴活动范围
         # start_boundary_y 是y轴活动范围
-        start_boundary_x = [[-2.9,-1.8],[-1.7,1.7],[1.8,2.9]]
+        start_boundary_x = [[-2.9,-1.6],[-1.5,1.5],[1.6,2.9]]
         start_boundary_y = [[-2.9,2.9],[-0.25,0.25],[-2.9,2.9]]
         for j in range(num_case):
             for i in range(now_agent_num):
@@ -268,14 +273,8 @@ class node_buffer():
             return child_new
 
     def SampleNearby_novelty_H(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
-        # start_boundary_x_agent 是x轴活动范围
-        # start_boundary_y_agent 是y轴活动范围
-        start_boundary_x_agent = [-1.7,1.7]
-        start_boundary_y_agent = [-0.25,0.25]
-        # start_boundary_x_landmark x轴活动范围的绝对值
-        # start_boundary_y_landmark 是y轴活动范围
-        start_boundary_x_landmark = [1.8,2.9]
-        start_boundary_y_landmark = [-2.9,2.9]
+        start_boundary_x = [[-2.9,-1.6],[-1.5,1.5],[1.6,2.9]]
+        start_boundary_y = [[-2.9,2.9],[-0.25,0.25],[-2.9,2.9]]
         
         if len(self.parent_all) > self.topk + 1:
             self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
@@ -301,30 +300,16 @@ class node_buffer():
                         epsilon_y = -2 * self.max_step * random.random() + self.max_step
                         st[i][0] = st[i][0] + epsilon_x
                         st[i][1] = st[i][1] + epsilon_y
-                        if i < self.agent_num: # agent范围
-                            if st[i][0] > start_boundary_x_agent[1]:
-                                st[i][0] = start_boundary_x_agent[1] - random.random()*0.01
-                            if st[i][0] < start_boundary_x_agent[0]:
-                                st[i][0] = start_boundary_x_agent[0] + random.random()*0.01
-                            if st[i][1] > start_boundary_y_agent[1]:
-                                st[i][1] = start_boundary_y_agent[1] - random.random()*0.01
-                            if st[i][1] < start_boundary_y_agent[0]:
-                                st[i][1] = start_boundary_y_agent[0] + random.random()*0.01
-                        else: # landmark范围
-                            if st[i][0] < 0 : # 左半边
-                                if st[i][0] < -start_boundary_y_landmark[1]:
-                                    st[i][0] = -start_boundary_y_landmark[1] + random.random()*0.01
-                                elif st[i][0] > -start_boundary_y_landmark[0]:
-                                    st[i][0] = -start_boundary_y_landmark[0] - random.random()*0.01
-                            else: # 右半边
-                                if st[i][0] > start_boundary_y_landmark[1]:
-                                    st[i][0] = start_boundary_y_landmark[1] - random.random()*0.01
-                                elif st[i][0] < start_boundary_y_landmark[0]:
-                                    st[i][0] = start_boundary_y_landmark[0] + random.random()*0.01
-                            if st[i][1] > start_boundary_y_landmark[1]:
-                                st[i][1] = start_boundary_y_landmark[1] - random.random()*0.01
-                            if st[i][1] < start_boundary_y_landmark[0]:
-                                st[i][1] = start_boundary_y_landmark[0] + random.random()*0.01
+                        # 根据x坐标范围判断处于哪个区域
+                        if st[i][0] <= start_boundary_x[0][1]:
+                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[0][0] + random.random()*0.01)),start_boundary_x[0][1]- random.random()*0.01))
+                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[0][0] + random.random()*0.01)),start_boundary_y[0][1]- random.random()*0.01))
+                        elif st[i][0] >= start_boundary_x[2][0]:
+                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[2][0] + random.random()*0.01)),start_boundary_x[2][1]- random.random()*0.01))
+                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[2][0] + random.random()*0.01)),start_boundary_y[2][1]- random.random()*0.01))
+                        else:
+                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[1][0] + random.random()*0.01)),start_boundary_x[1][1]- random.random()*0.01))
+                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[1][0] + random.random()*0.01)),start_boundary_y[1][1]- random.random()*0.01))
                     if len(self.parent_all) > self.topk + 1:
                         if self.get_novelty([st],self.parent_all) > novelty_threshold:
                             child_new.append(copy.deepcopy(st))
@@ -336,14 +321,8 @@ class node_buffer():
             return child_new
 
     def SampleNearby_H(self,starts):
-        # start_boundary_x_agent 是x轴活动范围
-        # start_boundary_y_agent 是y轴活动范围
-        start_boundary_x_agent = [-1.7,1.7]
-        start_boundary_y_agent = [-0.25,0.25]
-        # start_boundary_x_landmark x轴活动范围的绝对值
-        # start_boundary_y_landmark 是y轴活动范围
-        start_boundary_x_landmark = [1.8,2.9]
-        start_boundary_y_landmark = [-2.9,2.9]
+        start_boundary_x = [[-2.9,-1.6],[-1.5,1.5],[1.6,2.9]]
+        start_boundary_y = [[-2.9,2.9],[-0.25,0.25],[-2.9,2.9]]
         starts = starts + []
         len_start = len(starts)
         starts_new = []
@@ -360,30 +339,16 @@ class node_buffer():
                         epsilon_y = -2 * self.max_step * random.random() + self.max_step
                         st[i][0] = st[i][0] + epsilon_x
                         st[i][1] = st[i][1] + epsilon_y
-                        if i < self.agent_num: # agent范围
-                            if st[i][0] > start_boundary_x_agent[1]:
-                                st[i][0] = start_boundary_x_agent[1] - random.random()*0.01
-                            if st[i][0] < start_boundary_x_agent[0]:
-                                st[i][0] = start_boundary_x_agent[0] + random.random()*0.01
-                            if st[i][1] > start_boundary_y_agent[1]:
-                                st[i][1] = start_boundary_y_agent[1] - random.random()*0.01
-                            if st[i][1] < start_boundary_y_agent[0]:
-                                st[i][1] = start_boundary_y_agent[0] + random.random()*0.01
-                        else: # landmark范围
-                            if st[i][0] < 0 : # 左半边
-                                if st[i][0] < -start_boundary_y_landmark[1]:
-                                    st[i][0] = -start_boundary_y_landmark[1] + random.random()*0.01
-                                elif st[i][0] > -start_boundary_y_landmark[0]:
-                                    st[i][0] = -start_boundary_y_landmark[0] - random.random()*0.01
-                            else: # 右半边
-                                if st[i][0] > start_boundary_y_landmark[1]:
-                                    st[i][0] = start_boundary_y_landmark[1] - random.random()*0.01
-                                elif st[i][0] < start_boundary_y_landmark[0]:
-                                    st[i][0] = start_boundary_y_landmark[0] + random.random()*0.01
-                            if st[i][1] > start_boundary_y_landmark[1]:
-                                st[i][1] = start_boundary_y_landmark[1] - random.random()*0.01
-                            if st[i][1] < start_boundary_y_landmark[0]:
-                                st[i][1] = start_boundary_y_landmark[0] + random.random()*0.01
+                        # 根据x坐标范围判断处于哪个区域
+                        if st[i][0] <= start_boundary_x[0][1]:
+                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[0][0] + random.random()*0.01)),start_boundary_x[0][1]- random.random()*0.01))
+                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[0][0] + random.random()*0.01)),start_boundary_y[0][1]- random.random()*0.01))
+                        elif st[i][0] >= start_boundary_x[2][0]:
+                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[2][0] + random.random()*0.01)),start_boundary_x[2][1]- random.random()*0.01))
+                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[2][0] + random.random()*0.01)),start_boundary_y[2][1]- random.random()*0.01))
+                        else:
+                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[1][0] + random.random()*0.01)),start_boundary_x[1][1]- random.random()*0.01))
+                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[1][0] + random.random()*0.01)),start_boundary_y[1][1]- random.random()*0.01))
                     starts_new.append(copy.deepcopy(st))
                     add_num += 1
             starts_new = random.sample(starts_new, self.reproduction_num)
@@ -719,7 +684,7 @@ def main():
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
     use_novelty_sample = True
-    use_parent_sample = False
+    use_parent_sample = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []

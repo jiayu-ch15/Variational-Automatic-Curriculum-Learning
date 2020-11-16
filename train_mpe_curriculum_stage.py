@@ -577,7 +577,7 @@ def main():
     save_node_flag = True
     historical_length = 5
     next_stage_flag = 0
-    frozen_epoch = 6
+    frozen_epoch = 0
     frozen_count = 0
     initial_optimizer = False
     eval_flag = False # 只用evaluate

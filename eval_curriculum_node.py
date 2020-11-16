@@ -131,15 +131,15 @@ if __name__ == '__main__':
     num_processes = 1000
     # envs = make_parallel_env(args.env_name, num_processes, args.seed, True)
     cover_rate_sum = 0
-    agent_num = 2
-    box_num = 2
+    agent_num = 4
+    box_num = 4
     # data = []
     # uniform data
     # starts = uniform_case_pb(10000, 2, 2, 2)
     # with open('/home/tsing73/curriculum/node_data/pb_44_2people2box.txt','w') as fp:
     #     for i in range(len(starts)):
     #         fp.write(str(np.array(starts[i]).reshape(-1))+'\n')
-    mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run1'
+    mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run2'
     if args.scenario_name=='simple_spread' or args.scenario_name=='simple_spread_H':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp_66_%i.txt' %agent_num
@@ -166,7 +166,6 @@ if __name__ == '__main__':
     j = 0
     while j<=1000:
         dir_path = mode_path  / 'archive' / ('archive_' + str(j))
-        # pdb.set_trace()
         dir_path2 = mode_path  / 'archive_novelty' / ('archive_novelty' + str(j))
         if os.path.exists(dir_path):
             with open(dir_path,'r') as fp :
