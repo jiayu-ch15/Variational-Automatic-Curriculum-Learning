@@ -6,7 +6,7 @@ from .multi_discrete import MultiDiscrete
 from .core import Agent, Landmark
 
 # update bounds to center around agent
-cam_range = 4
+cam_range = 6
 
 # environment for all agents in the multiagent world
 # currently code assumes that no agents will be created/destroyed at runtime!

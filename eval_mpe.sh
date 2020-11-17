@@ -1,6 +1,6 @@
 #!/bin/sh
 env="MPE"
-scenario_name="simple_spread_H"
+scenario_name="simple_spread_3rooms"
 # scenario_name="push_ball"
 seed_max=1
 
