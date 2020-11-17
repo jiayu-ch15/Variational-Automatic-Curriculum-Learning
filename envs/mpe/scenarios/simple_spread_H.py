@@ -15,18 +15,18 @@ class Scenario(BaseScenario):
             num_landmarks = now_agent_num
         # world.collaborative = True
         # add walls
-        world.walls = [Wall(orient='V', axis_pos=-3.0, endpoints=(-3, 3),hard=True),
-                Wall(orient='V', axis_pos=3.0, endpoints=(-3, 3),hard=True),
-                Wall(orient='H', axis_pos=-3.0, endpoints=(-3, 3),hard=True),
-                Wall(orient='H', axis_pos=3.0, endpoints=(-3, 3),hard=True),
+        world.walls = [Wall(orient='V', axis_pos=-4.5, endpoints=(-6, 6),width=3.0, hard=True),
+                Wall(orient='V', axis_pos=4.5, endpoints=(-6, 6),width=3.0, hard=True),
+                Wall(orient='H', axis_pos=-4.5, endpoints=(-6, 6),width=3.0, hard=True),
+                Wall(orient='H', axis_pos=4.5, endpoints=(-6, 6),width=3.0,hard=True),
                 # up wall
-                Wall(orient='V', axis_pos=-1.5, endpoints=(0.25, 3), width=0.5, hard=True),
-                Wall(orient='H', axis_pos=0.5, endpoints=(-1.5, 1.5), width=0.5, hard=True),
-                Wall(orient='V', axis_pos=1.5, endpoints=(0.25, 3), width=0.5, hard=True),
+                Wall(orient='V', axis_pos=0, endpoints=(1.0, 3), width=1.0, hard=True),
+                Wall(orient='H', axis_pos=1.75, endpoints=(-1.5, 1.5), width=2.5, hard=True),
+                # Wall(orient='V', axis_pos=1.0, endpoints=(1.0, 3), width=1.0, hard=True),
                 # down wall
-                Wall(orient='V', axis_pos=-1.5, endpoints=(-0.25, -3), width=0.5, hard=True),
-                Wall(orient='H', axis_pos=-0.5, endpoints=(-1.5, 1.5), width=0.5, hard=True),
-                Wall(orient='V', axis_pos=1.5, endpoints=(-0.25, -3), width=0.5, hard=True),
+                Wall(orient='V', axis_pos=0, endpoints=(-3.0, -1.0), width=1.0, hard=True),
+                Wall(orient='H', axis_pos=-1.75, endpoints=(-1.5, 1.5), width=2.5, hard=True),
+                # Wall(orient='V', axis_pos=1.0, endpoints=(-3.0, -1.0), width=1.0, hard=True),
                 ]
         # add agents
         world.agents = [Agent() for i in range(num_agents)]

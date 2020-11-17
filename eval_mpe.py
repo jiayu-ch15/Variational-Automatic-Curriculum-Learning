@@ -201,9 +201,16 @@ def main():
     cover_rate = 0
     random.seed(1)
     np.random.seed(1)
+    
+    # load files
+    dir_path = '/home/chenjy/curriculum/diversified_left/' + ('archive_' + str(89))
+    if os.path.exists(dir_path):
+        with open(dir_path,'r') as fp :
+            archive = fp.readlines()
+        for i in range(len(archive)):
+            archive[i] = np.array(archive[i][1:-2].split(),dtype=float)
+
     starts = produce_good_case_grid(500,3.0,num_agents)
-    # starts = produce_hard_case(500,3,8)
-    # starts = produce_uniform_case(500,3,16)
     for eval_episode in range(args.eval_episodes):
         print(eval_episode)
         eval_env = MPEEnv(args)
@@ -212,8 +219,10 @@ def main():
             all_frames.append(image)
         
         # eval_obs, _ = eval_env.reset(num_agents,num_boxes)
-        eval_obs, _ = eval_env.reset(num_agents)
-        # eval_obs = eval_env.new_starts_obs(starts[eval_episode],num_agents)
+        # eval_obs, _ = eval_env.reset(num_agents)
+        start = archive[500]
+        start = [np.array([start[0],start[1]]),np.array([start[2],start[3]]),np.array([start[4],start[5]]),np.array([start[6],start[7]]),np.array([start[8],start[9]]),np.array([start[10],start[11]]),np.array([start[12],start[13]]),np.array([start[14],start[15]])]
+        eval_obs = eval_env.new_starts_obs(start,num_agents)
         # eval_obs = eval_env.new_starts_obs_pb(starts[eval_episode],num_agents,num_boxes)
         eval_obs = np.array(eval_obs)       
         eval_share_obs = eval_obs.reshape(1, -1)
