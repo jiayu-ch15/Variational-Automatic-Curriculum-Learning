@@ -1,11 +1,11 @@
 #!/bin/sh
 ulimit -n 32768
 env="MPE"
-scenario="simple_spread_H"
+scenario="simple_spread_3rooms"
 num_landmarks=4
 num_agents=4
-# algo="diversified_novelty_left_right_sph"
-algo='diversified_novelty_parentsampling_left_sph'
+# algo="check"
+algo='diversified_novelty_left_sp3'
 seed_max=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"

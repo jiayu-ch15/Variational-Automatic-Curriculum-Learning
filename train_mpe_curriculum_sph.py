@@ -89,51 +89,37 @@ class node_buffer():
         return archive
 
     def produce_good_case_H(self, num_case, now_agent_num): # 产生H_map的初始态
-        init_switch = 1 # 0 mid, 1 left, 2 left_right
+        init_switch = 0 # 0 mid, 1 left, 2 left_right
         one_starts_landmark = []
         one_starts_agent = []
         archive = [] 
+        start_boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        start_boundary_y = [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
         if init_switch ==0:
-            # agent和landmark都在通道内
-            start_boundary_x = [-1.5,1.5]
-            start_boundary_y = [-0.25,0.25]
+            # left room
+            start_boundary_x = [-4.9,-3.1]
+            start_boundary_y = [-2.9,2.9]
         elif init_switch==1:
-            # agent和landmark都在左边
-            start_boundary_x = [-2.9,-1.6]
+            # right room
+            start_boundary_x = [3.1,4.9]
             start_boundary_y = [-2.9,2.9]
-        if init_switch==0 or init_switch==1:
-            for j in range(num_case):
-                for i in range(now_agent_num):
-                    landmark_location_x = np.random.uniform(start_boundary_x[0],start_boundary_x[1])
-                    landmark_location_y = np.random.uniform(start_boundary_y[0],start_boundary_y[1])
-                    landmark_location = np.array([landmark_location_x,landmark_location_y])
-                    one_starts_landmark.append(copy.deepcopy(landmark_location))
-                indices = random.sample(range(now_agent_num), now_agent_num)
-                for k in indices:
-                    epsilon = -2 * 0.01 * random.random() + 0.01
-                    one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
-                archive.append(one_starts_agent+one_starts_landmark)
-                one_starts_agent = []
-                one_starts_landmark = []
-       
-        if init_switch==2:
-            # 各在左右两边50%
-            start_boundary_x = [1.6, 2.9] # 范围绝对值
+        elif init_switch==2:
+            # middle room
+            start_boundary_x = [-0.9,0.9]
             start_boundary_y = [-2.9,2.9]
-            for j in range(num_case):
-                for i in range(now_agent_num):
-                    direction = np.random.choice([-1,1])
-                    landmark_location_x = np.random.uniform(start_boundary_x[0],start_boundary_x[1]) * direction
-                    landmark_location_y = np.random.uniform(start_boundary_y[0],start_boundary_y[1])
-                    landmark_location = np.array([landmark_location_x,landmark_location_y])
-                    one_starts_landmark.append(copy.deepcopy(landmark_location))
-                indices = random.sample(range(now_agent_num), now_agent_num)
-                for k in indices:
-                    epsilon = -2 * 0.01 * random.random() + 0.01
-                    one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
-                archive.append(one_starts_agent+one_starts_landmark)
-                one_starts_agent = []
-                one_starts_landmark = []
+        for j in range(num_case):
+            for i in range(now_agent_num):
+                landmark_location_x = np.random.uniform(start_boundary_x[0],start_boundary_x[1])
+                landmark_location_y = np.random.uniform(start_boundary_y[0],start_boundary_y[1])
+                landmark_location = np.array([landmark_location_x,landmark_location_y])
+                one_starts_landmark.append(copy.deepcopy(landmark_location))
+            indices = random.sample(range(now_agent_num), now_agent_num)
+            for k in indices:
+                epsilon = -2 * 0.01 * random.random() + 0.01
+                one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
+            archive.append(one_starts_agent+one_starts_landmark)
+            one_starts_agent = []
+            one_starts_landmark = []
 
         return archive
 
@@ -141,21 +127,21 @@ class node_buffer():
         one_starts_landmark = []
         one_starts_agent = []
         archive = [] 
-        # start_boundary_x x轴活动范围
-        # start_boundary_y 是y轴活动范围
-        start_boundary_x = [[-2.9,-1.6],[-1.5,1.5],[1.6,2.9]]
-        start_boundary_y = [[-2.9,2.9],[-0.25,0.25],[-2.9,2.9]]
+        # boundary_x x轴活动范围
+        # boundary_y 是y轴活动范围
+        boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        boundary_y = [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
         for j in range(num_case):
             for i in range(now_agent_num):
                 location_id = np.random.choice([0,1,2],1)[0]
-                landmark_location_x = np.random.uniform(start_boundary_x[location_id][0],start_boundary_x[location_id][1])
-                landmark_location_y = np.random.uniform(start_boundary_y[location_id][0],start_boundary_y[location_id][1])
+                landmark_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
+                landmark_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
                 landmark_location = np.array([landmark_location_x,landmark_location_y])
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
             for i in range(now_agent_num):
                 location_id = np.random.choice([0,1,2],1)[0]
-                agent_location_x = np.random.uniform(start_boundary_x[location_id][0],start_boundary_x[location_id][1])
-                agent_location_y = np.random.uniform(start_boundary_y[location_id][0],start_boundary_y[location_id][1])
+                agent_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
+                agent_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
                 agent_location = np.array([agent_location_x,agent_location_y])
                 one_starts_landmark.append(copy.deepcopy(agent_location))
             archive.append(one_starts_agent+one_starts_landmark)
@@ -273,8 +259,8 @@ class node_buffer():
             return child_new
 
     def SampleNearby_novelty_H(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
-        start_boundary_x = [[-2.9,-1.6],[-1.5,1.5],[1.6,2.9]]
-        start_boundary_y = [[-2.9,2.9],[-0.25,0.25],[-2.9,2.9]]
+        boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        boundary_y = [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
         
         if len(self.parent_all) > self.topk + 1:
             self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
@@ -286,6 +272,8 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
         parents = parents + []
         len_start = len(parents)
+        num_tries = 20 
+        num_try = 0
         child_new = []
         if parents==[]:
             return []
@@ -295,21 +283,24 @@ class node_buffer():
                 for k in range(len_start):
                     st = copy.deepcopy(parents[k])
                     s_len = len(st)
-                    for i in range(s_len):
+                    entity_id = 0
+                    while entity_id < s_len:
                         epsilon_x = -2 * self.max_step * random.random() + self.max_step
                         epsilon_y = -2 * self.max_step * random.random() + self.max_step
-                        st[i][0] = st[i][0] + epsilon_x
-                        st[i][1] = st[i][1] + epsilon_y
-                        # 根据x坐标范围判断处于哪个区域
-                        if st[i][0] <= start_boundary_x[0][1]:
-                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[0][0] + random.random()*0.01)),start_boundary_x[0][1]- random.random()*0.01))
-                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[0][0] + random.random()*0.01)),start_boundary_y[0][1]- random.random()*0.01))
-                        elif st[i][0] >= start_boundary_x[2][0]:
-                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[2][0] + random.random()*0.01)),start_boundary_x[2][1]- random.random()*0.01))
-                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[2][0] + random.random()*0.01)),start_boundary_y[2][1]- random.random()*0.01))
+                        tmp_st_x = st[entity_id][0] + epsilon_x
+                        tmp_st_y = st[entity_id][1] + epsilon_y
+                        # rejection sampling
+                        num_try += 1
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x,boundary_y)
+                        if legal:
+                            st[entity_id][0] = tmp_st_x
+                            st[entity_id][1] = tmp_st_y
+                            entity_id += 1
+                            num_try = 0
                         else:
-                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[1][0] + random.random()*0.01)),start_boundary_x[1][1]- random.random()*0.01))
-                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[1][0] + random.random()*0.01)),start_boundary_y[1][1]- random.random()*0.01))
+                            assert num_try <= num_tries 
+                            continue
+
                     if len(self.parent_all) > self.topk + 1:
                         if self.get_novelty([st],self.parent_all) > novelty_threshold:
                             child_new.append(copy.deepcopy(st))
@@ -321,11 +312,13 @@ class node_buffer():
             return child_new
 
     def SampleNearby_H(self,starts):
-        start_boundary_x = [[-2.9,-1.6],[-1.5,1.5],[1.6,2.9]]
-        start_boundary_y = [[-2.9,2.9],[-0.25,0.25],[-2.9,2.9]]
+        boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        boundary_y = [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
         starts = starts + []
         len_start = len(starts)
         starts_new = []
+        num_tries = 20 
+        num_try = 0
         if starts==[]:
             return []
         else:
@@ -334,25 +327,41 @@ class node_buffer():
                 for i in range(len_start):
                     st = copy.deepcopy(starts[i])
                     s_len = len(st)
-                    for i in range(s_len):
+                    entity_id = 0
+                    while entity_id < s_len:
                         epsilon_x = -2 * self.max_step * random.random() + self.max_step
                         epsilon_y = -2 * self.max_step * random.random() + self.max_step
-                        st[i][0] = st[i][0] + epsilon_x
-                        st[i][1] = st[i][1] + epsilon_y
-                        # 根据x坐标范围判断处于哪个区域
-                        if st[i][0] <= start_boundary_x[0][1]:
-                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[0][0] + random.random()*0.01)),start_boundary_x[0][1]- random.random()*0.01))
-                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[0][0] + random.random()*0.01)),start_boundary_y[0][1]- random.random()*0.01))
-                        elif st[i][0] >= start_boundary_x[2][0]:
-                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[2][0] + random.random()*0.01)),start_boundary_x[2][1]- random.random()*0.01))
-                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[2][0] + random.random()*0.01)),start_boundary_y[2][1]- random.random()*0.01))
+                        tmp_st_x = st[entity_id][0] + epsilon_x
+                        tmp_st_y = st[entity_id][1] + epsilon_y
+                        # rejection sampling
+                        num_try += 1
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x,boundary_y)
+                        if legal:
+                            st[entity_id][0] = tmp_st_x
+                            st[entity_id][1] = tmp_st_y
+                            entity_id += 1
+                            num_try = 0
                         else:
-                            st[i][0] = np.min((np.max((st[i][0],start_boundary_x[1][0] + random.random()*0.01)),start_boundary_x[1][1]- random.random()*0.01))
-                            st[i][1] = np.min((np.max((st[i][1],start_boundary_y[1][0] + random.random()*0.01)),start_boundary_y[1][1]- random.random()*0.01))
+                            assert num_try <= num_tries 
+                            continue
+
                     starts_new.append(copy.deepcopy(st))
                     add_num += 1
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
+
+    def is_legal(self, pos, boundary_x, boundary_y):
+        legal = False
+        # 限制在整个大的范围内
+        if pos[0] < boundary_x[0][0] or pos[0] > boundary_x[-1][0]:
+            return False
+        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        for boundary_id in range(len(boundary_x)):
+            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
+                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
+                    legal = True
+                    break
+        return legal
 
     def SampleNearby(self, starts): # produce new children and return
         starts = starts + []
@@ -515,7 +524,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    run = wandb.init(project='sph',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    run = wandb.init(project='sp_3rooms',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     # run = wandb.init(project='check',name='separate_reward')
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
@@ -684,7 +693,7 @@ def main():
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
     use_novelty_sample = True
-    use_parent_sample = True
+    use_parent_sample = False
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
