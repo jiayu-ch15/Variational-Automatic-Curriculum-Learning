@@ -112,6 +112,32 @@ def uniform_case_pb(num_case, start_boundary, now_agent_num, now_box_num):
         one_starts_box = []
     return archive
 
+def produce_uniform_case_H(num_case, now_agent_num): # 产生H_map的随机态
+    one_starts_landmark = []
+    one_starts_agent = []
+    archive = [] 
+    # boundary_x x轴活动范围
+    # boundary_y 是y轴活动范围
+    boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+    boundary_y = [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
+    for j in range(num_case):
+        for i in range(now_agent_num):
+            location_id = np.random.choice([0,1,2],1)[0]
+            landmark_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
+            landmark_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
+            landmark_location = np.array([landmark_location_x,landmark_location_y])
+            one_starts_landmark.append(copy.deepcopy(landmark_location))
+        for i in range(now_agent_num):
+            location_id = np.random.choice([0,1,2],1)[0]
+            agent_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
+            agent_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
+            agent_location = np.array([agent_location_x,agent_location_y])
+            one_starts_landmark.append(copy.deepcopy(agent_location))
+        archive.append(one_starts_agent+one_starts_landmark)
+        one_starts_agent = []
+        one_starts_landmark = []
+    return archive
+
 # Parameters
 gamma = 0.95
 render = False
@@ -133,19 +159,23 @@ if __name__ == '__main__':
     cover_rate_sum = 0
     agent_num = 4
     box_num = 4
-    # data = []
-    # uniform data
-    # starts = uniform_case_pb(10000, 2, 2, 2)
-    # with open('/home/tsing73/curriculum/node_data/pb_44_2people2box.txt','w') as fp:
+    data = []
+    # # uniform data
+    # starts = produce_uniform_case_H(10000, 4)
+    # with open('/home/tsing73/curriculum/node_data/sp3_10*6.txt','w') as fp:
     #     for i in range(len(starts)):
     #         fp.write(str(np.array(starts[i]).reshape(-1))+'\n')
-    mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run2'
+
+    mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run1'
     if args.scenario_name=='simple_spread' or args.scenario_name=='simple_spread_H':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp_66_%i.txt' %agent_num
     elif args.scenario_name=='push_ball':
         mode_path = mode_path / ('%iagents'%box_num)
         data_dir = '/home/tsing73/curriculum/node_data/pb_44_2people%ibox.txt' %box_num
+    elif args.scenario_name=='simple_spread_3rooms':
+        mode_path = mode_path / ('%iagents'%agent_num)
+        data_dir = '/home/tsing73/curriculum/node_data/sp3_10*6.txt'
     with open(data_dir,'r') as fp:
         data = fp.readlines()
     for i in range(len(data)):
