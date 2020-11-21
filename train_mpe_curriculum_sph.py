@@ -51,7 +51,7 @@ def make_parallel_env(args):
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 class node_buffer():
-    def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
+    def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
         self.archive = self.produce_good_case_H(archive_initial_length, self.agent_num)
@@ -63,30 +63,12 @@ class node_buffer():
         self.parent_all = []
         self.max_step = max_step
         self.boundary = boundary
+        self.legal_region = legal_region
         self.reproduction_num = reproduction_num
         self.choose_child_index = []
         self.choose_archive_index = []
         self.eval_score = np.zeros(shape=len(self.archive))
         self.topk = 5
-
-    def produce_good_case(self, num_case, start_boundary, now_agent_num):
-        one_starts_landmark = []
-        one_starts_agent = []
-        archive = [] 
-        for j in range(num_case):
-            for i in range(now_agent_num):
-                # landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2) 
-                landmark_location = np.array([np.random.uniform(start_boundary[0],start_boundary[1]),np.random.uniform(start_boundary[2],start_boundary[3])])
-                one_starts_landmark.append(copy.deepcopy(landmark_location))
-            # index_sample = BatchSampler(SubsetRandomSampler(range(now_agent_num)),now_agent_num,drop_last=True)
-            indices = random.sample(range(now_agent_num), now_agent_num)
-            for k in indices:
-                epsilon = -2 * 0.01 * random.random() + 0.01
-                one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
-            archive.append(one_starts_agent+one_starts_landmark)
-            one_starts_agent = []
-            one_starts_landmark = []
-        return archive
 
     def produce_good_case_H(self, num_case, now_agent_num): # 产生H_map的初始态
         init_switch = 2 # 0 left, 1 right, 2 mid
@@ -133,13 +115,13 @@ class node_buffer():
         boundary_y = [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
         for j in range(num_case):
             for i in range(now_agent_num):
-                location_id = np.random.choice([0,1,2],1)[0]
+                location_id = np.random.randint(len(boundary_x))
                 landmark_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
                 landmark_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
                 landmark_location = np.array([landmark_location_x,landmark_location_y])
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
             for i in range(now_agent_num):
-                location_id = np.random.choice([0,1,2],1)[0]
+                location_id = np.random.randint(len(boundary_x))
                 agent_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
                 agent_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
                 agent_location = np.array([agent_location_x,agent_location_y])
@@ -472,6 +454,7 @@ class node_buffer():
         if len(self.childlist) > self.buffer_length:
             self.childlist = self.childlist[len(self.childlist)-self.buffer_length:]
         if len(self.archive) > self.buffer_length:
+            assert (del_switch=='novelty' or del_switch=='random' or del_switch=='old'), 'del_switch should be novelty, random or old'
             if del_switch=='novelty' : # novelty del
                 self.archive_novelty = self.get_novelty(self.archive,self.archive)
                 self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
@@ -484,7 +467,7 @@ class node_buffer():
                 for i in range(del_num):
                     del self.archive[del_index[i]-del_archive_num]
                     del_archive_num += 1
-            else: # old del
+            elif del_switch=='old': # old del
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
         if len(self.parent_all) > self.buffer_length:
             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
@@ -712,6 +695,8 @@ def main():
     # start_boundary = 0.3
     # start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
     start_boundary = [2.4,3.0,2.4,3.0] # 无效
+    legal_region = {'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+        'y': [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]}
     max_step = 0.6
     N_easy = 0
     test_flag = 0
@@ -733,7 +718,8 @@ def main():
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
-                           boundary=boundary)
+                           boundary=boundary,
+                           legal_region=legal_region)
     
     # run
     begin = time.time()

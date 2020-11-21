@@ -4,8 +4,8 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-# algo='mix4n8_90to95decay'
-algo='check'
+algo='mix4n8_90to95decay'
+# algo='check'
 seed_max=3
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"

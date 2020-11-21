@@ -544,7 +544,7 @@ def main():
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.0001
+    upper_bound = 0.9
     decay_begin = upper_bound
     decay_end = upper_bound + 0.05
     target_num = 8
@@ -591,6 +591,15 @@ def main():
                 for agent_id in range(num_agents):
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
+        # reproduction_num should be changed
+        if last_mean_cover_rate <= decay_begin:
+            last_node.reproduction_num = N_child
+        elif last_mean_cover_rate > decay_begin and last_mean_cover_rate < decay_end:
+            decay_gamma = (last_mean_cover_rate-decay_end) / (decay_begin-decay_end)
+            last_node.reproduction_num = int(N_child*decay_gamma)
+        else:
+            last_node.reproduction_num = N_child
+        
         # reproduction
         if use_novelty_sample:
             if last_node.agent_num!=0:
@@ -604,18 +613,22 @@ def main():
         # reset env 
         # one length = now_process_num
         one_length_last = 0
-        if last_node.agent_num!=0 and last_mean_cover_rate <= decay_end:
+        if last_node.agent_num!=0 and last_mean_cover_rate < decay_end:
             if last_mean_cover_rate <= decay_begin:
                 if use_parent_sample:
                     starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive,N_parent)
                 else:
                     starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive)
-            else:
-                decay_gamma = (last_mean_cover_rate-decay_end) / (decay_begin-decay_end)
+            elif last_mean_cover_rate > decay_begin and last_mean_cover_rate < decay_end:
                 if use_parent_sample:
                     starts_last, one_length_last, starts_length_last = last_node.sample_starts(int(N_child*decay_gamma),int(N_archive*decay_gamma),int(N_parent*decay_gamma))
                 else:
                     starts_last, one_length_last, starts_length_last = last_node.sample_starts(int(N_child*decay_gamma),int(N_archive*decay_gamma))
+            else:
+                if use_parent_sample:
+                    starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive,N_parent)
+                else:
+                    starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive)
             wandb.log({'n_threads_last': starts_length_last},current_timestep)
             last_node.eval_score = np.zeros(shape=one_length_last)
         # starts_now, one_length_now = now_node.sample_starts(N_child,N_archive)
@@ -965,7 +978,7 @@ def main():
             # import pdb;pdb.set_trace()
             wandb.log({str(now_node.agent_num)+'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             wandb.log({str(now_node.agent_num)+'training_success_rate': np.mean(np.mean(step_success[:,-historical_length:],axis=1))}, current_timestep)
-            print({str(now_node.agent_num)+'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+            print(str(now_node.agent_num)+'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
             wandb.log({str(now_node.agent_num)+'train_collision_num': np.mean(step_collision_num)},current_timestep)
             current_timestep += args.episode_length * starts_length_now
             now_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)

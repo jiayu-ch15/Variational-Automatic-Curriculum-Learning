@@ -600,18 +600,18 @@ def main():
 
         # reproduction
         if use_novelty_sample:
-            if last_node.agent_num!=0:
+            if last_node.agent_num!=0 and mix_flag:
                 last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
             now_node.childlist += now_node.SampleNearby_novelty(now_node.parent,child_novelty_threshold,logger, current_timestep)
         else:
-            if last_node.agent_num!=0:
+            if last_node.agent_num!=0 and mix_flag:
                 last_node.childlist += last_node.SampleNearby(last_node.parent)
             now_node.childlist += now_node.SampleNearby(now_node.parent)
         
         # reset env 
         # one length = now_process_num
         one_length_last = 0
-        if last_node.agent_num!=0:
+        if last_node.agent_num!=0 and mix_flag:
             if use_parent_sample:
                 starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive,N_parent)
             else:
@@ -1022,7 +1022,7 @@ def main():
                     current_timestep)
 
                 # clean the buffer and reset
-                if last_node.agent_num!=0:
+                if last_node.agent_num!=0 and mix_flag:
                     rollouts_last.after_update()
                 rollouts_now.after_update()
             else: # 需要修改成同时update的版本
@@ -1046,7 +1046,7 @@ def main():
                     rollouts[agent_id].after_update()
 
         # move nodes
-        if last_node.agent_num!=0:
+        if last_node.agent_num!=0 and mix_flag:
             last_node.eval_score = last_node.eval_score / eval_frequency
             last_node.move_nodes(one_length_last, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, logger, current_timestep)
         now_node.eval_score = now_node.eval_score / eval_frequency

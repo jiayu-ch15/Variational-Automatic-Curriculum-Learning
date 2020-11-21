@@ -122,13 +122,13 @@ def produce_uniform_case_H(num_case, now_agent_num): # 产生H_map的随机态
     boundary_y = [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
     for j in range(num_case):
         for i in range(now_agent_num):
-            location_id = np.random.choice([0,1,2],1)[0]
+            location_id = np.random.choice([0,1,2,3,4],1)[0]
             landmark_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
             landmark_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
             landmark_location = np.array([landmark_location_x,landmark_location_y])
             one_starts_landmark.append(copy.deepcopy(landmark_location))
         for i in range(now_agent_num):
-            location_id = np.random.choice([0,1,2],1)[0]
+            location_id = np.random.choice([0,1,2,3,4],1)[0]
             agent_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
             agent_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
             agent_location = np.array([agent_location_x,agent_location_y])
