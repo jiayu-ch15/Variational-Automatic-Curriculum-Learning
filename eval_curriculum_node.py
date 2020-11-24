@@ -173,7 +173,7 @@ if __name__ == '__main__':
     elif args.scenario_name=='push_ball':
         mode_path = mode_path / ('%iagents'%box_num)
         data_dir = '/home/tsing73/curriculum/node_data/pb_44_2people%ibox.txt' %box_num
-    elif args.scenario_name=='simple_spread_3rooms':
+    elif args.scenario_name=='simple_spread_3rooms' or args.scenario_name=='simple_spread_3rooms_hard':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp3_10*6.txt'
     with open(data_dir,'r') as fp:

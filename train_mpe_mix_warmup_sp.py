@@ -1380,7 +1380,7 @@ def main():
                 rew.append(np.sum(rollouts_now.rewards[:,i]))
             wandb.log({str(now_node.agent_num) + 'eval_episode_reward': np.mean(rew)}, current_timestep)
             print(str(now_node.agent_num) + 'test_mean_cover_rate: ', now_mean_cover_rate)
-            if now_mean_cover_rate >= mix_bound: # 一旦false，就不再混合
+            if now_mean_cover_rate >= mix_bound and now_node.agent_num==8: # 一旦false，就不再混合
                 mix_flag = False
         
         if now_mean_cover_rate > upper_bound and now_node.agent_num < target_num:

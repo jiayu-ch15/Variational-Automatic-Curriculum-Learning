@@ -125,7 +125,7 @@ class node_buffer():
                 agent_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
                 agent_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
                 agent_location = np.array([agent_location_x,agent_location_y])
-                one_starts_landmark.append(copy.deepcopy(agent_location))
+                one_starts_agent.append(copy.deepcopy(agent_location))
             archive.append(one_starts_agent+one_starts_landmark)
             one_starts_agent = []
             one_starts_landmark = []
