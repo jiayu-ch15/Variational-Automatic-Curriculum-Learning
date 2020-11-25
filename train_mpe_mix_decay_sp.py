@@ -613,7 +613,7 @@ def main():
         # reset env 
         # one length = now_process_num
         one_length_last = 0
-        if last_node.agent_num!=0 and last_mean_cover_rate < decay_end:
+        if last_node.agent_num!=0 and last_mean_cover_rate < decay_end and int(args.n_rollout_threads * decay_gamma) > 0:
             if last_mean_cover_rate <= decay_begin:
                 if use_parent_sample:
                     starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive,N_parent)

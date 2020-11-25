@@ -95,9 +95,9 @@ class node_buffer():
         return archive
 
     def produce_good_case_grid(self, num_case, start_boundary,now_agent_num, now_box_num):
-        # agent_size=0.2, ball_size=0.2,landmark_size=0.3
+        # agent_size=0.2, ball_size=0.2,landmark_size=0.2
         # box在内侧，agent在start_boundary和start_boundary_agent之间
-        cell_size = 0.3
+        cell_size = 0.2
         grid_num = int(start_boundary * 2 / cell_size) + 1
         assert grid_num ** 2 >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num,grid_num))
@@ -540,7 +540,7 @@ def main():
     N_child = 325
     N_archive = 150
     N_parent = 25
-    max_step = 0.2
+    max_step = 0.4
     TB = 1
     M = N_child
     Rmin = 0.5
@@ -1201,6 +1201,8 @@ def main():
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
+            if now_node.agent_num==4:
+                agents.num_mini_batch = 16
 
 
         total_num_steps = current_timestep

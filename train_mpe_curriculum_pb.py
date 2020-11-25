@@ -99,7 +99,7 @@ class node_buffer():
     def produce_good_case_grid(self, num_case, start_boundary, now_agent_num, now_box_num):
         # agent_size=0.2, ball_size=0.2,landmark_size=0.3
         # box在内侧，agent在start_boundary和start_boundary_agent之间
-        cell_size = 0.3
+        cell_size = 0.2
         grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
         init_origin_node = np.array([start_boundary[0],start_boundary[2]])
         assert grid_num ** 2 >= now_agent_num + now_box_num
@@ -557,8 +557,8 @@ def main():
     Rmax = 0.95
     boundary = 2.0
     # start_boundary = 0.3
-    start_boundary = [1.4,2.0,1.4,2.0]
-    # start_boundary = [-0.3,0.3,-0.3,0.3]
+    # start_boundary = [1.4,2.0,1.4,2.0]
+    start_boundary = [-0.3,0.3,-0.3,0.3]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0

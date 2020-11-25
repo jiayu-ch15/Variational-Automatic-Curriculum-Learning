@@ -675,9 +675,9 @@ def main():
     
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
-    use_novelty_sample = True
+    use_novelty_sample = False
     use_parent_sample = False
-    del_switch = 'novelty'
+    del_switch = 'old'
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
