@@ -632,7 +632,7 @@ def main():
     
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
-    use_novelty_sample = True
+    use_novelty_sample = False
     use_parent_sample = False
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
