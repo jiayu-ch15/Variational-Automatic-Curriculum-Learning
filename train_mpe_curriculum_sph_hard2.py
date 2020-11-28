@@ -75,8 +75,8 @@ class node_buffer():
         one_starts_landmark = []
         one_starts_agent = []
         archive = [] 
-        start_boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        start_boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.4,0.4],[-2.9,2.9]]
+        # start_boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        # start_boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.4,0.4],[-2.9,2.9]]
         if init_switch ==0:
             # left room
             start_boundary_x = [-4.9,-3.1]
@@ -111,8 +111,10 @@ class node_buffer():
         archive = [] 
         # boundary_x x轴活动范围
         # boundary_y 是y轴活动范围
-        boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.4,0.4],[-2.9,2.9]]
+        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        # boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.4,0.4],[-2.9,2.9]]
+        boundary_x = [[-4.9,-3.1],[-0.9,0.9],[3.1,4.9]]
+        boundary_y = [[-2.9,2.9],[-2.9,2.9],[-2.9,2.9]]
         for j in range(num_case):
             for i in range(now_agent_num):
                 location_id = np.random.randint(len(boundary_x))
@@ -632,7 +634,7 @@ def main():
     
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
-    use_novelty_sample = False
+    use_novelty_sample = True
     use_parent_sample = False
     del_switch = 'novelty'
     child_novelty_threshold = 0.8

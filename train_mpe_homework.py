@@ -545,8 +545,8 @@ def main():
     Rmax = 0.95
     boundary = 3
     start_boundary = 0.3
-    # start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
-    start_boundary = [2.4,3.0,2.4,3.0]
+    start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
+    # start_boundary = [2.4,3.0,2.4,3.0]
     max_step = 0.6
     N_easy = 0
     test_flag = 0

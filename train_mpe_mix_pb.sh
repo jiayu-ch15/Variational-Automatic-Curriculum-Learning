@@ -17,4 +17,4 @@ echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
 #     echo "training is done!"
 # done
 seed=3
-CUDA_VISIBLE_DEVICES=3 python train_mpe_mix_pb.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 1 --episode_length 120 --num_env_steps 100000000 --ppo_epoch 15 --recurrent_policy --use_popart
+CUDA_VISIBLE_DEVICES=1 python train_mpe_mix_pb.py --env_name ${env} --algorithm_name ${algo} --scenario_name ${scenario} --num_agents ${num_agents} --num_landmarks ${num_landmarks} --seed ${seed} --n_rollout_threads 500 --num_mini_batch 1 --episode_length 120 --num_env_steps 200000000 --ppo_epoch 15 --recurrent_policy --use_popart
