@@ -20,17 +20,13 @@ class Scenario(BaseScenario):
                 Wall(orient='H', axis_pos=-4.5, endpoints=(-6, 6),width=3.0, hard=True),
                 Wall(orient='H', axis_pos=4.5, endpoints=(-6, 6),width=3.0,hard=True),
                 # up left wall
-                Wall(orient='V', axis_pos=-2, endpoints=(0.15, 3), width=2, hard=True),
-                # Wall(orient='H', axis_pos=4.35, endpoints=(-3, -1), width=2.75, hard=True),
-                # up right wall
-                Wall(orient='V', axis_pos=2, endpoints=(0.5, 3), width=2, hard=True),
-                # Wall(orient='H', axis_pos=4.35, endpoints=(1, 3), width=2.75, hard=True),
+                Wall(orient='V', axis_pos=-2, endpoints=(2.15, 3), width=2, hard=True),
                 # down left wall
-                Wall(orient='V', axis_pos=-2, endpoints=(-3, -0.15), width=2, hard=True),
-                # Wall(orient='H', axis_pos=-1.625, endpoints=(-1.5, -0.75), width=2.75, hard=True),
+                Wall(orient='V', axis_pos=-2, endpoints=(-3, 1.85), width=2, hard=True),
+                # up right wall
+                Wall(orient='V', axis_pos=2, endpoints=(-1.85, 3), width=2, hard=True),
                 # down right wall
-                Wall(orient='V', axis_pos=2, endpoints=(-3, -0.5), width=2, hard=True)
-                # Wall(orient='H', axis_pos=-1.625, endpoints=(0.75, 1.5), width=2.75, hard=True),
+                Wall(orient='V', axis_pos=2, endpoints=(-3, -2.15), width=2, hard=True)
                 ]
         # add agents
         world.agents = [Agent() for i in range(num_agents)]
