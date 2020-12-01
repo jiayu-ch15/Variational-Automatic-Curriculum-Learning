@@ -363,7 +363,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    run = wandb.init(project='phase_pb')
+    run = wandb.init(project='phase_pb',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -444,7 +444,7 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix4n8_pb/run%i/models/agent_model.pt'%args.seed)['model'].to(device)
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix4n8_pb/run%i/models/2box_model.pt'%(args.seed+9))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -541,15 +541,15 @@ def main():
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = 2
-    start_boundary = 0.3
+    boundary = 2.0
+    start_boundary = 1.0
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.95
     target_num = 4
     last_box_num = 0
-    now_box_num = 2
+    now_box_num = 4
     now_agent_num = now_box_num
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
@@ -559,7 +559,7 @@ def main():
     historical_length = 5
     next_stage_flag = 0
     frozen_epoch = 6
-    frozen_count = 6
+    frozen_count = 0
     initial_optimizer = False
     eval_flag = False
     random.seed(args.seed)
@@ -863,10 +863,7 @@ def main():
         actor_critic.boxes_num = now_node.box_num
         if episode % check_frequency==0 or eval_flag:
             obs, _ = envs.reset(now_node.agent_num,now_node.box_num)
-            if now_node.box_num == 2:
-                episode_length = 120
-            else:
-                episode_length = 200
+            episode_length = 120
             #replay buffer
             rollouts = RolloutStorage_share(now_node.agent_num,
                         episode_length, 

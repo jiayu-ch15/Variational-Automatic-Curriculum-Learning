@@ -71,28 +71,17 @@ class node_buffer():
         self.topk = 5
 
     def produce_good_case_H(self, num_case, now_agent_num): # 产生H_map的初始态
-        init_switch = 2 # 0 left, 1 right, 2 mid
         one_starts_landmark = []
         one_starts_agent = []
         archive = [] 
-        # start_boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        # start_boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.4,0.4],[-2.9,2.9]]
-        if init_switch ==0:
-            # left room
-            start_boundary_x = [-4.9,-3.1]
-            start_boundary_y = [-2.9,2.9]
-        elif init_switch==1:
-            # right room
-            start_boundary_x = [3.1,4.9]
-            start_boundary_y = [-2.9,2.9]
-        elif init_switch==2:
-            # middle room
-            start_boundary_x = [-0.9,0.9]
-            start_boundary_y = [-2.9,2.9]
+        # easy goal是landmark和agent都在mid、right两个房间，landmark和agent在一起
+        start_boundary_x = [[-0.9,0.9],[3.1,4.9]]
+        start_boundary_y = [[-2.9,2.9],[-2.9,2.9]]
         for j in range(num_case):
             for i in range(now_agent_num):
-                landmark_location_x = np.random.uniform(start_boundary_x[0],start_boundary_x[1])
-                landmark_location_y = np.random.uniform(start_boundary_y[0],start_boundary_y[1])
+                location_id = np.random.randint(len(start_boundary_x))
+                landmark_location_x = np.random.uniform(start_boundary_x[location_id][0],start_boundary_x[location_id][1])
+                landmark_location_y = np.random.uniform(start_boundary_y[location_id][0],start_boundary_y[location_id][1])
                 landmark_location = np.array([landmark_location_x,landmark_location_y])
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
             indices = random.sample(range(now_agent_num), now_agent_num)
@@ -102,7 +91,6 @@ class node_buffer():
             archive.append(one_starts_agent+one_starts_landmark)
             one_starts_agent = []
             one_starts_landmark = []
-
         return archive
 
     def produce_uniform_case_H(self, num_case, now_agent_num): # 产生H_map的随机态
@@ -111,21 +99,22 @@ class node_buffer():
         archive = [] 
         # boundary_x x轴活动范围
         # boundary_y 是y轴活动范围
-        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        # boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.4,0.4],[-2.9,2.9]]
-        boundary_x = [[-4.9,-3.1],[-0.9,0.9],[3.1,4.9]]
-        boundary_y = [[-2.9,2.9],[-2.9,2.9],[-2.9,2.9]]
+        # agent只能在left room出发，目标点在mid and right room
+        boundary_x_agent = [[-4.9,-3.1]]
+        boundary_y_agent = [[-2.9,2.9]]
+        boundary_x_landmark = [[-0.9,0.9],[3.1,4.9]]
+        boundary_y_landmark = [[-2.9,2.9],[-2.9,2.9]]
         for j in range(num_case):
             for i in range(now_agent_num):
-                location_id = np.random.randint(len(boundary_x))
-                landmark_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
-                landmark_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
+                location_id = np.random.randint(len(boundary_x_landmark))
+                landmark_location_x = np.random.uniform(boundary_x_landmark[location_id][0],boundary_x_landmark[location_id][1])
+                landmark_location_y = np.random.uniform(boundary_y_landmark[location_id][0],boundary_y_landmark[location_id][1])
                 landmark_location = np.array([landmark_location_x,landmark_location_y])
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
             for i in range(now_agent_num):
-                location_id = np.random.randint(len(boundary_x))
-                agent_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
-                agent_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
+                location_id = np.random.randint(len(boundary_x_agent))
+                agent_location_x = np.random.uniform(boundary_x_agent[location_id][0],boundary_x_agent[location_id][1])
+                agent_location_y = np.random.uniform(boundary_y_agent[location_id][0],boundary_y_agent[location_id][1])
                 agent_location = np.array([agent_location_x,agent_location_y])
                 one_starts_agent.append(copy.deepcopy(agent_location))
             archive.append(one_starts_agent+one_starts_landmark)
@@ -154,7 +143,7 @@ class node_buffer():
 
     def SampleNearby_novelty_H(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
         boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.4,0.4],[-2.9,2.9]]
+        boundary_y = [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
         
         if len(self.parent_all) > self.topk + 1:
             self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
@@ -207,7 +196,7 @@ class node_buffer():
 
     def SampleNearby_H(self,starts):
         boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.4,0.4],[-2.9,2.9]]
+        boundary_y = [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
         starts = starts + []
         len_start = len(starts)
         starts_new = []
@@ -587,9 +576,9 @@ def main():
     
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
-    use_novelty_sample = False
+    use_novelty_sample = True
     use_parent_sample = False
-    del_switch = 'old'
+    del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度

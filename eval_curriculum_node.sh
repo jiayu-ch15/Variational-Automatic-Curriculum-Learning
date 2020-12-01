@@ -5,7 +5,7 @@ scenario="simple_spread_3rooms_hard2"
 # scenario="push_ball"
 num_landmarks=2
 num_agents=2
-algo="diversified_novelty_mid_sp3_hard2"
+algo="diversified_novelty_agentleft_landmarkmidright_sp3"
 seed_max=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"
