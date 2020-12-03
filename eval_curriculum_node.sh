@@ -1,11 +1,11 @@
 #!/bin/sh
 ulimit -n 4096 
 env="MPE"
-scenario="simple_spread_3rooms_hard2"
+scenario="simple_spread_3rooms_leftup_rightdown"
 # scenario="push_ball"
 num_landmarks=2
 num_agents=2
-algo="diversified_novelty_agentleft_landmarkmidright_sp3"
+algo="diversified_novelty_sp3_leftup_rightdown"
 seed_max=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"
