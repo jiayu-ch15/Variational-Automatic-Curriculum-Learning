@@ -596,11 +596,13 @@ def main():
         # reproduction_num should be changed
         if last_mean_cover_rate <= decay_begin:
             last_node.reproduction_num = N_child
+            decay_gamma = 1
         elif last_mean_cover_rate > decay_begin and last_mean_cover_rate < decay_end:
             decay_gamma = (last_mean_cover_rate-decay_end) / (decay_begin-decay_end)
             last_node.reproduction_num = int(N_child*decay_gamma)
         else:
             last_node.reproduction_num = N_child
+            decay_gamma = 1
         
         # reproduction
         if use_novelty_sample:
@@ -613,7 +615,6 @@ def main():
             now_node.childlist += now_node.SampleNearby(now_node.parent)
         
         # reset env 
-        # one length = now_process_num
         one_length_last = 0
         if last_node.agent_num!=0 and last_mean_cover_rate < decay_end and int(args.n_rollout_threads * decay_gamma) > 0 and mix_flag:
             if last_mean_cover_rate <= decay_begin:
@@ -636,7 +637,7 @@ def main():
 
         for times in range(eval_frequency):
             # last_node
-            if last_node.agent_num!=0 and last_mean_cover_rate < decay_end:
+            if last_node.agent_num!=0 and last_mean_cover_rate < decay_end and int(args.n_rollout_threads * decay_gamma) > 0 and mix_flag:
                 actor_critic.agents_num = last_node.agent_num
                 obs = envs.new_starts_obs(starts_last, last_node.agent_num, starts_length_last)
                 #replay buffer
@@ -782,7 +783,7 @@ def main():
                 # import pdb;pdb.set_trace()
                 wandb.log({str(last_node.agent_num)+'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
                 wandb.log({str(last_node.agent_num)+'training_success_rate': np.mean(np.mean(step_success[:,-historical_length:],axis=1))}, current_timestep)
-                # print(str(last_node.agent_num) + 'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+                print(str(last_node.agent_num) + 'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
                 wandb.log({str(last_node.agent_num)+'train_collision_num': np.mean(step_collision_num)},current_timestep)
                 current_timestep += args.episode_length * starts_length_last
                 last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)

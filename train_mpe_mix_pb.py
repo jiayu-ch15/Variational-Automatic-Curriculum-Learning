@@ -560,7 +560,7 @@ def main():
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 5
-    save_node_flag = True
+    save_node_flag = False
     historical_length = 5
     next_stage_flag = 0
     random.seed(args.seed)
@@ -1037,7 +1037,7 @@ def main():
             actor_critic.agents_num = now_node.agent_num
             actor_critic.boxes_num = now_node.box_num
             obs, _ = envs.reset(now_node.agent_num,now_node.box_num)
-            episode_length = 120
+            episode_length = 200
             #replay buffer
             rollouts = RolloutStorage_share(now_node.agent_num,
                         episode_length, 
@@ -1166,11 +1166,9 @@ def main():
                                 np.array(values[agent_id]),
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
-            # import pdb;pdb.set_trace()
-            wandb.log({'%icover_rate'%now_node.agent_num: np.mean(infos)}, current_timestep)
-            mean_cover_rate = np.mean(infos)
-            print('test_agent_num: ', now_node.agent_num)
-            print('test_mean_cover_rate: ', mean_cover_rate)
+            wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            mean_cover_rate = np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))
+            print(str(now_node.agent_num) + 'test_mean_cover_rate: ', mean_cover_rate)
         
         if mean_cover_rate > upper_bound and now_node.agent_num < target_num:
             mean_cover_rate = 0
