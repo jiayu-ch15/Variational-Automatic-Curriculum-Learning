@@ -229,6 +229,7 @@ def main():
         eval_recurrent_hidden_states = np.zeros((num_agents,args.hidden_size)).astype(np.float32)
         eval_recurrent_hidden_states_critic = np.zeros((num_agents,args.hidden_size)).astype(np.float32)
         eval_masks = np.ones((num_agents,1)).astype(np.float32)
+        step_cover_rate = np.zeros(shape=(args.episode_length))
         
         for step in range(args.episode_length): 
             calc_start = time.time()              
@@ -268,7 +269,7 @@ def main():
                     
             # Obser reward and next obs
             eval_obs, eval_rewards, eval_dones, eval_infos, _ = eval_env.step(eval_actions_env)
-            # print('reward: ', eval_rewards)
+            step_cover_rate[step] = eval_infos[0]
             eval_obs = np.array(eval_obs)
             eval_share_obs = eval_obs.reshape(1, -1)
             
@@ -279,8 +280,8 @@ def main():
                 elapsed = calc_end - calc_start
                 if elapsed < args.ifi:
                     time.sleep(ifi - elapsed)
-        print('cover_rate: ', np.mean(eval_infos))
-        cover_rate += np.mean(eval_infos)                      
+        print('cover_rate: ', np.mean(step_cover_rate[-5:]))
+        cover_rate += np.mean(step_cover_rate[-5:])                     
         if args.save_gifs:
             gif_num = 0
             imageio.mimsave(str(gifs_dir / args.scenario_name) + '_%i.gif' % gif_num,

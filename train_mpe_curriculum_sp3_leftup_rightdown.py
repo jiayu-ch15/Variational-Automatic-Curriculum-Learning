@@ -285,6 +285,11 @@ class node_buffer():
             self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child + N_archive + N_parent - len(self.choose_archive_index)-len(self.choose_parent_index)))
         if len(self.choose_child_index) < N_child:
             self.choose_parent_index = random.sample(range(len(self.parent_all)), min(len(self.parent_all), N_child + N_archive + N_parent - len(self.choose_archive_index)-len(self.choose_child_index)))
+        # fix the thread problem
+        tmp_index_length = len(self.choose_archive_index) + len(self.choose_child_index) + len(self.choose_parent_index)
+        sum_N = N_child + N_archive + N_parent
+        if  tmp_index_length < sum_N:
+            self.choose_parent_index += random.sample(range(len(self.parent_all)),min(len(self.parent_all), sum_N - tmp_index_length))
         self.choose_child_index = np.sort(self.choose_child_index)
         self.choose_archive_index = np.sort(self.choose_archive_index)
         self.choose_parent_index = np.sort(self.choose_parent_index)
@@ -578,7 +583,7 @@ def main():
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
     use_novelty_sample = True
-    use_parent_sample = False
+    use_parent_sample = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
