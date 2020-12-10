@@ -4,10 +4,9 @@ env="MPE"
 scenario="push_ball"
 num_landmarks=2
 num_agents=2
-# algo="diversified_novelty_parentsampling_pb"
-algo='diversified_novelty_parentsampling_badinit_pb'
+algo="queue_pb_eval1"
 # algo='check'
-seed=2
+seed=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
 

@@ -178,7 +178,7 @@ class node_buffer():
 
     def novelty_sort(self, buffer, buffer_novelty):
         zipped = zip(buffer,buffer_novelty)
-        sort_zipped = sorted(zipped,key=lambda x:(x[1],x[0]))
+        sort_zipped = sorted(zipped,key=lambda x:(x[1],np.mean(x[0])))
         result = zip(*sort_zipped)
         buffer_new, buffer_novelty_new = [list(x) for x in result]
         return buffer_new, buffer_novelty_new
@@ -472,7 +472,7 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
-        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_4boxlength200_pb/run%i/models/2box_model.pt'%(args.seed))['model'].to(device)
+        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_4boxlength200_pb/run3/models/2box_model.pt')['model'].to(device)
         actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/phase_pb_0.98/run1/models/2box_model.pt')['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
@@ -615,6 +615,8 @@ def main():
     # actor_critic.agents_num = now_node.agent_num
     agents.actor_critic = actor_critic
     for episode in range(episodes):
+        now_node.agent_num = 4
+        now_node.box_num = 4
         if not eval_flag:
             print('now_box_num: ', now_node.box_num)
             if args.use_linear_lr_decay:# decrease learning rate linearly

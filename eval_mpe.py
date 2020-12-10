@@ -151,22 +151,100 @@ def produce_good_case_grid_pb(num_case, start_boundary, now_agent_num, now_box_n
         one_starts_box = []
     return archive
 
-def produce_uniform_case(num_case, boundary, now_agent_num):
+def produce_uniform_case_grid(num_case, start_boundary, now_agent_num):
+    # agent_size=0.1
+    cell_size = 0.2
+    grid_num = int(start_boundary * 2 / cell_size)
+    grid = np.zeros(shape=(grid_num,grid_num))
     one_starts_landmark = []
     one_starts_agent = []
+    one_starts_agent_grid = []
+    one_starts_landmark_grid = []
     archive = [] 
     for j in range(num_case):
         for i in range(now_agent_num):
-            landmark_location = np.random.uniform(-boundary, +boundary, 2)  
-            one_starts_landmark.append(copy.deepcopy(landmark_location))
+            while 1:
+                agent_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                    continue
+                else:
+                    grid[agent_location_grid[0],agent_location_grid[1]] = 1
+                    one_starts_agent_grid.append(copy.deepcopy(agent_location_grid))
+                    agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
+                    one_starts_agent.append(copy.deepcopy(agent_location))
+                    break
         for i in range(now_agent_num):
-            agent_location = np.random.uniform(-boundary, +boundary, 2)
-            one_starts_agent.append(copy.deepcopy(agent_location))
+            while 1:
+                landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
+                    continue
+                else:
+                    grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
+                    one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
+                    landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size])-start_boundary
+                    one_starts_landmark.append(copy.deepcopy(landmark_location))
+                    break
+        # select_starts.append(one_starts_agent+one_starts_landmark)
         archive.append(one_starts_agent+one_starts_landmark)
+        grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_agent = []
+        one_starts_agent_grid = []
+        one_starts_landmark_grid
         one_starts_landmark = []
     return archive
 
+def produce_uniform_case_grid_pb(num_case, start_boundary, now_agent_num, now_box_num):
+    # agent_size=0.2, ball_size=0.2,landmark_size=0.3
+    # box在内侧，agent在start_boundary和start_boundary_agent之间
+    cell_size = 0.2
+    grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
+    init_origin_node = np.array([start_boundary[0],start_boundary[2]])
+    assert grid_num ** 2 >= now_agent_num + now_box_num
+    grid = np.zeros(shape=(grid_num,grid_num))
+    one_starts_landmark = []
+    one_starts_agent = []
+    one_starts_box = []
+    one_starts_box_grid = []
+    one_starts_landmark_grid = []
+    one_starts_agent_grid = []
+    archive = [] 
+    for j in range(num_case):
+        for i in range(now_box_num):
+            while 1:
+                landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
+                    continue
+                else:
+                    grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
+                    # box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
+                    landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                    one_starts_landmark.append(copy.deepcopy(landmark_location))
+                    one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
+                    break
+        for i in range(now_box_num):
+            while 1:
+                box_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                if grid[box_location_grid[0],box_location_grid[1]]==1:
+                    continue
+                else:
+                    grid[box_location_grid[0],box_location_grid[1]] = 1
+                    # box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
+                    box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                    one_starts_box.append(copy.deepcopy(box_location))
+                    one_starts_box_grid.append(copy.deepcopy(box_location_grid))
+                    break
+        for i in range(now_agent_num):
+            agent_location = np.random.uniform(start_boundary[0], start_boundary[1], 2)
+            one_starts_agent.append(copy.deepcopy(agent_location))
+        # select_starts.append(one_starts_agent+one_starts_landmark)
+        archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
+        grid = np.zeros(shape=(grid_num,grid_num))
+        one_starts_agent = []
+        one_starts_landmark = []
+        one_starts_box = []
+        one_starts_box_grid = []
+        one_starts_landmark_grid = []
+    return archive
 
 def main():
     args = get_config()

@@ -95,8 +95,8 @@ class node_buffer():
             one_starts_landmark = []
             one_starts_box = []
         return archive
-
-    def produce_good_case_grid(self, num_case, start_boundary, now_agent_num, now_box_num):
+    
+    def produce_good_case_grid(self,num_case, start_boundary, now_agent_num, now_box_num):
         # agent_size=0.2, ball_size=0.2,landmark_size=0.3
         # box在内侧，agent在start_boundary和start_boundary_agent之间
         cell_size = 0.2
@@ -107,19 +107,9 @@ class node_buffer():
         one_starts_landmark = []
         one_starts_agent = []
         one_starts_box = []
+        one_starts_box_grid = []
         archive = [] 
         for j in range(num_case):
-            for i in range(now_agent_num):
-                while 1:
-                    agent_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    if grid[agent_location_grid[0],agent_location_grid[1]]==1:
-                        continue
-                    else:
-                        grid[agent_location_grid[0],agent_location_grid[1]] = 1
-                        # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
-                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
-                        one_starts_agent.append(copy.deepcopy(agent_location))
-                        break
             for i in range(now_box_num):
                 while 1:
                     box_location_grid = np.random.randint(0, grid.shape[0], 2) 
@@ -130,19 +120,49 @@ class node_buffer():
                         # box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
                         box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size]) + init_origin_node
                         one_starts_box.append(copy.deepcopy(box_location))
+                        one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                         break
             indices = random.sample(range(now_box_num), now_box_num)
             for k in indices:
-                epsilons = np.array([[-0.3,0],[0.3,0],[0,-0.3],[0,0.3],[0.3,0.3],[0.3,-0.3],[-0.3,0.3],[-0.3,-0.3]])
-                epsilon = epsilons[np.random.randint(0,8)]
+                delta_x_direction = random.sample([-1,0,1],1)[0]
+                delta_y_direction = random.sample([-1,0,1],1)[0]
+                epsilon_x = cell_size * delta_x_direction
+                epsilon_y = cell_size * delta_y_direction
                 noise = -2 * 0.01 * random.random() + 0.01
-                one_starts_landmark.append(copy.deepcopy(one_starts_box[k]+epsilon+noise))
+                box_location = np.array([one_starts_box[k][0]+epsilon_x+noise,one_starts_box[k][1]+epsilon_y+noise])
+                one_starts_landmark.append(copy.deepcopy(box_location))
+            # agent_location
+            indices_agent = random.sample(range(now_box_num), now_box_num)
+            num_try = 0
+            num_tries = 20
+            around = 1
+            for k in indices_agent:
+                while num_try < num_tries:
+                    delta_x_direction = random.randint(-around,around)
+                    delta_y_direction = random.randint(-around,around)
+                    agent_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
+                    agent_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
+                    agent_location_grid = np.array([agent_location_x,agent_location_y])
+                    if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                        num_try += 1
+                        if num_try >= num_tries and around==1:
+                            around = 2
+                            num_try = 0
+                        assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
+                        continue
+                    else:
+                        grid[agent_location_grid[0],agent_location_grid[1]] = 1
+                        # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
+                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                        one_starts_agent.append(copy.deepcopy(agent_location))
+                        break
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
             one_starts_agent = []
             one_starts_landmark = []
             one_starts_box = []
+            one_starts_box_grid = []
         return archive
 
     def get_novelty(self,list1,list2):
@@ -159,7 +179,7 @@ class node_buffer():
 
     def novelty_sort(self, buffer, buffer_novelty):
         zipped = zip(buffer,buffer_novelty)
-        sort_zipped = sorted(zipped,key=lambda x:(x[1],x[0]))
+        sort_zipped = sorted(zipped,key=lambda x:(x[1],np.mean(x[0])))
         result = zip(*sort_zipped)
         buffer_new, buffer_novelty_new = [list(x) for x in result]
         return buffer_new, buffer_novelty_new
@@ -245,6 +265,11 @@ class node_buffer():
             self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child + N_archive + N_parent - len(self.choose_archive_index)-len(self.choose_parent_index)))
         if len(self.choose_child_index) < N_child:
             self.choose_parent_index = random.sample(range(len(self.parent_all)), min(len(self.parent_all), N_child + N_archive + N_parent - len(self.choose_archive_index)-len(self.choose_child_index)))
+        # fix the thread problem
+        tmp_index_length = len(self.choose_archive_index) + len(self.choose_child_index) + len(self.choose_parent_index)
+        sum_N = N_child + N_archive + N_parent
+        if  tmp_index_length < sum_N:
+            self.choose_parent_index += random.sample(range(len(self.parent_all)),min(len(self.parent_all), sum_N - tmp_index_length))
         self.choose_child_index = np.sort(self.choose_child_index)
         self.choose_archive_index = np.sort(self.choose_archive_index)
         self.choose_parent_index = np.sort(self.choose_parent_index)
@@ -538,9 +563,9 @@ def main():
     use_parent_novelty = False # 关闭
     use_child_novelty = False # 关闭
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
-    use_novelty_sample = True
-    use_parent_sample = True
-    del_switch = 'novelty'
+    use_novelty_sample = False
+    use_parent_sample = False
+    del_switch = 'old'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
@@ -550,14 +575,12 @@ def main():
         N_parent = 0
     N_archive = 150
     N_child = args.n_rollout_threads - N_archive - N_parent
-    max_step = 0.2
+    max_step = 0.4
     TB = 1
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    # start_boundary = 0.3
-    # start_boundary = [1.4,2.0,1.4,2.0]
     start_boundary = [-0.3,0.3,-0.3,0.3]
     N_easy = 0
     test_flag = 0
@@ -566,10 +589,10 @@ def main():
     last_box_num = 2
     now_agent_num = num_agents
     mean_cover_rate = 0
-    eval_frequency = 3 #需要fix几个回合
+    eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 5
-    save_node_flag = True
+    save_node_flag = False
     save_90_flag = True
     historical_length = 5
     random.seed(args.seed)
@@ -746,7 +769,7 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            wandb.log({'training_cover_rate': np.mean(infos)}, current_timestep)
+            wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             curriculum_episode += 1
             current_timestep += args.episode_length * starts_length
             last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
@@ -798,7 +821,7 @@ def main():
                 for i in range(rollouts.rewards.shape[1]):
                     rew.append(np.sum(rollouts.rewards[:,i]))
                 wandb.log(
-                    {'average_episode_reward': np.mean(rew)},
+                    {'train_average_episode_reward': np.mean(rew)},
                     current_timestep)
                 # clean the buffer and reset
                 rollouts.after_update()
@@ -818,7 +841,7 @@ def main():
                     for i in range(rollouts[agent_id].rewards.shape[1]):
                         rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
                     wandb.log(
-                        {'average_episode_reward': np.mean(rew)},
+                        {'train_average_episode_reward': np.mean(rew)},
                         (episode+1) * args.episode_length * starts_length*eval_frequency)
                     
                     rollouts[agent_id].after_update()
