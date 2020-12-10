@@ -472,8 +472,8 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
-        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_4boxlength200_pb/run3/models/2box_model.pt')['model'].to(device)
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/phase_pb_0.98/run1/models/2box_model.pt')['model'].to(device)
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_4boxlength200_pb/run3/models/2box_model.pt')['model'].to(device)
+        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/phase_pb_0.98/run1/models/2box_model.pt')['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -575,8 +575,8 @@ def main():
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    upper_bound = 0.98
-    target_num = 4
+    upper_bound = 0.9
+    target_num = 12
     last_box_num = 0
     now_box_num = 4
     now_agent_num = now_box_num
@@ -1039,7 +1039,10 @@ def main():
                     torch.save({'model': actor_critic}, str(save_dir) + "/%ibox_model.pt"%now_node.box_num)
         if next_stage_flag==1:
             next_stage_flag = 0
-            start_boundary = [-0.6,0.6,-0.6,0.6]
+            if now_agent_num==4:
+                start_boundary = [-0.6,0.6,-0.6,0.6]
+            elif now_agent_num>=8:
+                start_boundary = [-0.8,0.8,-0.8,0.8]
             now_node = node_buffer(now_agent_num, now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,

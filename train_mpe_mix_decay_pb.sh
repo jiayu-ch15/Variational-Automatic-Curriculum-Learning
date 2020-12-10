@@ -4,9 +4,7 @@ env="MPE"
 scenario="push_ball"
 num_landmarks=2
 num_agents=2
-algo="mix2n4_mix_decay_pb_check_2agentdown"
-# algo='check'
-seed=1
+algo="mix2n4_mix_decay_pb_true"
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
 

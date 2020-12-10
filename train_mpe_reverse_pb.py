@@ -384,12 +384,13 @@ class node_buffer():
         for i in range(one_length):
             if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
                 self.add_child.append(copy.deepcopy(self.childlist[i]))
+            elif self.eval_score[i]>Rmax:
+                self.parent_all.append(copy.deepcopy(self.childlist[i]))
         self.childlist = copy.deepcopy(self.add_child)
         self.archive += self.childlist
         if len(self.archive) > self.buffer_length:
             if del_switch=='novelty' : # novelty del
                 self.archive_novelty = self.get_novelty(self.archive,self.archive)
-                pdb.set_trace()
                 self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
             elif del_switch=='random': # random del
@@ -601,10 +602,10 @@ def main():
     
     use_parent_novelty = False
     use_child_novelty = False
-    use_novelty_sample = False
+    use_novelty_sample = True
     use_parent_sample = False
     use_reverse_goal = True
-    del_switch = 'novelty'
+    del_switch = 'old'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
@@ -655,11 +656,10 @@ def main():
             else:     
                 for agent_id in range(num_agents):
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
-
         # reproduction
         if use_reverse_goal:
             if use_novelty_sample:
-                last_node.childlist += last_node.SampleNearby_novelty(last_node.childlist, child_novelty_threshold, logger, current_timestep)
+                last_node.childlist = last_node.SampleNearby_novelty(last_node.childlist, child_novelty_threshold, logger, current_timestep)
             else:
                 last_node.childlist = last_node.SampleNearby(last_node.childlist)
         else:
@@ -667,7 +667,6 @@ def main():
                 last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
             else:
                 last_node.childlist += last_node.SampleNearby(last_node.parent)
-        
         # reset env 
         # one length = now_process_num
         if use_reverse_goal:
