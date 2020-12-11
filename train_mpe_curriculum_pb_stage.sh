@@ -5,7 +5,7 @@ scenario="push_ball"
 num_landmarks=2
 num_agents=2
 num_boxes=2
-algo='phase_pb_4agent0.9_8agent_12agent'
+algo='phase_pb_4agent0.9_8agent_12agent_start1.0'
 # algo='check'
 seed_max=1
 

@@ -107,26 +107,20 @@ def produce_hard_case(num_case, boundary, now_agent_num):
         one_starts_landmark = []
     return archive
 
-def produce_good_case_grid_pb(num_case, start_boundary, now_agent_num, now_box_num):
-    # agent_size=0.2, ball_size=0.3,landmark_size=0.3
-    cell_size = 0.3
-    grid_num = int(start_boundary * 2 / cell_size)
+def produce_good_case_grid(num_case, start_boundary, now_agent_num, now_box_num):
+    # agent_size=0.2, ball_size=0.2,landmark_size=0.3
+    # box在内侧，agent在start_boundary和start_boundary_agent之间
+    cell_size = 0.2
+    grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
+    init_origin_node = np.array([start_boundary[0],start_boundary[2]])
+    assert grid_num ** 2 >= now_agent_num + now_box_num
     grid = np.zeros(shape=(grid_num,grid_num))
     one_starts_landmark = []
     one_starts_agent = []
     one_starts_box = []
+    one_starts_box_grid = []
     archive = [] 
     for j in range(num_case):
-        for i in range(now_agent_num):
-            while 1:
-                agent_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                if grid[agent_location_grid[0],agent_location_grid[1]]==1:
-                    continue
-                else:
-                    grid[agent_location_grid[0],agent_location_grid[1]] = 1
-                    agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
-                    one_starts_agent.append(copy.deepcopy(agent_location))
-                    break
         for i in range(now_box_num):
             while 1:
                 box_location_grid = np.random.randint(0, grid.shape[0], 2) 
@@ -134,21 +128,52 @@ def produce_good_case_grid_pb(num_case, start_boundary, now_agent_num, now_box_n
                     continue
                 else:
                     grid[box_location_grid[0],box_location_grid[1]] = 1
-                    box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
+                    # box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
+                    box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size]) + init_origin_node
                     one_starts_box.append(copy.deepcopy(box_location))
+                    one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                     break
         indices = random.sample(range(now_box_num), now_box_num)
         for k in indices:
-            epsilons = np.array([[-0.3,0],[0.3,0],[0,-0.3],[0,0.3],[0.3,0.3],[0.3,-0.3],[-0.3,0.3],[-0.3,-0.3]])
-            epsilon = epsilons[np.random.randint(0,8)]
+            delta_x_direction = random.sample([-1,0,1],1)[0]
+            delta_y_direction = random.sample([-1,0,1],1)[0]
+            epsilon_x = cell_size * delta_x_direction
+            epsilon_y = cell_size * delta_y_direction
             noise = -2 * 0.01 * random.random() + 0.01
-            one_starts_landmark.append(copy.deepcopy(one_starts_box[k]+epsilon+noise))
+            box_location = np.array([one_starts_box[k][0]+epsilon_x+noise,one_starts_box[k][1]+epsilon_y+noise])
+            one_starts_landmark.append(copy.deepcopy(box_location))
+        # agent_location
+        indices_agent = random.sample(range(now_box_num), now_box_num)
+        num_try = 0
+        num_tries = 20
+        around = 1
+        for k in indices_agent:
+            while num_try < num_tries:
+                delta_x_direction = random.randint(-around,around)
+                delta_y_direction = random.randint(-around,around)
+                agent_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
+                agent_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
+                agent_location_grid = np.array([agent_location_x,agent_location_y])
+                if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                    num_try += 1
+                    if num_try >= num_tries and around==1:
+                        around = 2
+                        num_try = 0
+                    assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
+                    continue
+                else:
+                    grid[agent_location_grid[0],agent_location_grid[1]] = 1
+                    # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
+                    agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                    one_starts_agent.append(copy.deepcopy(agent_location))
+                    break
         # select_starts.append(one_starts_agent+one_starts_landmark)
         archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
         grid = np.zeros(shape=(grid_num,grid_num))
         one_starts_agent = []
         one_starts_landmark = []
         one_starts_box = []
+        one_starts_box_grid = []
     return archive
 
 def produce_uniform_case_grid(num_case, start_boundary, now_agent_num):
@@ -269,8 +294,8 @@ def main():
     
     num_agents = args.num_agents
    
-    actor_critic = torch.load('/home/chenjy/curriculum/results/MPE/simple_spread/check/run10/models/agent_model.pt')['model'].to(device)
-    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_shaped_reward' + '/run2' + "/models/agent_model.pt")['model'].to(device)
+    # actor_critic = torch.load('/home/chenjy/curriculum/results/MPE/simple_spread/check/run10/models/agent_model.pt')['model'].to(device)
+    actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_shaped_reward' + '/run2' + "/models/agent_model.pt")['model'].to(device)
     actor_critic.agents_num = 4
     actor_critic.boxes_num = 4
     num_agents = 4
@@ -288,7 +313,7 @@ def main():
         for i in range(len(archive)):
             archive[i] = np.array(archive[i][1:-2].split(),dtype=float)
 
-    starts = produce_good_case_grid(500,3.0,num_agents)
+    starts = produce_good_case_grid_pb(500,[-0.6,0.6,-0.6,0.6],num_agents,num_boxes)
     for eval_episode in range(args.eval_episodes):
         print(eval_episode)
         eval_env = MPEEnv(args)
@@ -298,10 +323,8 @@ def main():
         
         # eval_obs, _ = eval_env.reset(num_agents,num_boxes)
         # eval_obs, _ = eval_env.reset(num_agents)
-        start = archive[500]
-        start = [np.array([start[0],start[1]]),np.array([start[2],start[3]]),np.array([start[4],start[5]]),np.array([start[6],start[7]]),np.array([start[8],start[9]]),np.array([start[10],start[11]]),np.array([start[12],start[13]]),np.array([start[14],start[15]])]
-        eval_obs = eval_env.new_starts_obs(start,num_agents)
-        # eval_obs = eval_env.new_starts_obs_pb(starts[eval_episode],num_agents,num_boxes)
+        # eval_obs = eval_env.new_starts_obs(start,num_agents)
+        eval_obs = eval_env.new_starts_obs_pb(starts[eval_episode],num_agents,num_boxes)
         eval_obs = np.array(eval_obs)       
         eval_share_obs = eval_obs.reshape(1, -1)
         eval_recurrent_hidden_states = np.zeros((num_agents,args.hidden_size)).astype(np.float32)

@@ -571,7 +571,7 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    start_boundary = [-0.6,0.6,-0.6,0.6]
+    start_boundary = [-1.0,1.0,-1.0,1.0]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
