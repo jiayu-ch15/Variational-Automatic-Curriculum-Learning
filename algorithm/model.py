@@ -958,7 +958,6 @@ class Policy_pb_2(nn.Module): # actor critic 分开
             
         else:
             dist = self.dist(actor_features, available_actions)
-            pdb.set_trace()
     
             if deterministic:
                 action = dist.mode()

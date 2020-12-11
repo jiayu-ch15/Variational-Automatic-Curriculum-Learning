@@ -287,18 +287,22 @@ class node_buffer():
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
 
-    def sample_starts_reverse(self, N_new, N_old):
+    def sample_starts_reverse(self, N_new, N_old, N_parent=0):
+        self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
         if len(self.childlist) < N_new:
-            self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new -len(self.childlist)))
+            self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new + N_parent -len(self.childlist)))
         else:
             self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old))
         self.choose_archive_index = np.sort(self.choose_archive_index)
+        self.choose_parent_index = np.sort(self.choose_parent_index)
         one_length = len(self.childlist) + len(self.choose_archive_index) # 需要搬运的点个数
-        starts_length = len(self.childlist) + len(self.choose_archive_index)
+        starts_length = len(self.childlist) + len(self.choose_archive_index) + len(self.choose_parent_index)
         starts = []
         starts += self.childlist
         for i in range(len(self.choose_archive_index)):
             starts.append(self.archive[self.choose_archive_index[i]])
+        for i in range(len(self.choose_parent_index)):
+            starts.append(self.parent_all[self.choose_parent_index[i]])
         self.childlist = copy.deepcopy(starts)
         
         return starts, one_length, starts_length
@@ -603,14 +607,18 @@ def main():
     use_parent_novelty = False
     use_child_novelty = False
     use_novelty_sample = True
-    use_parent_sample = False
+    use_parent_sample = True
     use_reverse_goal = True
     del_switch = 'old'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
-    N_new = 350
+    N_parent = 25
     N_old = 150
+    if use_parent_sample:
+        N_new = args.n_rollout_threads - N_parent - N_old # 325
+    else:
+        N_new = args.n_rollout_threads - N_old # 350
     max_step = 0.4
     TB = 1
     M = N_new
@@ -670,7 +678,10 @@ def main():
         # reset env 
         # one length = now_process_num
         if use_reverse_goal:
-            starts, one_length, starts_length = last_node.sample_starts_reverse(N_new,N_old)
+            if use_parent_sample:
+                starts, one_length, starts_length = last_node.sample_starts_reverse(N_new,N_old,N_parent)
+            else:
+                starts, one_length, starts_length = last_node.sample_starts_reverse(N_new,N_old)
         else:
             if use_parent_sample:
                 starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)
@@ -763,7 +774,7 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
-                step_cover_rate[:,step] = np.array(infos)[:,0]
+                step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer

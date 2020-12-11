@@ -29,6 +29,7 @@ import random
 import copy
 import matplotlib.pyplot as plt
 import pdb
+import wandb
 np.set_printoptions(linewidth=1000)
 
 
@@ -56,7 +57,6 @@ class node_buffer():
         self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
-        self.add_archive = [] # 上次更新成为archive的点
         self.childlist = []
         self.hardlist = []
         self.parent = []
@@ -75,7 +75,8 @@ class node_buffer():
         archive = [] 
         for j in range(num_case):
             for i in range(now_agent_num):
-                landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2) 
+                # landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2) 
+                landmark_location = np.array([np.random.uniform(start_boundary[0],start_boundary[1]),np.random.uniform(start_boundary[2],start_boundary[3])])
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
             # index_sample = BatchSampler(SubsetRandomSampler(range(now_agent_num)),now_agent_num,drop_last=True)
             indices = random.sample(range(now_agent_num), now_agent_num)
@@ -162,8 +163,7 @@ class node_buffer():
         else:
             novelty_threshold = 0
         # novelty_threshold = child_novelty_threshold
-        writer.add_scalars(str(self.agent_num)+'agent/novelty_threshold',
-                {'novelty_threshold': novelty_threshold},timestep)
+        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -228,35 +228,6 @@ class node_buffer():
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
 
-    def SampleNearby_reverse(self, starts):
-        starts_new = starts + []
-        len_start = len(starts_new)
-        if starts_new==[]:
-            return []
-        else:
-            add_num = 0
-            while add_num < self.reproduction_num:
-                for i in range(len_start):
-                    st = copy.deepcopy(starts[i])
-                    s_len = len(st)
-                    for i in range(s_len):
-                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
-                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
-                        st[i][0] = st[i][0] + epsilon_x
-                        st[i][1] = st[i][1] + epsilon_y
-                        if st[i][0] > self.boundary:
-                            st[i][0] = self.boundary - random.random()*0.01
-                        if st[i][0] < -self.boundary:
-                            st[i][0] = -self.boundary + random.random()*0.01
-                        if st[i][1] > self.boundary:
-                            st[i][1] = self.boundary - random.random()*0.01
-                        if st[i][1] < -self.boundary:
-                            st[i][1] = -self.boundary + random.random()*0.01
-                    starts_new.append(copy.deepcopy(st))
-                    add_num += 1
-            starts_new = random.sample(starts_new, self.reproduction_num)
-            return starts_new
-
     def sample_starts(self, N_child, N_archive, N_parent=0):
         self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
         self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
@@ -282,55 +253,25 @@ class node_buffer():
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
     
-    # def sample_starts_reverse(self, N_new, N_old, n_rollout_threads):
-    #     if len(self.childlist) < N_new:
-    #         self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new -len(self.childlist)))
-    #     else:
-    #         self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old))
-    #     self.choose_archive_index = np.sort(self.choose_archive_index)
-    #     one_length = len(self.childlist) + len(self.choose_archive_index) # 需要搬运的点个数
-    #     starts_length = len(self.childlist) + len(self.choose_archive_index)
-    #     while starts_length < n_rollout_threads:
-    #         self.choose_archive_index = np.concatenate((self.choose_archive_index,self.choose_archive_index))
-    #         starts_length = len(self.childlist) + len(self.choose_archive_index)
-    #     self.choose_archive_index = np.sort(self.choose_archive_index)
-    #     self.choose_archive_index = self.choose_archive_index[0:n_rollout_threads-len(self.childlist)]
-    #     one_length = len(self.childlist) + len(self.choose_archive_index)
-    #     starts_length = len(self.childlist) + len(self.choose_archive_index)
-    #     starts = []
-    #     starts += self.childlist
-    #     for i in range(len(self.choose_archive_index)):
-    #         starts.append(self.archive[self.choose_archive_index[i]])
-    #     self.childlist = copy.deepcopy(starts)
-        
-    #     return starts, one_length, starts_length
-
-    def sample_starts_reverse(self, N_new, N_old, n_rollout_threads):
+    def sample_starts_reverse(self, N_new, N_old, N_parent=0):
+        self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
         if len(self.childlist) < N_new:
-            self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new -len(self.childlist)))
+            self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old + N_new + N_parent -len(self.childlist)))
         else:
             self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_old))
         self.choose_archive_index = np.sort(self.choose_archive_index)
+        self.choose_parent_index = np.sort(self.choose_parent_index)
         one_length = len(self.childlist) + len(self.choose_archive_index) # 需要搬运的点个数
-        starts_length = len(self.childlist) + len(self.choose_archive_index)
+        starts_length = len(self.childlist) + len(self.choose_archive_index) + len(self.choose_parent_index)
         starts = []
         starts += self.childlist
         for i in range(len(self.choose_archive_index)):
             starts.append(self.archive[self.choose_archive_index[i]])
+        for i in range(len(self.choose_parent_index)):
+            starts.append(self.parent_all[self.choose_parent_index[i]])
         self.childlist = copy.deepcopy(starts)
         
         return starts, one_length, starts_length
-
-    def move_nodes_reverse(self, one_length, Rmax, Rmin):
-        self.add_child = []
-        del_archive_num = 0
-        for i in range(one_length):
-            if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
-                self.add_child.append(copy.deepcopy(self.childlist[i]))
-        self.childlist = copy.deepcopy(self.add_child)
-        self.archive += self.childlist
-        if len(self.archive)> self.buffer_length:
-            self.archive = self.archive[len(self.archive)-self.buffer_length:]
 
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
@@ -402,15 +343,37 @@ class node_buffer():
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
         if len(self.parent_all) > self.buffer_length:
             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
-        writer.add_scalars(str(self.agent_num)+'agent/archive',
-                        {'archive_length': len(self.archive)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/childlist',
-                        {'childlist_length': len(self.childlist)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/parentlist',
-                        {'parentlist_length': len(self.parent)},timestep)
-        writer.add_scalars(str(self.agent_num)+'agent/child_drop',
-                        {'drop_num': drop_num},timestep)
-    
+        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
+        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
+        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
+        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
+
+    def move_nodes_reverse(self, one_length, Rmax, Rmin, del_switch):
+        self.add_child = []
+        del_archive_num = 0
+        for i in range(one_length):
+            if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
+                self.add_child.append(copy.deepcopy(self.childlist[i]))
+            elif self.eval_score[i]>Rmax:
+                self.parent_all.append(copy.deepcopy(self.childlist[i]))
+        self.childlist = copy.deepcopy(self.add_child)
+        self.archive += self.childlist
+        if len(self.archive) > self.buffer_length:
+            if del_switch=='novelty' : # novelty del
+                self.archive_novelty = self.get_novelty(self.archive,self.archive)
+                self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
+                self.archive = self.archive[len(self.archive)-self.buffer_length:]
+            elif del_switch=='random': # random del
+                del_num = len(self.archive) - self.buffer_length
+                del_index = random.sample(range(len(self.archive)),del_num)
+                del_index = np.sort(del_index)
+                del_archive_num = 0
+                for i in range(del_num):
+                    del self.archive[del_index[i]-del_archive_num]
+                    del_archive_num += 1
+            else: # old del
+                self.archive = self.archive[len(self.archive)-self.buffer_length:]
+
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
         if self.agent_num!=0:
@@ -442,7 +405,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    
+    run = wandb.init(project='curriculum',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
     # seed
@@ -615,9 +578,12 @@ def main():
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
-    N_new = 300
-    N_old = 200
-    # N_parent = 50
+    N_parent = 25
+    N_old = 150
+    if use_parent_sample:
+        N_new = args.n_rollout_threads - N_parent - N_old # 325
+    else:
+        N_new = args.n_rollout_threads - N_old # 350
     max_step = 0.6
     TB = 1
     M = N_new
@@ -665,7 +631,10 @@ def main():
 
         # reproduction
         if use_reverse_goal:
-            last_node.childlist = last_node.SampleNearby(last_node.childlist)
+            if use_novelty_sample:
+                last_node.childlist = last_node.SampleNearby_novelty(last_node.childlist, child_novelty_threshold, logger, current_timestep)
+            else:
+                last_node.childlist = last_node.SampleNearby(last_node.childlist)
         else:
             if use_novelty_sample:
                 last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
@@ -673,9 +642,11 @@ def main():
                 last_node.childlist += last_node.SampleNearby(last_node.parent)
         
         # reset env 
-        # one length = now_process_num
         if use_reverse_goal:
-            starts, one_length, starts_length = last_node.sample_starts_reverse(N_new,N_old,args.n_rollout_threads)
+            if use_parent_sample:
+                starts, one_length, starts_length = last_node.sample_starts_reverse(N_new,N_old,N_parent)
+            else:
+                starts, one_length, starts_length = last_node.sample_starts_reverse(N_new,N_old)
         else:
             if use_parent_sample:
                 starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)
@@ -813,7 +784,7 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
             current_timestep += args.episode_length * starts_length
             curriculum_episode += 1
@@ -860,14 +831,14 @@ def main():
             if args.share_policy:
                 actor_critic.train()
                 value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
-                logger.add_scalars('value_loss',
+                wandb.log(
                     {'value_loss': value_loss},
                     current_timestep)
                             
                 rew = []
                 for i in range(rollouts.rewards.shape[1]):
                     rew.append(np.sum(rollouts.rewards[:,i]))
-                logger.add_scalars('average_episode_reward',
+                wandb.log(
                     {'average_episode_reward': np.mean(rew)},
                     current_timestep)
                 # clean the buffer and reset
@@ -895,7 +866,7 @@ def main():
 
         # move nodes
         last_node.eval_score = last_node.eval_score / eval_frequency
-        last_node.move_nodes_reverse(one_length, Rmax, Rmin)
+        last_node.move_nodes_reverse(one_length, Rmax, Rmin, del_switch)
         # 需要改路径
         if (episode+1) % save_node_frequency ==0 and save_node_flag:
             last_node.save_node(save_node_dir, episode)
@@ -1034,8 +1005,11 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
-            logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log(
+                {'eval_episode_reward': np.mean(rew)},
+                current_timestep)
+            wandb.log({'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
+            wandb.log({'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
             print('test_agent_num: ', last_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
