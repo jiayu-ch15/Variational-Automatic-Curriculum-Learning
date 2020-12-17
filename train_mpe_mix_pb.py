@@ -616,10 +616,6 @@ def main():
     starts_length_now = args.n_rollout_threads
     current_timestep = 0
 
-    # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix4n8_pb/run1/models/2box_model.pt')['model'].to(device)
-    # actor_critic.agents_num = now_node.agent_num
-    # actor_critic.boxes_num = now_node.box_num
-    # agents.actor_critic = actor_critic
 
     for episode in range(episodes):
         if args.use_linear_lr_decay:# decrease learning rate linearly
@@ -1219,7 +1215,7 @@ def main():
 
         if next_stage_flag==1:
             next_stage_flag = 0
-            start_boundary = [-0.6,0.6,-0.6,0.6]
+            start_boundary = [-1.0,1.0,-1.0,1.0]
             last_node = copy.deepcopy(now_node)
             now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,

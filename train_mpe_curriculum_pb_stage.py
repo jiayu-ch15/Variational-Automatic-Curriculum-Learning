@@ -359,6 +359,7 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
         wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
         wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
+        wandb.log({str(self.agent_num)+'parentall_length': len(self.parent_all)},timestep)
         wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
     
     def save_node(self, dir_path, episode):
@@ -472,7 +473,7 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_4boxlength200_pb/run3/models/2box_model.pt')['model'].to(device)
+        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_4boxlength200_pb/run3/models/agent_model.pt')['model'].to(device)
         # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/phase_pb_0.98/run1/models/2box_model.pt')['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
@@ -571,24 +572,25 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    start_boundary = [-1.0,1.0,-1.0,1.0]
+    # start_boundary = [-1.0,1.0,-1.0,1.0]
+    start_boundary = [-0.3,0.3,-0.3,0.3]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
     target_num = 12
     last_box_num = 0
-    now_box_num = 4
+    now_box_num = 2
     now_agent_num = now_box_num
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
-    save_node_frequency = 5
+    save_node_frequency = 1
     save_node_flag = False
     historical_length = 5
     next_stage_flag = 0
     frozen_epoch = 6
-    frozen_count = 0
+    frozen_count = 6
     initial_optimizer = False
     eval_flag = False
     random.seed(args.seed)
@@ -615,8 +617,6 @@ def main():
     # actor_critic.agents_num = now_node.agent_num
     agents.actor_critic = actor_critic
     for episode in range(episodes):
-        now_node.agent_num = 4
-        now_node.box_num = 4
         if not eval_flag:
             print('now_box_num: ', now_node.box_num)
             if args.use_linear_lr_decay:# decrease learning rate linearly
@@ -1039,10 +1039,8 @@ def main():
                     torch.save({'model': actor_critic}, str(save_dir) + "/%ibox_model.pt"%now_node.box_num)
         if next_stage_flag==1:
             next_stage_flag = 0
-            if now_agent_num==4:
-                start_boundary = [-0.6,0.6,-0.6,0.6]
-            elif now_agent_num>=8:
-                start_boundary = [-0.8,0.8,-0.8,0.8]
+            if now_agent_num>=4:
+                start_boundary = [-1.0,1.0,-1.0,1.0]
             now_node = node_buffer(now_agent_num, now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
@@ -1051,7 +1049,7 @@ def main():
                            boundary=boundary)
             actor_critic.agents_num = now_node.agent_num
             actor_critic.boxes_num = now_node.box_num
-            frozen_count = 0
+            frozen_count = frozen_epoch # without warmup
             if now_node.agent_num==4:
                 agents.num_mini_batch = 8
             elif now_node.agent_num==8:

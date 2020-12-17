@@ -53,7 +53,6 @@ class node_buffer():
     def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
-        pdb.set_trace()
         self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
@@ -553,19 +552,17 @@ def main():
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 3
-    save_node_flag = True
+    save_node_flag = False
     historical_length = 5
     next_stage_flag = 0
     random.seed(args.seed)
     np.random.seed(args.seed)
-    pdb.set_trace()
     last_node = node_buffer(last_agent_num,buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
-    pdb.set_trace()
     now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
@@ -1010,6 +1007,8 @@ def main():
             if args.share_policy:
                 actor_critic.train()
                 if last_node.agent_num!=0:
+                    batch_last = starts_length_last * args.episode_length * last_node.agent_num
+                    batch_now = starts_length_now * args.episode_length * now_node.agent_num
                     value_loss, action_loss, dist_entropy = agents.update_double_share(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
                 else:
                     value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now,False,initial_optimizer=False)
@@ -1220,7 +1219,7 @@ def main():
             print('test_agent_num: ', now_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
         
-        if mean_cover_rate > upper_bound and now_node.agent_num < target_num:
+        if mean_cover_rate >= upper_bound and now_node.agent_num < target_num:
             mean_cover_rate = 0
             last_agent_num = now_node.agent_num
             now_agent_num = min(last_agent_num * 2,target_num)

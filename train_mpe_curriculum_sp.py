@@ -527,9 +527,9 @@ def main():
     
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
-    use_novelty_sample = True
-    use_parent_sample = True
-    del_switch = 'novelty'
+    use_novelty_sample = False
+    use_parent_sample = False
+    del_switch = 'old'
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
@@ -545,8 +545,8 @@ def main():
     Rmax = 0.95
     boundary = 3
     start_boundary = 0.3
-    # start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
-    start_boundary = [2.4,3.0,2.4,3.0]
+    start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
+    # start_boundary = [2.4,3.0,2.4,3.0]
     max_step = 0.6
     N_easy = 0
     test_flag = 0

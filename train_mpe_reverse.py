@@ -167,6 +167,8 @@ class node_buffer():
         parents = parents + []
         len_start = len(parents)
         child_new = []
+        num_try = 0
+        num_tries = 50
         if parents==[]:
             return []
         else:
@@ -192,6 +194,10 @@ class node_buffer():
                         if self.get_novelty([st],self.parent_all) > novelty_threshold:
                             child_new.append(copy.deepcopy(st))
                             add_num += 1
+                        else:
+                            num_try += 1
+                            if num_try > num_tries:
+                                novelty_threshold = 0
                     else:
                         child_new.append(copy.deepcopy(st))
                         add_num += 1
@@ -571,7 +577,7 @@ def main():
     
     use_parent_novelty = False
     use_child_novelty = False
-    use_novelty_sample = False
+    use_novelty_sample = True
     use_parent_sample = False
     use_reverse_goal = True
     del_switch = 'old'
@@ -590,7 +596,7 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = 0.3
+    start_boundary = [-0.3,0.3,-0.3,0.3]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -601,7 +607,7 @@ def main():
     eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 1
-    save_node_flag = True
+    save_node_flag = False
     historical_length = 5
     random.seed(args.seed)
     np.random.seed(args.seed)
@@ -739,7 +745,10 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
-                step_cover_rate[:,step] = np.array(infos)[:,0]
+                cover_rate_list = []
+                for env_id in range(one_length):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                step_cover_rate[:,step] = np.array(cover_rate_list)
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -960,7 +969,10 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
-                test_cover_rate[:,step] = np.array(infos)[:,0]
+                cover_rate_list = []
+                for env_id in range(args.n_rollout_threads):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                test_cover_rate[:,step] = np.array(cover_rate_list)
 
                 # If done then clean the history of observations.
                 # insert data in buffer

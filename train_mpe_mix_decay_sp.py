@@ -551,9 +551,12 @@ def main():
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
-    decay_begin = upper_bound
-    decay_end = upper_bound + 0.05
+    mix_add_frequency = 30 # 改变比例的频率
+    mix_add_count = 0
+    decay_last = 1.0
+    decay_now = 0.1
     mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
+    last_begin_flag = False
     target_num = 8
     last_agent_num = 0
     now_agent_num = 4
@@ -562,7 +565,7 @@ def main():
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 3
-    save_node_flag = True
+    save_node_flag = False
     historical_length = 5
     next_stage_flag = 0
     random.seed(args.seed)
@@ -599,50 +602,70 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction_num should be changed
-        if last_mean_cover_rate <= decay_begin:
-            last_node.reproduction_num = N_child
-            decay_gamma = 1
-        elif last_mean_cover_rate > decay_begin and last_mean_cover_rate < decay_end:
-            decay_gamma = (last_mean_cover_rate-decay_end) / (decay_begin-decay_end)
-            last_node.reproduction_num = int(N_child*decay_gamma)
+        if mix_add_count == mix_add_frequency and mix_flag:
+            mix_add_count = 0
+            decay_now += 0.1
+            decay_now = min(decay_now,1.0)
+            if last_begin_flag:
+                decay_last -= 0.1
+                decay_last = max(decay_last,0.0)
+            # 停止混合
+            if decay_last == 0.0:
+                mix_flag = False
+            # 开始降低last_node比例
+            if decay_now == 1.0:
+                last_begin_flag = True
+                
+        wandb.log({'decay_last': decay_last},current_timestep)
+        wandb.log({'decay_now': decay_now},current_timestep)
+        print('decay_last: ', decay_last)
+        print('decay_now: ', decay_now)
+        print('mix_flag: ',mix_flag)
+        print('count: ', mix_add_count)
+        if mix_flag:
+            last_node.reproduction_num = round(N_child * decay_last)
+            now_node.reproduction_num = round(N_child * decay_now)
         else:
             last_node.reproduction_num = N_child
-            decay_gamma = 1
+            now_node.reproduction_num = N_child
         
         # reproduction
         if use_novelty_sample:
-            if last_node.agent_num!=0 and last_mean_cover_rate < decay_end:
+            if last_node.agent_num!=0:
                 last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
             now_node.childlist += now_node.SampleNearby_novelty(now_node.parent,child_novelty_threshold,logger, current_timestep)
         else:
-            if last_node.agent_num!=0 and last_mean_cover_rate < decay_end:
+            if last_node.agent_num!=0:
                 last_node.childlist += last_node.SampleNearby(last_node.parent)
             now_node.childlist += now_node.SampleNearby(now_node.parent)
         
         # reset env 
         one_length_last = 0
-        if last_node.agent_num!=0 and last_mean_cover_rate < decay_end and int(args.n_rollout_threads * decay_gamma) > 0 and mix_flag:
-            if last_mean_cover_rate <= decay_begin:
-                if use_parent_sample:
-                    starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive,N_parent)
-                else:
-                    starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive)
-            elif last_mean_cover_rate > decay_begin and last_mean_cover_rate < decay_end:
-                if use_parent_sample:
-                    starts_last, one_length_last, starts_length_last = last_node.sample_starts(int(N_child*decay_gamma),int(N_archive*decay_gamma),int(N_parent*decay_gamma))
-                else:
-                    starts_last, one_length_last, starts_length_last = last_node.sample_starts(int(N_child*decay_gamma),int(N_archive*decay_gamma))
+        if last_node.agent_num!=0 and mix_flag:
+            if round(N_child*decay_last) == 0 or round(N_archive*decay_last) ==0 or round(N_parent*decay_last) ==0:
+                mix_flag = False
+            if use_parent_sample:
+                starts_last, one_length_last, starts_length_last = last_node.sample_starts(round(N_child*decay_last),round(N_archive*decay_last),round(N_parent*decay_last))
+            else:
+                starts_last, one_length_last, starts_length_last = last_node.sample_starts(round(N_child*decay_last),round(N_archive*decay_last))
             last_node.eval_score = np.zeros(shape=one_length_last)
-        # starts_now, one_length_now = now_node.sample_starts(N_child,N_archive)
-        if use_parent_sample:
-            starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive,N_parent)
+        if mix_flag:
+            if use_parent_sample:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child*decay_now),round(N_archive*decay_now),round(N_parent*decay_now))
+            else:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child*decay_now),round(N_archive*decay_now))
         else:
-            starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive)
-        now_node.eval_score = np.zeros(shape=one_length_now)    
+            if use_parent_sample:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive,N_parent)
+            else:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive)
+        now_node.eval_score = np.zeros(shape=one_length_now)   
 
         for times in range(eval_frequency):
+            if mix_flag:
+                mix_add_count += 1
             # last_node
-            if last_node.agent_num!=0 and last_mean_cover_rate < decay_end and int(args.n_rollout_threads * decay_gamma) > 0 and mix_flag:
+            if last_node.agent_num!=0 and mix_flag:
                 actor_critic.agents_num = last_node.agent_num
                 obs = envs.new_starts_obs(starts_last, last_node.agent_num, starts_length_last)
                 #replay buffer
@@ -1027,7 +1050,7 @@ def main():
             # one_length需要改, log横坐标需要改
             if args.share_policy:
                 actor_critic.train()
-                if last_node.agent_num!=0 and last_mean_cover_rate < decay_end:
+                if last_node.agent_num!=0 and mix_flag:
                     wandb.log({'Type of agents': 2},current_timestep)
                     value_loss, action_loss, dist_entropy = agents.update_double_share(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
                 else:
@@ -1038,7 +1061,7 @@ def main():
                     current_timestep)
 
                 # clean the buffer and reset
-                if last_node.agent_num!=0 and last_mean_cover_rate < decay_end:
+                if last_node.agent_num!=0 and mix_flag:
                     rollouts_last.after_update()
                 rollouts_now.after_update()
             else: # 需要修改成同时update的版本
@@ -1062,7 +1085,7 @@ def main():
                     rollouts[agent_id].after_update()
 
         # move nodes
-        if last_node.agent_num!=0 and last_mean_cover_rate < decay_end:
+        if last_node.agent_num!=0 and mix_flag:
             last_node.eval_score = last_node.eval_score / eval_frequency
             last_node.move_nodes(one_length_last, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, logger, current_timestep)
         now_node.eval_score = now_node.eval_score / eval_frequency
@@ -1237,8 +1260,6 @@ def main():
                     rew.append(np.sum(rollouts_now.rewards[:,i]))
                 wandb.log({str(last_node.agent_num) + 'eval_episode_reward': np.mean(rew)}, current_timestep)
                 print(str(last_node.agent_num) + 'test_mean_cover_rate: ', last_mean_cover_rate)
-                if last_mean_cover_rate >= decay_end:
-                    mix_flag = False
 
         # test now_node
         if episode % check_frequency==0:
@@ -1399,7 +1420,7 @@ def main():
             wandb.log({str(now_node.agent_num) + 'eval_episode_reward': np.mean(rew)}, current_timestep)
             print(str(now_node.agent_num) + 'test_mean_cover_rate: ', now_mean_cover_rate)
         
-        if now_mean_cover_rate > upper_bound and now_node.agent_num < target_num:
+        if now_mean_cover_rate >= upper_bound and now_node.agent_num < target_num:
             now_mean_cover_rate = 0
             last_agent_num = now_node.agent_num
             now_agent_num = min(last_agent_num * 2,target_num)

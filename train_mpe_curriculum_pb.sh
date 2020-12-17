@@ -4,7 +4,7 @@ env="MPE"
 scenario="push_ball"
 num_landmarks=2
 num_agents=2
-algo="queue_pb_eval1"
+algo="solved_pb_final_version"
 # algo='check'
 seed=1
 

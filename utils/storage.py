@@ -625,7 +625,6 @@ class RolloutStorage(object):
             
             yield share_obs_batch, obs_batch, recurrent_hidden_states_batch, recurrent_hidden_states_critic_batch, actions_batch, value_preds_batch, return_batch, masks_batch, high_masks_batch, old_action_log_probs_batch, adv_targ
 
-
 class RolloutStorage_share(object):  # 减小share_obs
     def __init__(self, num_agents, episode_length, n_rollout_threads, obs_space, action_space,
                  recurrent_hidden_state_size, use_same_dim=False):

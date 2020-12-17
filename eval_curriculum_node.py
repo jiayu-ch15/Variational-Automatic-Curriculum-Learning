@@ -157,8 +157,8 @@ if __name__ == '__main__':
     num_processes = 1000
     # envs = make_parallel_env(args.env_name, num_processes, args.seed, True)
     cover_rate_sum = 0
-    agent_num = 4
-    box_num = 4
+    agent_num = 2
+    box_num = 2
     data = []
     # # uniform data
     # starts = produce_uniform_case_H(10000, 4)

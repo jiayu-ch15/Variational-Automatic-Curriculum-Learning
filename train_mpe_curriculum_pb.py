@@ -97,8 +97,6 @@ class node_buffer():
         return archive
     
     def produce_good_case_grid(self,num_case, start_boundary, now_agent_num, now_box_num):
-        # agent_size=0.2, ball_size=0.2,landmark_size=0.3
-        # box在内侧，agent在start_boundary和start_boundary_agent之间
         cell_size = 0.2
         grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
         init_origin_node = np.array([start_boundary[0],start_boundary[2]])
@@ -589,10 +587,10 @@ def main():
     last_box_num = 2
     now_agent_num = num_agents
     mean_cover_rate = 0
-    eval_frequency = 1 #需要fix几个回合
+    eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 5
-    save_node_flag = False
+    save_node_flag = True
     save_90_flag = True
     historical_length = 5
     random.seed(args.seed)

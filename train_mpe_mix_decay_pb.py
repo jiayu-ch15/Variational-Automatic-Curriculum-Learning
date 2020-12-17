@@ -280,9 +280,9 @@ class node_buffer():
             starts.append(self.archive[self.choose_archive_index[i]])
         for i in range(len(self.choose_parent_index)):
             starts.append(self.parent_all[self.choose_parent_index[i]])
-        print('sample_archive: ', len(self.choose_archive_index))
-        print('sample_childlist: ', len(self.choose_child_index))
-        print('sample_parent: ', len(self.choose_parent_index))
+        print(str(self.agent_num) + 'sample_archive: ', len(self.choose_archive_index))
+        print(str(self.agent_num) + 'sample_childlist: ', len(self.choose_child_index))
+        print(str(self.agent_num) + 'sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
     
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
@@ -584,6 +584,7 @@ def main():
     decay_last = 1.0
     decay_now = 0.1
     mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
+    last_begin_flag = False
     target_num = 4
     last_box_num = 0
     last_agent_num = last_box_num
@@ -631,17 +632,27 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction_num should be changed
-        if mix_add_count == mix_add_frequency:
-            if decay_now < 1.0:
-                decay_now += 0.1
-            else:
-                if decay_last > 0.0:
-                    decay_last -= 0.1
-                else:
-                    mix_flag = False
+        if mix_add_count == mix_add_frequency and mix_flag:
+            mix_add_count = 0
+            decay_now += 0.1
+            decay_now = min(decay_now,1.0)
+            if last_begin_flag:
+                decay_last -= 0.1
+                decay_last = max(decay_last,0.0)
+            # 停止混合
+            if decay_last == 0.0:
+                mix_flag = False
+            # 开始降低last_node比例
+            if decay_now == 1.0:
+                last_begin_flag = True
+                
+        wandb.log({'decay_last': decay_last},current_timestep)
+        wandb.log({'decay_now': decay_now},current_timestep)
+        print('decay_last: ', decay_last)
+        print('decay_now: ', decay_now)
         if mix_flag:
-            last_node.reproduction_num = N_child * decay_last
-            now_node.reproduction_num = N_child * decay_now
+            last_node.reproduction_num = round(N_child * decay_last)
+            now_node.reproduction_num = round(N_child * decay_now)
         else:
             last_node.reproduction_num = N_child
             now_node.reproduction_num = N_child
@@ -659,19 +670,29 @@ def main():
         # reset env 
         one_length_last = 0
         if last_node.agent_num!=0 and mix_flag:
+            # check
+            if round(N_child*decay_last) == 0 or round(N_archive*decay_last) ==0 or round(N_parent*decay_last) ==0:
+                mix_flag = False
             if use_parent_sample:
-                starts_last, one_length_last, starts_length_last = last_node.sample_starts(int(N_child*decay_last),int(N_archive*decay_last),int(N_parent*decay_last))
+                starts_last, one_length_last, starts_length_last = last_node.sample_starts(round(N_child*decay_last),round(N_archive*decay_last),round(N_parent*decay_last))
             else:
-                starts_last, one_length_last, starts_length_last = last_node.sample_starts(int(N_child*decay_last),int(N_archive*decay_last))
+                starts_last, one_length_last, starts_length_last = last_node.sample_starts(round(N_child*decay_last),round(N_archive*decay_last))
             last_node.eval_score = np.zeros(shape=one_length_last)
-        if use_parent_sample:
-            starts_now, one_length_now, starts_length_now = now_node.sample_starts(int(N_child*decay_now),int(N_archive*decay_now),int(N_parent*decay_now))
+        if mix_flag:
+            if use_parent_sample:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child*decay_now),round(N_archive*decay_now),round(N_parent*decay_now))
+            else:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child*decay_now),round(N_archive*decay_now))
         else:
-            starts_now, one_length_now, starts_length_now = now_node.sample_starts(int(N_child*decay_now),int(N_archive*decay_now))
+            if use_parent_sample:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive,N_parent)
+            else:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive)
         now_node.eval_score = np.zeros(shape=one_length_now)    
 
         for times in range(eval_frequency):
-            mix_add_count += 1
+            if mix_flag:
+                mix_add_count += 1
             # last_node
             if last_node.agent_num!=0 and mix_flag:
                 actor_critic.agents_num = last_node.agent_num
@@ -1379,7 +1400,7 @@ def main():
         if next_stage_flag==1:
             mix_flag = True
             next_stage_flag = 0
-            start_boundary = [-0.6,0.6,-0.6,0.6]
+            start_boundary = [-1.0,1.0,-1.0,1.0]
             last_node = copy.deepcopy(now_node)
             now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,
