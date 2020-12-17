@@ -55,7 +55,7 @@ class node_buffer():
         self.agent_num = agent_num
         self.box_num = box_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+        self.archive = self.produce_good_case_grid_pb(archive_initial_length, start_boundary, self.agent_num, self.box_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -95,7 +95,7 @@ class node_buffer():
             one_starts_box = []
         return archive
 
-    def produce_good_case_grid(self,num_case, start_boundary, now_agent_num, now_box_num):
+    def produce_good_case_grid_pb(self,num_case, start_boundary, now_agent_num, now_box_num):
         # agent_size=0.2, ball_size=0.2,landmark_size=0.3
         # box在内侧，agent在start_boundary和start_boundary_agent之间
         cell_size = 0.2
@@ -109,6 +109,7 @@ class node_buffer():
         one_starts_box_grid = []
         archive = [] 
         for j in range(num_case):
+            # box location
             for i in range(now_box_num):
                 while 1:
                     box_location_grid = np.random.randint(0, grid.shape[0], 2) 
@@ -121,21 +122,36 @@ class node_buffer():
                         one_starts_box.append(copy.deepcopy(box_location))
                         one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                         break
+            # landmark location
             indices = random.sample(range(now_box_num), now_box_num)
+            num_try = 0
+            num_tries = 20
             for k in indices:
-                delta_x_direction = random.sample([-1,0,1],1)[0]
-                delta_y_direction = random.sample([-1,0,1],1)[0]
-                epsilon_x = cell_size * delta_x_direction
-                epsilon_y = cell_size * delta_y_direction
-                noise = -2 * 0.01 * random.random() + 0.01
-                box_location = np.array([one_starts_box[k][0]+epsilon_x+noise,one_starts_box[k][1]+epsilon_y+noise])
-                one_starts_landmark.append(copy.deepcopy(box_location))
+                around = 1
+                while num_try < num_tries:
+                    delta_x_direction = random.randint(-around,around)
+                    delta_y_direction = random.randint(-around,around)
+                    landmark_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
+                    landmark_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
+                    landmark_location_grid = np.array([landmark_location_x,landmark_location_y])
+                    if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
+                        num_try += 1
+                        if num_try >= num_tries and around==1:
+                            around = 2
+                            num_try = 0
+                        assert num_try<num_tries or around==1, 'case %i can not find landmark pos'%j
+                        continue
+                    else:
+                        grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                        one_starts_landmark.append(copy.deepcopy(landmark_location))
+                        break
             # agent_location
             indices_agent = random.sample(range(now_box_num), now_box_num)
             num_try = 0
             num_tries = 20
-            around = 1
             for k in indices_agent:
+                around = 1
                 while num_try < num_tries:
                     delta_x_direction = random.randint(-around,around)
                     delta_y_direction = random.randint(-around,around)

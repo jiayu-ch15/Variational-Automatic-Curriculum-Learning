@@ -4,7 +4,7 @@ env="MPE"
 scenario="push_ball"
 num_landmarks=2
 num_agents=2
-algo="reverse_pb_eval1_parentsampling"
+algo="reverse_pb_train2eval4"
 # algo='check'
 seed=3
 

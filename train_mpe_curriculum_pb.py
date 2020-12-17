@@ -55,7 +55,7 @@ class node_buffer():
         self.agent_num = agent_num
         self.box_num = box_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case_grid(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+        self.archive = self.produce_good_case_grid_pb(archive_initial_length, start_boundary, self.agent_num, self.box_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -96,7 +96,9 @@ class node_buffer():
             one_starts_box = []
         return archive
     
-    def produce_good_case_grid(self,num_case, start_boundary, now_agent_num, now_box_num):
+    def produce_good_case_grid_pb(self,num_case, start_boundary, now_agent_num, now_box_num):
+        # agent_size=0.2, ball_size=0.2,landmark_size=0.3
+        # box在内侧，agent在start_boundary和start_boundary_agent之间
         cell_size = 0.2
         grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
         init_origin_node = np.array([start_boundary[0],start_boundary[2]])
@@ -108,6 +110,7 @@ class node_buffer():
         one_starts_box_grid = []
         archive = [] 
         for j in range(num_case):
+            # box location
             for i in range(now_box_num):
                 while 1:
                     box_location_grid = np.random.randint(0, grid.shape[0], 2) 
@@ -120,21 +123,36 @@ class node_buffer():
                         one_starts_box.append(copy.deepcopy(box_location))
                         one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                         break
+            # landmark location
             indices = random.sample(range(now_box_num), now_box_num)
+            num_try = 0
+            num_tries = 20
             for k in indices:
-                delta_x_direction = random.sample([-1,0,1],1)[0]
-                delta_y_direction = random.sample([-1,0,1],1)[0]
-                epsilon_x = cell_size * delta_x_direction
-                epsilon_y = cell_size * delta_y_direction
-                noise = -2 * 0.01 * random.random() + 0.01
-                box_location = np.array([one_starts_box[k][0]+epsilon_x+noise,one_starts_box[k][1]+epsilon_y+noise])
-                one_starts_landmark.append(copy.deepcopy(box_location))
+                around = 1
+                while num_try < num_tries:
+                    delta_x_direction = random.randint(-around,around)
+                    delta_y_direction = random.randint(-around,around)
+                    landmark_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
+                    landmark_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
+                    landmark_location_grid = np.array([landmark_location_x,landmark_location_y])
+                    if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
+                        num_try += 1
+                        if num_try >= num_tries and around==1:
+                            around = 2
+                            num_try = 0
+                        assert num_try<num_tries or around==1, 'case %i can not find landmark pos'%j
+                        continue
+                    else:
+                        grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                        one_starts_landmark.append(copy.deepcopy(landmark_location))
+                        break
             # agent_location
             indices_agent = random.sample(range(now_box_num), now_box_num)
             num_try = 0
             num_tries = 20
-            around = 1
             for k in indices_agent:
+                around = 1
                 while num_try < num_tries:
                     delta_x_direction = random.randint(-around,around)
                     delta_y_direction = random.randint(-around,around)
@@ -856,11 +874,16 @@ def main():
         print('archive: ', len(last_node.archive))
 
         # test
+        # eval 4agent4box
+        num_agents_test = 4 
+        num_boxes_test = 4
+        actor_critic.agent_num = num_agents_test
+        actor_critic.box_num = num_boxes_test
         if episode % check_frequency==0:
-            obs, _ = envs.reset(num_agents,num_boxes)
+            obs, _ = envs.reset(num_agents_test,num_boxes_test)
             episode_length = 120
             #replay buffer
-            rollouts = RolloutStorage(num_agents,
+            rollouts = RolloutStorage(num_agents_test,
                         episode_length, 
                         args.n_rollout_threads,
                         envs.observation_space[0], 
@@ -869,7 +892,7 @@ def main():
             # replay buffer init
             if args.share_policy: 
                 share_obs = obs.reshape(args.n_rollout_threads, -1)        
-                share_obs = np.expand_dims(share_obs,1).repeat(num_agents,axis=1)    
+                share_obs = np.expand_dims(share_obs,1).repeat(num_agents_test,axis=1)    
                 rollouts.share_obs[0] = share_obs.copy() 
                 rollouts.obs[0] = obs.copy()               
                 rollouts.recurrent_hidden_states = np.zeros(rollouts.recurrent_hidden_states.shape).astype(np.float32)
@@ -879,7 +902,7 @@ def main():
                 for o in obs:
                     share_obs.append(list(itertools.chain(*o)))
                 share_obs = np.array(share_obs)
-                for agent_id in range(num_agents):    
+                for agent_id in range(num_agents_test):    
                     rollouts[agent_id].share_obs[0] = share_obs.copy()
                     rollouts[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
                     rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
@@ -894,7 +917,7 @@ def main():
                 recurrent_hidden_statess_critic = []
                 
                 with torch.no_grad():                
-                    for agent_id in range(num_agents):
+                    for agent_id in range(num_agents_test):
                         if args.share_policy:
                             actor_critic.eval()
                             value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
@@ -922,7 +945,7 @@ def main():
                 actions_env = []
                 for i in range(args.n_rollout_threads):
                     one_hot_action_env = []
-                    for agent_id in range(num_agents):
+                    for agent_id in range(num_agents_test):
                         if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
                             uc_action = []
                             for j in range(envs.action_space[agent_id].shape):
@@ -949,7 +972,7 @@ def main():
                 masks = []
                 for i, done in enumerate(dones): 
                     mask = []               
-                    for agent_id in range(num_agents): 
+                    for agent_id in range(num_agents_test): 
                         if done[agent_id]:    
                             recurrent_hidden_statess[agent_id][i] = np.zeros(args.hidden_size).astype(np.float32)
                             recurrent_hidden_statess_critic[agent_id][i] = np.zeros(args.hidden_size).astype(np.float32)    
@@ -960,7 +983,7 @@ def main():
                                 
                 if args.share_policy: 
                     share_obs = obs.reshape(args.n_rollout_threads, -1)        
-                    share_obs = np.expand_dims(share_obs,1).repeat(num_agents,axis=1)    
+                    share_obs = np.expand_dims(share_obs,1).repeat(num_agents_test,axis=1)    
                     
                     rollouts.insert(share_obs, 
                                 obs, 
@@ -976,7 +999,7 @@ def main():
                     for o in obs:
                         share_obs.append(list(itertools.chain(*o)))
                     share_obs = np.array(share_obs)
-                    for agent_id in range(num_agents):
+                    for agent_id in range(num_agents_test):
                         rollouts[agent_id].insert(share_obs, 
                                 np.array(list(obs[:,agent_id])), 
                                 np.array(recurrent_hidden_statess[agent_id]), 
