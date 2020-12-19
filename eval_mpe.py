@@ -110,8 +110,8 @@ def produce_hard_case(num_case, boundary, now_agent_num):
 
 def produce_good_case_grid_pb(num_case, start_boundary, now_agent_num, now_box_num):
     cell_size = 0.3
-    grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
-    init_origin_node = np.array([start_boundary[0],start_boundary[2]])
+    grid_num = round((start_boundary[1]-start_boundary[0]) / cell_size)
+    init_origin_node = np.array([start_boundary[0]+0.5*cell_size,start_boundary[3]-0.5*cell_size]) # left, up
     assert grid_num ** 2 >= now_agent_num + now_box_num
     grid = np.zeros(shape=(grid_num,grid_num))
     grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
@@ -130,7 +130,7 @@ def produce_good_case_grid_pb(num_case, start_boundary, now_agent_num, now_box_n
                 else:
                     grid[box_location_grid[0],box_location_grid[1]] = 1
                     # box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
-                    box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                    box_location = np.array([(box_location_grid[0]+0.5)*cell_size,-(box_location_grid[1]+0.5)*cell_size]) + init_origin_node
                     one_starts_box.append(copy.deepcopy(box_location))
                     one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                     break
@@ -156,7 +156,7 @@ def produce_good_case_grid_pb(num_case, start_boundary, now_agent_num, now_box_n
                     continue
                 else:
                     grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
-                    landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                    landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,-(landmark_location_grid[1]+0.5)*cell_size]) + init_origin_node
                     one_starts_landmark.append(copy.deepcopy(landmark_location))
                     break
         # agent_location
@@ -181,7 +181,7 @@ def produce_good_case_grid_pb(num_case, start_boundary, now_agent_num, now_box_n
                 else:
                     grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
                     # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
-                    agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                    agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,-(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
                     one_starts_agent.append(copy.deepcopy(agent_location))
                     break
         # select_starts.append(one_starts_agent+one_starts_landmark)

@@ -96,10 +96,10 @@ class node_buffer():
             one_starts_box = []
         return archive
     
-    def produce_good_case_grid_pb(self,num_case, start_boundary, now_agent_num, now_box_num):
+    def produce_good_case_grid_pb(self, num_case, start_boundary, now_agent_num, now_box_num):
         cell_size = 0.3
-        grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
-        init_origin_node = np.array([start_boundary[0],start_boundary[2]])
+        grid_num = round((start_boundary[1]-start_boundary[0]) / cell_size)
+        init_origin_node = np.array([start_boundary[0]+0.5*cell_size,start_boundary[3]-0.5*cell_size]) # left, up
         assert grid_num ** 2 >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num,grid_num))
         grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
@@ -118,7 +118,7 @@ class node_buffer():
                     else:
                         grid[box_location_grid[0],box_location_grid[1]] = 1
                         # box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
-                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size,-(box_location_grid[1]+0.5)*cell_size]) + init_origin_node
                         one_starts_box.append(copy.deepcopy(box_location))
                         one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                         break
@@ -144,7 +144,7 @@ class node_buffer():
                         continue
                     else:
                         grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,-(landmark_location_grid[1]+0.5)*cell_size]) + init_origin_node
                         one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             # agent_location
@@ -169,7 +169,7 @@ class node_buffer():
                     else:
                         grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
                         # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
-                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,-(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
                         one_starts_agent.append(copy.deepcopy(agent_location))
                         break
             # select_starts.append(one_starts_agent+one_starts_landmark)
@@ -581,9 +581,9 @@ def main():
     use_parent_novelty = False # 关闭
     use_child_novelty = False # 关闭
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
-    use_novelty_sample = True
+    use_novelty_sample = False
     use_parent_sample = False
-    del_switch = 'novelty'
+    del_switch = 'old'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
@@ -599,7 +599,7 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    start_boundary = [-0.3,0.3,-0.3,0.3]
+    start_boundary = [-0.45,0.45,-0.45,0.45]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -877,8 +877,8 @@ def main():
 
         # test
         # eval 4agent4box
-        num_agents_test = 4 
-        num_boxes_test = 4
+        num_agents_test = 2
+        num_boxes_test = 2
         actor_critic.agents_num = num_agents_test
         actor_critic.boxes_num = num_boxes_test
         if episode % check_frequency==0:
