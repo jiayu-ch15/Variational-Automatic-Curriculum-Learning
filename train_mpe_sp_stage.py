@@ -13,7 +13,7 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO, PPO2, PPO3
+from algorithm.ppo import PPO, PPO3
 from algorithm.model import Policy, Policy2, Policy3, ATTBase_actor_add, ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
@@ -460,7 +460,7 @@ def main():
         actor_critic.to(device)
         # load model
         # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_bound90_check_true/run%i/models/4agent_model.pt'%(args.seed+1))['model'].to(device)
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_ppotrue/run%i/models/4agent_model.pt'%(args.seed))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,

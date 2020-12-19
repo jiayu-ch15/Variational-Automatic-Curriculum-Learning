@@ -554,7 +554,7 @@ def main():
     mix_add_frequency = 30 # 改变比例的频率
     mix_add_count = 0
     decay_last = 1.0
-    decay_now = 0.1
+    decay_now = 1.0
     mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
     last_begin_flag = False
     target_num = 8
@@ -853,11 +853,7 @@ def main():
                                                     args.use_popart,
                                                     agents[agent_id].value_normalizer)
             # now_node  
-            actor_critic.agents_num = now_node.agent_num  
-            if now_node.agent_num <=4:
-                agents.num_mini_batch = 2
-            else:
-                agents.num_mini_batch = 16                           
+            actor_critic.agents_num = now_node.agent_num                            
             obs = envs.new_starts_obs(starts_now, now_node.agent_num, starts_length_now)
             #replay buffer
             rollouts_now = RolloutStorage_share(now_node.agent_num,
@@ -1055,7 +1051,7 @@ def main():
                     value_loss, action_loss, dist_entropy = agents.update_double_share(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
                 else:
                     wandb.log({'Type of agents': 1},current_timestep)
-                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now,False,initial_optimizer=False)
+                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now)
                 # print('value_loss: ', value_loss)
                 wandb.log({'value_loss': value_loss},
                     current_timestep)

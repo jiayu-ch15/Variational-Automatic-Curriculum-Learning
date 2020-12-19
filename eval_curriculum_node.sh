@@ -6,7 +6,7 @@ scenario="push_ball"
 num_landmarks=2
 num_agents=2
 # algo="diversified_novelty_parentsampling_sp3_leftup_rightdown"
-algo='diversified_novelty_badinit_pb_true'
+algo='diversified_pb_train2eval4'
 seed_max=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"

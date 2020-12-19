@@ -27,7 +27,7 @@ class Scenario(BaseScenario):
             agent.collide = True
             agent.silent = True
             agent.adversary = True if i < num_people else False  # people.adversary = True     box.adversary = False
-            agent.size = 0.1 if agent.adversary else 0.1
+            agent.size = 0.1 if agent.adversary else 0.15
             # agent.accel = 3.0 if agent.adversary else 5
             # agent.max_speed = 0.5 if agent.adversary else 0.5
             agent.action_callback = None if i < num_people else self.box_policy  # box有action_callback 即不做动作
@@ -38,7 +38,7 @@ class Scenario(BaseScenario):
             landmark.name = 'landmark %d' % i
             landmark.collide = False
             landmark.movable = False
-            landmark.size = 0.1
+            landmark.size = 0.15
             landmark.cover = 0
             # landmark.boundary = False
         # make initial conditions

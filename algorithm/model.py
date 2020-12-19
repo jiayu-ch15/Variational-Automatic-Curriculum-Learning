@@ -2368,7 +2368,6 @@ class ObsEncoder_homework(nn.Module):
 
         agent_beta_ij = torch.matmul(self_emb.view(batch_size,1,-1), self.agent_correlation_mat)
         landmark_beta_ij = torch.matmul(self_emb.view(batch_size,1,-1), self.landmark_correlation_mat) 
-
         for i in range(agent_num - 1):
             other_agent_emb.append(inputs[:, 4+3*landmark_num+2*i:4+3*landmark_num+2*(i+1)])
         for i in range(landmark_num):

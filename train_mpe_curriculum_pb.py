@@ -97,13 +97,12 @@ class node_buffer():
         return archive
     
     def produce_good_case_grid_pb(self,num_case, start_boundary, now_agent_num, now_box_num):
-        # agent_size=0.2, ball_size=0.2,landmark_size=0.3
-        # box在内侧，agent在start_boundary和start_boundary_agent之间
-        cell_size = 0.2
+        cell_size = 0.3
         grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
         init_origin_node = np.array([start_boundary[0],start_boundary[2]])
         assert grid_num ** 2 >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num,grid_num))
+        grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_agent = []
         one_starts_box = []
@@ -123,6 +122,7 @@ class node_buffer():
                         one_starts_box.append(copy.deepcopy(box_location))
                         one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                         break
+            grid_without_landmark = copy.deepcopy(grid)
             # landmark location
             indices = random.sample(range(now_box_num), now_box_num)
             num_try = 0
@@ -159,7 +159,7 @@ class node_buffer():
                     agent_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
                     agent_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
                     agent_location_grid = np.array([agent_location_x,agent_location_y])
-                    if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                    if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
                         num_try += 1
                         if num_try >= num_tries and around==1:
                             around = 2
@@ -167,7 +167,7 @@ class node_buffer():
                         assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
                         continue
                     else:
-                        grid[agent_location_grid[0],agent_location_grid[1]] = 1
+                        grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
                         # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
                         agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
                         one_starts_agent.append(copy.deepcopy(agent_location))
@@ -175,6 +175,7 @@ class node_buffer():
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
+            grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
             one_starts_agent = []
             one_starts_landmark = []
             one_starts_box = []
@@ -354,6 +355,7 @@ class node_buffer():
         print('child_drop: ', drop_num)
         print('add_hard_num: ', add_hard_num )
         print('parent: ', len(self.parent))
+        print('parent_all: ', len(self.parent_all))
         if len(self.childlist) > self.buffer_length:
             self.childlist = self.childlist[len(self.childlist)-self.buffer_length:]
         if len(self.archive) > self.buffer_length:
@@ -579,9 +581,9 @@ def main():
     use_parent_novelty = False # 关闭
     use_child_novelty = False # 关闭
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
-    use_novelty_sample = False
+    use_novelty_sample = True
     use_parent_sample = False
-    del_switch = 'old'
+    del_switch = 'novelty'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
@@ -591,7 +593,7 @@ def main():
         N_parent = 0
     N_archive = 150
     N_child = args.n_rollout_threads - N_archive - N_parent
-    max_step = 0.4
+    max_step = 0.2
     TB = 1
     M = N_child
     Rmin = 0.5
@@ -601,8 +603,8 @@ def main():
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    last_agent_num = 2
-    last_box_num = 2
+    last_agent_num = num_agents
+    last_box_num = num_agents
     now_agent_num = num_agents
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
@@ -655,6 +657,8 @@ def main():
         print('sample_time: ', end1- start1)
         last_node.eval_score = np.zeros(shape=one_length)
 
+        actor_critic.agents_num = last_node.agent_num
+        actor_critic.boxes_num = last_node.box_num
         for times in range(eval_frequency):
             obs = envs.new_starts_obs_pb(starts, num_agents, num_boxes,starts_length)
             #replay buffer
@@ -690,7 +694,6 @@ def main():
                 action_log_probs = []
                 recurrent_hidden_statess = []
                 recurrent_hidden_statess_critic = []
-                
                 with torch.no_grad():                
                     for agent_id in range(num_agents):
                         if args.share_policy:
@@ -784,7 +787,6 @@ def main():
                                 np.array(values[agent_id]),
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
-            # import pdb;pdb.set_trace()
             wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             curriculum_episode += 1
             current_timestep += args.episode_length * starts_length
@@ -877,8 +879,8 @@ def main():
         # eval 4agent4box
         num_agents_test = 4 
         num_boxes_test = 4
-        actor_critic.agent_num = num_agents_test
-        actor_critic.box_num = num_boxes_test
+        actor_critic.agents_num = num_agents_test
+        actor_critic.boxes_num = num_boxes_test
         if episode % check_frequency==0:
             obs, _ = envs.reset(num_agents_test,num_boxes_test)
             episode_length = 120
@@ -1010,13 +1012,13 @@ def main():
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
-            wandb.log({'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
-            wandb.log({'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({str(num_agents_test) + 'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
+            wandb.log({str(num_agents_test) + 'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
             if mean_cover_rate >= 0.9 and args.algorithm_name=='ours_pb' and save_90_flag:
                 torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")
                 save_90_flag = False
-            print('test_agent_num: ', last_node.agent_num)
+            print('test_agent_num: ', num_agents_test)
             print('test_mean_cover_rate: ', mean_cover_rate)
 
         total_num_steps = current_timestep

@@ -809,11 +809,7 @@ def main():
                                                     args.use_popart,
                                                     agents[agent_id].value_normalizer)
             # now_node  
-            actor_critic.agents_num = now_node.agent_num  
-            if now_node.agent_num <=4:
-                agents.num_mini_batch = 2
-            else:
-                agents.num_mini_batch = 16                           
+            actor_critic.agents_num = now_node.agent_num                            
             obs = envs.new_starts_obs(starts_now, now_node.agent_num, starts_length_now)
             #replay buffer
             rollouts_now = RolloutStorage_share(now_node.agent_num,
@@ -1007,8 +1003,6 @@ def main():
             if args.share_policy:
                 actor_critic.train()
                 if last_node.agent_num!=0:
-                    batch_last = starts_length_last * args.episode_length * last_node.agent_num
-                    batch_now = starts_length_now * args.episode_length * now_node.agent_num
                     value_loss, action_loss, dist_entropy = agents.update_double_share(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
                 else:
                     value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now,False,initial_optimizer=False)

@@ -5,6 +5,7 @@ scenario="simple_spread"
 num_landmarks=4
 num_agents=4
 algo="solved_eval1_sp"
+# algo='check'
 seed=3
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"

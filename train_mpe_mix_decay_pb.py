@@ -95,13 +95,12 @@ class node_buffer():
         return archive
 
     def produce_good_case_grid_pb(self,num_case, start_boundary, now_agent_num, now_box_num):
-        # agent_size=0.2, ball_size=0.2,landmark_size=0.3
-        # box在内侧，agent在start_boundary和start_boundary_agent之间
         cell_size = 0.2
         grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
         init_origin_node = np.array([start_boundary[0],start_boundary[2]])
         assert grid_num ** 2 >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num,grid_num))
+        grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_agent = []
         one_starts_box = []
@@ -121,6 +120,7 @@ class node_buffer():
                         one_starts_box.append(copy.deepcopy(box_location))
                         one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                         break
+            grid_without_landmark = copy.deepcopy(grid)
             # landmark location
             indices = random.sample(range(now_box_num), now_box_num)
             num_try = 0
@@ -157,7 +157,7 @@ class node_buffer():
                     agent_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
                     agent_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
                     agent_location_grid = np.array([agent_location_x,agent_location_y])
-                    if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                    if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
                         num_try += 1
                         if num_try >= num_tries and around==1:
                             around = 2
@@ -165,7 +165,7 @@ class node_buffer():
                         assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
                         continue
                     else:
-                        grid[agent_location_grid[0],agent_location_grid[1]] = 1
+                        grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
                         # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
                         agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
                         one_starts_agent.append(copy.deepcopy(agent_location))
@@ -173,6 +173,7 @@ class node_buffer():
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
+            grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
             one_starts_agent = []
             one_starts_landmark = []
             one_starts_box = []
@@ -193,7 +194,7 @@ class node_buffer():
 
     def novelty_sort(self, buffer, buffer_novelty):
         zipped = zip(buffer,buffer_novelty)
-        sort_zipped = sorted(zipped,key=lambda x:(x[1],x[0]))
+        sort_zipped = sorted(zipped,key=lambda x:(x[1],np.mean(x[0])))
         result = zip(*sort_zipped)
         buffer_new, buffer_novelty_new = [list(x) for x in result]
         return buffer_new, buffer_novelty_new
@@ -487,7 +488,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO(actor_critic,
+        agents = PPO3(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
@@ -598,7 +599,7 @@ def main():
     mix_add_frequency = 30 # 改变比例的频率
     mix_add_count = 0
     decay_last = 1.0
-    decay_now = 0.1
+    decay_now = 1.0
     mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
     last_begin_flag = False
     target_num = 4
@@ -1069,7 +1070,7 @@ def main():
                     value_loss, action_loss, dist_entropy = agents.update_double_share_pb(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
                 else:
                     wandb.log({'Type of agents': 1},current_timestep)
-                    value_loss, action_loss, dist_entropy = agents.update_share(now_node.agent_num, rollouts_now)
+                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, False, initial_optimizer=False)
                 wandb.log({'value_loss': value_loss},
                     current_timestep)
 
@@ -1416,7 +1417,7 @@ def main():
         if next_stage_flag==1:
             mix_flag = True
             next_stage_flag = 0
-            start_boundary = [-1.0,1.0,-1.0,1.0]
+            start_boundary = [-0.6,0.6,-0.6,0.6]
             last_node = copy.deepcopy(now_node)
             now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,

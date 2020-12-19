@@ -96,13 +96,12 @@ class node_buffer():
         return archive
 
     def produce_good_case_grid_pb(self,num_case, start_boundary, now_agent_num, now_box_num):
-        # agent_size=0.2, ball_size=0.2,landmark_size=0.3
-        # box在内侧，agent在start_boundary和start_boundary_agent之间
         cell_size = 0.2
         grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
         init_origin_node = np.array([start_boundary[0],start_boundary[2]])
         assert grid_num ** 2 >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num,grid_num))
+        grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
         one_starts_agent = []
         one_starts_box = []
@@ -122,6 +121,7 @@ class node_buffer():
                         one_starts_box.append(copy.deepcopy(box_location))
                         one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                         break
+            grid_without_landmark = copy.deepcopy(grid)
             # landmark location
             indices = random.sample(range(now_box_num), now_box_num)
             num_try = 0
@@ -158,7 +158,7 @@ class node_buffer():
                     agent_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
                     agent_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
                     agent_location_grid = np.array([agent_location_x,agent_location_y])
-                    if grid[agent_location_grid[0],agent_location_grid[1]]==1:
+                    if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
                         num_try += 1
                         if num_try >= num_tries and around==1:
                             around = 2
@@ -166,7 +166,7 @@ class node_buffer():
                         assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
                         continue
                     else:
-                        grid[agent_location_grid[0],agent_location_grid[1]] = 1
+                        grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
                         # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
                         agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
                         one_starts_agent.append(copy.deepcopy(agent_location))
@@ -174,6 +174,7 @@ class node_buffer():
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
+            grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
             one_starts_agent = []
             one_starts_landmark = []
             one_starts_box = []
@@ -628,10 +629,6 @@ def main():
     one_length_now = args.n_rollout_threads
     starts_length_now = args.n_rollout_threads
 
-    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/push_ball/stage95_warmup_3iter_pb/run1/models/2box_model.pt')['model'].to(device)
-    # actor_critic.boxes_num = now_node.box_num
-    # actor_critic.agents_num = now_node.agent_num
-    agents.actor_critic = actor_critic
     for episode in range(episodes):
         if not eval_flag:
             print('now_box_num: ', now_node.box_num)
@@ -905,7 +902,6 @@ def main():
             print('now_node_archive: ', len(now_node.archive))
 
         # test
-        # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/check95_mini_batch8_8step_warmup_3iter/run1/models/8agent_model.pt')['model'].to(device)
         actor_critic.agents_num = now_node.agent_num
         actor_critic.boxes_num = now_node.box_num
         if episode % check_frequency==0 or eval_flag:
@@ -1055,7 +1051,9 @@ def main():
                     torch.save({'model': actor_critic}, str(save_dir) + "/%ibox_model.pt"%now_node.box_num)
         if next_stage_flag==1:
             next_stage_flag = 0
-            if now_agent_num>=4:
+            if now_agent_num==4:
+                start_boundary = [-0.6,0.6,-0.6,0.6]
+            elif now_agent_num>4:
                 start_boundary = [-1.0,1.0,-1.0,1.0]
             now_node = node_buffer(now_agent_num, now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,
