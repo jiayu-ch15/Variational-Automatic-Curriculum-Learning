@@ -75,20 +75,8 @@ class node_buffer():
         one_starts_landmark = []
         one_starts_agent = []
         archive = [] 
-        start_boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        start_boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
-        if init_switch ==0:
-            # left room
-            start_boundary_x = [-4.9,-3.1]
-            start_boundary_y = [-2.9,2.9]
-        elif init_switch==1:
-            # right room
-            start_boundary_x = [3.1,4.9]
-            start_boundary_y = [-2.9,2.9]
-        elif init_switch==2:
-            # middle room
-            start_boundary_x = [-0.9,0.9]
-            start_boundary_y = [-2.9,2.9]
+        start_boundary_x = self.start_boundary['x']
+        start_boundary_y = self.start_boundary['y']
         for j in range(num_case):
             for i in range(now_agent_num):
                 landmark_location_x = np.random.uniform(start_boundary_x[0],start_boundary_x[1])
@@ -111,70 +99,26 @@ class node_buffer():
         archive = [] 
         # boundary_x x轴活动范围
         # boundary_y 是y轴活动范围
-        boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
+        # agent只能在middle room出发，目标点在left and right room
+        boundary_x_agent = self.boundary['agent']['x']
+        boundary_y_agent = self.boundary['agent']['y']
+        boundary_x_landmark = self.boundary['landmark']['x']
+        boundary_y_landmark = self.boundary['landmark']['y']
         for j in range(num_case):
             for i in range(now_agent_num):
-                location_id = np.random.randint(len(boundary_x))
-                landmark_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
-                landmark_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
+                location_id = np.random.randint(len(boundary_x_landmark))
+                landmark_location_x = np.random.uniform(boundary_x_landmark[location_id][0],boundary_x_landmark[location_id][1])
+                landmark_location_y = np.random.uniform(boundary_y_landmark[location_id][0],boundary_y_landmark[location_id][1])
                 landmark_location = np.array([landmark_location_x,landmark_location_y])
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
             for i in range(now_agent_num):
-                location_id = np.random.randint(len(boundary_x))
-                agent_location_x = np.random.uniform(boundary_x[location_id][0],boundary_x[location_id][1])
-                agent_location_y = np.random.uniform(boundary_y[location_id][0],boundary_y[location_id][1])
+                location_id = np.random.randint(len(boundary_x_agent))
+                agent_location_x = np.random.uniform(boundary_x_agent[location_id][0],boundary_x_agent[location_id][1])
+                agent_location_y = np.random.uniform(boundary_y_agent[location_id][0],boundary_y_agent[location_id][1])
                 agent_location = np.array([agent_location_x,agent_location_y])
                 one_starts_agent.append(copy.deepcopy(agent_location))
             archive.append(one_starts_agent+one_starts_landmark)
             one_starts_agent = []
-            one_starts_landmark = []
-        return archive
-
-    def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
-        # agent_size=0.1
-        cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size) + 1
-        grid = np.zeros(shape=(grid_num,grid_num))
-        one_starts_landmark = []
-        one_starts_landmark_grid = []
-        one_starts_agent = []
-        archive = [] 
-        for j in range(num_case):
-            for i in range(now_agent_num):
-                while 1:
-                    landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    extra_room = np.random.uniform(-0.05, +0.05, 2) 
-                    if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
-                        continue
-                    else:
-                        grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
-                        one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + extra_room -start_boundary
-                        one_starts_landmark.append(copy.deepcopy(landmark_location))
-                        break
-            indices = random.sample(range(now_agent_num), now_agent_num)
-            for k in indices:
-                epsilons = np.array([[-1,0],[1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]])
-                epsilon = epsilons[random.sample(range(8),8)]
-                # extra_room = -2 * 0.02 * random.random() + 0.02
-                for epsilon_id in range(epsilon.shape[0]):
-                    agent_location_grid = one_starts_landmark_grid[k] + epsilon[epsilon_id]
-                    if agent_location_grid[0] >= grid.shape[0]:
-                        agent_location_grid[0] = grid.shape[0]-1
-                    if agent_location_grid[1] >= grid.shape[1]:
-                        agent_location_grid[1] = grid.shape[1]-1
-                    if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
-                        grid[agent_location_grid[0],agent_location_grid[1]]=2
-                        break
-                noise = np.random.uniform(-0.01, +0.01)
-                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary+noise
-                one_starts_agent.append(copy.deepcopy(agent_location))
-            # select_starts.append(one_starts_agent+one_starts_landmark)
-            archive.append(one_starts_agent+one_starts_landmark)
-            grid = np.zeros(shape=(grid_num,grid_num))
-            one_starts_agent = []
-            one_starts_landmark_grid = []
             one_starts_landmark = []
         return archive
 
@@ -197,52 +141,9 @@ class node_buffer():
         buffer_new, buffer_novelty_new = [list(x) for x in result]
         return buffer_new, buffer_novelty_new
 
-    def SampleNearby_novelty(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
-        if len(self.parent_all) > self.topk + 1:
-            self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
-            self.parent_all, self.parent_all_novelty = self.novelty_sort(self.parent_all, self.parent_all_novelty)
-            novelty_threshold = np.mean(self.parent_all_novelty)
-        else:
-            novelty_threshold = 0
-        # novelty_threshold = child_novelty_threshold
-        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
-        parents = parents + []
-        len_start = len(parents)
-        child_new = []
-        if parents==[]:
-            return []
-        else:
-            add_num = 0
-            while add_num < self.reproduction_num:
-                for k in range(len_start):
-                    st = copy.deepcopy(parents[k])
-                    s_len = len(st)
-                    for i in range(s_len):
-                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
-                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
-                        st[i][0] = st[i][0] + epsilon_x
-                        st[i][1] = st[i][1] + epsilon_y
-                        if st[i][0] > self.boundary:
-                            st[i][0] = self.boundary - random.random()*0.01
-                        if st[i][0] < -self.boundary:
-                            st[i][0] = -self.boundary + random.random()*0.01
-                        if st[i][1] > self.boundary:
-                            st[i][1] = self.boundary - random.random()*0.01
-                        if st[i][1] < -self.boundary:
-                            st[i][1] = -self.boundary + random.random()*0.01
-                    if len(self.parent_all) > self.topk + 1:
-                        if self.get_novelty([st],self.parent_all) > novelty_threshold:
-                            child_new.append(copy.deepcopy(st))
-                            add_num += 1
-                    else:
-                        child_new.append(copy.deepcopy(st))
-                        add_num += 1
-            child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
-            return child_new
-
     def SampleNearby_novelty_H(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
-        boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
+        boundary_x = self.legal_region['x']
+        boundary_y = self.legal_region['y']
         
         if len(self.parent_all) > self.topk + 1:
             self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
@@ -294,8 +195,8 @@ class node_buffer():
             return child_new
 
     def SampleNearby_H(self,starts):
-        boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        boundary_y = [[-2.9,2.9],[-0.1,0.1],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]
+        boundary_x = self.legal_region['x']
+        boundary_y = self.legal_region['y']
         starts = starts + []
         len_start = len(starts)
         starts_new = []
@@ -344,36 +245,6 @@ class node_buffer():
                     legal = True
                     break
         return legal
-
-    def SampleNearby(self, starts): # produce new children and return
-        starts = starts + []
-        len_start = len(starts)
-        starts_new = []
-        if starts==[]:
-            return []
-        else:
-            add_num = 0
-            while add_num < self.reproduction_num:
-                for i in range(len_start):
-                    st = copy.deepcopy(starts[i])
-                    s_len = len(st)
-                    for i in range(s_len):
-                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
-                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
-                        st[i][0] = st[i][0] + epsilon_x
-                        st[i][1] = st[i][1] + epsilon_y
-                        if st[i][0] > self.boundary:
-                            st[i][0] = self.boundary - random.random()*0.01
-                        if st[i][0] < -self.boundary:
-                            st[i][0] = -self.boundary + random.random()*0.01
-                        if st[i][1] > self.boundary:
-                            st[i][1] = self.boundary - random.random()*0.01
-                        if st[i][1] < -self.boundary:
-                            st[i][1] = -self.boundary + random.random()*0.01
-                    starts_new.append(copy.deepcopy(st))
-                    add_num += 1
-            starts_new = random.sample(starts_new, self.reproduction_num)
-            return starts_new
 
     def sample_starts(self, N_child, N_archive, N_parent=0):
         self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
