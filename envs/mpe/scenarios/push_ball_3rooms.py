@@ -20,18 +20,19 @@ class Scenario(BaseScenario):
         self.num_people = num_people
         self.num_agents = num_boxes + num_people # deactivate "good" agent
         # add walls
-        world.walls = [Wall(orient='V', axis_pos=-6.5, endpoints=(-6, 6),width=3.0, hard=True),
-                Wall(orient='V', axis_pos=6.5, endpoints=(-6, 6),width=3.0, hard=True),
-                Wall(orient='H', axis_pos=-4.5, endpoints=(-6, 6),width=3.0, hard=True),
-                Wall(orient='H', axis_pos=4.5, endpoints=(-6, 6),width=3.0,hard=True),
+        # map 5*4
+        world.walls = [Wall(orient='V', axis_pos=-4, endpoints=(-6, 6),width=3.0, hard=True),
+                Wall(orient='V', axis_pos=4, endpoints=(-6, 6),width=3.0, hard=True),
+                Wall(orient='H', axis_pos=-3.5, endpoints=(-6, 6),width=3.0, hard=True),
+                Wall(orient='H', axis_pos=3.5, endpoints=(-6, 6),width=3.0,hard=True),
                 # up left wall
-                Wall(orient='V', axis_pos=-2, endpoints=(2.2, 3), width=2, hard=True),
+                Wall(orient='V', axis_pos=-1, endpoints=(0.3, 2), width=1, hard=True),
                 # down left wall
-                Wall(orient='V', axis_pos=-2, endpoints=(-3, 1.8), width=2, hard=True),
+                Wall(orient='V', axis_pos=-1, endpoints=(-2, -0.3), width=1, hard=True),
                 # up right wall
-                Wall(orient='V', axis_pos=2, endpoints=(-1.8, 3), width=2, hard=True),
+                Wall(orient='V', axis_pos=1, endpoints=(0.3, 2), width=1, hard=True),
                 # down right wall
-                Wall(orient='V', axis_pos=2, endpoints=(-3, -2.2), width=2, hard=True)
+                Wall(orient='V', axis_pos=1, endpoints=(-2, -0.3), width=1, hard=True)
                 ]
         # add agents
         world.agents = [Agent() for i in range(self.num_agents)]

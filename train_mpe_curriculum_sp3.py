@@ -54,6 +54,9 @@ class node_buffer():
     def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
+        self.start_boundary = start_boundary
+        self.boundary = boundary
+        self.legal_region = legal_region
         self.archive = self.produce_good_case_H(archive_initial_length, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
@@ -62,8 +65,6 @@ class node_buffer():
         self.parent = []
         self.parent_all = []
         self.max_step = max_step
-        self.boundary = boundary
-        self.legal_region = legal_region
         self.reproduction_num = reproduction_num
         self.choose_child_index = []
         self.choose_archive_index = []
@@ -71,16 +72,17 @@ class node_buffer():
         self.topk = 5
 
     def produce_good_case_H(self, num_case, now_agent_num): # 产生H_map的初始态
-        init_switch = 2 # 0 left, 1 right, 2 mid
         one_starts_landmark = []
         one_starts_agent = []
         archive = [] 
+        # easy goal是agent和landmark都在left and right
         start_boundary_x = self.start_boundary['x']
         start_boundary_y = self.start_boundary['y']
         for j in range(num_case):
             for i in range(now_agent_num):
-                landmark_location_x = np.random.uniform(start_boundary_x[0],start_boundary_x[1])
-                landmark_location_y = np.random.uniform(start_boundary_y[0],start_boundary_y[1])
+                location_id = np.random.randint(len(start_boundary_x))
+                landmark_location_x = np.random.uniform(start_boundary_x[location_id][0],start_boundary_x[location_id][1])
+                landmark_location_y = np.random.uniform(start_boundary_y[location_id][0],start_boundary_y[location_id][1])
                 landmark_location = np.array([landmark_location_x,landmark_location_y])
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
             indices = random.sample(range(now_agent_num), now_agent_num)
@@ -90,7 +92,6 @@ class node_buffer():
             archive.append(one_starts_agent+one_starts_landmark)
             one_starts_agent = []
             one_starts_landmark = []
-
         return archive
 
     def produce_uniform_case_H(self, num_case, now_agent_num): # 产生H_map的随机态
@@ -548,7 +549,7 @@ def main():
     use_child_novelty = False # 保持false
     use_novelty_sample = False
     use_parent_sample = False
-    del_switch = 'old'
+    del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度

@@ -15,6 +15,7 @@ class Scenario(BaseScenario):
             num_landmarks = now_agent_num
         # world.collaborative = True
         # add walls
+        # map 10*6
         world.walls = [Wall(orient='V', axis_pos=-6.5, endpoints=(-6, 6),width=3.0, hard=True),
                 Wall(orient='V', axis_pos=6.5, endpoints=(-6, 6),width=3.0, hard=True),
                 Wall(orient='H', axis_pos=-4.5, endpoints=(-6, 6),width=3.0, hard=True),
