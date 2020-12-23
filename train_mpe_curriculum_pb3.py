@@ -51,11 +51,14 @@ def make_parallel_env(args):
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 class node_buffer():
-    def __init__(self,agent_num, box_num, buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
+    def __init__(self,agent_num, box_num, buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region):
         self.agent_num = agent_num
         self.box_num = box_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case_grid_pb(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+        self.start_boundary = start_boundary
+        self.legal_region = legal_region
+        self.boundary = boundary
+        self.archive = self.produce_good_case_grid_pb_H(archive_initial_length, self.agent_num, self.box_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -64,7 +67,6 @@ class node_buffer():
         self.parent_all_novelty = []
         self.hardlist = []
         self.max_step = max_step
-        self.boundary = boundary
         self.reproduction_num = reproduction_num
         self.choose_child_index = []
         self.choose_archive_index = []
@@ -72,40 +74,19 @@ class node_buffer():
         self.eval_score = np.zeros(shape=len(self.archive))
         self.topk = 5
 
-    def produce_good_case(self, num_case, start_boundary, now_agent_num, now_box_num):
-        one_starts_landmark = []
-        one_starts_agent = []
-        one_starts_box = []
-        archive = [] 
-        for j in range(num_case):
-            for i in range(now_box_num):
-                landmark_location = np.array([np.random.uniform(start_boundary[0],start_boundary[1]),np.random.uniform(start_boundary[2],start_boundary[3])])
-                # landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2)  
-                one_starts_landmark.append(copy.deepcopy(landmark_location))
-            indices = random.sample(range(now_box_num), now_box_num)
-            for k in indices:
-                epsilon = -2 * 0.01 * random.random() + 0.01
-                one_starts_box.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
-            indices = random.sample(range(now_box_num), now_agent_num)
-            for k in indices:
-                epsilon = -2 * 0.01 * random.random() + 0.01
-                one_starts_agent.append(copy.deepcopy(one_starts_box[k]+epsilon))
-            archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
-            one_starts_agent = []
-            one_starts_landmark = []
-            one_starts_box = []
-        return archive
-    
-    def produce_good_case_grid_pb(self, num_case, start_boundary, now_agent_num, now_box_num):
+    def produce_good_case_pb_H(self, num_case, now_agent_num, now_box_num):
         landmark_size = 0.3
         box_size = 0.3
         agent_size = 0.2
         cell_size = max([landmark_size,box_size,agent_size]) + 0.1
-        grid_num = round((start_boundary[1]-start_boundary[0]) / cell_size)
+        start_boundary_x = self.start_boundary['x']
+        start_boundary_y = self.start_boundary['y']
+        grid_num_x = round(start_boundary_x/cell_size)
+        grid_num_y = round(start_boundary_y/cell_size)
         init_origin_node = np.array([start_boundary[0]+0.5*cell_size,start_boundary[3]-0.5*cell_size]) # left, up
-        assert grid_num ** 2 >= now_agent_num + now_box_num
-        grid = np.zeros(shape=(grid_num,grid_num))
-        grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
+        assert grid_num_x * grid_num_y >= now_agent_num + now_box_num
+        grid = np.zeros(shape=(grid_num_x,grid_num_y))
+        grid_without_landmark = np.zeros(shape=(grid_num_x,grid_num_y))
         one_starts_landmark = []
         one_starts_agent = []
         one_starts_box = []
@@ -219,7 +200,10 @@ class node_buffer():
         buffer_new, buffer_novelty_new = [list(x) for x in result]
         return buffer_new, buffer_novelty_new
 
-    def SampleNearby_novelty(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
+    def SampleNearby_novelty_H(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
+        boundary_x = self.legal_region['x']
+        boundary_y = self.legal_region['y']
+        
         if len(self.parent_all) > self.topk + 1:
             self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
             self.parent_all, self.parent_all_novelty = self.novelty_sort(self.parent_all, self.parent_all_novelty)
@@ -230,6 +214,8 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
         parents = parents + []
         len_start = len(parents)
+        num_tries = 100
+        num_try = 0
         child_new = []
         if parents==[]:
             return []
@@ -239,19 +225,24 @@ class node_buffer():
                 for k in range(len_start):
                     st = copy.deepcopy(parents[k])
                     s_len = len(st)
-                    for i in range(s_len):
+                    entity_id = 0
+                    while entity_id < s_len:
                         epsilon_x = -2 * self.max_step * random.random() + self.max_step
                         epsilon_y = -2 * self.max_step * random.random() + self.max_step
-                        st[i][0] = st[i][0] + epsilon_x
-                        st[i][1] = st[i][1] + epsilon_y
-                        if st[i][0] > self.boundary:
-                            st[i][0] = self.boundary - random.random()*0.01
-                        if st[i][0] < -self.boundary:
-                            st[i][0] = -self.boundary + random.random()*0.01
-                        if st[i][1] > self.boundary:
-                            st[i][1] = self.boundary - random.random()*0.01
-                        if st[i][1] < -self.boundary:
-                            st[i][1] = -self.boundary + random.random()*0.01
+                        tmp_st_x = st[entity_id][0] + epsilon_x
+                        tmp_st_y = st[entity_id][1] + epsilon_y
+                        # rejection sampling
+                        num_try += 1
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x,boundary_y)
+                        if legal:
+                            st[entity_id][0] = tmp_st_x
+                            st[entity_id][1] = tmp_st_y
+                            entity_id += 1
+                            num_try = 0
+                        else:
+                            assert num_try <= num_tries, str(st[entity_id])
+                            continue
+
                     if len(self.parent_all) > self.topk + 1:
                         if self.get_novelty([st],self.parent_all) > novelty_threshold:
                             child_new.append(copy.deepcopy(st))
@@ -262,10 +253,14 @@ class node_buffer():
             child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
             return child_new
 
-    def SampleNearby(self, starts): # produce new children and return
+    def SampleNearby_H(self, starts): # produce new children and return
+        boundary_x = self.legal_region['x']
+        boundary_y = self.legal_region['y']
         starts = starts + []
         len_start = len(starts)
         starts_new = []
+        num_tries = 100
+        num_try = 0
         if starts==[]:
             return []
         else:
@@ -274,23 +269,41 @@ class node_buffer():
                 for i in range(len_start):
                     st = copy.deepcopy(starts[i])
                     s_len = len(st)
-                    for i in range(s_len):
+                    entity_id = 0
+                    while entity_id < s_len:
                         epsilon_x = -2 * self.max_step * random.random() + self.max_step
                         epsilon_y = -2 * self.max_step * random.random() + self.max_step
-                        st[i][0] = st[i][0] + epsilon_x
-                        st[i][1] = st[i][1] + epsilon_y
-                        if st[i][0] > self.boundary:
-                            st[i][0] = self.boundary - random.random()*0.01
-                        if st[i][0] < -self.boundary:
-                            st[i][0] = -self.boundary + random.random()*0.01
-                        if st[i][1] > self.boundary:
-                            st[i][1] = self.boundary - random.random()*0.01
-                        if st[i][1] < -self.boundary:
-                            st[i][1] = -self.boundary + random.random()*0.01
+                        tmp_st_x = st[entity_id][0] + epsilon_x
+                        tmp_st_y = st[entity_id][1] + epsilon_y
+                        # rejection sampling
+                        num_try += 1
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x,boundary_y)
+                        if legal:
+                            st[entity_id][0] = tmp_st_x
+                            st[entity_id][1] = tmp_st_y
+                            entity_id += 1
+                            num_try = 0
+                        else:
+                            assert num_try <= num_tries, str(st[entity_id])
+                            continue
+
                     starts_new.append(copy.deepcopy(st))
                     add_num += 1
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
+
+    def is_legal(self, pos, boundary_x, boundary_y):
+        legal = False
+        # 限制在整个大的范围内
+        if pos[0] < boundary_x[0][0] or pos[0] > boundary_x[-1][1]:
+            return False
+        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        for boundary_id in range(len(boundary_x)):
+            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
+                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
+                    legal = True
+                    break
+        return legal
 
     def sample_starts(self, N_child, N_archive, N_parent=0):
         self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
@@ -428,7 +441,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    run = wandb.init(project='pb_tricks',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    run = wandb.init(project='pb_3rooms',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -611,14 +624,17 @@ def main():
         N_parent = 0
     N_archive = 150
     N_child = args.n_rollout_threads - N_archive - N_parent
-    max_step = 0.2
+    max_step = 0.4
     TB = 1
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = 2.0
-    # start_boundary = [-0.4,0.4,-0.4,0.4]
-    start_boundary = [1.2,2.0,1.2,2.0]
+    boundary = {'agent':{'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]},
+                'box':{'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]},
+                'landmark':{'x':[[-4.9,-3.1],[-0.9,0.9],[3.1,4.9]],'y':[[-2.9,2.9],[-2.9,2.9],[-2.9,2.9]]}} # uniform distribution
+    start_boundary = {'x':[-0.4,0.4],'y':[-0.4,0.4]} # 默认一个初始区域
+    legal_region = {'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+        'y': [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]}
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -641,7 +657,8 @@ def main():
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
-                           boundary=boundary)
+                           boundary=boundary,
+                           legal_region=legal_region)
 
     
     # run
