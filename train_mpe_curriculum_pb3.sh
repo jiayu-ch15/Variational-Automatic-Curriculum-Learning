@@ -4,7 +4,7 @@ env="MPE"
 scenario="push_ball_3rooms"
 num_landmarks=2
 num_agents=2
-algo="tech1_pb3_eval2_map10*2"
+algo="tech3_pb3_maze"
 seed=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"

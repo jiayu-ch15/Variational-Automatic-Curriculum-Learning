@@ -51,8 +51,9 @@ def make_parallel_env(args):
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 class node_buffer():
-    def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region):
+    def __init__(self,agent_num, landmark_num, buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region):
         self.agent_num = agent_num
+        self.landmark_num = landmark_num
         self.buffer_length = buffer_length
         self.boundary = boundary
         self.start_boundary = start_boundary
@@ -143,8 +144,10 @@ class node_buffer():
         return buffer_new, buffer_novelty_new
 
     def SampleNearby_novelty_H(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
-        boundary_x = self.legal_region['x']
-        boundary_y = self.legal_region['y']
+        boundary_x_agent = self.legal_region['agent']['x']
+        boundary_y_agent = self.legal_region['agent']['y']
+        boundary_x_landmark = self.legal_region['landmark']['x']
+        boundary_y_landmark = self.legal_region['landmark']['y']
         
         if len(self.parent_all) > self.topk + 1:
             self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
@@ -168,14 +171,30 @@ class node_buffer():
                     st = copy.deepcopy(parents[k])
                     s_len = len(st)
                     entity_id = 0
-                    while entity_id < s_len:
+                    while entity_id < self.agent_num:
                         epsilon_x = -2 * self.max_step * random.random() + self.max_step
                         epsilon_y = -2 * self.max_step * random.random() + self.max_step
                         tmp_st_x = st[entity_id][0] + epsilon_x
                         tmp_st_y = st[entity_id][1] + epsilon_y
                         # rejection sampling
                         num_try += 1
-                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x,boundary_y)
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x_agent,boundary_y_agent)
+                        if legal:
+                            st[entity_id][0] = tmp_st_x
+                            st[entity_id][1] = tmp_st_y
+                            entity_id += 1
+                            num_try = 0
+                        else:
+                            assert num_try <= num_tries, str(st[entity_id])
+                            continue
+                    while entity_id < self.agent_num + self.landmark_num: # landmark_pos_set
+                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                        tmp_st_x = st[entity_id][0] + epsilon_x
+                        tmp_st_y = st[entity_id][1] + epsilon_y
+                        # rejection sampling
+                        num_try += 1
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x_landmark,boundary_y_landmark)
                         if legal:
                             st[entity_id][0] = tmp_st_x
                             st[entity_id][1] = tmp_st_y
@@ -196,8 +215,10 @@ class node_buffer():
             return child_new
 
     def SampleNearby_H(self,starts):
-        boundary_x = self.legal_region['x']
-        boundary_y = self.legal_region['y']
+        boundary_x_agent = self.legal_region['agent']['x']
+        boundary_y_agent = self.legal_region['agent']['y']
+        boundary_x_landmark = self.legal_region['landmark']['x']
+        boundary_y_landmark = self.legal_region['landmark']['y']
         starts = starts + []
         len_start = len(starts)
         starts_new = []
@@ -212,14 +233,30 @@ class node_buffer():
                     st = copy.deepcopy(starts[i])
                     s_len = len(st)
                     entity_id = 0
-                    while entity_id < s_len:
+                    while entity_id < self.agent_num: # agent_pos_set
                         epsilon_x = -2 * self.max_step * random.random() + self.max_step
                         epsilon_y = -2 * self.max_step * random.random() + self.max_step
                         tmp_st_x = st[entity_id][0] + epsilon_x
                         tmp_st_y = st[entity_id][1] + epsilon_y
                         # rejection sampling
                         num_try += 1
-                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x,boundary_y)
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x_agent,boundary_y_agent)
+                        if legal:
+                            st[entity_id][0] = tmp_st_x
+                            st[entity_id][1] = tmp_st_y
+                            entity_id += 1
+                            num_try = 0
+                        else:
+                            assert num_try <= num_tries, str(st[entity_id])
+                            continue
+                    while entity_id < self.agent_num + self.landmark_num: # landmark_pos_set
+                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                        tmp_st_x = st[entity_id][0] + epsilon_x
+                        tmp_st_y = st[entity_id][1] + epsilon_y
+                        # rejection sampling
+                        num_try += 1
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x_landmark,boundary_y_landmark)
                         if legal:
                             st[entity_id][0] = tmp_st_x
                             st[entity_id][1] = tmp_st_y
@@ -602,8 +639,9 @@ def main():
     boundary = {'agent':{'x':[[-4.9,-3.1]],'y':[[-2.9,2.9]]},
                 'landmark':{'x':[[3.1,4.9]],'y':[[-2.9,2.9]]}} # uniform distribution
     start_boundary = {'x':[[3.1,4.9]],'y':[[-2.9,2.9]]} # good goal
-    legal_region = {'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-        'y': [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]} # legal region for samplenearby
+    legal_region = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+        'y': [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]},
+        'landmark':{'x':[[3.1,4.9]],'y':[[-2.9,2.9]]}} # legal region for samplenearby
     max_step = 0.6
     N_easy = 0
     test_flag = 0
@@ -620,7 +658,7 @@ def main():
     historical_length = 5
     random.seed(args.seed)
     np.random.seed(args.seed)
-    last_node = node_buffer(last_agent_num,buffer_length,
+    last_node = node_buffer(last_agent_num,last_agent_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
                            max_step=max_step,

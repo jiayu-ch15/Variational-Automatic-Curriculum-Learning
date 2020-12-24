@@ -14,11 +14,11 @@ class Scenario(BaseScenario):
             num_agents = now_agent_num
             num_landmarks = now_agent_num
         # world.collaborative = True
-        # add walls
+        # add walls 18*6
         world.walls = [Wall(orient='V', axis_pos=-10.5, endpoints=(-6, 6),width=3.0, hard=True),
                 Wall(orient='V', axis_pos=10.5, endpoints=(-6, 6),width=3.0, hard=True),
-                Wall(orient='H', axis_pos=-4.5, endpoints=(-6, 6),width=3.0, hard=True),
-                Wall(orient='H', axis_pos=4.5, endpoints=(-6, 6),width=3.0,hard=True),
+                Wall(orient='H', axis_pos=-4.5, endpoints=(-12, 12),width=3.0, hard=True),
+                Wall(orient='H', axis_pos=4.5, endpoints=(-12, 12),width=3.0,hard=True),
                 # up left wall
                 Wall(orient='V', axis_pos=-2, endpoints=(0.2, 3), width=2, hard=True),
                 # down left wall
@@ -30,7 +30,7 @@ class Scenario(BaseScenario):
                 # up right wall
                 Wall(orient='V', axis_pos=2, endpoints=(0.2, 3), width=2, hard=True),
                 # down right wall
-                Wall(orient='V', axis_pos=2, endpoints=(-3, -0.2), width=2, hard=True)
+                Wall(orient='V', axis_pos=2, endpoints=(-3, -0.2), width=2, hard=True),
                 # up right wall
                 Wall(orient='V', axis_pos=6, endpoints=(0.2, 3), width=2, hard=True),
                 # down right wall
