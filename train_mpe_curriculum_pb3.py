@@ -651,9 +651,9 @@ def main():
     use_parent_novelty = False # 关闭
     use_child_novelty = False # 关闭
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
-    use_novelty_sample = True
-    use_parent_sample = True
-    del_switch = 'novelty'
+    use_novelty_sample = False
+    use_parent_sample = False
+    del_switch = 'old'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
@@ -663,25 +663,25 @@ def main():
         N_parent = 0
     N_archive = 150
     N_child = args.n_rollout_threads - N_archive - N_parent
-    max_step = 0.4
+    max_step = 0.2
     TB = 1
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = {'agent':{'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]},
-                'box':{'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]},
-                'landmark':{'x':[[-4.9,-3.1],[-0.9,0.9],[3.1,4.9]],'y':[[-2.9,2.9],[-2.9,2.9],[-2.9,2.9]]}} # uniform distribution
+    boundary = {'agent':{'x':[[-0.9,0.9]],'y':[[-0.9,0.9]]},
+                'box':{'x':[[-0.9,0.9]],'y':[[-0.9,0.9]]},
+                'landmark':{'x':[[-4.9,-3.1],[-0.9,0.9],[3.1,4.9]],'y':[[-0.9,0.9],[-0.9,0.9],[-0.9,0.9]]}} # uniform distribution
     start_boundary = {'x':[-0.4,0.4],'y':[-0.4,0.4]} # 默认一个初始区域
     legal_region = {'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-        'y': [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]}
+        'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]}
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     last_agent_num = num_agents
     last_box_num = num_agents
     now_agent_num = num_agents
-    num_agents_test = 4
-    num_boxes_test = 4
+    num_agents_test = 2
+    num_boxes_test = 2
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1

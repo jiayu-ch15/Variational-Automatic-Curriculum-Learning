@@ -19,12 +19,11 @@ class Scenario(BaseScenario):
         self.num_boxes = num_boxes
         self.num_people = num_people
         self.num_agents = num_boxes + num_people # deactivate "good" agent
-        # add walls
-        # map 10*6
+        # add walls 10*2
         world.walls = [Wall(orient='V', axis_pos=-6.5, endpoints=(-6, 6),width=3.0, hard=True),
                 Wall(orient='V', axis_pos=6.5, endpoints=(-6, 6),width=3.0, hard=True),
-                Wall(orient='H', axis_pos=-4.5, endpoints=(-6, 6),width=3.0, hard=True),
-                Wall(orient='H', axis_pos=4.5, endpoints=(-6, 6),width=3.0,hard=True),
+                Wall(orient='H', axis_pos=-4, endpoints=(-6, 6),width=6.0, hard=True),
+                Wall(orient='H', axis_pos=4, endpoints=(-6, 6),width=6.0,hard=True),
                 # up left wall
                 Wall(orient='V', axis_pos=-2, endpoints=(0.2, 3), width=2, hard=True),
                 # down left wall

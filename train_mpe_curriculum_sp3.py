@@ -582,8 +582,8 @@ def main():
     
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
-    use_novelty_sample = False
-    use_parent_sample = False
+    use_novelty_sample = True
+    use_parent_sample = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
@@ -598,9 +598,10 @@ def main():
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = {'agent':{'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]},
-                'landmark':{'x':[[-4.9,-3.1],[-0.9,0.9],[3.1,4.9]],'y':[[-2.9,2.9],[-2.9,2.9],[-2.9,2.9]]}} # uniform distribution
-    start_boundary = {'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]} # good goal
+    # left agent, right landmark
+    boundary = {'agent':{'x':[[-4.9,-3.1]],'y':[[-2.9,2.9]]},
+                'landmark':{'x':[[3.1,4.9]],'y':[[-2.9,2.9]]}} # uniform distribution
+    start_boundary = {'x':[[3.1,4.9]],'y':[[-2.9,2.9]]} # good goal
     legal_region = {'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
         'y': [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]} # legal region for samplenearby
     max_step = 0.6
