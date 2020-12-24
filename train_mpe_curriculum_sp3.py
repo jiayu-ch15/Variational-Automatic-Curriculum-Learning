@@ -54,8 +54,8 @@ class node_buffer():
     def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
-        self.start_boundary = start_boundary
         self.boundary = boundary
+        self.start_boundary = start_boundary
         self.legal_region = legal_region
         self.archive = self.produce_good_case_H(archive_initial_length, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
@@ -247,6 +247,36 @@ class node_buffer():
                     break
         return legal
 
+    def SampleNearby(self, starts): # produce new children and return
+        starts = starts + []
+        len_start = len(starts)
+        starts_new = []
+        if starts==[]:
+            return []
+        else:
+            add_num = 0
+            while add_num < self.reproduction_num:
+                for i in range(len_start):
+                    st = copy.deepcopy(starts[i])
+                    s_len = len(st)
+                    for i in range(s_len):
+                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                        st[i][0] = st[i][0] + epsilon_x
+                        st[i][1] = st[i][1] + epsilon_y
+                        if st[i][0] > self.boundary:
+                            st[i][0] = self.boundary - random.random()*0.01
+                        if st[i][0] < -self.boundary:
+                            st[i][0] = -self.boundary + random.random()*0.01
+                        if st[i][1] > self.boundary:
+                            st[i][1] = self.boundary - random.random()*0.01
+                        if st[i][1] < -self.boundary:
+                            st[i][1] = -self.boundary + random.random()*0.01
+                    starts_new.append(copy.deepcopy(st))
+                    add_num += 1
+            starts_new = random.sample(starts_new, self.reproduction_num)
+            return starts_new
+
     def sample_starts(self, N_child, N_archive, N_parent=0):
         self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
         self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
@@ -255,6 +285,11 @@ class node_buffer():
             self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child + N_archive + N_parent - len(self.choose_archive_index)-len(self.choose_parent_index)))
         if len(self.choose_child_index) < N_child:
             self.choose_parent_index = random.sample(range(len(self.parent_all)), min(len(self.parent_all), N_child + N_archive + N_parent - len(self.choose_archive_index)-len(self.choose_child_index)))
+        # fix the thread problem
+        tmp_index_length = len(self.choose_archive_index) + len(self.choose_child_index) + len(self.choose_parent_index)
+        sum_N = N_child + N_archive + N_parent
+        if  tmp_index_length < sum_N:
+            self.choose_parent_index += random.sample(range(len(self.parent_all)),min(len(self.parent_all), sum_N - tmp_index_length))
         self.choose_child_index = np.sort(self.choose_child_index)
         self.choose_archive_index = np.sort(self.choose_archive_index)
         self.choose_parent_index = np.sort(self.choose_parent_index)
@@ -565,9 +600,9 @@ def main():
     Rmax = 0.95
     boundary = {'agent':{'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]},
                 'landmark':{'x':[[-4.9,-3.1],[-0.9,0.9],[3.1,4.9]],'y':[[-2.9,2.9],[-2.9,2.9],[-2.9,2.9]]}} # uniform distribution
-    start_boundary = {'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]}
+    start_boundary = {'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]} # good goal
     legal_region = {'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-        'y': [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]}
+        'y': [[-2.9,2.9],[-0.15,0.15],[-2.9,2.9],[-0.15,0.15],[-2.9,2.9]]} # legal region for samplenearby
     max_step = 0.6
     N_easy = 0
     test_flag = 0

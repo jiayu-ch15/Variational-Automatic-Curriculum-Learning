@@ -74,16 +74,16 @@ class node_buffer():
         self.eval_score = np.zeros(shape=len(self.archive))
         self.topk = 5
 
-    def produce_good_case_pb_H(self, num_case, now_agent_num, now_box_num):
+    def produce_good_case_grid_pb_H(self, num_case, now_agent_num, now_box_num):
         landmark_size = 0.3
         box_size = 0.3
         agent_size = 0.2
         cell_size = max([landmark_size,box_size,agent_size]) + 0.1
         start_boundary_x = self.start_boundary['x']
         start_boundary_y = self.start_boundary['y']
-        grid_num_x = round(start_boundary_x/cell_size)
-        grid_num_y = round(start_boundary_y/cell_size)
-        init_origin_node = np.array([start_boundary[0]+0.5*cell_size,start_boundary[3]-0.5*cell_size]) # left, up
+        grid_num_x = round((start_boundary_x[1]-start_boundary_x[0])/cell_size)
+        grid_num_y = round((start_boundary_y[1]-start_boundary_y[0])/cell_size)
+        init_origin_node = np.array([start_boundary_x[0]+0.5*cell_size,start_boundary_y[1]-0.5*cell_size]) # left, up
         assert grid_num_x * grid_num_y >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num_x,grid_num_y))
         grid_without_landmark = np.zeros(shape=(grid_num_x,grid_num_y))
@@ -173,12 +173,51 @@ class node_buffer():
                             break
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
-            grid = np.zeros(shape=(grid_num,grid_num))
-            grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
+            grid = np.zeros(shape=(grid_num_x,grid_num_y))
+            grid_without_landmark = np.zeros(shape=(grid_num_x,grid_num_y))
             one_starts_agent = []
             one_starts_landmark = []
             one_starts_box = []
             one_starts_box_grid = []
+        return archive
+
+    def produce_uniform_case_pb_H(self, num_case, now_agent_num, now_box_num):
+        one_starts_landmark = []
+        one_starts_agent = []
+        one_starts_box = []
+        archive = [] 
+        # boundary_x x轴活动范围
+        # boundary_y 是y轴活动范围
+        # agent只能在middle room出发，目标点在left and right room
+        boundary_x_agent = self.boundary['agent']['x']
+        boundary_y_agent = self.boundary['agent']['y']
+        boundary_x_box = self.boundary['box']['x']
+        boundary_y_box = self.boundary['box']['y']
+        boundary_x_landmark = self.boundary['landmark']['x']
+        boundary_y_landmark = self.boundary['landmark']['y']
+        for j in range(num_case):
+            for i in range(now_box_num):
+                location_id = np.random.randint(len(boundary_x_landmark))
+                landmark_location_x = np.random.uniform(boundary_x_landmark[location_id][0],boundary_x_landmark[location_id][1])
+                landmark_location_y = np.random.uniform(boundary_y_landmark[location_id][0],boundary_y_landmark[location_id][1])
+                landmark_location = np.array([landmark_location_x,landmark_location_y])
+                one_starts_landmark.append(copy.deepcopy(landmark_location))
+            for i in range(now_box_num):
+                location_id = np.random.randint(len(boundary_x_box))
+                box_location_x = np.random.uniform(boundary_x_box[location_id][0],boundary_x_box[location_id][1])
+                box_location_y = np.random.uniform(boundary_y_box[location_id][0],boundary_y_box[location_id][1])
+                box_location = np.array([box_location_x,box_location_y])
+                one_starts_box.append(copy.deepcopy(box_location))
+            for i in range(now_agent_num):
+                location_id = np.random.randint(len(boundary_x_agent))
+                agent_location_x = np.random.uniform(boundary_x_agent[location_id][0],boundary_x_agent[location_id][1])
+                agent_location_y = np.random.uniform(boundary_y_agent[location_id][0],boundary_y_agent[location_id][1])
+                agent_location = np.array([agent_location_x,agent_location_y])
+                one_starts_agent.append(copy.deepcopy(agent_location))
+            archive.append(one_starts_agent + one_starts_box + one_starts_landmark)
+            one_starts_agent = []
+            one_starts_landmark = []
+            one_starts_box = []
         return archive
 
     def get_novelty(self,list1,list2):
@@ -612,9 +651,9 @@ def main():
     use_parent_novelty = False # 关闭
     use_child_novelty = False # 关闭
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
-    use_novelty_sample = False
-    use_parent_sample = False
-    del_switch = 'old'
+    use_novelty_sample = True
+    use_parent_sample = True
+    del_switch = 'novelty'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
@@ -641,8 +680,8 @@ def main():
     last_agent_num = num_agents
     last_box_num = num_agents
     now_agent_num = num_agents
-    num_agents_test = 2
-    num_boxes_test = 2
+    num_agents_test = 4
+    num_boxes_test = 4
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
@@ -680,9 +719,9 @@ def main():
         # reproduction
         if use_samplenearby:
             if use_novelty_sample:
-                last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+                last_node.childlist += last_node.SampleNearby_novelty_H(last_node.parent, child_novelty_threshold,logger, current_timestep)
             else:
-                last_node.childlist += last_node.SampleNearby(last_node.parent)
+                last_node.childlist += last_node.SampleNearby_H(last_node.parent)
         
         # reset env 
         # one length = now_process_num
@@ -918,7 +957,8 @@ def main():
         actor_critic.agents_num = num_agents_test
         actor_critic.boxes_num = num_boxes_test
         if episode % check_frequency==0:
-            obs, _ = envs.reset(num_agents_test,num_boxes_test)
+            uniform_case = last_node.produce_uniform_case_pb_H(args.n_rollout_threads, num_agents_test, num_boxes_test)
+            obs = envs.new_starts_obs_pb(uniform_case, num_agents_test, num_boxes_test, args.n_rollout_threads)
             episode_length = 120
             #replay buffer
             rollouts = RolloutStorage(num_agents_test,
