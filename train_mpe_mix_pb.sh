@@ -4,8 +4,8 @@ env="MPE"
 scenario="push_ball"
 num_landmarks=2
 num_agents=2
-algo="mix2n4_ppotrue"
-# algo='check'
+# algo="mix2n4_ppotrue"
+algo='check'
 seed=3
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"

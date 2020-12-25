@@ -741,6 +741,7 @@ def main():
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
+    # map 10*2
     boundary = {'agent':{'x':[[-4.9,-3.1]],'y':[[-0.9,0.9]]},
                 'box':{'x':[[-4.9,-3.1]],'y':[[-0.9,0.9]]},
                 'landmark':{'x':[[3.1,4.9]],'y':[[-0.9,0.9]]}} # uniform distribution

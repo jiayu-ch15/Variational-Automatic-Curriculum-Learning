@@ -355,6 +355,25 @@ class node_buffer():
         else:
             return 0
 
+    def save_phase_curricula(self, dir_path, success_rate):
+        if self.agent_num!=0:
+            save_path = dir_path / ('%iagents' % (self.agent_num))
+            if not os.path.exists(save_path):
+                os.makedirs(save_path / 'archive')
+                os.makedirs(save_path / 'parent')
+                os.makedirs(save_path / 'parent_all')
+            with open(save_path / 'archive' / ('archive_%f' %(success_rate)),'w+') as fp:
+                for line in self.archive:
+                    fp.write(str(np.array(line).reshape(-1))+'\n')
+            with open(save_path / 'parent' / ('parent_%f' %(success_rate)),'w+') as fp:
+                for line in self.parent:
+                    fp.write(str(np.array(line).reshape(-1))+'\n')
+            with open(save_path / 'parent_all' / ('parent_all_%f' %(success_rate)),'w+') as fp:
+                for line in self.parent_all:
+                    fp.write(str(np.array(line).reshape(-1))+'\n')
+        else:
+            return 0
+
 def main():
     args = get_config()
     run = wandb.init(project='mix_sp',name=str(args.algorithm_name) + "_seed" + str(args.seed))
@@ -379,6 +398,7 @@ def main():
     # path
     model_dir = Path('./results') / args.env_name / args.scenario_name / args.algorithm_name
     node_dir = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name
+    curricula_dir = Path('./curricula') / args.env_name / args.scenario_name / args.algorithm_name
     if not model_dir.exists():
         curr_run = 'run1'
     else:
@@ -395,9 +415,18 @@ def main():
             node_curr_run = 'run1'
         else:
             node_curr_run = 'run%i' % (max(exst_run_nums) + 1)
+    if not curricula_dir.exists():
+        curricula_curr_run = 'run1'
+    else:
+        exst_run_nums = [int(str(folder.name).split('run')[1]) for folder in node_dir.iterdir() if str(folder.name).startswith('run')]
+        if len(exst_run_nums) == 0:
+            curricula_curr_run = 'run1'
+        else:
+            curricula_curr_run = 'run%i' % (max(exst_run_nums) + 1)
 
     run_dir = model_dir / curr_run
     save_node_dir = node_dir / node_curr_run
+    save_curricula_dir = curricula_dir / curricula_curr_run
     log_dir = run_dir / 'logs'
     save_dir = run_dir / 'models'
     os.makedirs(str(log_dir))
@@ -550,9 +579,11 @@ def main():
     now_agent_num = 4
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
+    mix_flag = False
     check_frequency = 1
     save_node_frequency = 3
     save_node_flag = False
+    save_curricula = True
     historical_length = 5
     next_stage_flag = 0
     random.seed(args.seed)
@@ -563,6 +594,7 @@ def main():
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
+    # 保证和phase的batch相同
     now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
@@ -580,11 +612,6 @@ def main():
     starts_length_now = args.n_rollout_threads
     current_timestep = 0
 
-    # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/double4_24/' + 'run1' + "/models/4agent_model.pt")['model'].to(device)
-    # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8/run1/models/4agent_model.pt')['model'].to(device)
-    # actor_critic.agents_num = now_node.agent_num
-    # agents.actor_critic = actor_critic
-
     for episode in range(episodes):
         if args.use_linear_lr_decay:# decrease learning rate linearly
             if args.share_policy:   
@@ -592,7 +619,10 @@ def main():
             else:     
                 for agent_id in range(num_agents):
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
-
+        
+        # 保证batch相同
+        if mix_flag:
+            now_node.reproduction_num = round(M/2) + 1
         # reproduction
         if use_novelty_sample:
             if last_node.agent_num!=0:
@@ -604,7 +634,6 @@ def main():
             now_node.childlist += now_node.SampleNearby(now_node.parent)
         
         # reset env 
-        # one length = now_process_num
         one_length_last = 0
         if last_node.agent_num!=0:
             if use_parent_sample:
@@ -612,11 +641,16 @@ def main():
             else:
                 starts_last, one_length_last, starts_length_last = last_node.sample_starts(N_child,N_archive)
             last_node.eval_score = np.zeros(shape=one_length_last)
-        # starts_now, one_length_now = now_node.sample_starts(N_child,N_archive)
         if use_parent_sample:
-            starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive,N_parent)
+            if mix_flag:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child/2),round(N_archive/2)+1,round(N_parent/2))
+            else:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive,N_parent)
         else:
-            starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive)
+            if mix_flag:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child/2),round(N_archive/2)+1)
+            else:
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive)
         now_node.eval_score = np.zeros(shape=one_length_now)    
 
         for times in range(eval_frequency):
@@ -1207,9 +1241,6 @@ def main():
             for i in range(rollouts_now.rewards.shape[1]):
                 rew.append(np.sum(rollouts_now.rewards[:,i]))
             wandb.log({'eval_episode_reward': np.mean(rew)}, current_timestep)
-
-            # wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(infos)}, current_timestep)
-            # mean_cover_rate = np.mean(infos)
             print('test_agent_num: ', now_node.agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
         
@@ -1231,8 +1262,11 @@ def main():
                 
 
         if next_stage_flag==1:
+            mix_flag = True
             next_stage_flag = 0
             last_node = copy.deepcopy(now_node)
+            if save_curricula:
+                last_node.save_phase_curricula(save_curricula_dir, upper_bound)
             start_boundary = 1.0
             now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=args.n_rollout_threads,
