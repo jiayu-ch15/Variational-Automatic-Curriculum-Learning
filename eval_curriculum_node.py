@@ -151,6 +151,35 @@ def produce_uniform_case_pb_H(num_case, now_agent_num, now_box_num, boundary):
         one_starts_box = []
     return archive
 
+def produce_uniform_case_H(num_case, now_agent_num, boundary): # 产生H_map的随机态
+    one_starts_landmark = []
+    one_starts_agent = []
+    archive = [] 
+    # boundary_x x轴活动范围
+    # boundary_y 是y轴活动范围
+    # agent只能在middle room出发，目标点在left and right room
+    boundary_x_agent = boundary['agent']['x']
+    boundary_y_agent = boundary['agent']['y']
+    boundary_x_landmark = boundary['landmark']['x']
+    boundary_y_landmark = boundary['landmark']['y']
+    for j in range(num_case):
+        for i in range(now_agent_num):
+            location_id = np.random.randint(len(boundary_x_landmark))
+            landmark_location_x = np.random.uniform(boundary_x_landmark[location_id][0],boundary_x_landmark[location_id][1])
+            landmark_location_y = np.random.uniform(boundary_y_landmark[location_id][0],boundary_y_landmark[location_id][1])
+            landmark_location = np.array([landmark_location_x,landmark_location_y])
+            one_starts_landmark.append(copy.deepcopy(landmark_location))
+        for i in range(now_agent_num):
+            location_id = np.random.randint(len(boundary_x_agent))
+            agent_location_x = np.random.uniform(boundary_x_agent[location_id][0],boundary_x_agent[location_id][1])
+            agent_location_y = np.random.uniform(boundary_y_agent[location_id][0],boundary_y_agent[location_id][1])
+            agent_location = np.array([agent_location_x,agent_location_y])
+            one_starts_agent.append(copy.deepcopy(agent_location))
+        archive.append(one_starts_agent+one_starts_landmark)
+        one_starts_agent = []
+        one_starts_landmark = []
+    return archive
+
 # Parameters
 gamma = 0.95
 render = False
@@ -174,17 +203,15 @@ if __name__ == '__main__':
     box_num = args.num_boxes
     data = []
     # uniform data
-    # # map 10*2
-    # boundary = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-    #     'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
-    #     'box':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-    #     'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
-    #     'landmark':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-    #     'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]}}
-    # starts = produce_uniform_case_pb_H(10000, 2, 2, boundary)
-    # with open('/home/tsing73/curriculum/node_data/pb3_10*2_2people2box.txt','w') as fp:
-    #     for i in range(len(starts)):
-    #         fp.write(str(np.array(starts[i]).reshape(-1))+'\n')
+    # map 10*2
+    boundary = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+        'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
+        'landmark':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+        'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]}}
+    starts = produce_uniform_case_H(10000, 4, boundary)
+    with open('/home/tsing73/curriculum/node_data/sp3small_10*2.txt','w') as fp:
+        for i in range(len(starts)):
+            fp.write(str(np.array(starts[i]).reshape(-1))+'\n')
     # pdb.set_trace()
 
     mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run1'
@@ -198,9 +225,15 @@ if __name__ == '__main__':
         or args.scenario_name=='simple_spread_3rooms_hard2' or args.scenario_name=='simple_spread_3rooms_leftup_rightdown':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp3_10*6.txt'
+    elif args.scenario_name=='simple_spread_3rooms_small':
+        mode_path = mode_path / ('%iagents'%agent_num)
+        data_dir = '/home/tsing73/curriculum/node_data/sp3small_10*2.txt'
     elif args.scenario_name=='push_ball_3rooms':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/pb3_10*2_2people2box.txt'
+    elif args.scenario_name=='push_ball_H':
+        mode_path = mode_path / ('%iagents'%agent_num)
+        data_dir = '/home/tsing73/curriculum/node_data/pb3_6*2_2people2box.txt'
     with open(data_dir,'r') as fp:
         data = fp.readlines()
     for i in range(len(data)):

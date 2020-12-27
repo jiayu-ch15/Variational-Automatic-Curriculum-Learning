@@ -94,10 +94,13 @@ class node_buffer():
             one_starts_box = []
         return archive
 
-    def produce_good_case_grid_pb(self,num_case, start_boundary, now_agent_num, now_box_num):
-        cell_size = 0.2
-        grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
-        init_origin_node = np.array([start_boundary[0],start_boundary[2]])
+    def produce_good_case_grid_pb(self, num_case, start_boundary, now_agent_num, now_box_num):
+        landmark_size = 0.3
+        box_size = 0.3
+        agent_size = 0.2
+        cell_size = max([landmark_size,box_size,agent_size]) + 0.1
+        grid_num = round((start_boundary[1]-start_boundary[0]) / cell_size)
+        init_origin_node = np.array([start_boundary[0]+0.5*cell_size,start_boundary[3]-0.5*cell_size]) # left, up
         assert grid_num ** 2 >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num,grid_num))
         grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
@@ -115,8 +118,10 @@ class node_buffer():
                         continue
                     else:
                         grid[box_location_grid[0],box_location_grid[1]] = 1
-                        # box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
-                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                        extra_room = (cell_size - landmark_size) / 2
+                        extra_x = np.random.uniform(-extra_room,extra_room)
+                        extra_y = np.random.uniform(-extra_room,extra_room)
+                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size+extra_x,-(box_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
                         one_starts_box.append(copy.deepcopy(box_location))
                         one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                         break
@@ -124,7 +129,7 @@ class node_buffer():
             # landmark location
             indices = random.sample(range(now_box_num), now_box_num)
             num_try = 0
-            num_tries = 20
+            num_tries = 50
             for k in indices:
                 around = 1
                 while num_try < num_tries:
@@ -142,34 +147,47 @@ class node_buffer():
                         continue
                     else:
                         grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                        extra_room = (cell_size - landmark_size) / 2
+                        extra_x = np.random.uniform(-extra_room,extra_room)
+                        extra_y = np.random.uniform(-extra_room,extra_room)
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size+extra_x,-(landmark_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
                         one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             # agent_location
             indices_agent = random.sample(range(now_box_num), now_box_num)
             num_try = 0
-            num_tries = 20
+            num_tries = 50
             for k in indices_agent:
                 around = 1
                 while num_try < num_tries:
                     delta_x_direction = random.randint(-around,around)
                     delta_y_direction = random.randint(-around,around)
-                    agent_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
-                    agent_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
+                    agent_location_x = one_starts_box_grid[k][0]+delta_x_direction
+                    agent_location_y = one_starts_box_grid[k][1]+delta_y_direction
                     agent_location_grid = np.array([agent_location_x,agent_location_y])
-                    if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
-                        num_try += 1
-                        if num_try >= num_tries and around==1:
-                            around = 2
-                            num_try = 0
-                        assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
-                        continue
-                    else:
-                        grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
-                        # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
-                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                    if agent_location_x < 0 or agent_location_y < 0 or agent_location_x > grid.shape[0]-1 or  agent_location_y > grid.shape[0]-1:
+                        extra_room = (cell_size - landmark_size) / 2
+                        extra_x = np.random.uniform(-extra_room,extra_room)
+                        extra_y = np.random.uniform(-extra_room,extra_room)
+                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
                         one_starts_agent.append(copy.deepcopy(agent_location))
                         break
+                    else:
+                        if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
+                            num_try += 1
+                            if num_try >= num_tries and around==1:
+                                around = 2
+                                num_try = 0
+                            assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
+                            continue
+                        else:
+                            grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
+                            extra_room = (cell_size - landmark_size) / 2
+                            extra_x = np.random.uniform(-extra_room,extra_room)
+                            extra_y = np.random.uniform(-extra_room,extra_room)
+                            agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                            one_starts_agent.append(copy.deepcopy(agent_location))
+                            break
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
@@ -591,7 +609,7 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    start_boundary = [-0.3,0.3,-0.3,0.3]
+    start_boundary = [-0.8,0.8,-0.8,0.8]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -599,13 +617,12 @@ def main():
     mix_add_frequency = 30 # 改变比例的频率
     mix_add_count = 0
     decay_last = 1.0
-    decay_now = 1.0
+    decay_now = 1.0 - 0.5 * decay_last
     mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
-    last_begin_flag = False
     target_num = 4
-    last_box_num = 0
+    last_box_num = 2
     last_agent_num = last_box_num
-    now_box_num = 2
+    now_box_num = 4
     now_agent_num = now_box_num
     last_mean_cover_rate = 0
     now_mean_cover_rate = 0
@@ -613,6 +630,8 @@ def main():
     check_frequency = 1
     save_node_frequency = 5
     save_node_flag = False
+    load_curricula = True
+    load_curricula_path = './curricula/MPE/push_ball/mix2n4_samebatch/run1/2boxes'
     historical_length = 5
     next_stage_flag = 0
     random.seed(args.seed)
@@ -629,6 +648,44 @@ def main():
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
+    if load_curricula: # 默认从2、4混合开始训练
+        mix_flag = True
+        # load archive
+        with open(load_curricula_path + '/archive/archive_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        archive_load = []
+        for i in range(len(tmp)): 
+            archive_load_one = []
+            for j in range(last_node.agent_num * 3):
+                archive_load_one.append(tmp[i][j*2:(j+1)*2])
+            archive_load.append(archive_load_one)
+        last_node.archive = copy.deepcopy(archive_load)
+        # load parent
+        with open(load_curricula_path + '/parent/parent_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        parent_load = []
+        for i in range(len(tmp)): 
+            parent_load_one = []
+            for j in range(last_node.agent_num * 3):
+                parent_load_one.append(tmp[i][j*2:(j+1)*2])
+            parent_load.append(parent_load_one)
+        last_node.parent = copy.deepcopy(parent_load)
+        # load parent_all
+        with open(load_curricula_path + '/parent_all/parent_all_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        parent_all_load = []
+        for i in range(len(tmp)): 
+            parent_all_load_one = []
+            for j in range(last_node.agent_num * 3):
+                parent_all_load_one.append(tmp[i][j*2:(j+1)*2])
+            parent_all_load.append(parent_all_load_one)
+        last_node.parent_all = copy.deepcopy(parent_all_load)
 
     
     # run
@@ -651,17 +708,12 @@ def main():
         # reproduction_num should be changed
         if mix_add_count == mix_add_frequency and mix_flag:
             mix_add_count = 0
-            decay_now += 0.1
-            decay_now = min(decay_now,1.0)
-            if last_begin_flag:
-                decay_last -= 0.1
-                decay_last = max(decay_last,0.0)
+            decay_last -= 0.1
+            decay_last = max(decay_last,0.0)
+            decay_now = 1.0 - 0.5 * decay_last
             # 停止混合
             if decay_last == 0.0:
                 mix_flag = False
-            # 开始降低last_node比例
-            if decay_now == 1.0:
-                last_begin_flag = True
                 
         wandb.log({'decay_last': decay_last},current_timestep)
         wandb.log({'decay_now': decay_now},current_timestep)
@@ -688,7 +740,7 @@ def main():
         one_length_last = 0
         if last_node.agent_num!=0 and mix_flag:
             # check
-            if round(N_child*decay_last) == 0 or round(N_archive*decay_last) ==0 or round(N_parent*decay_last) ==0:
+            if round(N_child*decay_last) == 0 or round(N_archive*decay_last)==0 or round(N_parent*decay_last)==0:
                 mix_flag = False
             if use_parent_sample:
                 starts_last, one_length_last, starts_length_last = last_node.sample_starts(round(N_child*decay_last),round(N_archive*decay_last),round(N_parent*decay_last))
@@ -1417,7 +1469,7 @@ def main():
         if next_stage_flag==1:
             mix_flag = True
             next_stage_flag = 0
-            start_boundary = [-0.6,0.6,-0.6,0.6]
+            start_boundary = [-0.8,0.8,-0.8,0.8]
             last_node = copy.deepcopy(now_node)
             now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,

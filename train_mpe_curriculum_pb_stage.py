@@ -13,7 +13,7 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO, PPO2, PPO3
+from algorithm.ppo import PPO, PPO3
 from algorithm.model import Policy, Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_actor_pb_add,ATTBase_critic_pb_add
 
 from config import get_config
@@ -95,10 +95,13 @@ class node_buffer():
             one_starts_box = []
         return archive
 
-    def produce_good_case_grid_pb(self,num_case, start_boundary, now_agent_num, now_box_num):
-        cell_size = 0.2
-        grid_num = int((start_boundary[1]-start_boundary[0]) / cell_size) + 1
-        init_origin_node = np.array([start_boundary[0],start_boundary[2]])
+    def produce_good_case_grid_pb(self, num_case, start_boundary, now_agent_num, now_box_num):
+        landmark_size = 0.3
+        box_size = 0.3
+        agent_size = 0.2
+        cell_size = max([landmark_size,box_size,agent_size]) + 0.1
+        grid_num = round((start_boundary[1]-start_boundary[0]) / cell_size)
+        init_origin_node = np.array([start_boundary[0]+0.5*cell_size,start_boundary[3]-0.5*cell_size]) # left, up
         assert grid_num ** 2 >= now_agent_num + now_box_num
         grid = np.zeros(shape=(grid_num,grid_num))
         grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
@@ -116,8 +119,10 @@ class node_buffer():
                         continue
                     else:
                         grid[box_location_grid[0],box_location_grid[1]] = 1
-                        # box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size])-start_boundary
-                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size,(box_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                        extra_room = (cell_size - landmark_size) / 2
+                        extra_x = np.random.uniform(-extra_room,extra_room)
+                        extra_y = np.random.uniform(-extra_room,extra_room)
+                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size+extra_x,-(box_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
                         one_starts_box.append(copy.deepcopy(box_location))
                         one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                         break
@@ -125,7 +130,7 @@ class node_buffer():
             # landmark location
             indices = random.sample(range(now_box_num), now_box_num)
             num_try = 0
-            num_tries = 20
+            num_tries = 100
             for k in indices:
                 around = 1
                 while num_try < num_tries:
@@ -143,34 +148,47 @@ class node_buffer():
                         continue
                     else:
                         grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                        extra_room = (cell_size - landmark_size) / 2
+                        extra_x = np.random.uniform(-extra_room,extra_room)
+                        extra_y = np.random.uniform(-extra_room,extra_room)
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size+extra_x,-(landmark_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
                         one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
             # agent_location
             indices_agent = random.sample(range(now_box_num), now_box_num)
             num_try = 0
-            num_tries = 20
+            num_tries = 100
             for k in indices_agent:
                 around = 1
                 while num_try < num_tries:
                     delta_x_direction = random.randint(-around,around)
                     delta_y_direction = random.randint(-around,around)
-                    agent_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
-                    agent_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
+                    agent_location_x = one_starts_box_grid[k][0]+delta_x_direction
+                    agent_location_y = one_starts_box_grid[k][1]+delta_y_direction
                     agent_location_grid = np.array([agent_location_x,agent_location_y])
-                    if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
-                        num_try += 1
-                        if num_try >= num_tries and around==1:
-                            around = 2
-                            num_try = 0
-                        assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
-                        continue
-                    else:
-                        grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
-                        # agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary
-                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size]) + init_origin_node
+                    if agent_location_x < 0 or agent_location_y < 0 or agent_location_x > grid.shape[0]-1 or  agent_location_y > grid.shape[0]-1:
+                        extra_room = (cell_size - landmark_size) / 2
+                        extra_x = np.random.uniform(-extra_room,extra_room)
+                        extra_y = np.random.uniform(-extra_room,extra_room)
+                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
                         one_starts_agent.append(copy.deepcopy(agent_location))
                         break
+                    else:
+                        if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
+                            num_try += 1
+                            if num_try >= num_tries and around==1:
+                                around = 2
+                                num_try = 0
+                            assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
+                            continue
+                        else:
+                            grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
+                            extra_room = (cell_size - landmark_size) / 2
+                            extra_x = np.random.uniform(-extra_room,extra_room)
+                            extra_y = np.random.uniform(-extra_room,extra_room)
+                            agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                            one_starts_agent.append(copy.deepcopy(agent_location))
+                            break
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
@@ -490,7 +508,7 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
-        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_4boxlength200_pb/run3/models/agent_model.pt')['model'].to(device)
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_samebatch/run%i/models/2box_model.pt'%args.seed)['model'].to(device)
         # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/phase_pb_0.98/run1/models/2box_model.pt')['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
@@ -590,14 +608,14 @@ def main():
     Rmax = 0.95
     boundary = 2.0
     # start_boundary = [-1.0,1.0,-1.0,1.0]
-    start_boundary = [-0.3,0.3,-0.3,0.3]
+    start_boundary = [-0.8,0.8,-0.8,0.8]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
-    target_num = 12
+    target_num = 4
     last_box_num = 0
-    now_box_num = 2
+    now_box_num = 4
     now_agent_num = now_box_num
     mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
@@ -1051,10 +1069,8 @@ def main():
                     torch.save({'model': actor_critic}, str(save_dir) + "/%ibox_model.pt"%now_node.box_num)
         if next_stage_flag==1:
             next_stage_flag = 0
-            if now_agent_num==4:
-                start_boundary = [-0.6,0.6,-0.6,0.6]
-            elif now_agent_num>4:
-                start_boundary = [-1.0,1.0,-1.0,1.0]
+            if now_agent_num>=4:
+                start_boundary = [-0.8,0.8,-0.8,0.8]
             now_node = node_buffer(now_agent_num, now_box_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,

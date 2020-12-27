@@ -1,13 +1,13 @@
 #!/bin/sh
 ulimit -n 4096 
 env="MPE"
-# scenario="simple_spread_3rooms"
-scenario="push_ball_3rooms"
-num_agents=2
-num_landmarks=2
-num_boxes=2
+scenario="simple_spread_3rooms_small"
+# scenario="push_ball_H"
+num_agents=4
+num_landmarks=4
+num_boxes=4
 # algo="diversified_novelty_parentsampling_sp3_leftup_rightdown"
-algo='tech3_pb3_maze'
+algo='tech3_sp3_small'
 seed_max=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed_max}"

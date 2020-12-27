@@ -415,14 +415,7 @@ def main():
             node_curr_run = 'run1'
         else:
             node_curr_run = 'run%i' % (max(exst_run_nums) + 1)
-    if not curricula_dir.exists():
-        curricula_curr_run = 'run1'
-    else:
-        exst_run_nums = [int(str(folder.name).split('run')[1]) for folder in node_dir.iterdir() if str(folder.name).startswith('run')]
-        if len(exst_run_nums) == 0:
-            curricula_curr_run = 'run1'
-        else:
-            curricula_curr_run = 'run%i' % (max(exst_run_nums) + 1)
+    curricula_curr_run = 'run%i'%args.seed
 
     run_dir = model_dir / curr_run
     save_node_dir = node_dir / node_curr_run
@@ -622,7 +615,7 @@ def main():
         
         # 保证batch相同
         if mix_flag:
-            now_node.reproduction_num = round(M/2) + 1
+            now_node.reproduction_num = round(M/2)
         # reproduction
         if use_novelty_sample:
             if last_node.agent_num!=0:
@@ -643,12 +636,12 @@ def main():
             last_node.eval_score = np.zeros(shape=one_length_last)
         if use_parent_sample:
             if mix_flag:
-                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child/2),round(N_archive/2)+1,round(N_parent/2))
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child/2),round(N_archive/2),round(N_parent/2))
             else:
                 starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive,N_parent)
         else:
             if mix_flag:
-                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child/2),round(N_archive/2)+1)
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child/2),round(N_archive/2))
             else:
                 starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive)
         now_node.eval_score = np.zeros(shape=one_length_now)    

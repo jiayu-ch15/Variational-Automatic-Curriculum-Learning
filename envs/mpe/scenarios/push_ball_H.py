@@ -22,12 +22,12 @@ class Scenario(BaseScenario):
         # add walls 6*2
         world.walls = [Wall(orient='V', axis_pos=-4.5, endpoints=(-6, 6),width=3.0, hard=True),
                 Wall(orient='V', axis_pos=4.5, endpoints=(-6, 6),width=3.0, hard=True),
-                Wall(orient='H', axis_pos=-4, endpoints=(-6, 6),width=3.0, hard=True),
-                Wall(orient='H', axis_pos=4, endpoints=(-6, 6),width=3.0,hard=True),
+                Wall(orient='H', axis_pos=-4, endpoints=(-6, 6),width=6.0, hard=True),
+                Wall(orient='H', axis_pos=4, endpoints=(-6, 6),width=6.0,hard=True),
                 # up left wall
-                Wall(orient='V', axis_pos=0, endpoints=(0.2, 3), width=2, hard=True),
+                Wall(orient='V', axis_pos=0, endpoints=(0.6, 3), width=2, hard=True),
                 # down left wall
-                Wall(orient='V', axis_pos=0, endpoints=(-3, -0.2), width=2, hard=True),
+                Wall(orient='V', axis_pos=0, endpoints=(-3, -0.6), width=2, hard=True),
                 ]
         # add agents
         world.agents = [Agent() for i in range(self.num_agents)]

@@ -442,6 +442,7 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
+        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_samebatch/run%i/models/4agent_model.pt'%(args.seed))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -554,12 +555,17 @@ def main():
     mix_add_frequency = 30 # 改变比例的频率
     mix_add_count = 0
     decay_last = 1.0
-    decay_now = 1.0
-    mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
-    last_begin_flag = False
+    decay_now = 1.0 - 0.5 * decay_last
+    mix_flag = False # 代表是否需要混合
     target_num = 8
-    last_agent_num = 0
-    now_agent_num = 4
+    load_curricula = False
+    load_curricula_path = './curricula/MPE/simple_spread/mix4n8_samebatch/run%i/4agents'
+    if load_curricula:
+        last_agent_num = 4
+        now_agent_num = 8
+    else:
+        last_agent_num = 0
+        now_agent_num = 4
     last_mean_cover_rate = 0
     now_mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
@@ -582,8 +588,46 @@ def main():
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
+    if load_curricula: # 默认从4、8混合开始训练
+        mix_flag = True
+        # load archive
+        with open(load_curricula_path + '/archive/archive_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        archive_load = []
+        for i in range(len(tmp)): 
+            archive_load_one = []
+            for j in range(last_node.agent_num * 2):
+                archive_load_one.append(tmp[i][j*2:(j+1)*2])
+            archive_load.append(archive_load_one)
+        last_node.archive = copy.deepcopy(archive_load)
+        # load parent
+        with open(load_curricula_path + '/parent/parent_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        parent_load = []
+        for i in range(len(tmp)): 
+            parent_load_one = []
+            for j in range(last_node.agent_num * 2):
+                parent_load_one.append(tmp[i][j*2:(j+1)*2])
+            parent_load.append(parent_load_one)
+        last_node.parent = copy.deepcopy(parent_load)
+        # load parent_all
+        with open(load_curricula_path + '/parent_all/parent_all_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        parent_all_load = []
+        for i in range(len(tmp)): 
+            parent_all_load_one = []
+            for j in range(last_node.agent_num * 2):
+                parent_all_load_one.append(tmp[i][j*2:(j+1)*2])
+            parent_all_load.append(parent_all_load_one)
+        last_node.parent_all = copy.deepcopy(parent_all_load)
+        
 
-    
     # run
     begin = time.time()
     episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads
@@ -604,17 +648,12 @@ def main():
         # reproduction_num should be changed
         if mix_add_count == mix_add_frequency and mix_flag:
             mix_add_count = 0
-            decay_now += 0.1
-            decay_now = min(decay_now,1.0)
-            if last_begin_flag:
-                decay_last -= 0.1
-                decay_last = max(decay_last,0.0)
+            decay_last -= 0.1
+            decay_last = max(decay_last,0.0)
+            decay_now = 1.0 - 0.5 * decay_last
             # 停止混合
             if decay_last == 0.0:
                 mix_flag = False
-            # 开始降低last_node比例
-            if decay_now == 1.0:
-                last_begin_flag = True
                 
         wandb.log({'decay_last': decay_last},current_timestep)
         wandb.log({'decay_now': decay_now},current_timestep)

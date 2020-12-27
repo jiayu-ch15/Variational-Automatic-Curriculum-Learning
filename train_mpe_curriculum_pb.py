@@ -611,7 +611,7 @@ def main():
         N_parent = 0
     N_archive = 150
     N_child = args.n_rollout_threads - N_archive - N_parent
-    max_step = 0.2
+    max_step = 0.4
     TB = 1
     M = N_child
     Rmin = 0.5
