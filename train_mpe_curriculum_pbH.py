@@ -75,6 +75,31 @@ class node_buffer():
         self.eval_score = np.zeros(shape=len(self.archive))
         self.topk = 5
 
+    def produce_good_case_pb_H(self, num_case, now_agent_num, now_box_num):
+        one_starts_landmark = []
+        one_starts_agent = []
+        one_starts_box = []
+        archive = [] 
+        start_boundary_x = self.start_boundary['x']
+        start_boundary_y = self.start_boundary['y']
+        for j in range(num_case):
+            for i in range(now_box_num):
+                landmark_location = np.array([np.random.uniform(start_boundary_x[0],start_boundary_x[1]),np.random.uniform(start_boundary_y[0],start_boundary_y[1])]) 
+                one_starts_landmark.append(copy.deepcopy(landmark_location))
+            indices = random.sample(range(now_box_num), now_box_num)
+            for k in indices:
+                epsilon = -2 * 0.01 * random.random() + 0.01
+                one_starts_box.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
+            indices = random.sample(range(now_box_num), now_agent_num)
+            for k in indices:
+                epsilon = -2 * 0.01 * random.random() + 0.01
+                one_starts_agent.append(copy.deepcopy(one_starts_box[k]+epsilon))
+            archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
+            one_starts_agent = []
+            one_starts_landmark = []
+            one_starts_box = []
+        return archive
+
     def produce_good_case_grid_pb_H(self, num_case, now_agent_num, now_box_num):
         landmark_size = 0.3
         box_size = 0.3
@@ -113,7 +138,7 @@ class node_buffer():
             # landmark location
             indices = random.sample(range(now_box_num), now_box_num)
             num_try = 0
-            num_tries = 50
+            num_tries = 100
             for k in indices:
                 around = 1
                 while num_try < num_tries:
@@ -122,25 +147,29 @@ class node_buffer():
                     landmark_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
                     landmark_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
                     landmark_location_grid = np.array([landmark_location_x,landmark_location_y])
-                    if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
+                    if landmark_location_x < 0 or landmark_location_y < 0 or landmark_location_x > grid.shape[0]-1 or  landmark_location_y > grid.shape[0]-1:
                         num_try += 1
-                        if num_try >= num_tries and around==1:
-                            around = 2
-                            num_try = 0
-                        assert num_try<num_tries or around==1, 'case %i can not find landmark pos'%j
                         continue
                     else:
-                        grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
-                        extra_room = (cell_size - landmark_size) / 2
-                        extra_x = np.random.uniform(-extra_room,extra_room)
-                        extra_y = np.random.uniform(-extra_room,extra_room)
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size+extra_x,-(landmark_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
-                        one_starts_landmark.append(copy.deepcopy(landmark_location))
-                        break
+                        if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
+                            num_try += 1
+                            if num_try >= num_tries and around==1:
+                                around = 2
+                                num_try = 0
+                            assert num_try<num_tries or around==1, 'case %i can not find landmark pos'%j
+                            continue
+                        else:
+                            grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
+                            extra_room = (cell_size - landmark_size) / 2
+                            extra_x = np.random.uniform(-extra_room,extra_room)
+                            extra_y = np.random.uniform(-extra_room,extra_room)
+                            landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size+extra_x,-(landmark_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                            one_starts_landmark.append(copy.deepcopy(landmark_location))
+                            break
             # agent_location
             indices_agent = random.sample(range(now_box_num), now_box_num)
             num_try = 0
-            num_tries = 50
+            num_tries = 100
             for k in indices_agent:
                 around = 1
                 while num_try < num_tries:
@@ -150,12 +179,9 @@ class node_buffer():
                     agent_location_y = one_starts_box_grid[k][1]+delta_y_direction
                     agent_location_grid = np.array([agent_location_x,agent_location_y])
                     if agent_location_x < 0 or agent_location_y < 0 or agent_location_x > grid.shape[0]-1 or  agent_location_y > grid.shape[0]-1:
-                        extra_room = (cell_size - landmark_size) / 2
-                        extra_x = np.random.uniform(-extra_room,extra_room)
-                        extra_y = np.random.uniform(-extra_room,extra_room)
-                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
-                        one_starts_agent.append(copy.deepcopy(agent_location))
-                        break
+                        num_try += 1
+                        assert num_try<num_tries, 'case %i can not find agent pos'%j
+                        continue
                     else:
                         if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
                             num_try += 1
@@ -189,7 +215,6 @@ class node_buffer():
         archive = [] 
         # boundary_x x轴活动范围
         # boundary_y 是y轴活动范围
-        # agent只能在middle room出发，目标点在left and right room
         boundary_x_agent = self.boundary['agent']['x']
         boundary_y_agent = self.boundary['agent']['y']
         boundary_x_box = self.boundary['box']['x']
@@ -741,31 +766,23 @@ def main():
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    # left agent,right landmark, map 6*2
-    # boundary = {'agent':{'x':[[-2.9,-1.1]],'y':[[-0.9,0.9]]},
-    #             'box':{'x':[[-2.9,-1.1]],'y':[[-0.9,0.9]]},
-    #             'landmark':{'x':[[1.1,2.9]],'y':[[-0.9,0.9]]}} # uniform distribution
+    # # left2right, map 6*2, narrow hall
+    # boundary = {'agent':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
+    #     'box':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
+    #     'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},} # uniform distribution
     # start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4]} # 默认一个初始区域
-    # legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],
-    #     'y': [[-0.9,0.9],[-0.45,0.45],[-0.9,0.9]]},
-    #     'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],
-    #     'y': [[-0.9,0.9],[-0.45,0.45],[-0.9,0.9]]},
-    #     'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},} # landmark只能处于最右端
+    # legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.25,0.25],[-0.9,0.9]]},
+    #     'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
+    #     'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},}  # landmark只能在最右端
 
-    # uniform map 6*2
-    boundary = {'agent':{'x':[[-2.9,-1.1],[1.1,2.9]],
-        'y': [[-0.9,0.9],[-0.9,0.9]]},
-        'box':{'x':[[-2.9,-1.1],[1.1,2.9]],
-        'y': [[-0.9,0.9],[-0.9,0.9]]},
-        'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],
-        'y': [[-0.9,0.9],[-0.9,0.9]]}} # uniform distribution
+    # uniform test, init_right map 6*2, narrow hall
+    boundary = {'agent':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},
+        'box':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},
+        'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},} # uniform distribution
     start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4]} # 默认一个初始区域
-    legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],
-        'y': [[-0.9,0.9],[-0.45,0.45],[-0.9,0.9]]},
-        'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],
-        'y': [[-0.9,0.9],[-0.45,0.45],[-0.9,0.9]]},
-        'landmark':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],
-        'y': [[-0.9,0.9],[-0.45,0.45],[-0.9,0.9]]}} # landmark只能处于最右端
+    legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.25,0.25],[-0.9,0.9]]},
+        'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
+        'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},}  
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0

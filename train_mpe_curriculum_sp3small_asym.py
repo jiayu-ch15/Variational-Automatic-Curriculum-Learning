@@ -638,9 +638,9 @@ def main():
     # left agent, right landmark, 10*2
     boundary = {'agent':{'x':[[-4.9,-3.1]],'y':[[-0.9,0.9]]},
                 'landmark':{'x':[[3.1,4.9]],'y':[[-0.9,0.9]]}} # uniform distribution
-    start_boundary = {'x':[[3.1,4.9]],'y':[[-0.9,0.9]]} # good goal
+    start_boundary = {'x':[[3.7,4.3]],'y':[[-0.3,0.3]]} # good goal
     legal_region = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-        'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
+        'y': [[-0.9,0.9],[0.45,0.75],[-0.9,0.9],[-0.75,-0.45],[-0.9,0.9]]},
         'landmark':{'x':[[3.1,4.9]],'y':[[-0.9,0.9]]}} # legal region for samplenearby
     max_step = 0.6
     N_easy = 0

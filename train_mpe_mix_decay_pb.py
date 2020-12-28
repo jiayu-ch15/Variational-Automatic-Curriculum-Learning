@@ -505,6 +505,7 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_samebatch/run%i/models/2box_model.pt'%(args.seed))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -631,7 +632,7 @@ def main():
     save_node_frequency = 5
     save_node_flag = False
     load_curricula = True
-    load_curricula_path = './curricula/MPE/push_ball/mix2n4_samebatch/run1/2boxes'
+    load_curricula_path = './curricula/MPE/push_ball/mix2n4_samebatch/run%i/2agents'%args.seed
     historical_length = 5
     next_stage_flag = 0
     random.seed(args.seed)

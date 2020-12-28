@@ -4,8 +4,8 @@ env="MPE"
 scenario="simple_spread_3rooms_leftup_rightdown"
 num_landmarks=4
 num_agents=4
-algo="check"
-# algo='diversified_novelty_parentsampling_sp3_leftup_rightdown'
+# algo="check"
+algo='tech1_sp3_asym-maze'
 seed=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"

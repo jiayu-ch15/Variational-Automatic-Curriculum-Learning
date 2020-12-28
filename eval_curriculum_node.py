@@ -202,16 +202,16 @@ if __name__ == '__main__':
     agent_num = args.num_agents
     box_num = args.num_boxes
     data = []
-    # uniform data
-    # map 10*2
-    boundary = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-        'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
-        'landmark':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-        'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]}}
-    starts = produce_uniform_case_H(10000, 4, boundary)
-    with open('/home/tsing73/curriculum/node_data/sp3small_10*2.txt','w') as fp:
-        for i in range(len(starts)):
-            fp.write(str(np.array(starts[i]).reshape(-1))+'\n')
+    # # uniform data
+    # # map 10*2
+    # boundary = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+    #     'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
+    #     'landmark':{'x':[[3.1,4.9]],
+    #     'y': [[-0.9,0.9]]}}
+    # starts = produce_uniform_case_H(10000, 4, boundary)
+    # with open('/home/tsing73/curriculum/node_data/sp3small_10*2.txt','w') as fp:
+    #     for i in range(len(starts)):
+    #         fp.write(str(np.array(starts[i]).reshape(-1))+'\n')
     # pdb.set_trace()
 
     mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run1'
@@ -225,7 +225,7 @@ if __name__ == '__main__':
         or args.scenario_name=='simple_spread_3rooms_hard2' or args.scenario_name=='simple_spread_3rooms_leftup_rightdown':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp3_10*6.txt'
-    elif args.scenario_name=='simple_spread_3rooms_small':
+    elif args.scenario_name=='simple_spread_3rooms_small' or args.scenario_name=='simple_spread_3rooms_small_asym':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp3small_10*2.txt'
     elif args.scenario_name=='push_ball_3rooms':

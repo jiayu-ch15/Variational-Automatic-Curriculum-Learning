@@ -55,6 +55,8 @@ class node_buffer():
         self.agent_num = agent_num
         self.box_num = box_num
         self.buffer_length = buffer_length
+        self.start_boundary = start_boundary
+        # self.archive = self.produce_good_case_pb(archive_initial_length, self.agent_num, self.box_num)
         self.archive = self.produce_good_case_grid_pb(archive_initial_length, start_boundary, self.agent_num, self.box_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
@@ -72,15 +74,16 @@ class node_buffer():
         self.eval_score = np.zeros(shape=len(self.archive))
         self.topk = 5
 
-    def produce_good_case(self, num_case, start_boundary, now_agent_num, now_box_num):
+    def produce_good_case_pb(self, num_case, now_agent_num, now_box_num):
         one_starts_landmark = []
         one_starts_agent = []
         one_starts_box = []
         archive = [] 
+        start_boundary_x = self.start_boundary['x']
+        start_boundary_y = self.start_boundary['y']
         for j in range(num_case):
             for i in range(now_box_num):
-                landmark_location = np.array([np.random.uniform(start_boundary[0],start_boundary[1]),np.random.uniform(start_boundary[2],start_boundary[3])])
-                # landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2)  
+                landmark_location = np.array([np.random.uniform(start_boundary_x[0],start_boundary_x[1]),np.random.uniform(start_boundary_y[0],start_boundary_y[1])]) 
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
             indices = random.sample(range(now_box_num), now_box_num)
             for k in indices:
@@ -95,7 +98,7 @@ class node_buffer():
             one_starts_landmark = []
             one_starts_box = []
         return archive
-    
+  
     def produce_good_case_grid_pb(self, num_case, start_boundary, now_agent_num, now_box_num):
         landmark_size = 0.3
         box_size = 0.3
@@ -599,9 +602,9 @@ def main():
     use_parent_novelty = False # 关闭
     use_child_novelty = False # 关闭
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
-    use_novelty_sample = False
-    use_parent_sample = False
-    del_switch = 'old'
+    use_novelty_sample = True
+    use_parent_sample = True
+    del_switch = 'novelty'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
@@ -618,7 +621,7 @@ def main():
     Rmax = 0.95
     boundary = 2.0
     # start_boundary = [-0.4,0.4,-0.4,0.4]
-    start_boundary = [1.2,2.0,1.2,2.0]
+    start_boundary = {'x':[-0.4,0.4],'y':[-0.4,0.4]} # bad init
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
