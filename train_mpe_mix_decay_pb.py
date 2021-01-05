@@ -617,7 +617,7 @@ def main():
     upper_bound = 0.9
     mix_add_frequency = 30 # 改变比例的频率
     mix_add_count = 0
-    decay_last = 1.0
+    decay_last = 1.8
     decay_now = 1.0 - 0.5 * decay_last
     mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
     target_num = 4
@@ -638,13 +638,13 @@ def main():
     random.seed(args.seed)
     np.random.seed(args.seed)
     last_node = node_buffer(last_agent_num,last_box_num, buffer_length,
-                           archive_initial_length=args.n_rollout_threads,
+                           archive_initial_length=int(args.n_rollout_threads/2),
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
     now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
-                           archive_initial_length=args.n_rollout_threads,
+                           archive_initial_length=int(args.n_rollout_threads/2),
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
@@ -1473,7 +1473,7 @@ def main():
             start_boundary = [-0.8,0.8,-0.8,0.8]
             last_node = copy.deepcopy(now_node)
             now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
-                           archive_initial_length=args.n_rollout_threads,
+                           archive_initial_length=int(args.n_rollout_threads/2),
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
