@@ -55,6 +55,7 @@ class node_buffer():
         self.agent_num = agent_num
         self.landmark_num = landmark_num
         self.buffer_length = buffer_length
+        self.topk = 5
         self.boundary = boundary
         self.start_boundary = start_boundary
         self.legal_region = legal_region
@@ -70,7 +71,6 @@ class node_buffer():
         self.choose_child_index = []
         self.choose_archive_index = []
         self.eval_score = np.zeros(shape=len(self.archive))
-        self.topk = 5
 
     def produce_good_case_H(self, num_case, now_agent_num): # 产生H_map的初始态
         one_starts_landmark = []
@@ -126,7 +126,7 @@ class node_buffer():
 
     def get_novelty(self,list1,list2):
         # list1是需要求novelty的
-        topk=5
+        topk=self.topk
         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
         if len(list2) < topk+1:
             dist_k = dist
@@ -436,10 +436,11 @@ class node_buffer():
             with open(save_path / 'archive' / ('archive_%i' %(episode)),'w+') as fp:
                 for line in self.archive:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
-            self.novelty = self.get_novelty(self.archive,self.archive)
-            with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
-                for line in self.archive_novelty:
-                    fp.write(str(np.array(line).reshape(-1))+'\n')
+            if len(self.archive) >= self.topk + 2 :
+                self.novelty = self.get_novelty(self.archive,self.archive)
+                with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
+                    for line in self.archive_novelty:
+                        fp.write(str(np.array(line).reshape(-1))+'\n')
             with open(save_path / 'parent' / ('parent_%i' %(episode)),'w+') as fp:
                 for line in self.parent:
                     fp.write(str(np.array(line).reshape(-1))+'\n')

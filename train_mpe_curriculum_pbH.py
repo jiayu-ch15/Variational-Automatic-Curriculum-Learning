@@ -107,6 +107,10 @@ class node_buffer():
         cell_size = max([landmark_size,box_size,agent_size]) + 0.1
         start_boundary_x = self.start_boundary['x']
         start_boundary_y = self.start_boundary['y']
+        if 'mirror_flag' in self.start_boundary.keys():
+            mirror_flag = self.start_boundary['mirror_flag']
+        else:
+            mirror_flag = False
         grid_num_x = round((start_boundary_x[1]-start_boundary_x[0])/cell_size)
         grid_num_y = round((start_boundary_y[1]-start_boundary_y[0])/cell_size)
         init_origin_node = np.array([start_boundary_x[0]+0.5*cell_size,start_boundary_y[1]-0.5*cell_size]) # left, up
@@ -119,6 +123,10 @@ class node_buffer():
         one_starts_box_grid = []
         archive = [] 
         for j in range(num_case):
+            if mirror_flag:
+                mirror = np.random.choice([-1,1])
+            else:
+                mirror = 1
             # box location
             for i in range(now_box_num):
                 while 1:
@@ -131,7 +139,7 @@ class node_buffer():
                         extra_x = np.random.uniform(-extra_room,extra_room)
                         extra_y = np.random.uniform(-extra_room,extra_room)
                         box_location = np.array([(box_location_grid[0]+0.5)*cell_size+extra_x,-(box_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
-                        one_starts_box.append(copy.deepcopy(box_location))
+                        one_starts_box.append(copy.deepcopy(box_location * mirror))
                         one_starts_box_grid.append(copy.deepcopy(box_location_grid))
                         break
             grid_without_landmark = copy.deepcopy(grid)
@@ -164,7 +172,7 @@ class node_buffer():
                             extra_x = np.random.uniform(-extra_room,extra_room)
                             extra_y = np.random.uniform(-extra_room,extra_room)
                             landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size+extra_x,-(landmark_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
-                            one_starts_landmark.append(copy.deepcopy(landmark_location))
+                            one_starts_landmark.append(copy.deepcopy(landmark_location * mirror))
                             break
             # agent_location
             indices_agent = random.sample(range(now_box_num), now_box_num)
@@ -196,7 +204,7 @@ class node_buffer():
                             extra_x = np.random.uniform(-extra_room,extra_room)
                             extra_y = np.random.uniform(-extra_room,extra_room)
                             agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
-                            one_starts_agent.append(copy.deepcopy(agent_location))
+                            one_starts_agent.append(copy.deepcopy(agent_location * mirror))
                             break
             # select_starts.append(one_starts_agent+one_starts_landmark)
             archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
@@ -749,9 +757,9 @@ def main():
     use_parent_novelty = False # 关闭
     use_child_novelty = False # 关闭
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
-    use_novelty_sample = True
-    use_parent_sample = True
-    del_switch = 'novelty'
+    use_novelty_sample = False
+    use_parent_sample = False
+    del_switch = 'old'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
@@ -766,23 +774,33 @@ def main():
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    # # left2right, map 6*2, narrow hall
+    # left2right, map 6*2, narrow hall
+    hall_width = 1.0
+    boundary = {'agent':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
+        'box':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
+        'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},} # uniform distribution
+    start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4]} # 默认一个初始区域
+    legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-(hall_width/2-0.05),(hall_width/2-0.05)],[-0.9,0.9]]},
+        'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-((hall_width/2-0.15)),(hall_width/2-0.15)],[-0.9,0.9]]},
+        'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},}  # landmark只能在最右端
+    # # uniform test, init_right map 6*2, narrow hall
+    # boundary = {'agent':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},
+    #     'box':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},
+    #     'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},} # uniform distribution
+    # # start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4],'mirror_flag': False} # init right
+    # start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4],'mirror_flag': True} # init all
+    # legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.25,0.25],[-0.9,0.9]]},
+    #     'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
+    #     'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},}  
+    # # left2right, map 6*2, no hall
     # boundary = {'agent':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
     #     'box':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
     #     'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},} # uniform distribution
     # start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4]} # 默认一个初始区域
-    # legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.25,0.25],[-0.9,0.9]]},
-    #     'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
+    # legal_region = {'agent':{'x':[[-2.9,2.9]],'y': [[-0.9,0.9]]},
+    #     'box':{'x':[[-2.9,2.9]],'y': [[-0.9,0.9]]},
     #     'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},}  # landmark只能在最右端
 
-    # uniform test, init_right map 6*2, narrow hall
-    boundary = {'agent':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},
-        'box':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},
-        'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},} # uniform distribution
-    start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4]} # 默认一个初始区域
-    legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.25,0.25],[-0.9,0.9]]},
-        'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
-        'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},}  
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0

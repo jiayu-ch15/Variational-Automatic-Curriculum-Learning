@@ -527,6 +527,7 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_samebatch/run%i/models/2box_model.pt'%(args.seed))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -631,15 +632,15 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    start_boundary = [-0.4,0.4,-0.4,0.4]
+    start_boundary = [-0.8,0.8,-0.8,0.8]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
     target_num = 4
-    last_box_num = 0
+    last_box_num = 2
     last_agent_num = last_box_num
-    now_box_num = 2
+    now_box_num = 4
     now_agent_num = now_box_num
     mean_cover_rate = 0
     mix_flag = False
@@ -647,7 +648,9 @@ def main():
     check_frequency = 1
     save_node_frequency = 5
     save_node_flag = False
-    save_curricula = True
+    load_curricula = True
+    load_curricula_path = './curricula/MPE/push_ball/mix2n4_samebatch/run%i/2agents'%args.seed
+    save_curricula = False
     historical_length = 5
     next_stage_flag = 0
     random.seed(args.seed)
@@ -664,6 +667,44 @@ def main():
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
+    if load_curricula: # 默认从2、4混合开始训练
+        mix_flag = True
+        # load archive
+        with open(load_curricula_path + '/archive/archive_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        archive_load = []
+        for i in range(len(tmp)): 
+            archive_load_one = []
+            for j in range(last_node.agent_num * 3):
+                archive_load_one.append(tmp[i][j*2:(j+1)*2])
+            archive_load.append(archive_load_one)
+        last_node.archive = copy.deepcopy(archive_load)
+        # load parent
+        with open(load_curricula_path + '/parent/parent_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        parent_load = []
+        for i in range(len(tmp)): 
+            parent_load_one = []
+            for j in range(last_node.agent_num * 3):
+                parent_load_one.append(tmp[i][j*2:(j+1)*2])
+            parent_load.append(parent_load_one)
+        last_node.parent = copy.deepcopy(parent_load)
+        # load parent_all
+        with open(load_curricula_path + '/parent_all/parent_all_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        parent_all_load = []
+        for i in range(len(tmp)): 
+            parent_all_load_one = []
+            for j in range(last_node.agent_num * 3):
+                parent_all_load_one.append(tmp[i][j*2:(j+1)*2])
+            parent_all_load.append(parent_all_load_one)
+        last_node.parent_all = copy.deepcopy(parent_all_load)
 
     
     # run
