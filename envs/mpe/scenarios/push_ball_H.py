@@ -19,15 +19,16 @@ class Scenario(BaseScenario):
         self.num_boxes = num_boxes
         self.num_people = num_people
         self.num_agents = num_boxes + num_people # deactivate "good" agent
-        # add walls 6*2, narrow hall(1.0)
+        # add walls 6*2, narrow hall
+        width_hall = 0.6
         world.walls = [Wall(orient='V', axis_pos=-4.5, endpoints=(-6, 6),width=3.0, hard=True),
                 Wall(orient='V', axis_pos=4.5, endpoints=(-6, 6),width=3.0, hard=True),
                 Wall(orient='H', axis_pos=-4, endpoints=(-6, 6),width=6.0, hard=True),
                 Wall(orient='H', axis_pos=4, endpoints=(-6, 6),width=6.0,hard=True),
                 # up left wall
-                Wall(orient='V', axis_pos=0, endpoints=(0.5, 3), width=3, hard=True),
+                Wall(orient='V', axis_pos=0, endpoints=(width_hall/2, 3), width=2, hard=True),
                 # down left wall
-                Wall(orient='V', axis_pos=0, endpoints=(-3, -0.5), width=3, hard=True),
+                Wall(orient='V', axis_pos=0, endpoints=(-3, -width_hall/2), width=2, hard=True),
                 ]
         # # add walls 6*2, empty
         # world.walls = [Wall(orient='V', axis_pos=-4.5, endpoints=(-6, 6),width=3.0, hard=True),

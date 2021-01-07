@@ -35,20 +35,20 @@ def main():
         for row in plots:
             x_step2.append(row[0])
             y_seed2.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed3' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step3.append(row[0])
-    #         y_seed3.append(row[1:])
+    data_dir =  './' + exp_name + '_seed3' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step3.append(row[0])
+            y_seed3.append(row[1:])
     x_step1 = x_step1[1:]
     y_seed1 = y_seed1[1:]
     x_step2 = x_step2[1:]
     y_seed2 = y_seed2[1:]
-    # x_step3 = x_step3[1:]
-    # y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step2),len(x_step3)))
-    length = min((len(x_step1),len(x_step2)))
+    x_step3 = x_step3[1:]
+    y_seed3 = y_seed3[1:]
+    length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # length = min((len(x_step1),len(x_step2)))
     for i in range(len(x_step1)):
         x_step1[i] = np.float(x_step1[i])
         for j in range(len(y_seed1[i])):
@@ -57,15 +57,15 @@ def main():
         x_step2[i] = np.float(x_step2[i])
         for j in range(len(y_seed2[i])):
             y_seed2[i][j] = np.float(y_seed2[i][j])
-    # for i in range(len(x_step3)):
-    #     x_step3[i] = np.float(x_step3[i])
-    #     for j in range(len(y_seed3[i])):
-    #         y_seed3[i][j] = np.float(y_seed3[i][j])
-    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    for i in range(len(x_step3)):
+        x_step3[i] = np.float(x_step3[i])
+        for j in range(len(y_seed3[i])):
+            y_seed3[i][j] = np.float(y_seed3[i][j])
+    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
     x_step = np.stack((x_step1[0:length],x_step2[0:length]),axis=1)
     x_step = x_step-x_step[0] # 从0开始计数
-    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length]),axis=1).squeeze(2)
+    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length]),axis=1).squeeze(2)
     mean_seed = np.mean(y_seed,axis=1)
     std_seed = np.std(y_seed,axis=1)
     timesteps = np.mean(x_step,axis=1)
@@ -95,20 +95,20 @@ def main():
         for row in plots:
             x_step2.append(row[0])
             y_seed2.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed3' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step3.append(row[0])
-    #         y_seed3.append(row[1:])
+    data_dir =  './' + exp_name + '_seed3' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step3.append(row[0])
+            y_seed3.append(row[1:])
     x_step1 = x_step1[1:]
     y_seed1 = y_seed1[1:]
     x_step2 = x_step2[1:]
     y_seed2 = y_seed2[1:]
-    # x_step3 = x_step3[1:]
-    # y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step2),len(x_step3)))
-    length = min((len(x_step1),len(x_step2)))
+    x_step3 = x_step3[1:]
+    y_seed3 = y_seed3[1:]
+    length = min((len(x_step1),len(x_step2),len(x_step3)))-50
+    # length = min((len(x_step1),len(x_step2)))
     for i in range(len(x_step1)):
         x_step1[i] = np.float(x_step1[i])
         for j in range(len(y_seed1[i])):
@@ -117,15 +117,15 @@ def main():
         x_step2[i] = np.float(x_step2[i])
         for j in range(len(y_seed2[i])):
             y_seed2[i][j] = np.float(y_seed2[i][j])
-    # for i in range(len(x_step3)):
-    #     x_step3[i] = np.float(x_step3[i])
-    #     for j in range(len(y_seed3[i])):
-    #         y_seed3[i][j] = np.float(y_seed3[i][j])
-    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    for i in range(len(x_step3)):
+        x_step3[i] = np.float(x_step3[i])
+        for j in range(len(y_seed3[i])):
+            y_seed3[i][j] = np.float(y_seed3[i][j])
+    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
     x_step = np.stack((x_step1[0:length],x_step2[0:length]),axis=1)
     x_step = x_step-x_step[0] # 从0开始计数
-    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length]),axis=1).squeeze(2)
+    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length]),axis=1).squeeze(2)
     mean_seed = np.mean(y_seed,axis=1)
     std_seed = np.std(y_seed,axis=1)
     timesteps = np.mean(x_step,axis=1)
@@ -154,20 +154,20 @@ def main():
         for row in plots:
             x_step2.append(row[0])
             y_seed2.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed3' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step3.append(row[0])
-    #         y_seed3.append(row[1:])
+    data_dir =  './' + exp_name + '_seed3' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step3.append(row[0])
+            y_seed3.append(row[1:])
     x_step1 = x_step1[1:]
     y_seed1 = y_seed1[1:]
     x_step2 = x_step2[1:]
     y_seed2 = y_seed2[1:]
-    # x_step3 = x_step3[1:]
-    # y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step2),len(x_step3)))
-    length = min((len(x_step1),len(x_step2)))
+    x_step3 = x_step3[1:]
+    y_seed3 = y_seed3[1:]
+    length = min((len(x_step1),len(x_step2),len(x_step3)))-50
+    # length = min((len(x_step1),len(x_step2)))
     for i in range(len(x_step1)):
         x_step1[i] = np.float(x_step1[i])
         for j in range(len(y_seed1[i])):
@@ -176,15 +176,15 @@ def main():
         x_step2[i] = np.float(x_step2[i])
         for j in range(len(y_seed2[i])):
             y_seed2[i][j] = np.float(y_seed2[i][j])
-    # for i in range(len(x_step3)):
-    #     x_step3[i] = np.float(x_step3[i])
-    #     for j in range(len(y_seed3[i])):
-    #         y_seed3[i][j] = np.float(y_seed3[i][j])
-    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    for i in range(len(x_step3)):
+        x_step3[i] = np.float(x_step3[i])
+        for j in range(len(y_seed3[i])):
+            y_seed3[i][j] = np.float(y_seed3[i][j])
+    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
     x_step = np.stack((x_step1[0:length],x_step2[0:length]),axis=1)
     x_step = x_step-x_step[0] # 从0开始计数
-    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length]),axis=1).squeeze(2)
+    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length]),axis=1).squeeze(2)
     mean_seed = np.mean(y_seed,axis=1)
     std_seed = np.std(y_seed,axis=1)
     timesteps = np.mean(x_step,axis=1)

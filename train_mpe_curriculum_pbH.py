@@ -757,9 +757,9 @@ def main():
     use_parent_novelty = False # 关闭
     use_child_novelty = False # 关闭
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
-    use_novelty_sample = False
-    use_parent_sample = False
-    del_switch = 'old'
+    use_novelty_sample = True
+    use_parent_sample = True
+    del_switch = 'novelty'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
@@ -775,23 +775,23 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     # left2right, map 6*2, narrow hall
-    hall_width = 1.0
-    boundary = {'agent':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
-        'box':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
-        'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},} # uniform distribution
-    start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4]} # 默认一个初始区域
+    hall_width = 0.6
+    # boundary = {'agent':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
+    #     'box':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
+    #     'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},} # uniform distribution
+    # start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4]} # 默认一个初始区域
+    # legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-(hall_width/2-0.05),(hall_width/2-0.05)],[-0.9,0.9]]},
+    #     'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-((hall_width/2-0.15)),(hall_width/2-0.15)],[-0.9,0.9]]},
+    #     'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},}  # landmark只能在最右端
+    # uniform test, init_right map 6*2, narrow hall
+    boundary = {'agent':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},
+        'box':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},
+        'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},} # uniform distribution
+    # start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4],'mirror_flag': False} # init right
+    start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4],'mirror_flag': True} # init all
     legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-(hall_width/2-0.05),(hall_width/2-0.05)],[-0.9,0.9]]},
         'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-((hall_width/2-0.15)),(hall_width/2-0.15)],[-0.9,0.9]]},
-        'landmark':{'x':[[1.1,2.9]],'y': [[-0.9,0.9]]},}  # landmark只能在最右端
-    # # uniform test, init_right map 6*2, narrow hall
-    # boundary = {'agent':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},
-    #     'box':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},
-    #     'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},} # uniform distribution
-    # # start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4],'mirror_flag': False} # init right
-    # start_boundary = {'x':[1.6,2.4],'y':[-0.4,0.4],'mirror_flag': True} # init all
-    # legal_region = {'agent':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.25,0.25],[-0.9,0.9]]},
-    #     'box':{'x':[[-2.9,-1.1],[-1,1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
-    #     'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},}  
+        'landmark':{'x':[[-2.9,-1.1],[1.1,2.9]],'y': [[-0.9,0.9],[-0.9,0.9]]},}  
     # # left2right, map 6*2, no hall
     # boundary = {'agent':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
     #     'box':{'x':[[-2.9,-1.1]],'y': [[-0.9,0.9]]},
