@@ -615,8 +615,8 @@ def main():
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
-    mix_add_frequency = 30 # 改变比例的频率
-    mix_add_count = 0
+    # mix_add_frequency = 30 # 改变比例的频率
+    # mix_add_count = 0
     decay_last = 1.8
     decay_now = 1.0 - 0.5 * decay_last
     mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
@@ -707,8 +707,9 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction_num should be changed
-        if mix_add_count == mix_add_frequency and mix_flag:
-            mix_add_count = 0
+        if last_mean_cover_rate >= upper_bound and mix_flag:
+        # if mix_add_count == mix_add_frequency and mix_flag:
+            # mix_add_count = 0
             decay_last -= 0.1
             decay_last = max(decay_last,0.0)
             decay_now = 1.0 - 0.5 * decay_last
@@ -718,8 +719,6 @@ def main():
                 
         wandb.log({'decay_last': decay_last},current_timestep)
         wandb.log({'decay_now': decay_now},current_timestep)
-        print('decay_last: ', decay_last)
-        print('decay_now: ', decay_now)
         if mix_flag:
             last_node.reproduction_num = round(N_child * decay_last)
             now_node.reproduction_num = round(N_child * decay_now)
@@ -761,8 +760,8 @@ def main():
         now_node.eval_score = np.zeros(shape=one_length_now)    
 
         for times in range(eval_frequency):
-            if mix_flag:
-                mix_add_count += 1
+            # if mix_flag:
+            #     mix_add_count += 1
             # last_node
             if last_node.agent_num!=0 and mix_flag:
                 actor_critic.agents_num = last_node.agent_num
@@ -1259,7 +1258,7 @@ def main():
                         actions_env.append(one_hot_action_env)
                     
                     # Obser reward and next obs
-                    obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, now_node.agent_num)
+                    obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, last_node.agent_num)
                     test_cover_rate[:,step] = np.array(infos)[:,0]
 
                     # If done then clean the history of observations.

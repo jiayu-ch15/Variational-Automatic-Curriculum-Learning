@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO,PPO3
-from algorithm.model import Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
+from algorithm.model import Policy,Policy3,ATTBase,ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -50,152 +50,88 @@ def make_parallel_env(args):
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 class node_buffer():
-    def __init__(self,agent_num, box_num, buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
+    def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
         self.agent_num = agent_num
-        self.box_num = box_num
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case_grid_pb(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
+        self.hardlist = []
         self.parent = []
         self.parent_all = []
-        self.parent_all_novelty = []
-        self.hardlist = []
         self.max_step = max_step
         self.boundary = boundary
         self.reproduction_num = reproduction_num
         self.choose_child_index = []
         self.choose_archive_index = []
-        self.choose_parent = []
         self.eval_score = np.zeros(shape=len(self.archive))
         self.topk = 5
 
-    def produce_good_case(self, num_case, start_boundary, now_agent_num, now_box_num):
+    def produce_good_case(self, num_case, start_boundary, now_agent_num):
         one_starts_landmark = []
         one_starts_agent = []
-        one_starts_box = []
         archive = [] 
         for j in range(num_case):
-            for i in range(now_box_num):
-                landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2)  
+            for i in range(now_agent_num):
+                landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2) 
                 one_starts_landmark.append(copy.deepcopy(landmark_location))
-            indices = random.sample(range(now_box_num), now_box_num)
+            # index_sample = BatchSampler(SubsetRandomSampler(range(now_agent_num)),now_agent_num,drop_last=True)
+            indices = random.sample(range(now_agent_num), now_agent_num)
             for k in indices:
                 epsilon = -2 * 0.01 * random.random() + 0.01
-                one_starts_box.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
-            indices = random.sample(range(now_box_num), now_agent_num)
-            for k in indices:
-                epsilon = -2 * 0.01 * random.random() + 0.01
-                one_starts_agent.append(copy.deepcopy(one_starts_box[k]+epsilon))
-            archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
+                one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
+            # select_starts.append(one_starts_agent+one_starts_landmark)
+            archive.append(one_starts_agent+one_starts_landmark)
             one_starts_agent = []
             one_starts_landmark = []
-            one_starts_box = []
         return archive
 
-    def produce_good_case_grid_pb(self, num_case, start_boundary, now_agent_num, now_box_num):
-        landmark_size = 0.3
-        box_size = 0.3
-        agent_size = 0.2
-        cell_size = max([landmark_size,box_size,agent_size]) + 0.1
-        grid_num = round((start_boundary[1]-start_boundary[0]) / cell_size)
-        init_origin_node = np.array([start_boundary[0]+0.5*cell_size,start_boundary[3]-0.5*cell_size]) # left, up
-        assert grid_num ** 2 >= now_agent_num + now_box_num
+    def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
+        # agent_size=0.1
+        cell_size = 0.2
+        grid_num = int(start_boundary * 2 / cell_size) + 1
         grid = np.zeros(shape=(grid_num,grid_num))
-        grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
         one_starts_landmark = []
+        one_starts_landmark_grid = []
         one_starts_agent = []
-        one_starts_box = []
-        one_starts_box_grid = []
         archive = [] 
         for j in range(num_case):
-            # box location
-            for i in range(now_box_num):
+            for i in range(now_agent_num):
                 while 1:
-                    box_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    if grid[box_location_grid[0],box_location_grid[1]]==1:
-                        continue
-                    else:
-                        grid[box_location_grid[0],box_location_grid[1]] = 1
-                        extra_room = (cell_size - landmark_size) / 2
-                        extra_x = np.random.uniform(-extra_room,extra_room)
-                        extra_y = np.random.uniform(-extra_room,extra_room)
-                        box_location = np.array([(box_location_grid[0]+0.5)*cell_size+extra_x,-(box_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
-                        one_starts_box.append(copy.deepcopy(box_location))
-                        one_starts_box_grid.append(copy.deepcopy(box_location_grid))
-                        break
-            grid_without_landmark = copy.deepcopy(grid)
-            # landmark location
-            indices = random.sample(range(now_box_num), now_box_num)
-            num_try = 0
-            num_tries = 50
-            for k in indices:
-                around = 1
-                while num_try < num_tries:
-                    delta_x_direction = random.randint(-around,around)
-                    delta_y_direction = random.randint(-around,around)
-                    landmark_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
-                    landmark_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
-                    landmark_location_grid = np.array([landmark_location_x,landmark_location_y])
+                    landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                    extra_room = np.random.uniform(-0.05, +0.05, 2) 
                     if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
-                        num_try += 1
-                        if num_try >= num_tries and around==1:
-                            around = 2
-                            num_try = 0
-                        assert num_try<num_tries or around==1, 'case %i can not find landmark pos'%j
                         continue
                     else:
                         grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
-                        extra_room = (cell_size - landmark_size) / 2
-                        extra_x = np.random.uniform(-extra_room,extra_room)
-                        extra_y = np.random.uniform(-extra_room,extra_room)
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size+extra_x,-(landmark_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                        one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
+                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + extra_room -start_boundary
                         one_starts_landmark.append(copy.deepcopy(landmark_location))
                         break
-            # agent_location
-            indices_agent = random.sample(range(now_box_num), now_box_num)
-            num_try = 0
-            num_tries = 50
-            for k in indices_agent:
-                around = 1
-                while num_try < num_tries:
-                    delta_x_direction = random.randint(-around,around)
-                    delta_y_direction = random.randint(-around,around)
-                    agent_location_x = one_starts_box_grid[k][0]+delta_x_direction
-                    agent_location_y = one_starts_box_grid[k][1]+delta_y_direction
-                    agent_location_grid = np.array([agent_location_x,agent_location_y])
-                    if agent_location_x < 0 or agent_location_y < 0 or agent_location_x > grid.shape[0]-1 or  agent_location_y > grid.shape[0]-1:
-                        extra_room = (cell_size - landmark_size) / 2
-                        extra_x = np.random.uniform(-extra_room,extra_room)
-                        extra_y = np.random.uniform(-extra_room,extra_room)
-                        agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
-                        one_starts_agent.append(copy.deepcopy(agent_location))
+            indices = random.sample(range(now_agent_num), now_agent_num)
+            for k in indices:
+                epsilons = np.array([[-1,0],[1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]])
+                epsilon = epsilons[random.sample(range(8),8)]
+                # extra_room = -2 * 0.02 * random.random() + 0.02
+                for epsilon_id in range(epsilon.shape[0]):
+                    agent_location_grid = one_starts_landmark_grid[k] + epsilon[epsilon_id]
+                    if agent_location_grid[0] >= grid.shape[0]:
+                        agent_location_grid[0] = grid.shape[0]-1
+                    if agent_location_grid[1] >= grid.shape[1]:
+                        agent_location_grid[1] = grid.shape[1]-1
+                    if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
+                        grid[agent_location_grid[0],agent_location_grid[1]]=2
                         break
-                    else:
-                        if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
-                            num_try += 1
-                            if num_try >= num_tries and around==1:
-                                around = 2
-                                num_try = 0
-                            assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
-                            continue
-                        else:
-                            grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
-                            extra_room = (cell_size - landmark_size) / 2
-                            extra_x = np.random.uniform(-extra_room,extra_room)
-                            extra_y = np.random.uniform(-extra_room,extra_room)
-                            agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
-                            one_starts_agent.append(copy.deepcopy(agent_location))
-                            break
+                noise = np.random.uniform(-0.01, +0.01)
+                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary+noise
+                one_starts_agent.append(copy.deepcopy(agent_location))
             # select_starts.append(one_starts_agent+one_starts_landmark)
-            archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
+            archive.append(one_starts_agent+one_starts_landmark)
             grid = np.zeros(shape=(grid_num,grid_num))
-            grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
             one_starts_agent = []
+            one_starts_landmark_grid = []
             one_starts_landmark = []
-            one_starts_box = []
-            one_starts_box_grid = []
         return archive
 
     def get_novelty(self,list1,list2):
@@ -315,17 +251,18 @@ class node_buffer():
             starts.append(self.archive[self.choose_archive_index[i]])
         for i in range(len(self.choose_parent_index)):
             starts.append(self.parent_all[self.choose_parent_index[i]])
-        print(str(self.agent_num) + 'sample_archive: ', len(self.choose_archive_index))
-        print(str(self.agent_num) + 'sample_childlist: ', len(self.choose_child_index))
-        print(str(self.agent_num) + 'sample_parent: ', len(self.choose_parent_index))
+        # print('sample_archive: ', len(self.choose_archive_index))
+        # print('sample_childlist: ', len(self.choose_child_index))
+        # print('sample_parent: ', len(self.choose_parent_index))
+        print('%isample_length: '%self.agent_num, starts_length)
         return starts, one_length, starts_length
     
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
         del_archive_num = 0
         del_easy_num = 0
-        drop_num = 0
         add_hard_num = 0
+        drop_num = 0
         self.parent = []
         child2archive = []
         for i in range(one_length):
@@ -411,6 +348,7 @@ class node_buffer():
             with open(save_path / 'archive' / ('archive_%i' %(episode)),'w+') as fp:
                 for line in self.archive:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
+            self.novelty = self.get_novelty(self.archive,self.archive)
             with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
                 for line in self.archive_novelty:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
@@ -423,9 +361,29 @@ class node_buffer():
         else:
             return 0
 
+    def save_phase_curricula(self, dir_path, success_rate):
+        if self.agent_num!=0:
+            save_path = dir_path / ('%iagents' % (self.agent_num))
+            if not os.path.exists(save_path):
+                os.makedirs(save_path / 'archive')
+                os.makedirs(save_path / 'parent')
+                os.makedirs(save_path / 'parent_all')
+            with open(save_path / 'archive' / ('archive_%f' %(success_rate)),'w+') as fp:
+                for line in self.archive:
+                    fp.write(str(np.array(line).reshape(-1))+'\n')
+            with open(save_path / 'parent' / ('parent_%f' %(success_rate)),'w+') as fp:
+                for line in self.parent:
+                    fp.write(str(np.array(line).reshape(-1))+'\n')
+            with open(save_path / 'parent_all' / ('parent_all_%f' %(success_rate)),'w+') as fp:
+                for line in self.parent_all:
+                    fp.write(str(np.array(line).reshape(-1))+'\n')
+        else:
+            return 0
+
 def main():
     args = get_config()
-    run = wandb.init(project='mix_pb_tricks',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    run = wandb.init(project='mix_tricks_sp',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
     # seed
@@ -446,6 +404,7 @@ def main():
     # path
     model_dir = Path('./results') / args.env_name / args.scenario_name / args.algorithm_name
     node_dir = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name
+    # curricula_dir = Path('./curricula') / args.env_name / args.scenario_name / args.algorithm_name
     if not model_dir.exists():
         curr_run = 'run1'
     else:
@@ -462,9 +421,11 @@ def main():
             node_curr_run = 'run1'
         else:
             node_curr_run = 'run%i' % (max(exst_run_nums) + 1)
+    # curricula_curr_run = 'run%i'%args.seed
 
     run_dir = model_dir / curr_run
     save_node_dir = node_dir / node_curr_run
+    # save_curricula_dir = curricula_dir / curricula_curr_run
     log_dir = run_dir / 'logs'
     save_dir = run_dir / 'models'
     os.makedirs(str(log_dir))
@@ -474,16 +435,14 @@ def main():
     # env
     envs = make_parallel_env(args)
     num_agents = args.num_agents
-    num_boxes = args.num_landmarks
     #Policy network
     if args.share_policy:
         # share_base = ATTBase(envs.observation_space[0].shape[0], num_agents)
-        actor_base = ATTBase_actor_dist_pb_add(envs.observation_space[0].shape[0], envs.action_space[0],num_agents,num_boxes)
-        critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0],num_agents,num_boxes)
-        actor_critic = Policy_pb_3(envs.observation_space[0],
+        actor_base = ATTBase_actor_dist_add(envs.observation_space[0].shape[0], envs.action_space[0], num_agents)
+        critic_base = ATTBase_critic_add(envs.observation_space[0].shape[0], num_agents)
+        actor_critic = Policy3(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
-                    num_box = num_boxes,
                     base=None,
                     actor_base=actor_base,
                     critic_base=critic_base,
@@ -505,7 +464,7 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_samebatch/run%i/models/2box_model.pt'%(args.seed))['model'].to(device)
+        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_samebatch/run%i/models/4agent_model.pt'%(args.seed))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -604,52 +563,55 @@ def main():
     N_child = 325
     N_archive = 150
     N_parent = 25
-    max_step = 0.4
+    max_step = 0.6
     TB = 1
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = 2.0
-    start_boundary = [-0.8,0.8,-0.8,0.8]
+    boundary = 3
+    start_boundary = 1
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
-    mix_add_frequency = 30 # 改变比例的频率
-    mix_add_count = 0
+    # mix_add_frequency = 30 # 改变比例的频率
+    # mix_add_count = 0
     decay_last = 1.8
     decay_now = 1.0 - 0.5 * decay_last
-    mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
-    target_num = 4
-    last_box_num = 2
-    last_agent_num = last_box_num
-    now_box_num = 4
-    now_agent_num = now_box_num
+    mix_flag = False # 代表是否需要混合
+    target_num = 8
+    load_curricula = True
+    load_curricula_path = './curricula/MPE/simple_spread/mixdecay4n8_finalversion/run%i/4agents'%args.seed
+    if load_curricula:
+        last_agent_num = 4
+        now_agent_num = 8
+    else:
+        last_agent_num = 0
+        now_agent_num = 4
     last_mean_cover_rate = 0
     now_mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
-    save_node_frequency = 5
+    save_node_frequency = 3
     save_node_flag = False
-    load_curricula = True
-    load_curricula_path = './curricula/MPE/push_ball/mix2n4_samebatch/run%i/2agents'%args.seed
+    save_curricula = False
     historical_length = 5
     next_stage_flag = 0
     random.seed(args.seed)
     np.random.seed(args.seed)
-    last_node = node_buffer(last_agent_num,last_box_num, buffer_length,
+    last_node = node_buffer(last_agent_num,buffer_length,
                            archive_initial_length=int(args.n_rollout_threads/2),
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
-    now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
+    now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=int(args.n_rollout_threads/2),
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
-    if load_curricula: # 默认从2、4混合开始训练
+    if load_curricula: # 默认从4、8混合开始训练
         mix_flag = True
         # load archive
         with open(load_curricula_path + '/archive/archive_0.900000','r') as fp :
@@ -659,7 +621,7 @@ def main():
         archive_load = []
         for i in range(len(tmp)): 
             archive_load_one = []
-            for j in range(last_node.agent_num * 3):
+            for j in range(last_node.agent_num * 2):
                 archive_load_one.append(tmp[i][j*2:(j+1)*2])
             archive_load.append(archive_load_one)
         last_node.archive = copy.deepcopy(archive_load)
@@ -671,7 +633,7 @@ def main():
         parent_load = []
         for i in range(len(tmp)): 
             parent_load_one = []
-            for j in range(last_node.agent_num * 3):
+            for j in range(last_node.agent_num * 2):
                 parent_load_one.append(tmp[i][j*2:(j+1)*2])
             parent_load.append(parent_load_one)
         last_node.parent = copy.deepcopy(parent_load)
@@ -683,15 +645,15 @@ def main():
         parent_all_load = []
         for i in range(len(tmp)): 
             parent_all_load_one = []
-            for j in range(last_node.agent_num * 3):
+            for j in range(last_node.agent_num * 2):
                 parent_all_load_one.append(tmp[i][j*2:(j+1)*2])
             parent_all_load.append(parent_all_load_one)
         last_node.parent_all = copy.deepcopy(parent_all_load)
+        
 
-    
     # run
     begin = time.time()
-    episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads // eval_frequency
+    episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads
     one_length_last = 0
     starts_length_last = 0
     one_length_now = args.n_rollout_threads
@@ -707,8 +669,9 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction_num should be changed
-        if mix_add_count == mix_add_frequency and mix_flag:
-            mix_add_count = 0
+        # if mix_add_count == mix_add_frequency and mix_flag:
+        if last_mean_cover_rate >= upper_bound and mix_flag:
+            # mix_add_count = 0
             decay_last -= 0.1
             decay_last = max(decay_last,0.0)
             decay_now = 1.0 - 0.5 * decay_last
@@ -718,15 +681,13 @@ def main():
                 
         wandb.log({'decay_last': decay_last},current_timestep)
         wandb.log({'decay_now': decay_now},current_timestep)
-        print('decay_last: ', decay_last)
-        print('decay_now: ', decay_now)
         if mix_flag:
             last_node.reproduction_num = round(N_child * decay_last)
             now_node.reproduction_num = round(N_child * decay_now)
         else:
             last_node.reproduction_num = N_child
             now_node.reproduction_num = N_child
-
+        
         # reproduction
         if use_novelty_sample:
             if last_node.agent_num!=0:
@@ -740,8 +701,7 @@ def main():
         # reset env 
         one_length_last = 0
         if last_node.agent_num!=0 and mix_flag:
-            # check
-            if round(N_child*decay_last) == 0 or round(N_archive*decay_last)==0 or round(N_parent*decay_last)==0:
+            if round(N_child*decay_last) == 0 or round(N_archive*decay_last) ==0 or round(N_parent*decay_last) ==0:
                 mix_flag = False
             if use_parent_sample:
                 starts_last, one_length_last, starts_length_last = last_node.sample_starts(round(N_child*decay_last),round(N_archive*decay_last),round(N_parent*decay_last))
@@ -758,16 +718,15 @@ def main():
                 starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive,N_parent)
             else:
                 starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive)
-        now_node.eval_score = np.zeros(shape=one_length_now)    
+        now_node.eval_score = np.zeros(shape=one_length_now)   
 
         for times in range(eval_frequency):
-            if mix_flag:
-                mix_add_count += 1
+            # if mix_flag:
+            #     mix_add_count += 1
             # last_node
             if last_node.agent_num!=0 and mix_flag:
                 actor_critic.agents_num = last_node.agent_num
-                actor_critic.boxes_num = last_node.box_num
-                obs = envs.new_starts_obs_pb(starts_last, last_node.agent_num, last_node.box_num, starts_length_last)
+                obs = envs.new_starts_obs(starts_last, last_node.agent_num, starts_length_last)
                 #replay buffer
                 rollouts_last = RolloutStorage_share(last_node.agent_num,
                             args.episode_length, 
@@ -794,6 +753,8 @@ def main():
                         rollouts_last[agent_id].recurrent_hidden_states = np.zeros(rollouts_last[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                         rollouts_last[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts_last[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
                 step_cover_rate = np.zeros(shape=(one_length_last,args.episode_length))
+                step_collision_num = np.zeros(shape=one_length_last)
+                step_success = np.zeros(shape=(one_length_last,args.episode_length))
                 for step in range(args.episode_length):
                     # Sample actions
                     values = []
@@ -852,7 +813,17 @@ def main():
                     
                     # Obser reward and next obs
                     obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length_last, last_node.agent_num)
-                    step_cover_rate[:,step] = np.array(infos)[0:one_length_last,0]
+                    cover_rate_list = []
+                    collision_list = []
+                    success_list = []
+                    for env_id in range(one_length_last):
+                        cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                        collision_list.append(infos[env_id][0]['collision'])
+                        success_list.append(int(infos[env_id][0]['success']))
+                    step_cover_rate[:,step] = np.array(cover_rate_list)
+                    step_collision_num += np.array(collision_list)
+                    step_success[:,step] = np.array(success_list)
+                    # step_cover_rate[:,step] = np.array(infos)[0:one_length_last,0]
 
                     # If done then clean the history of observations.
                     # insert data in buffer
@@ -898,7 +869,9 @@ def main():
                                     np.array(masks)[:,agent_id])
                 # import pdb;pdb.set_trace()
                 wandb.log({str(last_node.agent_num)+'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
-                print(str(last_node.agent_num)+'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+                wandb.log({str(last_node.agent_num)+'training_success_rate': np.mean(np.mean(step_success[:,-historical_length:],axis=1))}, current_timestep)
+                print(str(last_node.agent_num) + 'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+                wandb.log({str(last_node.agent_num)+'train_collision_num': np.mean(step_collision_num)},current_timestep)
                 current_timestep += args.episode_length * starts_length_last
                 last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
                                             
@@ -939,9 +912,8 @@ def main():
                                                     args.use_popart,
                                                     agents[agent_id].value_normalizer)
             # now_node  
-            actor_critic.agents_num = now_node.agent_num
-            actor_critic.boxes_num = now_node.box_num                             
-            obs = envs.new_starts_obs_pb(starts_now, now_node.agent_num, now_node.box_num, starts_length_now)
+            actor_critic.agents_num = now_node.agent_num                            
+            obs = envs.new_starts_obs(starts_now, now_node.agent_num, starts_length_now)
             #replay buffer
             rollouts_now = RolloutStorage_share(now_node.agent_num,
                         args.episode_length, 
@@ -968,6 +940,9 @@ def main():
                     rollouts_now[agent_id].recurrent_hidden_states = np.zeros(rollouts_now[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                     rollouts_now[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts_now[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
             step_cover_rate = np.zeros(shape=(one_length_now,args.episode_length))
+            step_collision_num = np.zeros(shape=one_length_now)
+            step_success = np.zeros(shape=(one_length_now,args.episode_length))
+
             for step in range(args.episode_length):
                 # Sample actions
                 values = []
@@ -1026,7 +1001,17 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length_now, now_node.agent_num)
-                step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
+                cover_rate_list = []
+                collision_list = []
+                success_list = []
+                for env_id in range(one_length_now):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                    collision_list.append(infos[env_id][0]['collision'])
+                    success_list.append(int(infos[env_id][0]['success']))
+                step_cover_rate[:,step] = np.array(cover_rate_list)
+                step_collision_num += np.array(collision_list)
+                step_success[:,step] = np.array(success_list)
+                # step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -1072,7 +1057,9 @@ def main():
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
             wandb.log({str(now_node.agent_num)+'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({str(now_node.agent_num)+'training_success_rate': np.mean(np.mean(step_success[:,-historical_length:],axis=1))}, current_timestep)
             print(str(now_node.agent_num)+'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+            wandb.log({str(now_node.agent_num)+'train_collision_num': np.mean(step_collision_num)},current_timestep)
             current_timestep += args.episode_length * starts_length_now
             now_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
                                         
@@ -1112,7 +1099,7 @@ def main():
                                                 args.use_proper_time_limits,
                                                 args.use_popart,
                                                 agents[agent_id].value_normalizer)
-                    
+                  
 
             # update the network
             # one_length需要改, log横坐标需要改
@@ -1120,15 +1107,16 @@ def main():
                 actor_critic.train()
                 if last_node.agent_num!=0 and mix_flag:
                     wandb.log({'Type of agents': 2},current_timestep)
-                    value_loss, action_loss, dist_entropy = agents.update_double_share_pb(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
+                    value_loss, action_loss, dist_entropy = agents.update_double_share(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
                 else:
                     wandb.log({'Type of agents': 1},current_timestep)
-                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, False, initial_optimizer=False)
+                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now)
+                # print('value_loss: ', value_loss)
                 wandb.log({'value_loss': value_loss},
                     current_timestep)
 
                 # clean the buffer and reset
-                if last_node.agent_num!=0:
+                if last_node.agent_num!=0 and mix_flag:
                     rollouts_last.after_update()
                 rollouts_now.after_update()
             else: # 需要修改成同时update的版本
@@ -1146,14 +1134,13 @@ def main():
                     rew = []
                     for i in range(rollouts[agent_id].rewards.shape[1]):
                         rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
-                    wandb.log(
-                        {'average_episode_reward': np.mean(rew)},
+                    wandb.log({'average_episode_reward': np.mean(rew)},
                         (episode+1) * args.episode_length * one_length*eval_frequency)
                     
                     rollouts[agent_id].after_update()
 
         # move nodes
-        if last_node.agent_num!=0:
+        if last_node.agent_num!=0 and mix_flag:
             last_node.eval_score = last_node.eval_score / eval_frequency
             last_node.move_nodes(one_length_last, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, logger, current_timestep)
         now_node.eval_score = now_node.eval_score / eval_frequency
@@ -1172,10 +1159,12 @@ def main():
         # test last_node
         if last_node.agent_num!=0:
             if episode % check_frequency==0:
-                actor_critic.agents_num = last_node.agent_num
-                actor_critic.boxes_num = last_node.box_num
-                obs, _ = envs.reset(last_node.agent_num,last_node.box_num)
-                episode_length = 200
+                actor_critic.agents_num = last_node.agent_num 
+                obs, _ = envs.reset(last_node.agent_num)
+                if last_node.agent_num == 4:
+                    episode_length = 70
+                else:
+                    episode_length = 200
                 #replay buffer
                 rollouts = RolloutStorage_share(last_node.agent_num,
                             episode_length, 
@@ -1202,6 +1191,8 @@ def main():
                         rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                         rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
                 test_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
+                test_collision_num = np.zeros(shape=args.n_rollout_threads)
+                test_success = np.zeros(shape=(args.n_rollout_threads,episode_length))
                 for step in range(episode_length):
                     # Sample actions
                     values = []
@@ -1259,8 +1250,18 @@ def main():
                         actions_env.append(one_hot_action_env)
                     
                     # Obser reward and next obs
-                    obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, now_node.agent_num)
-                    test_cover_rate[:,step] = np.array(infos)[:,0]
+                    obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, last_node.agent_num)
+                    cover_rate_list = []
+                    collision_list = []
+                    success_list = []
+                    for env_id in range(args.n_rollout_threads):
+                        cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                        collision_list.append(infos[env_id][0]['collision'])
+                        success_list.append(int(infos[env_id][0]['success']))
+                    test_cover_rate[:,step] = np.array(cover_rate_list)
+                    test_collision_num += np.array(collision_list)
+                    test_success[:,step] = np.array(success_list)
+                    # step_cover_rate[:,step] = np.array(infos)[:,0]
 
                     # If done then clean the history of observations.
                     # insert data in buffer
@@ -1306,15 +1307,23 @@ def main():
                                     np.array(masks)[:,agent_id])
                 # import pdb;pdb.set_trace()
                 wandb.log({str(last_node.agent_num) + 'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+                wandb.log({str(last_node.agent_num) + 'success_rate': np.mean(np.mean(test_success[:,-historical_length:],axis=1))}, current_timestep)
+                wandb.log({str(last_node.agent_num) + 'test_collision_num': np.mean(test_collision_num)}, current_timestep)
                 last_mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
+                rew = []
+                for i in range(rollouts_now.rewards.shape[1]):
+                    rew.append(np.sum(rollouts_now.rewards[:,i]))
+                wandb.log({str(last_node.agent_num) + 'eval_episode_reward': np.mean(rew)}, current_timestep)
                 print(str(last_node.agent_num) + 'test_mean_cover_rate: ', last_mean_cover_rate)
 
         # test now_node
         if episode % check_frequency==0:
-            actor_critic.agents_num = now_node.agent_num
-            actor_critic.boxes_num = now_node.box_num
-            obs, _ = envs.reset(now_node.agent_num,now_node.box_num)
-            episode_length = 200
+            actor_critic.agents_num = now_node.agent_num 
+            obs, _ = envs.reset(now_node.agent_num)
+            if now_node.agent_num == 4:
+                episode_length = 70
+            else:
+                episode_length = 200
             #replay buffer
             rollouts = RolloutStorage_share(now_node.agent_num,
                         episode_length, 
@@ -1341,6 +1350,8 @@ def main():
                     rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                     rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
             test_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
+            test_collision_num = np.zeros(shape=args.n_rollout_threads)
+            test_success = np.zeros(shape=(args.n_rollout_threads,episode_length))
             for step in range(episode_length):
                 # Sample actions
                 values = []
@@ -1399,7 +1410,17 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, now_node.agent_num)
-                test_cover_rate[:,step] = np.array(infos)[:,0]
+                cover_rate_list = []
+                collision_list = []
+                success_list = []
+                for env_id in range(args.n_rollout_threads):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                    collision_list.append(infos[env_id][0]['collision'])
+                    success_list.append(int(infos[env_id][0]['success']))
+                test_cover_rate[:,step] = np.array(cover_rate_list)
+                test_collision_num += np.array(collision_list)
+                test_success[:,step] = np.array(success_list)
+                # step_cover_rate[:,step] = np.array(infos)[:,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -1445,41 +1466,48 @@ def main():
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
             wandb.log({str(now_node.agent_num) + 'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({str(now_node.agent_num) + 'success_rate': np.mean(np.mean(test_success[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({str(now_node.agent_num) + 'test_collision_num': np.mean(test_collision_num)}, current_timestep)
             now_mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
+            rew = []
+            for i in range(rollouts_now.rewards.shape[1]):
+                rew.append(np.sum(rollouts_now.rewards[:,i]))
+            wandb.log({str(now_node.agent_num) + 'eval_episode_reward': np.mean(rew)}, current_timestep)
             print(str(now_node.agent_num) + 'test_mean_cover_rate: ', now_mean_cover_rate)
         
-        if now_mean_cover_rate > upper_bound and now_node.agent_num < target_num:
+        if now_mean_cover_rate >= upper_bound and now_node.agent_num < target_num:
             now_mean_cover_rate = 0
             last_agent_num = now_node.agent_num
             now_agent_num = min(last_agent_num * 2,target_num)
             add_num = now_agent_num - last_agent_num
-            now_box_num = now_agent_num
             if add_num!=0:
                 next_stage_flag = 1
                 if args.share_policy:
                     torch.save({
                                 'model': actor_critic
                                 }, 
-                                str(save_dir) + "/%ibox_model.pt"%now_node.box_num)
+                                str(save_dir) + "/%iagent_model.pt"%now_node.agent_num)
             else:
                 last_node.agent_num = 0
-                last_node.box_num = 0
                 one_length_last = 0
                 
 
         if next_stage_flag==1:
             mix_flag = True
             next_stage_flag = 0
-            start_boundary = [-0.8,0.8,-0.8,0.8]
             last_node = copy.deepcopy(now_node)
-            now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
+            if save_curricula:
+                last_node.save_phase_curricula(save_curricula_dir, upper_bound)
+            start_boundary = 1.0
+            now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=int(args.n_rollout_threads/2),
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
-            if now_node.agent_num==4:
-                agents.num_mini_batch = 8
+            actor_critic.agents_num = now_node.agent_num
+            if now_node.agent_num==8:
+                agents.num_mini_batch = 16
 
 
         total_num_steps = current_timestep
