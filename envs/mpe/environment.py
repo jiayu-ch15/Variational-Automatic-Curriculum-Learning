@@ -334,7 +334,6 @@ class MultiAgentEnv(gym.Env):
             obs_dim = len(self.observation_callback(agent, self.world))
             self.observation_space.append(spaces.Box(low=-np.inf, high=+np.inf, shape=(obs_dim,), dtype=np.float32))#[-inf,inf]
             agent.action.c = np.zeros(self.world.dim_c)
-        
         # set agent and landmark
         for i, agent in enumerate(self.agents_all): # agent+box
             agent.state.p_pos = starts_one[i]

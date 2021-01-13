@@ -620,8 +620,8 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    # start_boundary = [-0.4,0.4,-0.4,0.4]
-    start_boundary = {'x':[-0.4,0.4],'y':[-0.4,0.4]} # bad init
+    start_boundary = [-0.4,0.4,-0.4,0.4]
+    # start_boundary = {'x':[-0.4,0.4],'y':[-0.4,0.4]} # bad init
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -684,7 +684,7 @@ def main():
         actor_critic.agents_num = last_node.agent_num
         actor_critic.boxes_num = last_node.box_num
         for times in range(eval_frequency):
-            obs = envs.new_starts_obs_pb(starts, num_agents, num_boxes,starts_length)
+            obs = envs.new_starts_obs_pb(starts, num_agents, num_boxes, starts_length)
             #replay buffer
             rollouts = RolloutStorage(num_agents,
                         args.episode_length, 
