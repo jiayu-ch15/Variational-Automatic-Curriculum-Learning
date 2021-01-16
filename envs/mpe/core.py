@@ -309,6 +309,7 @@ class World(object):
         else:
             # compute actual distance between entities
             delta_pos = entity_a.state.p_pos - entity_b.state.p_pos
+            # assert delta_pos >= 1e-5 'Two entities coincide'
             dist = np.sqrt(np.sum(np.square(delta_pos)))
             # minimum allowable distance
             dist_min = entity_a.size + entity_b.size
