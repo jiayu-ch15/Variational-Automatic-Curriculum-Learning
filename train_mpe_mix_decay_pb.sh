@@ -4,7 +4,7 @@ env="MPE"
 scenario="push_ball"
 num_landmarks=2
 num_agents=2
-algo="mixdecay_only2decay_fre150_pb"
+algo="mixdecay_0.5_fre120_pb"
 # algo="check"
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"

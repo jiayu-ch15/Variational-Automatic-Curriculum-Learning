@@ -615,11 +615,12 @@ def main():
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
-    mix_add_frequency = 150 # 改变比例的频率
+    mix_add_frequency = 120 # 改变比例的频率
     mix_add_count = 0
     decay_last = 1.0
     decay_now = 1.0 - 0.5 * decay_last
     mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
+    decay = True
     target_num = 4
     last_box_num = 2
     last_agent_num = last_box_num
@@ -633,7 +634,7 @@ def main():
     save_node_frequency = 5
     save_node_flag = False
     load_curricula = True
-    load_curricula_path = './curricula/MPE/push_ball/mix2n4_samebatch/run%i/2agents'%args.seed
+    load_curricula_path = './curricula/MPE/push_ball/mix2n4_eval3tonext/run%i/2agents'%args.seed
     historical_length = 5
     next_stage_flag = 0
     random.seed(args.seed)
@@ -708,14 +709,15 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction_num should be changed
-        if mix_add_count >= mix_add_frequency and mix_flag:
-            mix_add_count = 0
-            decay_last -= 0.1
-            decay_last = max(decay_last,0.0)
-            decay_now = 1.0 - 0.5 * decay_last
-            # 停止混合
-            if decay_last == 0.0:
-                mix_flag = False
+        if decay:
+            if mix_add_count >= mix_add_frequency and mix_flag:
+                mix_add_count = 0
+                decay_last -= 0.1
+                decay_last = max(decay_last,0.0)
+                decay_now = 1.0 - 0.5 * decay_last
+                # 停止混合
+                if decay_last == 0.0:
+                    mix_flag = False
                 
         wandb.log({'decay_last': decay_last},current_timestep)
         wandb.log({'decay_now': decay_now},current_timestep)

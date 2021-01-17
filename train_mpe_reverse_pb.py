@@ -642,13 +642,16 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    start_boundary = [-0.3,0.3,-0.3,0.3]
+    # start_boundary = [-0.3,0.3,-0.3,0.3]
+    start_boundary = [-0.8,0.8,-0.8,0.8]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    last_agent_num = 2
-    last_box_num = 2
+    last_agent_num = 4
+    last_box_num = 4
     now_agent_num = num_agents
+    num_agents_test = 4 
+    num_boxes_test = 4
     mean_cover_rate = 0
     eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
@@ -927,8 +930,6 @@ def main():
         print('archive: ', len(last_node.archive))
 
         # test
-        num_agents_test = 4 
-        num_boxes_test = 4
         actor_critic.agents_num = num_agents_test
         actor_critic.boxes_num = num_boxes_test
         if episode % check_frequency==0:

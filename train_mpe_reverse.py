@@ -596,12 +596,13 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
-    start_boundary = [-0.3,0.3,-0.3,0.3]
+    # start_boundary = [-0.3,0.3,-0.3,0.3]
+    start_boundary = [-1.0,1.0,-1.0,1.0]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    target_num = 4
-    last_agent_num = 4
+    target_num = 8
+    last_agent_num = 8
     now_agent_num = num_agents
     test_num_agents = 8
     mean_cover_rate = 0
