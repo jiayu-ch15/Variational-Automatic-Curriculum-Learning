@@ -577,7 +577,7 @@ def main():
     
     use_parent_novelty = False
     use_child_novelty = False
-    use_novelty_sample = True
+    use_novelty_sample = False
     use_parent_sample = False
     use_reverse_goal = True
     del_switch = 'old'
@@ -603,6 +603,7 @@ def main():
     target_num = 4
     last_agent_num = 4
     now_agent_num = num_agents
+    test_num_agents = 8
     mean_cover_rate = 0
     eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
@@ -661,6 +662,7 @@ def main():
         last_node.eval_score = np.zeros(shape=one_length)
 
         for times in range(eval_frequency):
+            actor_critic.agents_num = last_node.agent_num
             obs = envs.new_starts_obs(starts, last_node.agent_num, starts_length)
             #replay buffer
             rollouts = RolloutStorage(num_agents,
@@ -884,10 +886,11 @@ def main():
 
         # test
         if episode % check_frequency==0:
-            obs, _ = envs.reset(num_agents)
+            actor_critic.agents_num = test_num_agents
+            obs, _ = envs.reset(test_num_agents)
             episode_length = 70
             #replay buffer
-            rollouts = RolloutStorage(num_agents,
+            rollouts = RolloutStorage(test_num_agents,
                         episode_length, 
                         args.n_rollout_threads,
                         envs.observation_space[0], 
@@ -896,7 +899,7 @@ def main():
             # replay buffer init
             if args.share_policy: 
                 share_obs = obs.reshape(args.n_rollout_threads, -1)        
-                share_obs = np.expand_dims(share_obs,1).repeat(num_agents,axis=1)    
+                share_obs = np.expand_dims(share_obs,1).repeat(test_num_agents,axis=1)    
                 rollouts.share_obs[0] = share_obs.copy() 
                 rollouts.obs[0] = obs.copy()               
                 rollouts.recurrent_hidden_states = np.zeros(rollouts.recurrent_hidden_states.shape).astype(np.float32)
@@ -906,7 +909,7 @@ def main():
                 for o in obs:
                     share_obs.append(list(itertools.chain(*o)))
                 share_obs = np.array(share_obs)
-                for agent_id in range(num_agents):    
+                for agent_id in range(test_num_agents):    
                     rollouts[agent_id].share_obs[0] = share_obs.copy()
                     rollouts[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
                     rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
@@ -921,7 +924,7 @@ def main():
                 recurrent_hidden_statess_critic = []
                 
                 with torch.no_grad():                
-                    for agent_id in range(num_agents):
+                    for agent_id in range(test_num_agents):
                         if args.share_policy:
                             actor_critic.eval()
                             value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
@@ -949,7 +952,7 @@ def main():
                 actions_env = []
                 for i in range(args.n_rollout_threads):
                     one_hot_action_env = []
-                    for agent_id in range(num_agents):
+                    for agent_id in range(test_num_agents):
                         if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
                             uc_action = []
                             for j in range(envs.action_space[agent_id].shape):
@@ -979,7 +982,7 @@ def main():
                 masks = []
                 for i, done in enumerate(dones): 
                     mask = []               
-                    for agent_id in range(num_agents): 
+                    for agent_id in range(test_num_agents): 
                         if done[agent_id]:    
                             recurrent_hidden_statess[agent_id][i] = np.zeros(args.hidden_size).astype(np.float32)
                             recurrent_hidden_statess_critic[agent_id][i] = np.zeros(args.hidden_size).astype(np.float32)    
@@ -990,7 +993,7 @@ def main():
                                 
                 if args.share_policy: 
                     share_obs = obs.reshape(args.n_rollout_threads, -1)        
-                    share_obs = np.expand_dims(share_obs,1).repeat(num_agents,axis=1)    
+                    share_obs = np.expand_dims(share_obs,1).repeat(test_num_agents,axis=1)    
                     
                     rollouts.insert(share_obs, 
                                 obs, 
@@ -1006,7 +1009,7 @@ def main():
                     for o in obs:
                         share_obs.append(list(itertools.chain(*o)))
                     share_obs = np.array(share_obs)
-                    for agent_id in range(num_agents):
+                    for agent_id in range(test_num_agents):
                         rollouts[agent_id].insert(share_obs, 
                                 np.array(list(obs[:,agent_id])), 
                                 np.array(recurrent_hidden_statess[agent_id]), 

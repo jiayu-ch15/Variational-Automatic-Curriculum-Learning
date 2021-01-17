@@ -615,9 +615,9 @@ def main():
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
-    mix_add_frequency = 60 # 改变比例的频率
+    mix_add_frequency = 150 # 改变比例的频率
     mix_add_count = 0
-    decay_last = 1.8 
+    decay_last = 1.0
     decay_now = 1.0 - 0.5 * decay_last
     mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
     target_num = 4
@@ -628,8 +628,7 @@ def main():
     last_mean_cover_rate = 0
     now_mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
-    reach_next_count = 0
-    reach_next_phase = 1 # reach upper bound n times
+    eval_count = 0
     check_frequency = 1
     save_node_frequency = 5
     save_node_flag = False
@@ -709,7 +708,7 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction_num should be changed
-        if mix_add_count == mix_add_frequency and mix_flag:
+        if mix_add_count >= mix_add_frequency and mix_flag:
             mix_add_count = 0
             decay_last -= 0.1
             decay_last = max(decay_last,0.0)
@@ -1450,10 +1449,10 @@ def main():
             now_mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
             print(str(now_node.agent_num) + 'test_mean_cover_rate: ', now_mean_cover_rate)
             if now_mean_cover_rate >= upper_bound:
-                reach_next_count += 1
+                eval_count += 1
         
-        if reach_next_count >=  reach_next_phase and now_node.agent_num < target_num:
-            reach_next_count = 0
+        if eval_count >= eval_frequency and now_node.agent_num < target_num:
+            eval_count = 0
             now_mean_cover_rate = 0
             last_agent_num = now_node.agent_num
             now_agent_num = min(last_agent_num * 2,target_num)

@@ -527,7 +527,7 @@ def main():
                                  },
                     device = device)
         actor_critic.to(device)
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_samebatch/run%i/models/2box_model.pt'%(args.seed))['model'].to(device)
+        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball/mix2n4_samebatch/run%i/models/2box_model.pt'%(args.seed))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -632,16 +632,19 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    start_boundary = [-0.8,0.8,-0.8,0.8]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
     target_num = 4
-    last_box_num = 2
+    last_box_num = 0
     last_agent_num = last_box_num
-    now_box_num = 4
+    now_box_num = 2
     now_agent_num = now_box_num
+    if now_agent_num ==2 :
+        start_boundary = [-0.4,0.4,-0.4,0.4]
+    else:
+        start_boundary = [-0.8,0.8,-0.8,0.8]
     mean_cover_rate = 0
     mix_flag = False
     eval_frequency = 3 #需要fix几个回合
@@ -649,9 +652,9 @@ def main():
     check_frequency = 1
     save_node_frequency = 5
     save_node_flag = False
-    load_curricula = True
+    load_curricula = False
     load_curricula_path = './curricula/MPE/push_ball/mix2n4_samebatch/run%i/2agents'%args.seed
-    save_curricula = False
+    save_curricula = True
     historical_length = 5
     next_stage_flag = 0
     random.seed(args.seed)

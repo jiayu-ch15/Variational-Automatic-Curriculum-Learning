@@ -4,9 +4,9 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-algo="reverse_eval1_novelty_sp"
+algo="reverse_sp_test8agents"
 # algo='check'
-seed=2
+seed=3
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
 
