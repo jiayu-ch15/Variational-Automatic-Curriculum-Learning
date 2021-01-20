@@ -743,7 +743,6 @@ def main():
             now_node.childlist += now_node.SampleNearby(now_node.parent)
         
         # reset env 
-        # one length = now_process_num
         one_length_last = 0
         if last_node.agent_num!=0:
             if use_parent_sample:
@@ -751,7 +750,6 @@ def main():
             else:
                 starts_last, one_length_now, starts_length_last = last_node.sample_starts(N_child,N_archive)
             last_node.eval_score = np.zeros(shape=one_length_last)
-        # starts_now, one_length_now = now_node.sample_starts(N_child,N_archive)
         if use_parent_sample:
             if mix_flag:
                 starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child/2),round(N_archive/2),round(N_parent/2))

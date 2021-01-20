@@ -129,7 +129,7 @@ class node_buffer():
             # landmark location
             indices = random.sample(range(now_box_num), now_box_num)
             num_try = 0
-            num_tries = 50
+            num_tries = 200
             for k in indices:
                 around = 1
                 while num_try < num_tries:
@@ -156,7 +156,7 @@ class node_buffer():
             # agent_location
             indices_agent = random.sample(range(now_box_num), now_box_num)
             num_try = 0
-            num_tries = 50
+            num_tries = 200
             for k in indices_agent:
                 around = 1
                 while num_try < num_tries:
@@ -615,17 +615,33 @@ def main():
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
-    mix_add_frequency = 120 # 改变比例的频率
-    mix_add_count = 0
-    decay_last = 1.0
-    decay_now = 1.0 - 0.5 * decay_last
-    mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
-    decay = True
-    target_num = 4
-    last_box_num = 2
-    last_agent_num = last_box_num
-    now_box_num = 4
-    now_agent_num = now_box_num
+    phase = True
+    if phase:
+        stop_mix_signal = 1.0
+        mix_add_frequency = 30 # 改变比例的频率
+        mix_add_count = 0
+        decay_last = 0.0
+        decay_now = 1.0 - 0.5 * decay_last
+        mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
+        decay = False
+        target_num = 4
+        last_box_num = 0
+        last_agent_num = last_box_num
+        now_box_num = 4
+        now_agent_num = now_box_num
+    else:
+        stop_mix_signal = 1.0
+        mix_add_frequency = 30 # 改变比例的频率
+        mix_add_count = 0
+        decay_last = 0.5
+        decay_now = 1.0 - 0.5 * decay_last
+        mix_flag = True # 代表是否需要混合，90%开始混合，95%以后不再混合
+        decay = False
+        target_num = 4
+        last_box_num = 2
+        last_agent_num = last_box_num
+        now_box_num = 4
+        now_agent_num = now_box_num
     last_mean_cover_rate = 0
     now_mean_cover_rate = 0
     eval_frequency = 3 #需要fix几个回合
@@ -640,19 +656,18 @@ def main():
     random.seed(args.seed)
     np.random.seed(args.seed)
     last_node = node_buffer(last_agent_num,last_box_num, buffer_length,
-                           archive_initial_length=int(args.n_rollout_threads/2),
+                           archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
     now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
-                           archive_initial_length=int(args.n_rollout_threads/2),
+                           archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary)
     if load_curricula: # 默认从2、4混合开始训练
-        mix_flag = True
         # load archive
         with open(load_curricula_path + '/archive/archive_0.900000','r') as fp :
             tmp = fp.readlines()
@@ -721,8 +736,6 @@ def main():
                 
         wandb.log({'decay_last': decay_last},current_timestep)
         wandb.log({'decay_now': decay_now},current_timestep)
-        print('decay_last: ', decay_last)
-        print('decay_now: ', decay_now)
         if mix_flag:
             last_node.reproduction_num = round(N_child * decay_last)
             now_node.reproduction_num = round(N_child * decay_now)
@@ -1123,9 +1136,11 @@ def main():
                 actor_critic.train()
                 if last_node.agent_num!=0 and mix_flag:
                     wandb.log({'Type of agents': 2},current_timestep)
+                    print('type of agents: ', 2)
                     value_loss, action_loss, dist_entropy = agents.update_double_share_pb(last_node.agent_num, now_node.agent_num, rollouts_last, rollouts_now)
                 else:
                     wandb.log({'Type of agents': 1},current_timestep)
+                    print('type of agents: ', 1)
                     value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, False, initial_optimizer=False)
                 wandb.log({'value_loss': value_loss},
                     current_timestep)
@@ -1453,6 +1468,7 @@ def main():
             if now_mean_cover_rate >= upper_bound:
                 eval_count += 1
         
+        # region mix start
         if eval_count >= eval_frequency and now_node.agent_num < target_num:
             eval_count = 0
             now_mean_cover_rate = 0
@@ -1461,32 +1477,35 @@ def main():
             add_num = now_agent_num - last_agent_num
             now_box_num = now_agent_num
             if add_num!=0:
-                next_stage_flag = 1
                 if args.share_policy:
                     torch.save({
                                 'model': actor_critic
                                 }, 
                                 str(save_dir) + "/%ibox_model.pt"%now_node.box_num)
+                mix_flag = True
+                start_boundary = [-0.8,0.8,-0.8,0.8]
+                last_node = copy.deepcopy(now_node)
+                now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
+                            archive_initial_length=int(args.n_rollout_threads/2),
+                            reproduction_num=M,
+                            max_step=max_step,
+                            start_boundary=start_boundary,
+                            boundary=boundary)
+                if now_node.agent_num==4:
+                    agents.num_mini_batch = 8
             else:
                 last_node.agent_num = 0
                 last_node.box_num = 0
                 one_length_last = 0
+        # end region
+
+        # region end mix
+        if now_mean_cover_rate > stop_mix_signal:
+            mix_flag = False
+            decay_last = 0.0
+            decay_now = 1.0
+        # end region
                 
-
-        if next_stage_flag==1:
-            mix_flag = True
-            next_stage_flag = 0
-            start_boundary = [-0.8,0.8,-0.8,0.8]
-            last_node = copy.deepcopy(now_node)
-            now_node = node_buffer(now_agent_num,now_box_num, buffer_length,
-                           archive_initial_length=int(args.n_rollout_threads/2),
-                           reproduction_num=M,
-                           max_step=max_step,
-                           start_boundary=start_boundary,
-                           boundary=boundary)
-            if now_node.agent_num==4:
-                agents.num_mini_batch = 8
-
 
         total_num_steps = current_timestep
 
