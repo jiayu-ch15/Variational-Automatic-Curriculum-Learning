@@ -615,7 +615,7 @@ def main():
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
-    phase = True
+    phase = False
     if phase:
         stop_mix_signal = 1.0
         mix_add_frequency = 30 # 改变比例的频率
@@ -631,12 +631,12 @@ def main():
         now_agent_num = now_box_num
     else:
         stop_mix_signal = 1.0
-        mix_add_frequency = 30 # 改变比例的频率
+        mix_add_frequency = 240 # 改变比例的频率
         mix_add_count = 0
-        decay_last = 0.5
+        decay_last = 1.0
         decay_now = 1.0 - 0.5 * decay_last
         mix_flag = True # 代表是否需要混合，90%开始混合，95%以后不再混合
-        decay = False
+        decay = True
         target_num = 4
         last_box_num = 2
         last_agent_num = last_box_num
@@ -1176,16 +1176,16 @@ def main():
             last_node.move_nodes(one_length_last, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, logger, current_timestep)
         now_node.eval_score = now_node.eval_score / eval_frequency
         now_node.move_nodes(one_length_now, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, logger, current_timestep)
-        print('last_node_parent: ', len(last_node.parent))
-        print('now_node_parent: ', len(now_node.parent))
+        # print('last_node_parent: ', len(last_node.parent))
+        # print('now_node_parent: ', len(now_node.parent))
         # 需要改路径
         if (episode+1) % save_node_frequency ==0 and save_node_flag:
             last_node.save_node(save_node_dir, episode)
             now_node.save_node(save_node_dir, episode)
-        print('last_node_childlist: ', len(last_node.childlist))
-        print('last_node_archive: ', len(last_node.archive))
-        print('now_node_childlist: ', len(now_node.childlist))
-        print('now_node_archive: ', len(now_node.archive))
+        # print('last_node_childlist: ', len(last_node.childlist))
+        # print('last_node_archive: ', len(last_node.archive))
+        # print('now_node_childlist: ', len(now_node.childlist))
+        # print('now_node_archive: ', len(now_node.archive))
 
         # test last_node
         if last_node.agent_num!=0:
