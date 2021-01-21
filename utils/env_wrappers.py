@@ -125,7 +125,7 @@ def worker(remote, parent_remote, env_fn_wrapper):
             now_agent_num = cmd[1]
             now_box_num = cmd[2]
             starts_one = cmd[3]
-            ob = env.new_starts_obs_pb(starts_one,now_agent_num,now_box_num)
+            ob = env.new_starts_obs_pb(starts_one, now_agent_num, now_box_num)
             remote.send(ob)
         # elif cmd[0] == 'reset_pb':
         #     now_agent_num = cmd[1]
