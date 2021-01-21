@@ -4,8 +4,8 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=8
 num_agents=8
-algo="gan"
-# algo='check'
+# algo="gan"
+algo='8agents_check'
 seed=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"

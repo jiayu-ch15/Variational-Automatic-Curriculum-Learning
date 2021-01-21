@@ -185,7 +185,6 @@ def make_parallel_env(args):
     else:
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
-
 def numpy_to_list(array, list_length, shape):
     res = []
     for i in range(list_length):
@@ -369,8 +368,6 @@ def main():
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    target_num = 2
-    last_agent_num = 2
     now_agent_num = num_agents
     mean_cover_rate = 0
     eval_frequency = 2 #需要fix几个回合
@@ -616,7 +613,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_agent_num, rollouts, False, initial_optimizer=False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_agent_num, rollouts, False, initial_optimizer=False) 
                 print('value_loss: ', value_loss)
                 wandb.log(
                     {'value_loss': value_loss},
@@ -799,7 +796,7 @@ def main():
             if mean_cover_rate >= 0.9 and args.algorithm_name=='ours' and save_90_flag:
                 torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")
                 save_90_flag = False
-            print('test_agent_num: ', last_agent_num)
+            print('test_agent_num: ', now_agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
 
         total_num_steps = current_timestep

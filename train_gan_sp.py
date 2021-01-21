@@ -364,8 +364,6 @@ def main():
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    target_num = 4
-    last_agent_num = 4
     now_agent_num = num_agents
     mean_cover_rate = 0
     eval_frequency = 2 #需要fix几个回合
@@ -407,8 +405,6 @@ def main():
                 for agent_id in range(num_agents):
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
-
-
         raw_goals, _ = gan.sample_states_with_noise(goal_configs['num_new_goals'])
         # replay buffer
         if all_goals.size > 0:
@@ -421,6 +417,9 @@ def main():
             goals = np.vstack([goals, goals[:add_num]]) #补齐到num_new_goals+num_old_goals   
         # generate the starts
         starts = numpy_to_list(goals, list_length=num_envs, shape=(num_agents*2,2))
+        print('len_starts: ',len(starts))
+        print('max_starts: ', np.max(starts))
+        print('min_starts: ', np.min(np.abs(starts)))
 
         for times in range(eval_frequency):
             obs = envs.new_starts_obs(starts, now_agent_num, starts_length)
@@ -559,9 +558,7 @@ def main():
             current_timestep += args.episode_length * starts_length
             curriculum_episode += 1
             
-            #region train the gan
-
-            
+            #region train the gan            
             if times == 1:
                 start_time = time.time()
                 filtered_raw_goals = []
@@ -615,7 +612,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_agent_num, rollouts, False, initial_optimizer=False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_agent_num, rollouts, False, initial_optimizer=False) 
                 print('value_loss: ', value_loss)
                 wandb.log(
                     {'value_loss': value_loss},
@@ -801,7 +798,7 @@ def main():
             if mean_cover_rate >= 0.9 and args.algorithm_name=='ours' and save_90_flag:
                 torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")
                 save_90_flag = False
-            print('test_agent_num: ', last_agent_num)
+            print('test_agent_num: ', now_agent_num)
             print('test_mean_cover_rate: ', mean_cover_rate)
 
         total_num_steps = current_timestep
