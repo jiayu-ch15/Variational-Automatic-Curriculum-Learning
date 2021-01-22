@@ -1174,10 +1174,6 @@ def main():
         if (episode+1) % save_node_frequency ==0 and save_node_flag:
             last_node.save_node(save_node_dir, episode)
             now_node.save_node(save_node_dir, episode)
-        print('last_node_childlist: ', len(last_node.childlist))
-        print('last_node_archive: ', len(last_node.archive))
-        print('now_node_childlist: ', len(now_node.childlist))
-        print('now_node_archive: ', len(now_node.archive))
 
         # test last_node
         # test now_node
