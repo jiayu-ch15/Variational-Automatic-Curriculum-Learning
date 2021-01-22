@@ -365,7 +365,7 @@ def main():
     
    
     boundary = 2
-    start_boundary = [-0.4,0.4,-0.4,0.4] # 分别代表x的范围和y的范围
+    start_boundary = [-0.8,0.8,-0.8,0.8] # 分别代表x的范围和y的范围
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -374,8 +374,8 @@ def main():
     eval_frequency = 2 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 5
-    save_node_flag = True
-    save_90_flag = True
+    save_node_flag = False
+    save_90_flag = False
     historical_length = 5
     random.seed(args.seed)
     np.random.seed(args.seed)
