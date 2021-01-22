@@ -630,7 +630,7 @@ def main():
         now_box_num = 4
         now_agent_num = now_box_num
     else:
-        stop_mix_signal = 1.0
+        stop_mix_signal = 0.9
         mix_add_frequency = 240 # 改变比例的频率
         mix_add_count = 0
         decay_last = 1.0
