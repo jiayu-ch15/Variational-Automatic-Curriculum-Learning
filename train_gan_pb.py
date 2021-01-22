@@ -125,8 +125,9 @@ class StateGAN(StateGenerator):
 
     def _add_noise_to_states(self, states):
         noise = np.random.randn(*states.shape) * self.state_noise_level
-        states += noise
-        return np.clip(states, self.state_center + self.state_bounds[0], self.state_center + self.state_bounds[1])
+        noise_states = np.clip(states, self.state_center + self.state_bounds[0], self.state_center + self.state_bounds[1])
+        noise_states += noise
+        return noise_states
 
     def sample_states(self, size):  # un-normalizes the states
         normalized_states, noise = self.gan.sample_generator(size)

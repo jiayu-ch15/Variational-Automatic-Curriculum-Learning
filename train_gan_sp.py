@@ -125,8 +125,9 @@ class StateGAN(StateGenerator):
 
     def _add_noise_to_states(self, states):
         noise = np.random.randn(*states.shape) * self.state_noise_level
-        states += noise
-        return np.clip(states, self.state_center + self.state_bounds[0], self.state_center + self.state_bounds[1])
+        noise_states = np.clip(states, self.state_center + self.state_bounds[0], self.state_center + self.state_bounds[1])
+        noise_states += noise
+        return noise_states
 
     def sample_states(self, size):  # un-normalizes the states
         normalized_states, noise = self.gan.sample_generator(size)
@@ -180,13 +181,13 @@ def make_parallel_env(args):
     else:
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
-
 def numpy_to_list(array, list_length, shape):
     res = []
     for i in range(list_length):
         sub_arr = array[i].reshape(shape)
         res.append(sub_arr)
     return res
+
 
 def main():
     args = get_config()
