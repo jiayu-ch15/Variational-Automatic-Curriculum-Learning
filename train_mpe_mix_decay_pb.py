@@ -633,10 +633,10 @@ def main():
         stop_mix_signal = 0.9
         mix_add_frequency = 240 # 改变比例的频率
         mix_add_count = 0
-        decay_last = 1.0
+        decay_last = 0.6
         decay_now = 1.0 - 0.5 * decay_last
         mix_flag = True # 代表是否需要混合，90%开始混合，95%以后不再混合
-        decay = True
+        decay = False
         target_num = 4
         last_box_num = 2
         last_agent_num = last_box_num
@@ -1462,13 +1462,13 @@ def main():
             wandb.log({str(eval_agent_num) + 'cover_rate': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate2 = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
             print(str(eval_agent_num) + 'test_mean_cover_rate: ', mean_cover_rate2)
-            if mean_cover_rate2 >= upper_bound:
+            if mean_cover_rate1 >= upper_bound:
                 eval_count += 1
         
         # region mix start
         if eval_count >= eval_frequency and now_node.agent_num < target_num:
             eval_count = 0
-            mean_cover_rate2 = 0
+            mean_cover_rate1 = 0
             last_agent_num = now_node.agent_num
             now_agent_num = min(last_agent_num * 2,target_num)
             add_num = now_agent_num - last_agent_num

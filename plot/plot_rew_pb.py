@@ -9,7 +9,7 @@ import pdb
 def main():
     scenario = 'push_ball'
     save_dir = './' + scenario + '/'
-    save_name = 'mix_fre_pb'
+    save_name = 'entity_curriculum'
     # pdb.set_trace()
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
@@ -67,67 +67,66 @@ def main():
     # plt.plot(timesteps,mean_seed,label='uniform + easy case',color='tab:brown')
     # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
 
-    # mix
-    exp_name = 'mix_pb'
-    # data_dir =  './' + exp_name + '.csv'
-    x_step1 = []
-    y_seed1 = []
-    x_step2 = []
-    y_seed2 = []
-    x_step3 = []
-    y_seed3 = []
-    # load data ranking by seed
-    data_dir =  './' + exp_name + '_seed1' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step1.append(row[0])
-            y_seed1.append(row[1:])
-    data_dir =  './' + exp_name + '_seed2' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step2.append(row[0])
-            y_seed2.append(row[1:])
-    data_dir =  './' + exp_name + '_seed3' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step3.append(row[0])
-            y_seed3.append(row[1:])
-    x_step1 = x_step1[1:]
-    y_seed1 = y_seed1[1:]
-    x_step2 = x_step2[1:]
-    y_seed2 = y_seed2[1:]
-    x_step3 = x_step3[1:]
-    y_seed3 = y_seed3[1:]
-    length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # length = min((len(x_step1),len(x_step3)))
-    for i in range(len(x_step1)):
-        x_step1[i] = np.float(x_step1[i])
-        for j in range(len(y_seed1[i])):
-            y_seed1[i][j] = np.float(y_seed1[i][j])
-    for i in range(len(x_step2)):
-        x_step2[i] = np.float(x_step2[i])
-        for j in range(len(y_seed2[i])):
-            y_seed2[i][j] = np.float(y_seed2[i][j])
-    for i in range(len(x_step3)):
-        x_step3[i] = np.float(x_step3[i])
-        for j in range(len(y_seed3[i])):
-            y_seed3[i][j] = np.float(y_seed3[i][j])
-    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
-    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
-    x_step = x_step-x_step[0] # 从0开始计数
-    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    mean_seed = np.mean(y_seed,axis=1)
-    std_seed = np.std(y_seed,axis=1)
-    timesteps = np.mean(x_step,axis=1)
-    plt.plot(timesteps,mean_seed,label='mix')
-    plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # # mix_decay
+    # exp_name = 'mixdecay_pb'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)[0:190]
+    # x_step = x_step-x_step[0] # 从0开始计数
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # plt.plot(timesteps,mean_seed,label='mix decay fre30')
+    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
 
-    # mix_decay
-    exp_name = 'mixdecay_pb'
+    # mix55
+    exp_name = 'mix55'
     # data_dir =  './' + exp_name + '.csv'
     x_step1 = []
     y_seed1 = []
@@ -181,240 +180,127 @@ def main():
     mean_seed = np.mean(y_seed,axis=1)
     std_seed = np.std(y_seed,axis=1)
     timesteps = np.mean(x_step,axis=1)
-    plt.plot(timesteps,mean_seed,label='mix decay fre30')
+    plt.plot(timesteps,mean_seed,label='mix 55')
     plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
 
-    # # mix_decay
-    # exp_name = 'mix_eval3_pb'
-    # # data_dir =  './' + exp_name + '.csv'
-    # x_step1 = []
-    # y_seed1 = []
-    # x_step2 = []
-    # y_seed2 = []
-    # x_step3 = []
-    # y_seed3 = []
-    # # load data ranking by seed
-    # data_dir =  './' + exp_name + '_seed1' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step1.append(row[0])
-    #         y_seed1.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed2' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step2.append(row[0])
-    #         y_seed2.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed3' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step3.append(row[0])
-    #         y_seed3.append(row[1:])
-    # x_step1 = x_step1[1:]
-    # y_seed1 = y_seed1[1:]
-    # x_step2 = x_step2[1:]
-    # y_seed2 = y_seed2[1:]
-    # x_step3 = x_step3[1:]
-    # y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # for i in range(len(x_step1)):
-    #     x_step1[i] = np.float(x_step1[i])
-    #     for j in range(len(y_seed1[i])):
-    #         y_seed1[i][j] = np.float(y_seed1[i][j])
-    # for i in range(len(x_step2)):
-    #     x_step2[i] = np.float(x_step2[i])
-    #     for j in range(len(y_seed2[i])):
-    #         y_seed2[i][j] = np.float(y_seed2[i][j])
-    # for i in range(len(x_step3)):
-    #     x_step3[i] = np.float(x_step3[i])
-    #     for j in range(len(y_seed3[i])):
-    #         y_seed3[i][j] = np.float(y_seed3[i][j])
-    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
-    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)[0:190]
-    # x_step = x_step-x_step[0] # 从0开始计数
-    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
-    # mean_seed = np.mean(y_seed,axis=1)
-    # std_seed = np.std(y_seed,axis=1)
-    # timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='mix eval3 pb')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+ 
+    # mix_decay
+    exp_name = 'mixdecay_fre30'
+    # data_dir =  './' + exp_name + '.csv'
+    x_step1 = []
+    y_seed1 = []
+    x_step2 = []
+    y_seed2 = []
+    x_step3 = []
+    y_seed3 = []
+    # load data ranking by seed
+    data_dir =  './' + exp_name + '_seed1' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step1.append(row[0])
+            y_seed1.append(row[1:])
+    data_dir =  './' + exp_name + '_seed2' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step2.append(row[0])
+            y_seed2.append(row[1:])
+    data_dir =  './' + exp_name + '_seed3' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step3.append(row[0])
+            y_seed3.append(row[1:])
+    x_step1 = x_step1[1:]
+    y_seed1 = y_seed1[1:]
+    x_step2 = x_step2[1:]
+    y_seed2 = y_seed2[1:]
+    x_step3 = x_step3[1:]
+    y_seed3 = y_seed3[1:]
+    length = min((len(x_step1),len(x_step2),len(x_step3)))
+    for i in range(len(x_step1)):
+        x_step1[i] = np.float(x_step1[i])
+        for j in range(len(y_seed1[i])):
+            y_seed1[i][j] = np.float(y_seed1[i][j])
+    for i in range(len(x_step2)):
+        x_step2[i] = np.float(x_step2[i])
+        for j in range(len(y_seed2[i])):
+            y_seed2[i][j] = np.float(y_seed2[i][j])
+    for i in range(len(x_step3)):
+        x_step3[i] = np.float(x_step3[i])
+        for j in range(len(y_seed3[i])):
+            y_seed3[i][j] = np.float(y_seed3[i][j])
+    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)[0:190]
+    x_step = x_step-x_step[0] # 从0开始计数
+    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
+    mean_seed = np.mean(y_seed,axis=1)
+    std_seed = np.std(y_seed,axis=1)
+    timesteps = np.mean(x_step,axis=1)
+    plt.plot(timesteps,mean_seed,label='rapid decay')
+    plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
 
-    # # mix_decay
-    # exp_name = 'mixdecay_pb_util0.9'
-    # # data_dir =  './' + exp_name + '.csv'
-    # x_step1 = []
-    # y_seed1 = []
-    # x_step2 = []
-    # y_seed2 = []
-    # x_step3 = []
-    # y_seed3 = []
-    # # load data ranking by seed
-    # data_dir =  './' + exp_name + '_seed1' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step1.append(row[0])
-    #         y_seed1.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed2' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step2.append(row[0])
-    #         y_seed2.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed3' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step3.append(row[0])
-    #         y_seed3.append(row[1:])
-    # x_step1 = x_step1[1:]
-    # y_seed1 = y_seed1[1:]
-    # x_step2 = x_step2[1:]
-    # y_seed2 = y_seed2[1:]
-    # x_step3 = x_step3[1:]
-    # y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # for i in range(len(x_step1)):
-    #     x_step1[i] = np.float(x_step1[i])
-    #     for j in range(len(y_seed1[i])):
-    #         y_seed1[i][j] = np.float(y_seed1[i][j])
-    # for i in range(len(x_step2)):
-    #     x_step2[i] = np.float(x_step2[i])
-    #     for j in range(len(y_seed2[i])):
-    #         y_seed2[i][j] = np.float(y_seed2[i][j])
-    # for i in range(len(x_step3)):
-    #     x_step3[i] = np.float(x_step3[i])
-    #     for j in range(len(y_seed3[i])):
-    #         y_seed3[i][j] = np.float(y_seed3[i][j])
-    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
-    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)[0:190]
-    # x_step = x_step-x_step[0] # 从0开始计数
-    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
-    # mean_seed = np.mean(y_seed,axis=1)
-    # std_seed = np.std(y_seed,axis=1)
-    # timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='mix decay 0.9')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
 
-    # # mix_decay
-    # exp_name = 'mixdecay_fre60'
-    # # data_dir =  './' + exp_name + '.csv'
-    # x_step1 = []
-    # y_seed1 = []
-    # x_step2 = []
-    # y_seed2 = []
-    # x_step3 = []
-    # y_seed3 = []
-    # # load data ranking by seed
-    # data_dir =  './' + exp_name + '_seed1' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step1.append(row[0])
-    #         y_seed1.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed2' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step2.append(row[0])
-    #         y_seed2.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed3' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step3.append(row[0])
-    #         y_seed3.append(row[1:])
-    # x_step1 = x_step1[1:]
-    # y_seed1 = y_seed1[1:]
-    # x_step2 = x_step2[1:]
-    # y_seed2 = y_seed2[1:]
-    # x_step3 = x_step3[1:]
-    # y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # for i in range(len(x_step1)):
-    #     x_step1[i] = np.float(x_step1[i])
-    #     for j in range(len(y_seed1[i])):
-    #         y_seed1[i][j] = np.float(y_seed1[i][j])
-    # for i in range(len(x_step2)):
-    #     x_step2[i] = np.float(x_step2[i])
-    #     for j in range(len(y_seed2[i])):
-    #         y_seed2[i][j] = np.float(y_seed2[i][j])
-    # for i in range(len(x_step3)):
-    #     x_step3[i] = np.float(x_step3[i])
-    #     for j in range(len(y_seed3[i])):
-    #         y_seed3[i][j] = np.float(y_seed3[i][j])
-    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
-    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)[0:190]
-    # x_step = x_step-x_step[0] # 从0开始计数
-    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
-    # mean_seed = np.mean(y_seed,axis=1)
-    # std_seed = np.std(y_seed,axis=1)
-    # timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='mix decay 0to1 fre60')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # mix_decay
+    exp_name = 'mixdecay_fre240'
+    # data_dir =  './' + exp_name + '.csv'
+    x_step1 = []
+    y_seed1 = []
+    x_step2 = []
+    y_seed2 = []
+    x_step3 = []
+    y_seed3 = []
+    # load data ranking by seed
+    data_dir =  './' + exp_name + '_seed1' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step1.append(row[0])
+            y_seed1.append(row[1:])
+    data_dir =  './' + exp_name + '_seed2' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step2.append(row[0])
+            y_seed2.append(row[1:])
+    data_dir =  './' + exp_name + '_seed3' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step3.append(row[0])
+            y_seed3.append(row[1:])
+    x_step1 = x_step1[1:]
+    y_seed1 = y_seed1[1:]
+    x_step2 = x_step2[1:]
+    y_seed2 = y_seed2[1:]
+    x_step3 = x_step3[1:]
+    y_seed3 = y_seed3[1:]
+    length = min((len(x_step1),len(x_step2),len(x_step3)))
+    for i in range(len(x_step1)):
+        x_step1[i] = np.float(x_step1[i])
+        for j in range(len(y_seed1[i])):
+            y_seed1[i][j] = np.float(y_seed1[i][j])
+    for i in range(len(x_step2)):
+        x_step2[i] = np.float(x_step2[i])
+        for j in range(len(y_seed2[i])):
+            y_seed2[i][j] = np.float(y_seed2[i][j])
+    for i in range(len(x_step3)):
+        x_step3[i] = np.float(x_step3[i])
+        for j in range(len(y_seed3[i])):
+            y_seed3[i][j] = np.float(y_seed3[i][j])
+    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)[0:190]
+    x_step = x_step-x_step[0] # 从0开始计数
+    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
+    mean_seed = np.mean(y_seed,axis=1)
+    std_seed = np.std(y_seed,axis=1)
+    timesteps = np.mean(x_step,axis=1)
+    plt.plot(timesteps,mean_seed,label='slow decay')
+    plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
 
-    # # mix_decay
-    # exp_name = 'mixdecay_manualstyle_pb'
-    # # data_dir =  './' + exp_name + '.csv'
-    # x_step1 = []
-    # y_seed1 = []
-    # x_step2 = []
-    # y_seed2 = []
-    # x_step3 = []
-    # y_seed3 = []
-    # # load data ranking by seed
-    # data_dir =  './' + exp_name + '_seed1' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step1.append(row[0])
-    #         y_seed1.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed2' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step2.append(row[0])
-    #         y_seed2.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed3' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step3.append(row[0])
-    #         y_seed3.append(row[1:])
-    # x_step1 = x_step1[1:]
-    # y_seed1 = y_seed1[1:]
-    # x_step2 = x_step2[1:]
-    # y_seed2 = y_seed2[1:]
-    # x_step3 = x_step3[1:]
-    # y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # for i in range(len(x_step1)):
-    #     x_step1[i] = np.float(x_step1[i])
-    #     for j in range(len(y_seed1[i])):
-    #         y_seed1[i][j] = np.float(y_seed1[i][j])
-    # for i in range(len(x_step2)):
-    #     x_step2[i] = np.float(x_step2[i])
-    #     for j in range(len(y_seed2[i])):
-    #         y_seed2[i][j] = np.float(y_seed2[i][j])
-    # for i in range(len(x_step3)):
-    #     x_step3[i] = np.float(x_step3[i])
-    #     for j in range(len(y_seed3[i])):
-    #         y_seed3[i][j] = np.float(y_seed3[i][j])
-    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
-    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)[0:190]
-    # x_step = x_step-x_step[0] # 从0开始计数
-    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
-    # mean_seed = np.mean(y_seed,axis=1)
-    # std_seed = np.std(y_seed,axis=1)
-    # timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='mix decay seed3 style')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
 
     # # mix46
     # exp_name = 'mix46'
@@ -474,65 +360,65 @@ def main():
     # plt.plot(timesteps,mean_seed,label='mix 46')
     # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
 
-    # # mix37
-    # exp_name = 'mix37'
-    # # data_dir =  './' + exp_name + '.csv'
-    # x_step1 = []
-    # y_seed1 = []
-    # x_step2 = []
-    # y_seed2 = []
-    # x_step3 = []
-    # y_seed3 = []
-    # # load data ranking by seed
-    # data_dir =  './' + exp_name + '_seed1' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step1.append(row[0])
-    #         y_seed1.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed2' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step2.append(row[0])
-    #         y_seed2.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed3' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step3.append(row[0])
-    #         y_seed3.append(row[1:])
-    # x_step1 = x_step1[1:]
-    # y_seed1 = y_seed1[1:]
-    # x_step2 = x_step2[1:]
-    # y_seed2 = y_seed2[1:]
-    # x_step3 = x_step3[1:]
-    # y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # for i in range(len(x_step1)):
-    #     x_step1[i] = np.float(x_step1[i])
-    #     for j in range(len(y_seed1[i])):
-    #         y_seed1[i][j] = np.float(y_seed1[i][j])
-    # for i in range(len(x_step2)):
-    #     x_step2[i] = np.float(x_step2[i])
-    #     for j in range(len(y_seed2[i])):
-    #         y_seed2[i][j] = np.float(y_seed2[i][j])
-    # for i in range(len(x_step3)):
-    #     x_step3[i] = np.float(x_step3[i])
-    #     for j in range(len(y_seed3[i])):
-    #         y_seed3[i][j] = np.float(y_seed3[i][j])
-    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
-    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)[0:190]
-    # x_step = x_step-x_step[0] # 从0开始计数
-    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
-    # mean_seed = np.mean(y_seed,axis=1)
-    # std_seed = np.std(y_seed,axis=1)
-    # timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='mix 37')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # mix37
+    exp_name = 'mix_final_pb'
+    # data_dir =  './' + exp_name + '.csv'
+    x_step1 = []
+    y_seed1 = []
+    x_step2 = []
+    y_seed2 = []
+    x_step3 = []
+    y_seed3 = []
+    # load data ranking by seed
+    data_dir =  './' + exp_name + '_seed1' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step1.append(row[0])
+            y_seed1.append(row[1:])
+    data_dir =  './' + exp_name + '_seed2' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step2.append(row[0])
+            y_seed2.append(row[1:])
+    data_dir =  './' + exp_name + '_seed3' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step3.append(row[0])
+            y_seed3.append(row[1:])
+    x_step1 = x_step1[1:]
+    y_seed1 = y_seed1[1:]
+    x_step2 = x_step2[1:]
+    y_seed2 = y_seed2[1:]
+    x_step3 = x_step3[1:]
+    y_seed3 = y_seed3[1:]
+    length = min((len(x_step1),len(x_step2),len(x_step3)))
+    for i in range(len(x_step1)):
+        x_step1[i] = np.float(x_step1[i])
+        for j in range(len(y_seed1[i])):
+            y_seed1[i][j] = np.float(y_seed1[i][j])
+    for i in range(len(x_step2)):
+        x_step2[i] = np.float(x_step2[i])
+        for j in range(len(y_seed2[i])):
+            y_seed2[i][j] = np.float(y_seed2[i][j])
+    for i in range(len(x_step3)):
+        x_step3[i] = np.float(x_step3[i])
+        for j in range(len(y_seed3[i])):
+            y_seed3[i][j] = np.float(y_seed3[i][j])
+    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)[0:190]
+    x_step = x_step-x_step[0] # 从0开始计数
+    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
+    mean_seed = np.mean(y_seed,axis=1)
+    std_seed = np.std(y_seed,axis=1)
+    timesteps = np.mean(x_step,axis=1)
+    plt.plot(timesteps,mean_seed,label='mix 37')
+    plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
 
-    # # mix46
+    # # mix28
     # exp_name = 'mix28'
     # # data_dir =  './' + exp_name + '.csv'
     # x_step1 = []
@@ -590,8 +476,9 @@ def main():
     # plt.plot(timesteps,mean_seed,label='mix 28')
     # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
 
-    # mix_decay
-    exp_name = 'mixdecay_only2decay_fre120_pb'
+
+    # phase_pb
+    exp_name = 'phase_pb'
     # data_dir =  './' + exp_name + '.csv'
     x_step1 = []
     y_seed1 = []
@@ -625,6 +512,7 @@ def main():
     x_step3 = x_step3[1:]
     y_seed3 = y_seed3[1:]
     length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # length = min((len(x_step1),len(x_step3)))
     for i in range(len(x_step1)):
         x_step1[i] = np.float(x_step1[i])
         for j in range(len(y_seed1[i])):
@@ -638,75 +526,15 @@ def main():
         for j in range(len(y_seed3[i])):
             y_seed3[i][j] = np.float(y_seed3[i][j])
     x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
-    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)[0:190]
+    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
     x_step = x_step-x_step[0] # 从0开始计数
     y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
+    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
     mean_seed = np.mean(y_seed,axis=1)
     std_seed = np.std(y_seed,axis=1)
     timesteps = np.mean(x_step,axis=1)
-    plt.plot(timesteps,mean_seed,label='mix only2decay fre 120')
+    plt.plot(timesteps,mean_seed,label='phase')
     plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
-
-    # # phase_pb
-    # exp_name = 'phase_pb'
-    # # data_dir =  './' + exp_name + '.csv'
-    # x_step1 = []
-    # y_seed1 = []
-    # x_step2 = []
-    # y_seed2 = []
-    # x_step3 = []
-    # y_seed3 = []
-    # # load data ranking by seed
-    # data_dir =  './' + exp_name + '_seed1' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step1.append(row[0])
-    #         y_seed1.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed2' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step2.append(row[0])
-    #         y_seed2.append(row[1:])
-    # data_dir =  './' + exp_name + '_seed3' + '.csv'
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step3.append(row[0])
-    #         y_seed3.append(row[1:])
-    # x_step1 = x_step1[1:]
-    # y_seed1 = y_seed1[1:]
-    # x_step2 = x_step2[1:]
-    # y_seed2 = y_seed2[1:]
-    # x_step3 = x_step3[1:]
-    # y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # # length = min((len(x_step1),len(x_step3)))
-    # for i in range(len(x_step1)):
-    #     x_step1[i] = np.float(x_step1[i])
-    #     for j in range(len(y_seed1[i])):
-    #         y_seed1[i][j] = np.float(y_seed1[i][j])
-    # for i in range(len(x_step2)):
-    #     x_step2[i] = np.float(x_step2[i])
-    #     for j in range(len(y_seed2[i])):
-    #         y_seed2[i][j] = np.float(y_seed2[i][j])
-    # for i in range(len(x_step3)):
-    #     x_step3[i] = np.float(x_step3[i])
-    #     for j in range(len(y_seed3[i])):
-    #         y_seed3[i][j] = np.float(y_seed3[i][j])
-    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
-    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
-    # x_step = x_step-x_step[0] # 从0开始计数
-    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    # mean_seed = np.mean(y_seed,axis=1)
-    # std_seed = np.std(y_seed,axis=1)
-    # timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='phase')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
-    plt.title('Massive entities')
 
     # # withoutwarmup
     # exp_name = 'withoutwarmup_sp'

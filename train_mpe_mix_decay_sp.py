@@ -700,10 +700,6 @@ def main():
                 
         wandb.log({'decay_last': decay_last},current_timestep)
         wandb.log({'decay_now': decay_now},current_timestep)
-        print('decay_last: ', decay_last)
-        print('decay_now: ', decay_now)
-        print('mix_flag: ',mix_flag)
-        print('count: ', mix_add_count)
         if mix_flag:
             last_node.reproduction_num = round(N_child * decay_last)
             now_node.reproduction_num = round(N_child * decay_now)
@@ -1176,7 +1172,6 @@ def main():
             now_node.save_node(save_node_dir, episode)
 
         # test last_node
-        # test now_node
         eval_agent_num = 4
         if episode % check_frequency==0:
             actor_critic.agents_num = eval_agent_num 
