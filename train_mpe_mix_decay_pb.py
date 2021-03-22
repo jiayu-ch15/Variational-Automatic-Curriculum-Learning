@@ -630,13 +630,13 @@ def main():
         now_box_num = 4
         now_agent_num = now_box_num
     else:
-        stop_mix_signal = 0.9
+        stop_mix_signal = 1.0
         mix_add_frequency = 240 # 改变比例的频率
         mix_add_count = 0
-        decay_last = 0.6
+        decay_last = 0.4
         decay_now = 1.0 - 0.5 * decay_last
         mix_flag = True # 代表是否需要混合，90%开始混合，95%以后不再混合
-        decay = False
+        decay = True
         target_num = 4
         last_box_num = 2
         last_agent_num = last_box_num

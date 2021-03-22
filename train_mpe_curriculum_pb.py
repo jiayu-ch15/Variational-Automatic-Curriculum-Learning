@@ -617,7 +617,7 @@ def main():
     max_step = 0.4
     TB = 1
     M = N_child
-    Rmin = 0.5
+    Rmin = 0.75
     Rmax = 0.95
     boundary = 2.0
     start_boundary = [-0.4,0.4,-0.4,0.4]
@@ -634,8 +634,8 @@ def main():
     eval_frequency = 3 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 5
-    save_node_flag = True
-    save_90_flag = True
+    save_node_flag = False
+    save_90_flag = False
     historical_length = 5
     random.seed(args.seed)
     np.random.seed(args.seed)

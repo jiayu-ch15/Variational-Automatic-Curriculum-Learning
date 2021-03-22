@@ -313,17 +313,17 @@ def main():
     num_agents = args.num_agents
    
     # actor_critic = torch.load('/home/chenjy/curriculum/results/MPE/simple_spread/check/run10/models/agent_model.pt')['model'].to(device)
-    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/homework/run4/models/agent_model.pt')['model'].to(device)
+    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/50agent_model.pt')['model'].to(device)
     # filename = '/home/tsing73/curriculum/'
     # for name, para in zip(actor_critic.actor_base.state_dict(),actor_critic.actor_base.parameters()):
     #     pdb.set_trace()
     #     a = para.transpose(0,1).reshape(1,-1)
     #     np.savetxt(filename+ name + '.txt',np.array(a.to('cpu').detach()),delimiter=',\n')
     # pdb.set_trace()
-    actor_critic.agents_num = 2
-    actor_critic.boxes_num = 2
-    num_agents = 2
-    num_boxes = 2
+    actor_critic.agents_num = args.num_agents
+    actor_critic.boxes_num = args.num_boxes
+    num_agents = args.num_agents
+    num_boxes = args.num_boxes
     all_frames = []
     cover_rate = 0
     random.seed(1)
@@ -337,7 +337,7 @@ def main():
         for i in range(len(archive)):
             archive[i] = np.array(archive[i][1:-2].split(),dtype=float)
 
-    starts = produce_good_case_grid_pb(500,[-0.6,0.6,-0.6,0.6],num_agents,num_boxes)
+    # starts = produce_good_case_grid_pb(500,[-0.6,0.6,-0.6,0.6],num_agents,num_boxes)
     for eval_episode in range(args.eval_episodes):
         print(eval_episode)
         eval_env = MPEEnv(args)
@@ -389,7 +389,6 @@ def main():
                 one_hot_action = np.zeros(eval_env.action_space[0].n)
                 one_hot_action[eval_actions[agent_id][0]] = 1
                 eval_actions_env.append(one_hot_action)
-            pdb.set_trace()
             # Obser reward and next obs
             eval_obs, eval_rewards, eval_dones, eval_infos, _ = eval_env.step(eval_actions_env)
             step_cover_rate[step] = eval_infos[0]['cover_rate']

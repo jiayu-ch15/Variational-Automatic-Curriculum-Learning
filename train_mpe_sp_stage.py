@@ -460,7 +460,7 @@ def main():
         actor_critic.to(device)
         # load model
         # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/ours/run1/models/agent_model.pt')['model'].to(device)
-        actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_ppotrue/run%i/models/4agent_model.pt'%(args.seed))['model'].to(device)
+        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mix4n8_ppotrue/run%i/models/4agent_model.pt'%(args.seed))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,

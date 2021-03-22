@@ -4,15 +4,18 @@ import pdb
 import numpy as np
 import os
 import csv
+from scipy.interpolate import make_interp_spline
 
 def main():
     scenario = 'simple_spread_3rooms'
     save_dir = './' + scenario + '/'
-    save_name = 'sp3_asym'
+    save_name = 'sp3_navigation'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     plt.style.use('ggplot')
+    plt.figure(figsize=(8,6))
 
+    # region sp3_navigation
     begin = 0
     # sp3
     # queue
@@ -81,8 +84,15 @@ def main():
     mean_seed = np.mean(y_seed,axis=1)
     std_seed = np.std(y_seed,axis=1)
     timesteps = np.mean(x_step,axis=1)
-    plt.plot(timesteps,mean_seed,label='FIFO')
-    plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # plt.plot(timesteps,mean_seed,color='brown')
+    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # region smooth
+    xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    plt.plot(xnew,mean_smooth,color='brown')
+    plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='brown')
+    # end region
 
     # diversified_sp3
     exp_name = 'diversified_sp3'
@@ -152,34 +162,18 @@ def main():
     mean_seed = np.mean(y_seed,axis=1)
     std_seed = np.std(y_seed,axis=1)
     timesteps = np.mean(x_step,axis=1)
-    plt.plot(timesteps,mean_seed,label='Diversified Task Buffer')
-    plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # plt.plot(timesteps,mean_seed,color='steelblue')
+    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # region smooth
+    xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    plt.plot(xnew,mean_smooth,color='mediumpurple')
+    plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='mediumpurple')
+    # end region
+    # end region
 
-    # # tech3
-    # exp_name = 'diversified_novelty_parentsampling_sp3'
-    # data_dir =  './' + exp_name + '.csv'
-    # x_step = []
-    # y_seed = []
-    # with open(data_dir,'r') as csvfile:
-    #     plots = csv.reader(csvfile)
-    #     for row in plots:
-    #         x_step.append(row[0])
-    #         y_seed.append(row[1:])
-    # x_step = x_step[1:]
-    # y_seed = y_seed[1:]
-    # for i in range(len(x_step)):
-    #     x_step[i] = np.float(x_step[i])
-    #     for j in range(len(y_seed[i])):
-    #         y_seed[i][j] = np.float(y_seed[i][j])
-    # x_step = np.array(x_step)[begin:]
-    # y_seed = np.array(y_seed)[begin:]
-    # mean_seed = np.mean(y_seed,axis=1)
-    # std_seed = np.std(y_seed,axis=1)
-    # plt.plot(x_step,mean_seed,label='tech3: novelty exploration + parentsampling')
-    # plt.fill_between(x_step,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
-    # plt.title('simple_spread_3rooms')
-
-    # # tech1
+    # # region maze
     # exp_name = 'tech1_sp3_small_asym'
     # # data_dir =  './' + exp_name + '.csv'
     # x_step1 = []
@@ -235,8 +229,15 @@ def main():
     # mean_seed = np.mean(y_seed,axis=1)
     # std_seed = np.std(y_seed,axis=1)
     # timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='FIFO')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # # plt.plot(timesteps,mean_seed,color='brown')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='brown')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='brown')
+    # # end region
 
 
     # # tech2
@@ -295,8 +296,15 @@ def main():
     # mean_seed = np.mean(y_seed,axis=1)
     # std_seed = np.std(y_seed,axis=1)
     # timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='Diversified Task Buffer')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # # plt.plot(timesteps,mean_seed,color='steelblue')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='steelblue')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='steelblue')
+    # # end region
 
     # # tech3
     # exp_name = 'tech3_sp3_small_asym'
@@ -354,15 +362,25 @@ def main():
     # mean_seed = np.mean(y_seed,axis=1)
     # std_seed = np.std(y_seed,axis=1)
     # timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='Novelty-based Sampling')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
-    # plt.title('simple_spread_3rooms_maze')
+    # # plt.plot(timesteps,mean_seed,color='mediumpurple')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1)
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='mediumpurple')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='mediumpurple')
+    # # end region
 
-
-    plt.xlabel('timesteps')
-    plt.ylabel('coverage rate')
+    font = {
+            'weight': 'normal',
+            'size': 24,
+            }
+    plt.tick_params(labelsize=24)
+    plt.xlabel('timesteps' + r'$(\times 10^{8})$',font)
+    plt.ylabel('coverage rate',font)
     plt.legend()
-    plt.savefig(save_dir + save_name + '.jpg')
+    plt.savefig(save_dir + save_name + '.jpg',bbox_inches='tight')
 
 if __name__ == "__main__":
     main()

@@ -45,7 +45,8 @@ def get_config():
     parser.add_argument("--use_popart", action='store_false', default=True)
     parser.add_argument("--use_feature_popart", action='store_true', default=False)
     parser.add_argument("--use_feature_normlization", action='store_false', default=True)   
-    parser.add_argument("--use_orthogonal", action='store_false', default=True)  
+    parser.add_argument("--use_orthogonal", action='store_false', default=True) 
+    parser.add_argument("--multi_critic", action='store_true', default=False) 
     
     # lstm
     parser.add_argument("--naive_recurrent_policy", action='store_true', default=False, help='use a naive recurrent policy')

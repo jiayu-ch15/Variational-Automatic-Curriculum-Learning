@@ -70,10 +70,15 @@ def main():
     # plt.plot(x_step1,y_seed1,label='uniform + easy case')
     plt.title('main_results')
 
-    plt.xlabel('timesteps')
-    plt.ylabel('success rate')
+    font = {
+            'weight': 'normal',
+            'size': 15,
+            }
+    plt.tick_params(labelsize=12)
+    plt.xlabel('timesteps',font)
+    plt.ylabel('success rate',font)
     plt.legend()
-    plt.savefig(save_dir + save_name + '.jpg')
+    plt.savefig(save_dir + save_name + '.jpg',bbox_inches='tight')
 
 if __name__ == "__main__":
     main()
