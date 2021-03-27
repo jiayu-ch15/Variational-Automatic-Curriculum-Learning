@@ -23,6 +23,9 @@ def simplifyworker(remote, parent_remote, env_fn_wrapper):
         elif cmd == 'reset':
             ob = env.reset()         
             remote.send((ob))
+        elif cmd == 'get_state':
+            state = env.get_state()
+            remote.send(state)
         elif cmd == 'reset_task':
             ob = env.reset_task()
             remote.send(ob)
@@ -34,7 +37,6 @@ def simplifyworker(remote, parent_remote, env_fn_wrapper):
             remote.send((env.observation_space, env.action_space))
         else:
             raise NotImplementedError
-
 
 class SimplifySubprocVecEnv(VecEnv):
     def __init__(self, env_fns, spaces=None):
@@ -66,6 +68,12 @@ class SimplifySubprocVecEnv(VecEnv):
         self.waiting = False
         obs, rews, dones, infos = zip(*results)
         return np.stack(obs), np.stack(rews), np.stack(dones), infos
+
+    def get_state(self): # the states of enities
+        for remote in self.remotes:
+            remote.send(('get_state', None))
+        state = [remote.recv() for remote in self.remotes]
+        return np.stack(state)
 
     def reset(self):
         for remote in self.remotes:
@@ -127,25 +135,9 @@ def worker(remote, parent_remote, env_fn_wrapper):
             starts_one = cmd[3]
             ob = env.new_starts_obs_pb(starts_one, now_agent_num, now_box_num)
             remote.send(ob)
-        # elif cmd[0] == 'reset_pb':
-        #     now_agent_num = cmd[1]
-        #     now_box_num = cmd[2]
-        #     ob, available_actions= env.reset(now_agent_num,now_box_num)
-        #     remote.send((ob, available_actions))
-
-        # if cmd == 'step':
-        #     ob, reward, done, info, available_actions = env.step(data)
-        #     if done.__class__.__name__=='bool':
-        #         if done:
-        #             ob, available_actions = env.reset()
-        #     else:
-        #         if all(done):
-        #             ob, available_actions = env.reset()
-            
-        #     remote.send((ob, reward, done, info, available_actions))
-        # elif cmd == 'reset':
-        #     ob, available_actions = env.reset()           
-        #     remote.send((ob, available_actions))
+        elif cmd == 'get_state':
+            state = env.get_state()
+            remote.send(state)
         elif cmd == 'reset_task':
             ob = env.reset_task()
             remote.send(ob)
@@ -179,17 +171,6 @@ class SubprocVecEnv(VecEnv):
         observation_space, action_space = self.remotes[0].recv()
         VecEnv.__init__(self, len(env_fns), observation_space, action_space)
 
-    # def step_async(self, actions):
-    #     for remote, action in zip(self.remotes, actions):
-    #         remote.send(('step', action))
-    #     self.waiting = True
-
-    # def step_wait(self):
-    #     results = [remote.recv() for remote in self.remotes]
-    #     self.waiting = False
-    #     obs, rews, dones, infos, available_actions = zip(*results)
-    #     return np.stack(obs), np.stack(rews), np.stack(dones), infos, np.stack(available_actions)
-
     def step_async(self, actions, now_num_processes, now_agent_num):
         i = 0
         for remote, action in zip(self.remotes, actions):
@@ -210,26 +191,11 @@ class SubprocVecEnv(VecEnv):
         obs, rews, dones, infos, available_actions = zip(*results)
         return np.stack(obs), np.stack(rews), np.stack(dones), infos, np.stack(available_actions)
 
-    # def reset(self):
-    #     for remote in self.remotes:
-    #         remote.send(('reset', None))
-    #     results = [remote.recv() for remote in self.remotes]
-    #     obs, available_actions = zip(*results)
-    #     return np.stack(obs), np.stack(available_actions)
-
-    # def reset(self, now_agent_num, now_box_num=None):
-    #     if now_box_num is None:
-    #         for remote in self.remotes:
-    #             remote.send(('reset' + str(now_agent_num), None))
-    #     else:
-    #         for remote in self.remotes:
-    #             remote.send(('reset' + str(now_agent_num), None))
-    #     results = [remote.recv() for remote in self.remotes]
-    #     obs, available_actions = zip(*results)
-    #     self.remotes[0].send(('get_spaces', None))
-    #     observation_space, action_space = self.remotes[0].recv()
-    #     VecEnv.__init__(self, self.length, observation_space, action_space)
-    #     return np.stack(obs), np.stack(available_actions)
+    def get_state(self): # the states of enities
+        for remote in self.remotes:
+            remote.send(('get_state', None))
+        state = [remote.recv() for remote in self.remotes]
+        return np.stack(state)
 
     def reset(self, now_agent_num, now_box_num=None):
         if now_box_num is None:

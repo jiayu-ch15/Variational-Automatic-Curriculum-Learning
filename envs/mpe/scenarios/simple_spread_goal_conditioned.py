@@ -132,16 +132,23 @@ class Scenario(BaseScenario):
         for entity in world.landmarks:  # world.entities:
             entity_color.append(entity.color)
         # communication of all other agents
-        comm = []
+        # comm = []
         other_pos = []
         for other in world.agents:
             if other is agent: continue
-            comm.append(other.state.c)
+            # comm.append(other.state.c)
             other_pos.append(other.state.p_pos - agent.state.p_pos)
-        return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos + comm)
+        return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + entity_pos + other_pos)
 
-    def get_state(self, world):
-        pass
+    def get_state(self, world): # get all entities's states
+        agent_pos = []
+        for agent in world.agents: # world.agents:
+            agent_pos.append(agent.state.p_pos)
+
+        entity_pos = []
+        for entity in world.landmarks:  # world.entities:
+            entity_pos.append(entity.state.p_pos)
+        return np.concatenate(agent_pos + entity_pos)
 
     def share_reward(self, world):
         # Agents are rewarded based on minimum agent distance to each landmark, penalized for collisions

@@ -82,7 +82,6 @@ class Categorical(nn.Module):
                             x[i][j]=float('-inf')
         return FixedCategorical(logits=x)
 
-
 class DiagGaussian(nn.Module):
     def __init__(self, num_inputs, num_outputs):
         super(DiagGaussian, self).__init__()
@@ -93,7 +92,8 @@ class DiagGaussian(nn.Module):
         self.fc_mean = init_(nn.Linear(num_inputs, num_outputs))
         self.logstd = AddBias(torch.zeros(num_outputs))
 
-    def forward(self, x, available_actions=None):
+
+    def forward(self, x):
         action_mean = self.fc_mean(x)
 
         #  An ugly hack for my KFAC implementation.
@@ -102,6 +102,10 @@ class DiagGaussian(nn.Module):
             zeros = zeros.cuda()
 
         action_logstd = self.logstd(zeros)
+        self.action_logstd = action_logstd
+        # self.action_logstd.retain_grad()
+        self.action_mean = action_mean
+        # self.action_mean.retain_grad()
         return FixedNormal(action_mean, action_logstd.exp())
 
 

@@ -139,6 +139,9 @@ class Scenario(BaseScenario):
                 good_pos.append(other.state.p_pos - agent.state.p_pos)
         return np.concatenate([agent.state.p_vel] + [agent.state.p_pos] + adv_pos + good_pos + landmark_pos)
     
+    def get_state(self, world):
+        pass
+
     def info_coverage_rate(self, world):
         num = 0
         for l in world.landmarks:

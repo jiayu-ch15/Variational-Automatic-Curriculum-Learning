@@ -601,6 +601,7 @@ def main():
 
         for times in range(eval_frequency):
             obs = envs.new_starts_obs(starts, last_node.agent_num, starts_length)
+            pdb.set_trace()
             #replay buffer
             rollouts = RolloutStorage(num_agents,
                         args.episode_length, 

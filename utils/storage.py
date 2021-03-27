@@ -625,6 +625,136 @@ class RolloutStorage(object):
             
             yield share_obs_batch, obs_batch, recurrent_hidden_states_batch, recurrent_hidden_states_critic_batch, actions_batch, value_preds_batch, return_batch, masks_batch, high_masks_batch, old_action_log_probs_batch, adv_targ
 
+class RolloutStorage_teacher(object):
+    def __init__(self, num_agents, episode_length, n_rollout_threads, obs_space, action_space,
+                 recurrent_hidden_state_size, use_same_dim=False):
+        
+        self.obs = np.zeros((episode_length + 1, n_rollout_threads, obs_space)).astype(np.float32) 
+        self.recurrent_hidden_states = np.zeros((
+            episode_length + 1, n_rollout_threads, recurrent_hidden_state_size)).astype(np.float32)
+        self.recurrent_hidden_states_critic = np.zeros((
+            episode_length + 1, n_rollout_threads, recurrent_hidden_state_size)).astype(np.float32)
+                       
+        self.rewards = np.zeros((episode_length, n_rollout_threads, 1)).astype(np.float32)
+        self.value_preds = np.zeros((episode_length + 1, n_rollout_threads, 1)).astype(np.float32)
+        self.returns = np.zeros((episode_length + 1, n_rollout_threads, 1)).astype(np.float32)
+        self.action_log_probs = np.zeros((episode_length, n_rollout_threads, 1)).astype(np.float32)
+        
+        # action_space
+        self.actions = np.zeros((episode_length, n_rollout_threads, action_space)).astype(np.float32)
+        self.masks = np.ones((episode_length + 1, n_rollout_threads, 1)).astype(np.float32)
+        self.episode_length = episode_length
+        self.step = 0
+
+    def insert(self, obs, actions, action_log_probs, value_preds, rewards, masks):
+        self.obs[self.step + 1] = obs.copy()
+        self.actions[self.step] = actions.copy()
+        self.action_log_probs[self.step] = action_log_probs.copy()
+        self.value_preds[self.step] = value_preds.copy()
+        self.rewards[self.step] = rewards.copy()
+        self.masks[self.step + 1] = masks.copy()
+        self.step = (self.step + 1) % self.episode_length
+        
+    def after_update(self):
+        self.obs[0] = self.obs[-1].copy()
+        self.masks[0] = self.masks[-1].copy()
+            
+    def compute_returns(self,
+                        next_value,
+                        use_gae,
+                        gamma,
+                        gae_lambda,
+                        use_proper_time_limits=True,
+                        use_popart=True,
+                        value_normalizer=None):
+        if use_proper_time_limits:
+            if use_gae:
+                self.value_preds[-1,:] = next_value
+                gae = 0
+                for step in reversed(range(self.rewards.shape[0])):
+                    if use_popart:
+                        delta = self.rewards[step,:] + gamma * value_normalizer.denormalize(torch.tensor(self.value_preds[
+                        step + 1,:])).cpu().numpy() * self.masks[step + 1,:] - value_normalizer.denormalize(torch.tensor(self.value_preds[step,:])).cpu().numpy()
+                        gae = delta + gamma * gae_lambda * self.masks[step + 1,:] * gae
+                        gae = gae * self.bad_masks[step + 1,:]
+                        self.returns[step,:] = gae + value_normalizer.denormalize(torch.tensor(self.value_preds[step,:])).cpu().numpy()
+                    else:
+                        delta = self.rewards[step,:] + gamma * self.value_preds[
+                            step + 1,:] * self.masks[step + 1,:] - self.value_preds[step,:]
+                        gae = delta + gamma * gae_lambda * self.masks[step + 1,:] * gae
+                        gae = gae * self.bad_masks[step + 1,:]
+                        self.returns[step,:] = gae + self.value_preds[step,:]
+            else:
+                self.returns[-1,:] = next_value
+                for step in reversed(range(self.rewards.shape[0])):
+                    if use_popart:
+                        self.returns[step,:] = (self.returns[step + 1,:] * \
+                        gamma * self.masks[step + 1,:] + self.rewards[step,:]) * self.bad_masks[step + 1,:] \
+                        + (1 - self.bad_masks[step + 1,:,agent_id]) * value_normalizer.denormalize(torch.tensor(self.value_preds[step,:])).cpu().numpy()
+                    else:
+                        self.returns[step,:] = (self.returns[step + 1,:] * \
+                            gamma * self.masks[step + 1,:] + self.rewards[step,:]) * self.bad_masks[step + 1,:] \
+                            + (1 - self.bad_masks[step + 1,:]) * self.value_preds[step,:]
+        else:
+            if use_gae:
+                self.value_preds[-1,:] = next_value
+                gae = 0
+                for step in reversed(range(self.rewards.shape[0])):
+                    if use_popart:
+                        delta = self.rewards[step,:] + gamma * value_normalizer.denormalize(torch.tensor(self.value_preds[
+                            step + 1,:])).cpu().numpy() * self.masks[step + 1,:] - value_normalizer.denormalize(torch.tensor(self.value_preds[step,:])).cpu().numpy()
+                        gae = delta + gamma * gae_lambda * self.masks[step + 1,:] * gae                       
+                        self.returns[step,:] = gae + value_normalizer.denormalize(torch.tensor(self.value_preds[step,:])).cpu().numpy()
+                    else:
+                        delta = self.rewards[step,:] + gamma * self.value_preds[step + 1,:] * self.masks[step + 1,:] - self.value_preds[step,:]
+                        gae = delta + gamma * gae_lambda * self.masks[step + 1,:] * gae
+                        self.returns[step,:] = gae + self.value_preds[step,:]
+            else:
+                self.returns[-1,:] = next_value
+                for step in reversed(range(self.rewards.shape[0])):
+                    self.returns[step,:] = self.returns[step + 1,:] * \
+                            gamma * self.masks[step + 1,:] + self.rewards[step,:]
+
+    def feed_forward_generator(self, advantages, num_mini_batch=None, mini_batch_size=None):
+        episode_length, n_rollout_threads = self.rewards.shape[0:2]
+        batch_size = n_rollout_threads * episode_length
+
+        if mini_batch_size is None:
+            assert batch_size >= num_mini_batch, (
+                "PPO requires the number of processes ({}) "
+                "* number of steps ({}) * number of agents ({}) = {} "
+                "to be greater than or equal to the number of PPO mini batches ({})."
+                "".format(n_rollout_threads, episode_length, n_rollout_threads * episode_length,
+                          num_mini_batch))
+            mini_batch_size = batch_size // num_mini_batch
+            
+        rand = torch.randperm(batch_size).numpy()
+        sampler = [rand[i*mini_batch_size:(i+1)*mini_batch_size] for i in range(num_mini_batch)]
+        
+        # import pdb;pdb.set_trace()
+        obs = self.obs[:-1].reshape(-1, *self.obs.shape[2:])
+        actions = self.actions.reshape(-1, self.actions.shape[-1])
+        value_preds = self.value_preds[:-1].reshape(-1, 1)
+        returns = self.returns[:-1].reshape(-1, 1)
+        masks = self.masks[:-1].reshape(-1, 1)
+        action_log_probs = self.action_log_probs.reshape(-1, 1)
+        advantages = advantages.reshape(-1, 1)
+        
+        for indices in sampler:
+            # obs size [T+1 N M Dim]-->[T N M Dim]-->[T*N*M,Dim]-->[index,Dim]                     
+            obs_batch = torch.tensor(obs[indices])
+            actions_batch = torch.tensor(actions[indices])
+            value_preds_batch = torch.tensor(value_preds[indices])
+            return_batch = torch.tensor(returns[indices])
+            masks_batch = torch.tensor(masks[indices])
+            old_action_log_probs_batch = torch.tensor(action_log_probs[indices])
+            if advantages is None:
+                adv_targ = None
+            else:
+                adv_targ = torch.tensor(advantages[indices])
+
+            yield obs_batch, actions_batch, value_preds_batch, return_batch, masks_batch, old_action_log_probs_batch, adv_targ
+
 class RolloutStorage_critic_k(object):
     def __init__(self, num_agents, episode_length, n_rollout_threads, critic_k, obs_space, action_space,
                  recurrent_hidden_state_size, use_same_dim=False):
@@ -1313,7 +1443,6 @@ class RolloutStorage_critic_k(object):
             adv_targ = _flatten_helper(L, N, adv_targ)
             
             yield share_obs_batch, obs_batch, recurrent_hidden_states_batch, recurrent_hidden_states_critic_batch, actions_batch, value_preds_batch, return_batch, masks_batch, high_masks_batch, old_action_log_probs_batch, adv_targ
-
 
 class RolloutStorage_share(object):  # 减小share_obs
     def __init__(self, num_agents, episode_length, n_rollout_threads, obs_space, action_space,

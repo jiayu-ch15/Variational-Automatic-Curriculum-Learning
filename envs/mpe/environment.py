@@ -18,7 +18,7 @@ class MultiAgentEnv(gym.Env):
     def __init__(self, world, reset_callback=None, make_callback=None, reward_callback=None,
                  observation_callback=None, info_callback=None,
                  share_callback=None,
-                 landmark_cover_callback=None,
+                 landmark_cover_callback=None, state_callback=None,
                  done_callback=None, post_step_callback=None,
                  shared_viewer=True, discrete_action=True):
 
@@ -34,6 +34,7 @@ class MultiAgentEnv(gym.Env):
         self.info_callback = info_callback
         self.share_callback = share_callback
         self.landmark_cover_callback = landmark_cover_callback
+        self.state_callback = state_callback
         self.done_callback = done_callback
                
         self.post_step_callback = post_step_callback
@@ -104,7 +105,12 @@ class MultiAgentEnv(gym.Env):
         else:
             np.random.seed(seed)
 
-    # step  this is  env.step()
+    def get_state(self): # get state of all entities
+        if self.state_callback is None:
+            return np.zeros(0)
+        return self.state_callback(self.world)
+
+    # step  this is env.step()
     def step(self, action_n):
         obs_n = []
         reward_n = []
@@ -120,6 +126,7 @@ class MultiAgentEnv(gym.Env):
         info = self._get_info()
         shared_reward = self._get_share()
         
+        # reset cover state of landmarks
         self.landmark_cover_callback(self.world)
         for i,agent in enumerate(self.agents):
             obs_n.append(self._get_obs(agent))
@@ -349,23 +356,6 @@ class MultiAgentEnv(gym.Env):
         for agent in self.agents:
             obs_n.append(self._get_obs(agent))
         return obs_n
-
-
-    # def reset(self):
-    #     # reset world
-    #     self.reset_callback(self.world)
-    #     # reset renderer
-    #     self._reset_render()
-    #     # record observations for each agent
-    #     obs_n = []
-    #     self.agents = self.world.policy_agents
-        
-    #     for agent in self.agents:
-    #         obs_n.append(self._get_obs(agent))
-        
-    #     available_action = [[None]] * self.n
-        
-    #     return obs_n, available_action
 
     # get info used for benchmarking
     def _get_info(self):

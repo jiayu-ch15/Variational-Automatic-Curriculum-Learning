@@ -83,6 +83,12 @@ def get_config():
     
     # replay buffer
     parser.add_argument("--episode_length", type=int, default=200, help='number of forward steps in A2C (default: 5)')
+    
+    # amigo
+    parser.add_argument("--teacher_entropy_coef", type=float, default=0.01, help='entropy term coefficient (default: 0.01)')
+    parser.add_argument("--teacher_lr", type=float, default=1e-3, help='learning rate (default: 7e-4)')
+    parser.add_argument("--episode_length_teacher", type=int, default=200, help='number of teacher steps')
+    parser.add_argument("--teacher_hidden_size", type=int, default=64)
 
     # run
     parser.add_argument("--use-linear-lr-decay", action='store_true', default=False, help='use a linear schedule on the learning rate')
