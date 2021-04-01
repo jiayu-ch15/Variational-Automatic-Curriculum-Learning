@@ -358,14 +358,32 @@ class node_buffer():
             return 0
 
 class goal_proposal():
-    def __init__(self,agent_num, boundary, env_name, critic_k, buffer_capacity, sample_batch):
+    def __init__(self,num_agents, boundary, env_name, critic_k, buffer_capacity, proposal_batch):
         # TODO: zip env parameters
-        self.agent_num = agent_num
+        self.num_agents = num_agents
         self.boundary = boundary
         self.env_name = env_name
         self.critic_k = critic_k
         self.buffer_capacity = buffer_capacity
-        self.sample_batch = sample_batch
+        self.proposal_batch = proposal_batch
+
+    def easy_sampling(self, starts_length, start_boundary):
+        one_starts_landmark = []
+        one_starts_agent = []
+        archive = [] 
+        for j in range(starts_length):
+            for i in range(self.num_agents):
+                landmark_location = np.array([np.random.uniform(start_boundary['x'][0],start_boundary['x'][1]),np.random.uniform(start_boundary['y'][0],start_boundary['y'][1])])
+                one_starts_landmark.append(copy.deepcopy(landmark_location))
+            indices = random.sample(range(self.num_agents), self.num_agents)
+            for k in indices:
+                epsilon = -2 * 0.01 * random.random() + 0.01
+                one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
+            # select_starts.append(one_starts_agent+one_starts_landmark)
+            archive.append(one_starts_agent+one_starts_landmark)
+            one_starts_agent = []
+            one_starts_landmark = []
+        return archive
 
     def uniform_sampling(self, starts_length):
         if self.env_name == 'simple_spread':
@@ -373,7 +391,7 @@ class goal_proposal():
             one_starts_agent = []
             archive = [] 
             for j in range(starts_length):
-                for i in range(self.agent_num): 
+                for i in range(self.num_agents): 
                     landmark_location = np.array([np.random.uniform(self.boundary['x'][0],self.boundary['x'][1]),np.random.uniform(self.boundary['y'][0],self.boundary['y'][1])])
                     one_starts_landmark.append(copy.deepcopy(landmark_location))
                     agent_location = np.array([np.random.uniform(self.boundary['x'][0],self.boundary['x'][1]),np.random.uniform(self.boundary['y'][0],self.boundary['y'][1])])
@@ -384,8 +402,8 @@ class goal_proposal():
             return archive
 
     def value_disagreement_sampling(self, starts, actor_critic, starts_share_obs, starts_obs, starts_recurrent_hidden_states, starts_recurrent_hidden_states_critic, starts_masks):
-        starts_value_list = np.zeros((self.buffer_capacity, self.agent_num, self.critic_k)).astype(np.float32)
-        for agent_id in range(self.agent_num):
+        starts_value_list = np.zeros((self.buffer_capacity, self.num_agents, self.critic_k)).astype(np.float32)
+        for agent_id in range(self.num_agents):
             starts_value,_,_ = actor_critic.get_value(
                                         torch.FloatTensor(starts_share_obs[:,agent_id]),
                                         torch.FloatTensor(starts_obs[:,agent_id]),
@@ -401,9 +419,9 @@ class goal_proposal():
         average_value_disagreement = np.mean(starts_value_list)
         # probability
         starts_value_list = starts_value_list / np.sum(starts_value_list)
-        starts_index = np.ar333333ange(0,self.buffer_capacity,1)
+        starts_index = np.arange(0,self.buffer_capacity,1)
         # no repeat sampling
-        starts_proposal_index = np.random.choice(starts_index,size=self.sample_batch,replace=False,p=starts_value_list)
+        starts_proposal_index = np.random.choice(starts_index,size=self.proposal_batch,replace=False,p=starts_value_list)
         starts_proposal = []
         for start_id in range(len(starts_proposal_index)):
             starts_proposal.append(starts[starts_proposal_index[start_id]])
@@ -464,11 +482,13 @@ def main():
     # env
     envs = make_parallel_env(args)
     num_agents = args.num_agents
-    critic_k = 3
+    critic_k = 10
     starts = []
     buffer_capacity = 10000 # uniform distribution G, capacity means exploration
-    sample_batch = args.n_rollout_threads
-    boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
+    proposal_batch = args.n_rollout_threads-100
+    easy_batch = 100
+    boundary = {'x':[-3,3],'y':[-3,3]}
+    easy_boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
     check_frequency = 1
     historical_length = 5
     random.seed(args.seed)
@@ -590,9 +610,9 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-    goal_proposal_module = goal_proposal(agent_num=num_agents, boundary=boundary,
+    goal_proposal_module = goal_proposal(num_agents=num_agents, boundary=boundary,
                                         env_name='simple_spread', critic_k=critic_k,
-                                        buffer_capacity=buffer_capacity, sample_batch=sample_batch)
+                                        buffer_capacity=buffer_capacity, proposal_batch=proposal_batch)
     
     # run
     begin = time.time()
@@ -613,8 +633,8 @@ def main():
         # uniform sampling = exploration
         starts = goal_proposal_module.uniform_sampling(buffer_capacity)
         obs = []
-        for epoch_id in range(int(buffer_capacity/sample_batch)):
-            obs_epoch = envs.new_starts_obs(starts, num_agents, buffer_capacity)
+        for epoch_id in range(int(buffer_capacity/proposal_batch)):
+            obs_epoch = envs.new_starts_obs(starts[epoch_id*proposal_batch:(epoch_id+1)*proposal_batch], num_agents, proposal_batch)
             obs.append(obs_epoch)
         obs = np.concatenate(obs,axis=0)
         starts_share_obs = obs.reshape(buffer_capacity, -1)
@@ -626,9 +646,11 @@ def main():
         starts_proposal, average_value_disagreement = goal_proposal_module.value_disagreement_sampling(starts, actor_critic, starts_share_obs,starts_obs,
                                                                             starts_recurrent_hidden_states,starts_recurrent_hidden_states_critic,
                                                                             starts_masks)
+        easy_starts = goal_proposal_module.easy_sampling(starts_length=easy_batch, start_boundary=easy_boundary)
+        starts_proposal += easy_starts
         wandb.log({'average_value_disagreement': average_value_disagreement},current_timestep)
         # end region
-        obs = envs.new_starts_obs(starts_proposal, num_agents, sample_batch)
+        obs = envs.new_starts_obs(starts_proposal, num_agents, args.n_rollout_threads)
         #replay buffer
         rollouts = RolloutStorage_critic_k(num_agents,
                     args.episode_length, 

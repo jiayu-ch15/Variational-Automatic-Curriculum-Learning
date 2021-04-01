@@ -1084,7 +1084,7 @@ class RolloutStorage_critic_k(object):
             masks = self.masks[:-1].reshape(-1, 1)
             high_masks = self.high_masks[:-1].reshape(-1, 1)
             action_log_probs = self.action_log_probs.reshape(-1, 1)
-            advantages = advantages[:,:,:,critic_id].reshape(-1, 1)
+            advantages = np.mean(advantages,axis=3).reshape(-1, 1) # average adv_targ
         
         for indices in sampler:
             # obs size [T+1 N M Dim]-->[T N M Dim]-->[T*N*M,Dim]-->[index,Dim]           
@@ -1104,79 +1104,7 @@ class RolloutStorage_critic_k(object):
                 adv_targ = torch.tensor(advantages[indices])
 
             yield share_obs_batch, obs_batch, recurrent_hidden_states_batch, recurrent_hidden_states_critic_batch, actions_batch, value_preds_batch, return_batch, masks_batch, high_masks_batch, old_action_log_probs_batch, adv_targ
-
-    def naive_recurrent_generator(self, agent_id, advantages, num_mini_batch):
-        n_rollout_threads = self.rewards.shape[1]
-        assert n_rollout_threads >= num_mini_batch, (
-            "PPO requires the number of processes ({}) "
-            "to be greater than or equal to the number of "
-            "PPO mini batches ({}).".format(n_rollout_threads, num_mini_batch))
-        num_envs_per_batch = n_rollout_threads // num_mini_batch
-        perm = torch.randperm(n_rollout_threads).numpy()
-        for start_ind in range(0, n_rollout_threads, num_envs_per_batch):
-            share_obs_batch = []
-            obs_batch = []
-            recurrent_hidden_states_batch = []
-            recurrent_hidden_states_critic_batch = []
-            actions_batch = []
-            value_preds_batch = []
-            return_batch = []
-            masks_batch = []
-            high_masks_batch = []
-            old_action_log_probs_batch = []
-            adv_targ = []
-
-            for offset in range(num_envs_per_batch):
-                ind = perm[start_ind + offset]
-                share_obs_batch.append(torch.tensor(self.share_obs[:-1, ind, agent_id]))
-                obs_batch.append(torch.tensor(self.obs[:-1, ind, agent_id]))
-                recurrent_hidden_states_batch.append(
-                    torch.tensor(self.recurrent_hidden_states[0:1, ind, agent_id]))
-                recurrent_hidden_states_critic_batch.append(
-                    torch.tensor(self.recurrent_hidden_states_critic[0:1, ind, agent_id]))
-                actions_batch.append(torch.tensor(self.actions[:, ind, agent_id]))
-                value_preds_batch.append(torch.tensor(self.value_preds[:-1, ind, agent_id]))
-                return_batch.append(torch.tensor(self.returns[:-1, ind, agent_id]))
-                masks_batch.append(torch.tensor(self.masks[:-1, ind, agent_id]))
-                high_masks_batch.append(torch.tensor(self.high_masks[:-1, ind, agent_id]))
-                old_action_log_probs_batch.append(
-                    torch.tensor(self.action_log_probs[:, ind, agent_id]))
-                adv_targ.append(torch.tensor(advantages[:, ind]))
-
-            T, N = self.episode_length, num_envs_per_batch
-            # These are all tensors of size (T, N, -1)
-            share_obs_batch = torch.stack(share_obs_batch, 1)
-            obs_batch = torch.stack(obs_batch, 1)
-            actions_batch = torch.stack(actions_batch, 1)
-            value_preds_batch = torch.stack(value_preds_batch, 1)
-            return_batch = torch.stack(return_batch, 1)
-            masks_batch = torch.stack(masks_batch, 1)
-            high_masks_batch = torch.stack(high_masks_batch, 1)
-            old_action_log_probs_batch = torch.stack(
-                old_action_log_probs_batch, 1)
-            adv_targ = torch.stack(adv_targ, 1)
-
-            # States is just a (N, -1) tensor
-            recurrent_hidden_states_batch = torch.stack(
-                recurrent_hidden_states_batch, 1).view(N, -1)
-            recurrent_hidden_states_critic_batch = torch.stack(
-                recurrent_hidden_states_critic_batch, 1).view(N, -1)
-
-            # Flatten the (T, N, ...) tensors to (T * N, ...)
-            share_obs_batch = _flatten_helper(T, N, share_obs_batch)
-            obs_batch = _flatten_helper(T, N, obs_batch)
-            actions_batch = _flatten_helper(T, N, actions_batch)
-            value_preds_batch = _flatten_helper(T, N, value_preds_batch)
-            return_batch = _flatten_helper(T, N, return_batch)
-            masks_batch = _flatten_helper(T, N, masks_batch)
-            high_masks_batch = _flatten_helper(T, N, high_masks_batch)
-            old_action_log_probs_batch = _flatten_helper(T, N, \
-                    old_action_log_probs_batch)
-            adv_targ = _flatten_helper(T, N, adv_targ)
-            
-
-            yield share_obs_batch, obs_batch, recurrent_hidden_states_batch, recurrent_hidden_states_critic_batch, actions_batch, value_preds_batch, return_batch, masks_batch, high_masks_batch, old_action_log_probs_batch, adv_targ
-            
+        
     def naive_recurrent_generator_share(self, advantages, num_mini_batch):
         episode_length, n_rollout_threads, num_agents = self.rewards.shape[0:3]
         batch_size = n_rollout_threads*num_agents

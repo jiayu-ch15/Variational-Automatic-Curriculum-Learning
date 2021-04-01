@@ -527,8 +527,8 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     # teacher network
-    teacher_obs_space = num_agents * 2
-    teacher_action_space = num_agents * 2
+    teacher_obs_space = num_agents * 4 # agents and landmarks
+    teacher_action_space = num_agents * 2 # landmarks
     teacher_actor_base = ATTBase_actor_teacher(teacher_obs_space, teacher_action_space, num_agents)
     teacher_critic_base = ATTBase_critic_teacher(teacher_obs_space, num_agents)
     teacher = Policy_teacher(
@@ -584,8 +584,8 @@ def main():
 
     eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
-    # boundary = {'x':[-3,3],'y':[-3,3]}
-    boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
+    boundary = {'x':[-3,3],'y':[-3,3]}
+    # boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
     historical_length = 5
     threshold = 0.15
     random.seed(args.seed)
@@ -615,11 +615,10 @@ def main():
 
         for times in range(eval_frequency):
             obs, _ = envs.reset(num_agents)
-            initial_state = envs.get_state() 
-            # initial states
-            initial_state = initial_state[:,num_agents*2:] # landmark states
+            initial_state = envs.get_state() # agents states and landmark states
             # teacher replay buffer init   
-            rollouts_teacher.obs[count_teacher_step] = initial_state.copy()
+            if count_teacher_step==0:
+                rollouts_teacher.obs[count_teacher_step] = initial_state.copy()
             # teacher.act()
             with torch.no_grad():
                 teacher.eval()
@@ -721,6 +720,8 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
+                # get raw extrinsic reward
+                extrinsic_reward = rewards[:,0]
                 # concatenate goal obs
                 obs = np.concatenate((obs,goal_obs),axis=2)
                 # add intrinsic reward
@@ -872,6 +873,10 @@ def main():
                 teacher_rewards[batch_id] = teacher_rewards[batch_id] * alpha
             else:
                 teacher_rewards[batch_id] = -teacher_rewards[batch_id] * beta
+        # add extrinsic reward
+        for batch_id in range(args.n_rollout_threads):
+            if np.mean(step_cover_rate[batch_id,-historical_length:]) == 1.0:
+                teacher_rewards[batch_id] += extrinsic_reward[batch_id]
         if np.mean(count_student_reach_goal) >= 10:
             timestep_student_reach_threshold += 1
         wandb.log({'student_reach_threshold':timestep_student_reach_threshold},current_timestep)

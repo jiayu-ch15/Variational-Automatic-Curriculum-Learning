@@ -1977,7 +1977,7 @@ class ObsEncoder_teacher(nn.Module):
         init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
                                constant_(x, 0), np.sqrt(2))
         self.encoder = nn.Sequential(
-                            init_(nn.Linear(num_agents * 2, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size),
+                            init_(nn.Linear(num_agents * 4, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size),
                             init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
 
 

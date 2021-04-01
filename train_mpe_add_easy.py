@@ -13,8 +13,8 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO
-from algorithm.model import Policy, ATTBase
+from algorithm.ppo import PPO3
+from algorithm.model import Policy, ATTBase, Policy3, ATTBase_add, ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -25,6 +25,7 @@ import shutil
 import numpy as np
 import itertools
 import pdb
+import wandb
 
 def make_parallel_env(args):
     def get_env_fn(rank):
@@ -61,7 +62,7 @@ def produce_uniform_case(num_case,boundary,num_agents):
 
 def main():
     args = get_config()
-    
+    run = wandb.init(project='baseline_add_easy',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
     # seed
@@ -102,11 +103,14 @@ def main():
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:
-        share_base = ATTBase(envs.observation_space[0].shape[0], num_agents)
-        actor_critic = Policy(envs.observation_space[0], 
+        actor_base = ATTBase_actor_dist_add(envs.observation_space[0].shape[0], envs.action_space[0], num_agents)
+        critic_base = ATTBase_critic_add(envs.observation_space[0].shape[0], num_agents)
+        actor_critic = Policy3(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
-                    base=share_base,
+                    base=None,
+                    actor_base=actor_base,
+                    critic_base=critic_base,
                     base_kwargs={'naive_recurrent': args.naive_recurrent_policy,
                                  'recurrent': args.recurrent_policy,
                                  'hidden_size': args.hidden_size,
@@ -126,7 +130,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO(actor_critic,
+        agents = PPO3(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
@@ -219,8 +223,8 @@ def main():
     starts = []
     boundary_easy = 0.3
     boundary = 3
-    num_easy = 250
-    num_uniform = 250
+    num_easy = 100
+    num_uniform = args.n_rollout_threads - num_easy
 
     for episode in range(episodes):
         if args.use_linear_lr_decay:# decrease learning rate linearly
@@ -257,7 +261,7 @@ def main():
                 rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
 
 
-        step_cover_rate = np.zeros(shape=(args.n_rollout_threads, args.episode_length))
+        step_cover_rate = np.zeros(shape=(num_uniform, args.episode_length))
         for step in range(args.episode_length):
             # Sample actions
             values = []
@@ -316,7 +320,10 @@ def main():
                
             # Obser reward and next obs
             obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
-            step_cover_rate[:,step] = np.array(infos)[:,0]
+            cover_rate_list = []
+            for env_id in range(args.n_rollout_threads):
+                cover_rate_list.append(infos[env_id][0]['cover_rate'])
+            step_cover_rate[:,step] = np.array(cover_rate_list)[num_easy:]
 
             # If done then clean the history of observations.
             # insert data in buffer
@@ -361,8 +368,8 @@ def main():
                             rewards[:,agent_id], 
                             np.array(masks)[:,agent_id])
         # import pdb;pdb.set_trace()
-        logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(step_cover_rate[:,-1])},(episode + 1) * args.episode_length * args.n_rollout_threads)
-        logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(step_cover_rate[:,-5:],axis=1))},(episode + 1) * args.episode_length * args.n_rollout_threads)
+        wandb.log({'cover_rate_1step': np.mean(step_cover_rate[:,-1])},(episode + 1) * args.episode_length * args.n_rollout_threads)
+        wandb.log({'cover_rate_5step': np.mean(np.mean(step_cover_rate[:,-5:],axis=1))},(episode + 1) * args.episode_length * args.n_rollout_threads)
                                       
         with torch.no_grad(): 
             for agent_id in range(num_agents):         
@@ -405,12 +412,11 @@ def main():
         # update the network
         if args.share_policy:
             actor_critic.train()
-            value_loss, action_loss, dist_entropy = agents.update_share(num_agents, rollouts)
-                           
+            value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(num_agents, rollouts, False, initial_optimizer=False)         
             rew = []
             for i in range(rollouts.rewards.shape[1]):
                 rew.append(np.sum(rollouts.rewards[:,i]))
-            logger.add_scalars('average_episode_reward',
+            wandb.log(
                 {'average_episode_reward': np.mean(rew)},
                 (episode + 1) * args.episode_length * args.n_rollout_threads)
             # clean the buffer and reset
