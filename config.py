@@ -83,6 +83,7 @@ def get_config():
     
     # replay buffer
     parser.add_argument("--episode_length", type=int, default=200, help='number of forward steps in A2C (default: 5)')
+    parser.add_argument("--test_episode_length", type=int, default=200, help='number of forward steps in A2C (default: 5)')
     
     # amigo
     parser.add_argument("--teacher_entropy_coef", type=float, default=0.01, help='entropy term coefficient (default: 0.01)')
