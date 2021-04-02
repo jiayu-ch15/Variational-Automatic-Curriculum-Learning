@@ -2161,9 +2161,13 @@ class PPO4():# actor_critic分开, k个critic网络
                         if count_stop_step >= self.num_mini_batch or count_stop_step==0:
                             if actor_update:
                                 self.optimizer_actor.zero_grad()
-                            for i in range(self.critic_k):
-                                self.optimizer_critic[i].zero_grad()
+                            self.optimizer_critic[i].zero_grad()
                             count_stop_step = 0
+
+                        if self.use_valueloss_average:
+                            value_loss = value_loss / self.num_mini_batch
+                            action_loss = action_loss / self.num_mini_batch
+                            dist_entropy = dist_entropy / self.num_mini_batch
 
                         (value_loss * self.value_loss_coef).backward()
                         if actor_update:
@@ -2175,8 +2179,7 @@ class PPO4():# actor_critic分开, k个critic网络
                             nn.utils.clip_grad_norm_(self.actor_critic.parameters(), self.max_grad_norm)
                         
                         if count_stop_step == self.num_mini_batch-1: 
-                            for i in range(self.critic_k):
-                                self.optimizer_critic[i].step()
+                            self.optimizer_critic[i].step()
                             if actor_update:
                                 self.optimizer_actor.step()
                         count_stop_step += 1

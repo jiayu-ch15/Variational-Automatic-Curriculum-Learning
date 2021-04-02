@@ -482,12 +482,12 @@ def main():
     # env
     envs = make_parallel_env(args)
     num_agents = args.num_agents
-    critic_k = 10
+    critic_k = 3
     starts = []
     buffer_capacity = 10000 # uniform distribution G, capacity means exploration
     proposal_batch = args.n_rollout_threads-100
     easy_batch = 100
-    boundary = {'x':[-3,3],'y':[-3,3]}
+    boundary = {'x':[-1,1],'y':[-1,1]}
     easy_boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
     check_frequency = 1
     historical_length = 5
