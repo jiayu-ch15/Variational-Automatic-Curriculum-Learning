@@ -17,6 +17,7 @@ def get_config():
     parser.add_argument("--env_name", type=str, default='batch1')
     parser.add_argument("--num_agents", type=int, default=3)
     parser.add_argument("--share_reward", action='store_false', default=True)
+    parser.add_argument("--eval_num_agents", type=int, default=3)
     
     # hanabi
     parser.add_argument("--hanabi_name", type=str, default='Hanabi-Full-Minimal')
