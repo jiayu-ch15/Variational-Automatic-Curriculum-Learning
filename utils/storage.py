@@ -2,6 +2,7 @@ import torch
 import numpy as np
 from torch.utils.data.sampler import BatchSampler, SubsetRandomSampler
 import time
+import pdb
 
 def _flatten_helper(T, N, _tensor):
     return _tensor.view(T * N, *_tensor.size()[2:])
@@ -269,7 +270,7 @@ class RolloutStorage(object):
         
         for indices in sampler:
             # obs size [T+1 N M Dim]-->[T N M Dim]-->[T*N*M,Dim]-->[index,Dim]           
-            share_obs_batch = torch.tensor(share_obs[indices])           
+            share_obs_batch = torch.tensor(share_obs[indices])       
             obs_batch = torch.tensor(obs[indices])
             recurrent_hidden_states_batch = torch.tensor(recurrent_hidden_states[indices])
             recurrent_hidden_states_critic_batch = torch.tensor(recurrent_hidden_states_critic[indices])
@@ -1665,7 +1666,7 @@ class RolloutStorage_share(object):  # 减小share_obs
         
         for indices in sampler:
             # obs size [T+1 N M Dim]-->[T N M Dim]-->[T*N*M,Dim]-->[index,Dim]           
-            share_obs_batch = torch.tensor(share_obs[(indices//self.agents_num)])           
+            share_obs_batch = torch.tensor(share_obs[(indices // self.agents_num)])          
             obs_batch = torch.tensor(obs[indices])
             recurrent_hidden_states_batch = torch.tensor(recurrent_hidden_states[indices])
             recurrent_hidden_states_critic_batch = torch.tensor(recurrent_hidden_states_critic[indices])

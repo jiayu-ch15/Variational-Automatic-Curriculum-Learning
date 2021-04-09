@@ -250,10 +250,10 @@ class node_buffer():
             starts.append(self.archive[self.choose_archive_index[i]])
         for i in range(len(self.choose_parent_index)):
             starts.append(self.parent_all[self.choose_parent_index[i]])
-        print('sample_archive: ', len(self.choose_archive_index))
-        print('sample_childlist: ', len(self.choose_child_index))
-        print('sample_parent: ', len(self.choose_parent_index))
-        print('%isample_length: '%self.num_agents, starts_length)
+        # print('sample_archive: ', len(self.choose_archive_index))
+        # print('sample_childlist: ', len(self.choose_child_index))
+        # print('sample_parent: ', len(self.choose_parent_index))
+        # print('%isample_length: '%self.num_agents, starts_length)
         return starts, one_length, starts_length
     
     def move_nodes(self, one_length, Rmax, Rmin, del_switch, writer, timestep): 
@@ -286,9 +286,9 @@ class node_buffer():
                     del_archive_num += 1
         self.archive += child2archive
         self.parent_all += self.parent
-        print('child_drop: ', drop_num)
-        print('add_hard_num: ', add_hard_num )
-        print('parent: ', len(self.parent))
+        # print('child_drop: ', drop_num)
+        # print('add_hard_num: ', add_hard_num )
+        # print('parent: ', len(self.parent))
         if len(self.childlist) > self.buffer_length:
             self.childlist = self.childlist[len(self.childlist)-self.buffer_length:]
         if len(self.archive) > self.buffer_length:
@@ -361,160 +361,171 @@ class node_buffer():
         else:
             return 0
 
-def evaluation(envs, actor_critic, args, eval_num_agents):
-        actor_critic.agents_num = eval_num_agents
-        obs, _ = envs.reset(eval_num_agents)
-        #replay buffer
-        rollouts = RolloutStorage_share(eval_num_agents,
-                    args.test_episode_length, 
-                    args.n_rollout_threads,
-                    envs.observation_space[0], 
-                    envs.action_space[0],
-                    args.hidden_size) 
-        # replay buffer init
+def evaluation(envs, actor_critic, args, eval_num_agents, timestep):
+    # update envs
+    envs.close()
+    args.n_rollout_threads = 500
+    envs = make_parallel_env(args)
+    # reset num_agents
+    actor_critic.num_agents = eval_num_agents
+    obs, _ = envs.reset(eval_num_agents)
+    #replay buffer
+    rollouts = RolloutStorage_share(eval_num_agents,
+                args.test_episode_length, 
+                args.n_rollout_threads,
+                envs.observation_space[0], 
+                envs.action_space[0],
+                args.hidden_size) 
+    # replay buffer init
+    if args.share_policy: 
+        share_obs = obs.reshape(args.n_rollout_threads, -1)        
+        # share_obs = np.expand_dims(share_obs,1).repeat(now_node.agent_num,axis=1)    
+        rollouts.share_obs[0] = share_obs.copy() 
+        rollouts.obs[0] = obs.copy()               
+        rollouts.recurrent_hidden_states = np.zeros(rollouts.recurrent_hidden_states.shape).astype(np.float32)
+        rollouts.recurrent_hidden_states_critic = np.zeros(rollouts.recurrent_hidden_states_critic.shape).astype(np.float32)
+    else:
+        share_obs = []
+        for o in obs:
+            share_obs.append(list(itertools.chain(*o)))
+        share_obs = np.array(share_obs)
+        for agent_id in range(eval_num_agents):    
+            rollouts[agent_id].share_obs[0] = share_obs.copy()
+            rollouts[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
+            rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
+            rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
+    test_cover_rate = np.zeros(shape=(args.n_rollout_threads,args.test_episode_length))
+    test_collision_num = np.zeros(shape=args.n_rollout_threads)
+    test_success = np.zeros(shape=(args.n_rollout_threads,args.test_episode_length))
+    for step in range(args.test_episode_length):
+        # Sample actions
+        values = []
+        actions= []
+        action_log_probs = []
+        recurrent_hidden_statess = []
+        recurrent_hidden_statess_critic = []
+        
+        with torch.no_grad():                
+            for agent_id in range(eval_num_agents):
+                if args.share_policy:
+                    actor_critic.eval()
+                    value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
+                        # torch.FloatTensor(rollouts.share_obs[step,:,agent_id]), 
+                        torch.FloatTensor(rollouts.share_obs[step]), 
+                        torch.FloatTensor(rollouts.obs[step,:,agent_id]), 
+                        torch.FloatTensor(rollouts.recurrent_hidden_states[step,:,agent_id]), 
+                        torch.FloatTensor(rollouts.recurrent_hidden_states_critic[step,:,agent_id]),
+                        torch.FloatTensor(rollouts.masks[step,:,agent_id]),deterministic=True)
+                else:
+                    actor_critic[agent_id].eval()
+                    value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic[agent_id].act(agent_id,
+                        torch.FloatTensor(rollouts[agent_id].share_obs[step,:]), 
+                        torch.FloatTensor(rollouts[agent_id].obs[step,:]), 
+                        torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states[step,:]), 
+                        torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states_critic[step,:]),
+                        torch.FloatTensor(rollouts[agent_id].masks[step,:]),deterministic=True)
+                    
+                values.append(value.detach().cpu().numpy())
+                actions.append(action.detach().cpu().numpy())
+                action_log_probs.append(action_log_prob.detach().cpu().numpy())
+                recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
+                recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
+        
+        # rearrange action
+        actions_env = []
+        for i in range(args.n_rollout_threads):
+            one_hot_action_env = []
+            for agent_id in range(eval_num_agents):
+                if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
+                    uc_action = []
+                    for j in range(envs.action_space[agent_id].shape):
+                        uc_one_hot_action = np.zeros(envs.action_space[agent_id].high[j]+1)
+                        uc_one_hot_action[actions[agent_id][i][j]] = 1
+                        uc_action.append(uc_one_hot_action)
+                    uc_action = np.concatenate(uc_action)
+                    one_hot_action_env.append(uc_action)
+                        
+                elif envs.action_space[agent_id].__class__.__name__ == 'Discrete':    
+                    one_hot_action = np.zeros(envs.action_space[agent_id].n)
+                    one_hot_action[actions[agent_id][i]] = 1
+                    one_hot_action_env.append(one_hot_action)
+                else:
+                    raise NotImplementedError
+            actions_env.append(one_hot_action_env)
+        
+        # Obser reward and next obs
+        obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, eval_num_agents)
+        cover_rate_list = []
+        collision_list = []
+        success_list = []
+        for env_id in range(args.n_rollout_threads):
+            cover_rate_list.append(infos[env_id][0]['cover_rate'])
+            collision_list.append(infos[env_id][0]['collision'])
+            success_list.append(int(infos[env_id][0]['success']))
+        test_cover_rate[:,step] = np.array(cover_rate_list)
+        test_collision_num += np.array(collision_list)
+        test_success[:,step] = np.array(success_list)
+        # step_cover_rate[:,step] = np.array(infos)[:,0]
+
+        # If done then clean the history of observations.
+        # insert data in buffer
+        masks = []
+        for i, done in enumerate(dones): 
+            mask = []               
+            for agent_id in range(eval_num_agents): 
+                if done[agent_id]:    
+                    recurrent_hidden_statess[agent_id][i] = np.zeros(args.hidden_size).astype(np.float32)
+                    recurrent_hidden_statess_critic[agent_id][i] = np.zeros(args.hidden_size).astype(np.float32)    
+                    mask.append([0.0])
+                else:
+                    mask.append([1.0])
+            masks.append(mask)
+                        
         if args.share_policy: 
             share_obs = obs.reshape(args.n_rollout_threads, -1)        
             # share_obs = np.expand_dims(share_obs,1).repeat(now_node.agent_num,axis=1)    
-            rollouts.share_obs[0] = share_obs.copy() 
-            rollouts.obs[0] = obs.copy()               
-            rollouts.recurrent_hidden_states = np.zeros(rollouts.recurrent_hidden_states.shape).astype(np.float32)
-            rollouts.recurrent_hidden_states_critic = np.zeros(rollouts.recurrent_hidden_states_critic.shape).astype(np.float32)
+            
+            rollouts.insert(share_obs, 
+                        obs, 
+                        np.array(recurrent_hidden_statess).transpose(1,0,2), 
+                        np.array(recurrent_hidden_statess_critic).transpose(1,0,2), 
+                        np.array(actions).transpose(1,0,2),
+                        np.array(action_log_probs).transpose(1,0,2), 
+                        np.array(values).transpose(1,0,2),
+                        rewards, 
+                        masks)
         else:
             share_obs = []
             for o in obs:
                 share_obs.append(list(itertools.chain(*o)))
             share_obs = np.array(share_obs)
-            for agent_id in range(eval_num_agents):    
-                rollouts[agent_id].share_obs[0] = share_obs.copy()
-                rollouts[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
-                rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
-                rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
-        test_cover_rate = np.zeros(shape=(args.n_rollout_threads,args.test_episode_length))
-        test_collision_num = np.zeros(shape=args.n_rollout_threads)
-        test_success = np.zeros(shape=(args.n_rollout_threads,args.test_episode_length))
-        for step in range(args.test_episode_length):
-            # Sample actions
-            values = []
-            actions= []
-            action_log_probs = []
-            recurrent_hidden_statess = []
-            recurrent_hidden_statess_critic = []
-            
-            with torch.no_grad():                
-                for agent_id in range(eval_num_agents):
-                    if args.share_policy:
-                        actor_critic.eval()
-                        value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
-                            # torch.FloatTensor(rollouts.share_obs[step,:,agent_id]), 
-                            torch.FloatTensor(rollouts.share_obs[step]), 
-                            torch.FloatTensor(rollouts.obs[step,:,agent_id]), 
-                            torch.FloatTensor(rollouts.recurrent_hidden_states[step,:,agent_id]), 
-                            torch.FloatTensor(rollouts.recurrent_hidden_states_critic[step,:,agent_id]),
-                            torch.FloatTensor(rollouts.masks[step,:,agent_id]),deterministic=True)
-                    else:
-                        actor_critic[agent_id].eval()
-                        value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic[agent_id].act(agent_id,
-                            torch.FloatTensor(rollouts[agent_id].share_obs[step,:]), 
-                            torch.FloatTensor(rollouts[agent_id].obs[step,:]), 
-                            torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states[step,:]), 
-                            torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states_critic[step,:]),
-                            torch.FloatTensor(rollouts[agent_id].masks[step,:]),deterministic=True)
-                        
-                    values.append(value.detach().cpu().numpy())
-                    actions.append(action.detach().cpu().numpy())
-                    action_log_probs.append(action_log_prob.detach().cpu().numpy())
-                    recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
-                    recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
-            
-            # rearrange action
-            actions_env = []
-            for i in range(args.n_rollout_threads):
-                one_hot_action_env = []
-                for agent_id in range(eval_num_agents):
-                    if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
-                        uc_action = []
-                        for j in range(envs.action_space[agent_id].shape):
-                            uc_one_hot_action = np.zeros(envs.action_space[agent_id].high[j]+1)
-                            uc_one_hot_action[actions[agent_id][i][j]] = 1
-                            uc_action.append(uc_one_hot_action)
-                        uc_action = np.concatenate(uc_action)
-                        one_hot_action_env.append(uc_action)
-                            
-                    elif envs.action_space[agent_id].__class__.__name__ == 'Discrete':    
-                        one_hot_action = np.zeros(envs.action_space[agent_id].n)
-                        one_hot_action[actions[agent_id][i]] = 1
-                        one_hot_action_env.append(one_hot_action)
-                    else:
-                        raise NotImplementedError
-                actions_env.append(one_hot_action_env)
-            
-            # Obser reward and next obs
-            obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, now_node.num_agents)
-            cover_rate_list = []
-            collision_list = []
-            success_list = []
-            for env_id in range(args.n_rollout_threads):
-                cover_rate_list.append(infos[env_id][0]['cover_rate'])
-                collision_list.append(infos[env_id][0]['collision'])
-                success_list.append(int(infos[env_id][0]['success']))
-            test_cover_rate[:,step] = np.array(cover_rate_list)
-            test_collision_num += np.array(collision_list)
-            test_success[:,step] = np.array(success_list)
-            # step_cover_rate[:,step] = np.array(infos)[:,0]
+            for agent_id in range(eval_num_agents):
+                rollouts[agent_id].insert(share_obs, 
+                        np.array(list(obs[:,agent_id])), 
+                        np.array(recurrent_hidden_statess[agent_id]), 
+                        np.array(recurrent_hidden_statess_critic[agent_id]), 
+                        np.array(actions[agent_id]),
+                        np.array(action_log_probs[agent_id]), 
+                        np.array(values[agent_id]),
+                        rewards[:,agent_id], 
+                        np.array(masks)[:,agent_id])
+    mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-args.historical_length:],axis=1))
+    mean_success_rate = np.mean(np.mean(test_success[:,-args.historical_length:],axis=1))
+    collision_num = np.mean(test_collision_num)
+    rew = []
+    for i in range(rollouts.rewards.shape[1]):
+        rew.append(np.sum(rollouts.rewards[:,i]))
+    average_episode_reward = np.mean(rew)
+    envs.close()
+    return mean_cover_rate, mean_success_rate, collision_num, average_episode_reward
 
-            # If done then clean the history of observations.
-            # insert data in buffer
-            masks = []
-            for i, done in enumerate(dones): 
-                mask = []               
-                for agent_id in range(eval_num_agents): 
-                    if done[agent_id]:    
-                        recurrent_hidden_statess[agent_id][i] = np.zeros(args.hidden_size).astype(np.float32)
-                        recurrent_hidden_statess_critic[agent_id][i] = np.zeros(args.hidden_size).astype(np.float32)    
-                        mask.append([0.0])
-                    else:
-                        mask.append([1.0])
-                masks.append(mask)
-                            
-            if args.share_policy: 
-                share_obs = obs.reshape(args.n_rollout_threads, -1)        
-                # share_obs = np.expand_dims(share_obs,1).repeat(now_node.agent_num,axis=1)    
-                
-                rollouts.insert(share_obs, 
-                            obs, 
-                            np.array(recurrent_hidden_statess).transpose(1,0,2), 
-                            np.array(recurrent_hidden_statess_critic).transpose(1,0,2), 
-                            np.array(actions).transpose(1,0,2),
-                            np.array(action_log_probs).transpose(1,0,2), 
-                            np.array(values).transpose(1,0,2),
-                            rewards, 
-                            masks)
-            else:
-                share_obs = []
-                for o in obs:
-                    share_obs.append(list(itertools.chain(*o)))
-                share_obs = np.array(share_obs)
-                for agent_id in range(eval_num_agents):
-                    rollouts[agent_id].insert(share_obs, 
-                            np.array(list(obs[:,agent_id])), 
-                            np.array(recurrent_hidden_statess[agent_id]), 
-                            np.array(recurrent_hidden_statess_critic[agent_id]), 
-                            np.array(actions[agent_id]),
-                            np.array(action_log_probs[agent_id]), 
-                            np.array(values[agent_id]),
-                            rewards[:,agent_id], 
-                            np.array(masks)[:,agent_id])
-        mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
-        mean_success_rate = np.mean(np.mean(test_success[:,-historical_length:],axis=1))
-        collision_num = np.mean(test_collision_num)
-        rew = []
-        for i in range(rollouts_now.rewards.shape[1]):
-            rew.append(np.sum(rollouts_now.rewards[:,i]))
-        average_episode_reward = np.mean(rew)
-        return mean_cover_rate, mean_success_rate, collision_num, average_episode_reward
-
-def collect_data(envs, actor_critic, args, node, starts, starts_length):
-    actor_critic.agents_num = node.num_agents
+def collect_data(envs, agents, actor_critic, args, node, starts, starts_length, one_length, timestep):
+    # update envs
+    envs.close()
+    args.n_rollout_threads = starts_length
+    envs = make_parallel_env(args)
+    # reset num_agents
+    actor_critic.num_agents = node.num_agents
     obs = envs.new_starts_obs(starts, node.num_agents, starts_length)
     #replay buffer
     rollouts = RolloutStorage_share(node.num_agents,
@@ -540,9 +551,9 @@ def collect_data(envs, actor_critic, args, node, starts, starts_length):
             rollouts[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
             rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
             rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
-    step_cover_rate = np.zeros(shape=(one_length_last,args.episode_length))
-    step_collision_num = np.zeros(shape=one_length_last)
-    step_success = np.zeros(shape=(one_length_last,args.episode_length))
+    step_cover_rate = np.zeros(shape=(one_length,args.episode_length))
+    step_collision_num = np.zeros(shape=one_length)
+    step_success = np.zeros(shape=(one_length,args.episode_length))
     for step in range(args.episode_length):
         # Sample actions
         values = []
@@ -603,7 +614,7 @@ def collect_data(envs, actor_critic, args, node, starts, starts_length):
         cover_rate_list = []
         collision_list = []
         success_list = []
-        for env_id in range(one_length_last):
+        for env_id in range(one_length):
             cover_rate_list.append(infos[env_id][0]['cover_rate'])
             collision_list.append(infos[env_id][0]['collision'])
             success_list.append(int(infos[env_id][0]['success']))
@@ -652,12 +663,13 @@ def collect_data(envs, actor_critic, args, node, starts, starts_length):
                         rewards[:,agent_id], 
                         np.array(masks)[:,agent_id])
     # import pdb;pdb.set_trace()
-    wandb.log({str(node.num_agents)+'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
-    wandb.log({str(node.num_agents)+'training_success_rate': np.mean(np.mean(step_success[:,-historical_length:],axis=1))}, current_timestep)
-    print(str(node.num_agents) + 'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
-    wandb.log({str(node.num_agents)+'train_collision_num': np.mean(step_collision_num)},current_timestep)
-    current_timestep += args.episode_length * starts_length
-    node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
+    wandb.log({str(node.num_agents)+'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-args.historical_length:],axis=1))}, timestep)
+    wandb.log({str(node.num_agents)+'training_success_rate': np.mean(np.mean(step_success[:,-args.historical_length:],axis=1))}, timestep)
+    print(str(node.num_agents) + 'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-args.historical_length:],axis=1)), end=' ')
+    print('threads: ', args.n_rollout_threads)
+    wandb.log({str(node.num_agents)+'train_collision_num': np.mean(step_collision_num)},timestep)
+    timestep += args.episode_length * starts_length
+    node.eval_score += np.mean(step_cover_rate[:,-args.historical_length:],axis=1)
                                 
     with torch.no_grad():  # get value and compute return
         for agent_id in range(node.num_agents):         
@@ -695,7 +707,14 @@ def collect_data(envs, actor_critic, args, node, starts, starts_length):
                                         args.use_proper_time_limits,
                                         args.use_popart,
                                         agents[agent_id].value_normalizer)
-    return rollouts
+    envs.close()
+    return rollouts, timestep
+
+def save(save_path, agents):
+    torch.save({'model': agents.actor_critic, 
+                'optimizer_actor': agents.optimizer_actor,
+                'optimizer_critic': agents.optimizer_critic}, save_path)
+
 
 # def trainer(envs, actor_critic, args):
 
@@ -751,12 +770,142 @@ def main():
     os.makedirs(str(save_dir))
     logger = SummaryWriter(str(log_dir)) 
 
+    # initial hyper-parameters
+    use_novelty_sample = True
+    use_past_sampling = True
+    del_switch = 'novelty'
+    starts = []
+    buffer_length = 2000 # archive 长度
+    N_child = 325
+    N_archive = 150
+    N_parent = 25
+    max_step = 0.6
+    TB = 1
+    M = N_child
+    Rmin = 0.5
+    Rmax = 0.95
+    boundary = 3
+    start_boundary = 0.3
+    upper_bound = 0.9
+    transfer = False
+    if transfer:
+        mix_flag = False
+        decay = False
+        stop_mix_signal = 1.0
+        target_num = args.eval_num_agents
+        last_box_num = 0
+        last_agent_num = last_box_num
+        now_box_num = 4
+        now_agent_num = now_box_num
+    else:
+        mix_flag = False
+        decay = True
+        stop_mix_signal = upper_bound
+        mix_add_frequency = 1 # 改变比例的频率
+        mix_add_count = 0
+        ratio_current = 0.1
+        if decay:
+            ratio_last = (1.0 - ratio_current) * 2
+        target_num = args.eval_num_agents
+        last_box_num = 0
+        last_agent_num = last_box_num
+        now_box_num = 4
+        now_agent_num = now_box_num
+    last_mean_cover_rate = 0
+    now_mean_cover_rate = 0
+    eval_frequency = 3 #需要fix几个回合
+    check_frequency = 1
+    save_node_frequency = 3
+    save_node_flag = False
+    save_curricula = True
+    next_stage_flag = 0
+    random.seed(args.seed)
+    np.random.seed(args.seed)
+    last_node = node_buffer(last_agent_num,buffer_length,
+                           archive_initial_length=int(args.n_rollout_threads),
+                           reproduction_num=M,
+                           max_step=max_step,
+                           start_boundary=start_boundary,
+                           boundary=boundary)
+    now_node = node_buffer(now_agent_num,buffer_length,
+                           archive_initial_length=int(args.n_rollout_threads),
+                           reproduction_num=M,
+                           max_step=max_step,
+                           start_boundary=start_boundary,
+                           boundary=boundary)
+    
+    # region load curricula and model
+    load_curricula = True
+    initial_optimizer = False
+    warm_up = False
+    warmup_iter = 30
+    load_model_path = None
+    if load_curricula: # 默认从4、8混合开始训练
+        # load path
+        load_curricula_path = Path('./curricula') / args.env_name / args.scenario_name / args.load_algorithm_name
+        load_model_path = Path('./results') / args.env_name / args.scenario_name / args.load_algorithm_name 
+        seed_path = 'run%i'%args.seed
+        model_path = 'models/%iagent_model_0.9.pt'%args.load_num_agents
+        load_curricula_path = load_curricula_path / seed_path / Path('%iagents'%args.load_num_agents)
+        load_model_path = load_model_path / seed_path / model_path
+        last_agent_num = 4
+        now_agent_num = 8
+        start_boundary = 1.0
+        if not transfer:
+            mix_flag = True
+        # initialize now node
+        now_node = node_buffer(now_agent_num,buffer_length,
+                        archive_initial_length=int(args.n_rollout_threads),
+                        reproduction_num=M,
+                        max_step=max_step,
+                        start_boundary=start_boundary,
+                        boundary=boundary)
+        # load last node
+        # load archive
+        last_node.num_agents = last_agent_num
+        with open(load_curricula_path / 'archive/archive_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        archive_load = []
+        for i in range(len(tmp)): 
+            archive_load_one = []
+            for j in range(last_node.num_agents * 2):
+                archive_load_one.append(tmp[i][j*2:(j+1)*2])
+            archive_load.append(archive_load_one)
+        last_node.archive = copy.deepcopy(archive_load)
+        # load parent
+        with open(load_curricula_path / 'parent/parent_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        parent_load = []
+        for i in range(len(tmp)): 
+            parent_load_one = []
+            for j in range(last_node.num_agents * 2):
+                parent_load_one.append(tmp[i][j*2:(j+1)*2])
+            parent_load.append(parent_load_one)
+        last_node.parent = copy.deepcopy(parent_load)
+        # load parent_all
+        with open(load_curricula_path / 'parent_all/parent_all_0.900000','r') as fp :
+            tmp = fp.readlines()
+            for i in range(len(tmp)):
+                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
+        parent_all_load = []
+        for i in range(len(tmp)): 
+            parent_all_load_one = []
+            for j in range(last_node.num_agents * 2):
+                parent_all_load_one.append(tmp[i][j*2:(j+1)*2])
+            parent_all_load.append(parent_all_load_one)
+        last_node.parent_all = copy.deepcopy(parent_all_load)
+    # end region
+    only_eval = False
+
     # env
     envs = make_parallel_env(args)
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:
-        # share_base = ATTBase(envs.observation_space[0].shape[0], num_agents)
         actor_base = ATTBase_actor_dist_add(envs.observation_space[0].shape[0], envs.action_space[0], num_agents)
         critic_base = ATTBase_critic_add(envs.observation_space[0].shape[0], num_agents)
         actor_critic = Policy3(envs.observation_space[0], 
@@ -766,24 +915,23 @@ def main():
                     actor_base=actor_base,
                     critic_base=critic_base,
                     base_kwargs={'naive_recurrent': args.naive_recurrent_policy,
-                                 'recurrent': args.recurrent_policy,
-                                 'hidden_size': args.hidden_size,
-                                 'attn': args.attn,                                 
-                                 'attn_size': args.attn_size,
-                                 'attn_N': args.attn_N,
-                                 'attn_heads': args.attn_heads,
-                                 'dropout': args.dropout,
-                                 'use_average_pool': args.use_average_pool,
-                                 'use_common_layer':args.use_common_layer,
-                                 'use_feature_normlization':args.use_feature_normlization,
-                                 'use_feature_popart':args.use_feature_popart,
-                                 'use_orthogonal':args.use_orthogonal,
-                                 'layer_N':args.layer_N,
-                                 'use_ReLU':args.use_ReLU
-                                 },
+                                'recurrent': args.recurrent_policy,
+                                'hidden_size': args.hidden_size,
+                                'attn': args.attn,                                 
+                                'attn_size': args.attn_size,
+                                'attn_N': args.attn_N,
+                                'attn_heads': args.attn_heads,
+                                'dropout': args.dropout,
+                                'use_average_pool': args.use_average_pool,
+                                'use_common_layer':args.use_common_layer,
+                                'use_feature_normlization':args.use_feature_normlization,
+                                'use_feature_popart':args.use_feature_popart,
+                                'use_orthogonal':args.use_orthogonal,
+                                'layer_N':args.layer_N,
+                                'use_ReLU':args.use_ReLU
+                                },
                     device = device)
         actor_critic.to(device)
-        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/mixdecay4n8_finalversion/run%i/models/4agent_model.pt'%(args.seed))['model'].to(device)
         # algorithm
         agents = PPO3(actor_critic,
                    args.clip_param,
@@ -798,13 +946,16 @@ def main():
                    weight_decay=args.weight_decay,
                    max_grad_norm=args.max_grad_norm,
                    use_max_grad_norm=args.use_max_grad_norm,
-                   use_clipped_value_loss= args.use_clipped_value_loss,
+                   use_clipped_value_loss=args.use_clipped_value_loss,
                    use_common_layer=args.use_common_layer,
                    use_huber_loss=args.use_huber_loss,
+                   use_accumulate_grad=args.use_accumulate_grad,
+                   use_grad_average=args.use_grad_average,
                    huber_delta=args.huber_delta,
                    use_popart=args.use_popart,
-                   device=device)
-      
+                   device=device) 
+        if load_curricula:
+            agents.load(load_model_path=load_model_path, initial_optimizer=initial_optimizer)     
     else:
         actor_critic = []
         agents = []
@@ -853,8 +1004,7 @@ def main():
                    device=device)
                                
             actor_critic.append(ac)
-            agents.append(agent) 
-              
+            agents.append(agent)  
             #replay buffer
             ro = SingleRolloutStorage(agent_id,
                     args.episode_length, 
@@ -863,119 +1013,7 @@ def main():
                     envs.action_space,
                     args.hidden_size)
             rollouts.append(ro)
-    
-    use_novelty_sample = True
-    use_parent_sample = True
-    del_switch = 'novelty'
-    starts = []
-    buffer_length = 2000 # archive 长度
-    N_child = 325
-    N_archive = 150
-    N_parent = 25
-    max_step = 0.6
-    TB = 1
-    M = N_child
-    Rmin = 0.5
-    Rmax = 0.95
-    boundary = 3
-    start_boundary = 0.3
-    upper_bound = 0.95
-    transfer = False
-    if transfer:
-        stop_mix_signal = 1.0
-        mix_add_frequency = 30 # 改变比例的频率
-        mix_add_count = 0
-        decay_last = 0.0
-        decay_now = 1.0 - 0.5 * decay_last
-        mix_flag = False # 代表是否需要混合，90%开始混合，95%以后不再混合
-        decay = False
-        target_num = 8
-        last_box_num = 0
-        last_agent_num = last_box_num
-        now_box_num = 4
-        now_agent_num = now_box_num
-    else:
-        stop_mix_signal = upper_bound
-        mix_add_frequency = 200 # 改变比例的频率
-        mix_add_count = 0
-        decay_last = 0.4
-        decay_now = 1.0 - 0.5 * decay_last
-        mix_flag = True # 代表是否需要混合，90%开始混合，95%以后不再混合
-        decay = False
-        target_num = 8
-        last_box_num = 4
-        last_agent_num = last_box_num
-        now_box_num = 8
-        now_agent_num = now_box_num
-    load_curricula = False
-    load_curricula_path = Path('./curricula') / args.env_name / args.scenario_name / args.algorithm_name / 'run%i'%args.seed
-    if load_curricula:
-        last_agent_num = 4
-        now_agent_num = 8
-    else:
-        last_agent_num = 0
-        now_agent_num = 4
-    last_mean_cover_rate = 0
-    now_mean_cover_rate = 0
-    eval_frequency = 3 #需要fix几个回合
-    check_frequency = 1
-    save_node_frequency = 3
-    save_node_flag = False
-    save_curricula = False
-    historical_length = 5
-    next_stage_flag = 0
-    random.seed(args.seed)
-    np.random.seed(args.seed)
-    last_node = node_buffer(last_agent_num,buffer_length,
-                           archive_initial_length=int(args.n_rollout_threads),
-                           reproduction_num=M,
-                           max_step=max_step,
-                           start_boundary=start_boundary,
-                           boundary=boundary)
-    now_node = node_buffer(now_agent_num,buffer_length,
-                           archive_initial_length=int(args.n_rollout_threads),
-                           reproduction_num=M,
-                           max_step=max_step,
-                           start_boundary=start_boundary,
-                           boundary=boundary)
-    if load_curricula: # 默认从4、8混合开始训练
-        # load archive
-        with open(load_curricula_path + '/archive/archive_0.900000','r') as fp :
-            tmp = fp.readlines()
-            for i in range(len(tmp)):
-                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
-        archive_load = []
-        for i in range(len(tmp)): 
-            archive_load_one = []
-            for j in range(last_node.num_agents * 2):
-                archive_load_one.append(tmp[i][j*2:(j+1)*2])
-            archive_load.append(archive_load_one)
-        last_node.archive = copy.deepcopy(archive_load)
-        # load parent
-        with open(load_curricula_path + '/parent/parent_0.900000','r') as fp :
-            tmp = fp.readlines()
-            for i in range(len(tmp)):
-                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
-        parent_load = []
-        for i in range(len(tmp)): 
-            parent_load_one = []
-            for j in range(last_node.num_agents * 2):
-                parent_load_one.append(tmp[i][j*2:(j+1)*2])
-            parent_load.append(parent_load_one)
-        last_node.parent = copy.deepcopy(parent_load)
-        # load parent_all
-        with open(load_curricula_path + '/parent_all/parent_all_0.900000','r') as fp :
-            tmp = fp.readlines()
-            for i in range(len(tmp)):
-                tmp[i] = np.array(tmp[i][1:-2].split(),dtype=float)
-        parent_all_load = []
-        for i in range(len(tmp)): 
-            parent_all_load_one = []
-            for j in range(last_node.num_agents * 2):
-                parent_all_load_one.append(tmp[i][j*2:(j+1)*2])
-            parent_all_load.append(parent_all_load_one)
-        last_node.parent_all = copy.deepcopy(parent_all_load)
-        
+
     # run
     begin = time.time()
     episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads
@@ -984,6 +1022,8 @@ def main():
     one_length_now = args.n_rollout_threads
     starts_length_now = args.n_rollout_threads
     current_timestep = 0
+    warmup_count = 0
+    entity_count = 0
 
     for episode in range(episodes):
         if args.use_linear_lr_decay:# decrease learning rate linearly
@@ -993,27 +1033,31 @@ def main():
                 for agent_id in range(num_agents):
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
-        # reproduction_num should be changed
-        if decay:
-            if mix_add_count == mix_add_frequency and mix_flag:
-                mix_add_count = 0
-                decay_last -= 0.1
-                decay_last = max(decay_last,0.0)
-                decay_now = 1.0 - 0.5 * decay_last
-                # 停止混合
-                if decay_last == 0.0:
-                    mix_flag = False
-            wandb.log({'decay_last': decay_last},current_timestep)
-            wandb.log({'decay_now': decay_now},current_timestep)
-
+        # ratio
+        if transfer:
+            ratio_current = 1.0
+            ratio_last = 0.0
+        else:
+            if decay: 
+                if mix_add_count == mix_add_frequency and mix_flag:
+                    mix_add_count = 0
+                    ratio_current += 0.1
+                    ratio_current = min(ratio_current,1.0)
+                    ratio_last = (1.0 - ratio_current) * 2
+                    # turn off mix
+                    if np.abs(ratio_current - 1.0) <= 1e-5:
+                        mix_flag = False
+            else: # mixed switch
+                ratio_last = (1.0 - ratio_current) * 2
+        wandb.log({'ratio_current': ratio_current},current_timestep)
+        
+        # reproduction
         if mix_flag:
-            last_node.reproduction_num = round(N_child * decay_last)
-            now_node.reproduction_num = round(N_child * decay_now)
+            last_node.reproduction_num = round(N_child * ratio_last)
+            now_node.reproduction_num = round(N_child * ratio_current)
         else:
             last_node.reproduction_num = N_child
             now_node.reproduction_num = N_child
-        
-        # reproduction
         if use_novelty_sample:
             if last_node.num_agents!=0:
                 last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, logger, current_timestep)
@@ -1024,109 +1068,130 @@ def main():
             now_node.childlist += now_node.SampleNearby(now_node.parent)
         
         # reset env 
-        one_length_last = 0
-        if last_node.num_agents!=0 and mix_flag:
-            if round(N_child*decay_last) == 0 or round(N_archive*decay_last) ==0 or round(N_parent*decay_last) ==0:
-                mix_flag = False
-            if use_parent_sample:
-                starts_last, one_length_last, starts_length_last = last_node.sample_starts(round(N_child*decay_last),round(N_archive*decay_last),round(N_parent*decay_last))
-            else:
-                starts_last, one_length_last, starts_length_last = last_node.sample_starts(round(N_child*decay_last),round(N_archive*decay_last))
-            last_node.eval_score = np.zeros(shape=one_length_last)
-        if mix_flag:
-            if use_parent_sample:
-                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child*decay_now),round(N_archive*decay_now),round(N_parent*decay_now))
-            else:
-                starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child*decay_now),round(N_archive*decay_now))
-        else:
-            if use_parent_sample:
+        if transfer:
+            if use_past_sampling:
                 starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive,N_parent)
             else:
-                starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive)
-        now_node.eval_score = np.zeros(shape=one_length_now)   
-
-        for times in range(eval_frequency):
-            if mix_flag:
-                mix_add_count += 1
+                starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive) 
+            now_node.eval_score = np.zeros(shape=one_length_now) 
+        else:
             # last node
             if last_node.num_agents!=0 and mix_flag:
-                rollouts_last = collect_data(envs, actor_critic, args, last_node, starts_length_last)
-            # now node
-            rollouts_now = collect_data(envs, actor_critic, args, now_node, starts_length_now)
-
-            # update the network
-            if args.share_policy:
-                actor_critic.train()
-                if last_node.num_agents!=0 and mix_flag:
-                    wandb.log({'Type of agents': 2},current_timestep)
-                    value_loss, action_loss, dist_entropy = agents.update_double_share(last_node.num_agents, now_node.num_agents, rollouts_last, rollouts_now)
+                if use_past_sampling:
+                    starts_last, one_length_last, starts_length_last = last_node.sample_starts(round(N_child*ratio_last),round(N_archive*ratio_last),round(N_parent*ratio_last))
                 else:
-                    wandb.log({'Type of agents': 1},current_timestep)
-                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.num_agents, rollouts_now)
-                wandb.log({'value_loss': value_loss},
-                    current_timestep)
-                # clean the buffer and reset
-                if last_node.num_agents!=0 and mix_flag:
-                    rollouts_last.after_update()
-                rollouts_now.after_update()
-            else: # 需要修改成同时update的版本
-                value_losses = []
-                action_losses = []
-                dist_entropies = [] 
-                for agent_id in range(num_agents):
-                    actor_critic[agent_id].train()
-                    value_loss, action_loss, dist_entropy = agents[agent_id].update_single(agent_id, rollouts[agent_id])
-                    value_losses.append(value_loss)
-                    action_losses.append(action_loss)
-                    dist_entropies.append(dist_entropy)
-                    rew = []
-                    for i in range(rollouts[agent_id].rewards.shape[1]):
-                        rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
-                    wandb.log({'average_episode_reward': np.mean(rew)},
-                        (episode+1) * args.episode_length * one_length*eval_frequency)
-                    rollouts[agent_id].after_update()
+                    starts_last, one_length_last, starts_length_last = last_node.sample_starts(round(N_child*ratio_last),round(N_archive*ratio_last))
+                last_node.eval_score = np.zeros(shape=one_length_last)
+            # now node
+            if mix_flag:
+                if use_past_sampling:
+                    starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child*ratio_current),round(N_archive*ratio_current),round(N_parent*ratio_current))
+                else:
+                    starts_now, one_length_now, starts_length_now = now_node.sample_starts(round(N_child*ratio_current),round(N_archive*ratio_current))
+            else:
+                if use_past_sampling:
+                    starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive,N_parent)
+                else:
+                    starts_now, one_length_now, starts_length_now = now_node.sample_starts(N_child,N_archive)
+            now_node.eval_score = np.zeros(shape=one_length_now)
 
-        # move nodes
-        if last_node.num_agents!=0 and mix_flag:
-            last_node.eval_score = last_node.eval_score / eval_frequency
-            last_node.move_nodes(one_length_last, Rmax, Rmin, del_switch, logger, current_timestep)
-        now_node.eval_score = now_node.eval_score / eval_frequency
-        now_node.move_nodes(one_length_now, Rmax, Rmin, del_switch, logger, current_timestep)
-        print('last_node_parent: ', len(last_node.parent))
-        print('now_node_parent: ', len(now_node.parent))
-        # 需要改路径
-        if (episode+1) % save_node_frequency ==0 and save_node_flag:
-            last_node.save_node(save_node_dir, episode)
-            now_node.save_node(save_node_dir, episode)
+        if not only_eval:
+            for times in range(eval_frequency):
+                if transfer:
+                    # now node
+                    rollouts_now, current_timestep = collect_data(envs, agents, agents.actor_critic, args, now_node, starts_now, starts_length_now, one_length_now, current_timestep)
+                else:
+                    if decay:
+                        if mix_flag: mix_add_count += 1
+                    # last node
+                    if last_node.num_agents!=0 and mix_flag:
+                        rollouts_last, current_timestep = collect_data(envs, agents, agents.actor_critic, args, last_node, starts_last, starts_length_last, one_length_last, current_timestep)
+                    # now node
+                    rollouts_now, current_timestep = collect_data(envs, agents, agents.actor_critic, args, now_node, starts_now, starts_length_now, one_length_now, current_timestep)
+
+                # update the network
+                if args.share_policy:
+                    agents.actor_critic.train()
+                    if warmup_count >= warmup_iter:
+                        warm_up = False
+                    if transfer:
+                        wandb.log({'Type of agents': 1}, current_timestep)
+                        value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.num_agents, rollouts_now, warm_up=warm_up)
+                    else:
+                        if last_node.num_agents!=0 and mix_flag:
+                            wandb.log({'Type of agents': 2}, current_timestep)
+                            value_loss, action_loss, dist_entropy = agents.update_double_share(last_node.num_agents, now_node.num_agents, rollouts_last, rollouts_now)
+                            # clean the buffer and reset
+                            rollouts_last.after_update()
+                        else:
+                            wandb.log({'Type of agents': 1},current_timestep)
+                            value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.num_agents, rollouts_now, warm_up=False)
+                    wandb.log({'value_loss': value_loss},current_timestep)
+                    warmup_count += 1
+                    rollouts_now.after_update()
+                else: # 需要修改成同时update的版本
+                    value_losses = []
+                    action_losses = []
+                    dist_entropies = [] 
+                    for agent_id in range(num_agents):
+                        agents.actor_critic[agent_id].train()
+                        value_loss, action_loss, dist_entropy = agents[agent_id].update_single(agent_id, rollouts[agent_id])
+                        value_losses.append(value_loss)
+                        action_losses.append(action_loss)
+                        dist_entropies.append(dist_entropy)
+                        rew = []
+                        for i in range(rollouts[agent_id].rewards.shape[1]):
+                            rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
+                        wandb.log({'average_episode_reward': np.mean(rew)},
+                            (episode+1) * args.episode_length * one_length*eval_frequency)
+                        rollouts[agent_id].after_update()
+
+            # move nodes
+            if last_node.num_agents!=0 and mix_flag:
+                last_node.eval_score = last_node.eval_score / eval_frequency
+                last_node.move_nodes(one_length_last, Rmax, Rmin, del_switch, logger, current_timestep)
+            now_node.eval_score = now_node.eval_score / eval_frequency
+            now_node.move_nodes(one_length_now, Rmax, Rmin, del_switch, logger, current_timestep)
+            # save node
+            if (episode+1) % save_node_frequency ==0 and save_node_flag:
+                last_node.save_node(save_node_dir, episode)
+                now_node.save_node(save_node_dir, episode)
         
         # region evaluation
         if episode % check_frequency==0:
-            # last 
-            eval_agent_nums = last_node.num_agents
-            mean_cover_rate_last, mean_success_rate_last, collision_num_last, eval_episode_reward_last = evaluation(envs, actor_critic, args, eval_agent_nums)
-            wandb.log({str(eval_num_agents) + 'cover_rate': mean_cover_rate_last}, current_timestep)
-            wandb.log({str(eval_num_agents) + 'success_rate': mean_success_rate_last}, current_timestep)
-            wandb.log({str(eval_num_agents) + 'test_collision_num': collision_num_last}, current_timestep)
-            wandb.log({str(eval_num_agents) + 'eval_episode_reward': eval_episode_reward_last}, current_timestep)
-            # now
-            eval_agent_nums = args.eval_num_agents
-            mean_cover_rate_now, mean_success_rate_now, collision_num_now, eval_episode_reward_now = evaluation(envs, actor_critic, args, eval_agent_nums)
-            wandb.log({str(eval_num_agents) + 'cover_rate': mean_cover_rate_now}, current_timestep)
-            wandb.log({str(eval_num_agents) + 'success_rate': mean_success_rate_now}, current_timestep)
-            wandb.log({str(eval_num_agents) + 'test_collision_num': collision_num_now}, current_timestep)
-            wandb.log({str(eval_num_agents) + 'eval_episode_reward': eval_episode_reward_now}, current_timestep)
+            print('----------evaluation-------------')
+            # current
+            eval_num_agents = now_node.num_agents
+            mean_cover_rate_current, mean_success_rate_current, collision_num_current, eval_episode_reward_current = evaluation(envs, agents.actor_critic, args, eval_num_agents, current_timestep)
+            print('current cover rate ' + str(eval_num_agents) + ': ',mean_cover_rate_current)
+            wandb.log({str(eval_num_agents) + 'cover_rate': mean_cover_rate_current}, current_timestep)
+            wandb.log({str(eval_num_agents) + 'success_rate': mean_success_rate_current}, current_timestep)
+            wandb.log({str(eval_num_agents) + 'test_collision_num': collision_num_current}, current_timestep)
+            wandb.log({str(eval_num_agents) + 'eval_episode_reward': eval_episode_reward_current}, current_timestep)
+            # # target
+            # if eval_num_agents != args.eval_num_agents:
+            #     eval_num_agents = args.eval_num_agents
+            #     mean_cover_rate_target, mean_success_rate_target, collision_num_target, eval_episode_reward_target = evaluation(envs, actor_critic, args, eval_num_agents, current_timestep)
+            #     print('target cover rate ' + str(eval_num_agents) + ': ',mean_cover_rate_target)
+            #     wandb.log({str(eval_num_agents) + 'cover_rate': mean_cover_rate_target}, current_timestep)
+            #     wandb.log({str(eval_num_agents) + 'success_rate': mean_success_rate_target}, current_timestep)
+            #     wandb.log({str(eval_num_agents) + 'test_collision_num': collision_num_target}, current_timestep)
+            #     wandb.log({str(eval_num_agents) + 'eval_episode_reward': eval_episode_reward_target}, current_timestep)
         # end region
         
         # region entity curriculum
-        if mean_cover_rate_now >= upper_bound and now_node.num_agents < target_num:
-            mean_cover_rate_now = 0
+        if mean_cover_rate_current >= upper_bound:
+            entity_count += 1
+        if entity_count >= eval_frequency and now_node.num_agents < target_num:
+            mean_cover_rate_current = 0
             last_agent_num = now_node.num_agents
             now_agent_num = min(last_agent_num * 2,target_num)
             add_num = now_agent_num - last_agent_num
             if add_num!=0:
                 if args.share_policy:
-                    torch.save({'model': actor_critic}, str(save_dir) + "/%iagent_model.pt"%now_node.num_agents)
-                            mix_flag = True
+                    # save model when switch
+                    save(str(save_dir) + "/%iagent_model_"%now_node.num_agents + str(upper_bound) + '.pt' , agents)
+                    mix_flag = True
                     last_node = copy.deepcopy(now_node)
                     if save_curricula:
                         last_node.save_phase_curricula(save_curricula_dir, upper_bound)
@@ -1137,33 +1202,30 @@ def main():
                                 max_step=max_step,
                                 start_boundary=start_boundary,
                                 boundary=boundary)
-                    actor_critic.agents_num = now_node.num_agents
+                    agents.actor_critic.num_agents = now_node.num_agents
                     if now_node.num_agents==8:
                         agents.num_mini_batch = 16
-            else:
-                last_node.num_agents = 0
-                one_length_last = 0
         # end region
                         
-        # region end mix
-        if mean_cover_rate_now > stop_mix_signal:
-            mix_flag = False
-            decay_last = 0.0
-            decay_now = 1.0
+        # region turn off mixed_switch
+        if not transfer:
+            if not decay:
+                if mean_cover_rate_current > stop_mix_signal:
+                    print('---Turn off mixed-switch---')
+                    mix_flag = False
+                    decay_last = 0.0
+                    decay_now = 1.0
         # end region
 
         total_num_steps = current_timestep
 
         if (episode % args.save_interval == 0 or episode == episodes - 1):# save for every interval-th episode or for the last epoch
             if args.share_policy:
-                torch.save({
-                            'model': actor_critic
-                            }, 
-                            str(save_dir) + "/agent_model.pt")
+                torch.save({'model': agents.actor_critic}, str(save_dir) + "/agent_model.pt")
             else:
                 for agent_id in range(num_agents):                                                  
                     torch.save({
-                                'model': actor_critic[agent_id]
+                                'model': agents.actor_critic[agent_id]
                                 }, 
                                 str(save_dir) + "/agent%i_model" % agent_id + ".pt")
 
@@ -1178,11 +1240,6 @@ def main():
                         total_num_steps,
                         args.num_env_steps,
                         int(total_num_steps / (end - begin))))
-            if args.share_policy:
-                print("value loss of agent: " + str(value_loss))
-            else:
-                for agent_id in range(num_agents):
-                    print("value loss of agent%i: " % agent_id + str(value_losses[agent_id]))
                 
     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
     logger.close()

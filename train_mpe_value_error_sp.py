@@ -385,16 +385,16 @@ class goal_proposal():
             one_starts_landmark = []
         return archive
 
-    def uniform_sampling(self, starts_length):
+    def uniform_sampling(self, starts_length, boundary):
         if self.env_name == 'simple_spread':
             one_starts_landmark = []
             one_starts_agent = []
             archive = [] 
             for j in range(starts_length):
                 for i in range(self.num_agents): 
-                    landmark_location = np.array([np.random.uniform(self.boundary['x'][0],self.boundary['x'][1]),np.random.uniform(self.boundary['y'][0],self.boundary['y'][1])])
+                    landmark_location = np.array([np.random.uniform(boundary['x'][0],boundary['x'][1]),np.random.uniform(boundary['y'][0],boundary['y'][1])])
                     one_starts_landmark.append(copy.deepcopy(landmark_location))
-                    agent_location = np.array([np.random.uniform(self.boundary['x'][0],self.boundary['x'][1]),np.random.uniform(self.boundary['y'][0],self.boundary['y'][1])])
+                    agent_location = np.array([np.random.uniform(boundary['x'][0],boundary['x'][1]),np.random.uniform(boundary['y'][0],boundary['y'][1])])
                     one_starts_agent.append(copy.deepcopy(agent_location))
                 archive.append(one_starts_agent+one_starts_landmark)
                 one_starts_agent = []
@@ -711,7 +711,7 @@ def main():
 
         # region goal proposal
         # uniform sampling = exploration
-        starts = goal_proposal_module.uniform_sampling(buffer_capacity)
+        starts = goal_proposal_module.uniform_sampling(buffer_capacity, boundary)
         obs = []
         for epoch_id in range(int(buffer_capacity/proposal_batch)):
             obs_epoch = envs.new_starts_obs(starts[epoch_id*proposal_batch:(epoch_id+1)*proposal_batch], num_agents, proposal_batch)
@@ -726,12 +726,13 @@ def main():
         starts_proposal, average_TD_error = goal_proposal_module.TD_error_sampling(args, starts, envs, actor_critic, starts_share_obs,starts_obs,
                                                                             starts_recurrent_hidden_states,starts_recurrent_hidden_states_critic,
                                                                             starts_masks)
-        easy_starts = goal_proposal_module.easy_sampling(starts_length=easy_batch, start_boundary=easy_boundary)
-        starts_proposal += easy_starts
+        easy_starts = goal_proposal_module.uniform_sampling(starts_length=easy_batch, boundary=easy_boundary)
+        # starts_proposal += easy_starts
+        training_batch = starts_proposal + easy_starts
         wandb.log({'average_TD_error': average_TD_error},current_timestep)
         # end region
 
-        obs = envs.new_starts_obs(starts_proposal, num_agents, args.n_rollout_threads)
+        obs = envs.new_starts_obs(training_batch, num_agents, args.n_rollout_threads)
         #replay buffer
         rollouts = RolloutStorage(num_agents,
                     args.episode_length, 
@@ -943,7 +944,8 @@ def main():
 
         # test
         if episode % check_frequency==0:
-            obs, _ = envs.reset(num_agents)
+            test_starts = goal_proposal_module.uniform_sampling(args.n_rollout_threads,boundary)
+            obs = envs.new_starts_obs(test_starts, num_agents, args.n_rollout_threads)
             episode_length = 70
             #replay buffer
             rollouts = RolloutStorage(num_agents,

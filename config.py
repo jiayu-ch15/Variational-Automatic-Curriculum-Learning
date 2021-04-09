@@ -6,6 +6,7 @@ def get_config():
 
     # prepare
     parser.add_argument("--algorithm_name", type=str, default='mappo')
+    parser.add_argument("--load_algorithm_name", type=str, default='mappo')
     parser.add_argument("--seed", type=int, default=1)
     parser.add_argument("--cuda", action='store_false', default=True)
     parser.add_argument("--cuda_deterministic", action='store_false', default=True)
@@ -15,6 +16,7 @@ def get_config():
     
     # env
     parser.add_argument("--env_name", type=str, default='batch1')
+    parser.add_argument("--load_num_agents", type=int, default=3)
     parser.add_argument("--num_agents", type=int, default=3)
     parser.add_argument("--share_reward", action='store_false', default=True)
     parser.add_argument("--eval_num_agents", type=int, default=3)
@@ -26,6 +28,9 @@ def get_config():
     parser.add_argument("--num_landmarks", type=int, default=3)
     parser.add_argument("--num_good_agents", type=int, default=3)
     parser.add_argument("--num_adversaries", type=int, default=1)
+
+    # evaluation
+    parser.add_argument("--historical_length", type=int, default=5)
     
     # do not need num_agents
     # starcraft2
@@ -81,6 +86,8 @@ def get_config():
     parser.add_argument("--use-proper-time-limits", action='store_true', default=False, help='compute returns taking into account time limits')
     parser.add_argument("--use_huber_loss", action='store_false', default=True)
     parser.add_argument("--huber_delta", type=float, default=10.0)   
+    parser.add_argument("--use_accumulate_grad", action='store_true', default=False)
+    parser.add_argument("--use_grad_average", action='store_true', default=False)
     
     # replay buffer
     parser.add_argument("--episode_length", type=int, default=200, help='number of forward steps in A2C (default: 5)')

@@ -222,8 +222,8 @@ def main():
     timesteps = 0
     starts = []
     boundary_easy = 0.3
-    boundary = 3
-    num_easy = 100
+    boundary = 1
+    num_easy = 0
     num_uniform = args.n_rollout_threads - num_easy
 
     for episode in range(episodes):

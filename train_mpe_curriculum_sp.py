@@ -509,6 +509,8 @@ def main():
                    use_clipped_value_loss= args.use_clipped_value_loss,
                    use_common_layer=args.use_common_layer,
                    use_huber_loss=args.use_huber_loss,
+                   use_accumulate_grad=args.use_accumulate_grad,
+                   use_grad_average=args.use_grad_average,
                    huber_delta=args.huber_delta,
                    use_popart=args.use_popart,
                    device=device)
@@ -775,7 +777,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False) 
                 print('value_loss: ', value_loss)
                 wandb.log(
                     {'value_loss': value_loss},
