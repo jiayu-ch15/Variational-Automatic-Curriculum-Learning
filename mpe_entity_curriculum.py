@@ -801,7 +801,7 @@ def main():
         mix_flag = False
         decay = True
         stop_mix_signal = upper_bound
-        mix_add_frequency = 1 # 改变比例的频率
+        mix_add_frequency = 30 # 改变比例的频率
         mix_add_count = 0
         ratio_current = 0.1
         if decay:
@@ -836,9 +836,9 @@ def main():
     
     # region load curricula and model
     load_curricula = True
-    initial_optimizer = False
+    initial_optimizer = True
     warm_up = False
-    warmup_iter = 30
+    warmup_iter = 150
     load_model_path = None
     if load_curricula: # 默认从4、8混合开始训练
         # load path

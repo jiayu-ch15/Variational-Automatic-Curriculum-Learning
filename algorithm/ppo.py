@@ -1067,8 +1067,8 @@ class PPO3():# actor_critic分开
         checkpoints = torch.load(load_model_path, map_location=self.device)
         self.actor_critic = checkpoints['model']
         if initial_optimizer:
-            self.optimizer_actor = optim.Adam(actor_critic.actor_base.parameters(), lr=lr, eps=eps, weight_decay=weight_decay)
-            self.optimizer_critic = optim.Adam(actor_critic.critic_base.parameters(), lr=lr, eps=eps, weight_decay=weight_decay)
+            self.optimizer_actor = optim.Adam(self.actor_critic.actor_base.parameters(), lr=self.lr, eps=self.eps, weight_decay=self.weight_decay)
+            self.optimizer_critic = optim.Adam(self.actor_critic.critic_base.parameters(), lr=self.lr, eps=self.eps, weight_decay=self.weight_decay)
         else:
             self.optimizer_actor = checkpoints['optimizer_actor']
             self.optimizer_critic = checkpoints['optimizer_critic']
