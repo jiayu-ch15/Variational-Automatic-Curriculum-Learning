@@ -53,6 +53,7 @@ def get_config():
     parser.add_argument("--use_feature_normlization", action='store_false', default=True)   
     parser.add_argument("--use_orthogonal", action='store_false', default=True) 
     parser.add_argument("--multi_critic", action='store_true', default=False) 
+    parser.add_argument("--critic_k", type=int, default=3)
     
     # lstm
     parser.add_argument("--naive_recurrent_policy", action='store_true', default=False, help='use a naive recurrent policy')
@@ -78,7 +79,7 @@ def get_config():
     parser.add_argument("--lr", type=float, default=5e-4, help='learning rate (default: 7e-4)')
     parser.add_argument("--eps", type=float, default=1e-5, help='RMSprop optimizer epsilon (default: 1e-5)')
     parser.add_argument("--weight_decay", type=float, default=0)
-    parser.add_argument("--use-max-grad-norm", action='store_false', default=True)
+    parser.add_argument("--use-max-grad-norm", action='store_true', default=False)
     parser.add_argument("--max-grad-norm", type=float, default=20.0, help='max norm of gradients (default: 0.5)')
     parser.add_argument("--use-gae", action='store_false', default=True, help='use generalized advantage estimation')
     parser.add_argument("--gamma", type=float, default=0.99, help='discount factor for rewards (default: 0.99)')

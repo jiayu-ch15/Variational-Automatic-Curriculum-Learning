@@ -14,6 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO,PPO4
+from algorithm.autocurriculum import node_buffer, value_disagreement_score, evaluation, collect_data, save
 from algorithm.model import Policy,Policy4, ATTBase_add, ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
@@ -49,385 +50,6 @@ def make_parallel_env(args):
         return DummyVecEnv([get_env_fn(0)])
     else:
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
-
-class node_buffer():
-    def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
-        self.agent_num = agent_num
-        self.buffer_length = buffer_length
-        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
-        self.archive_novelty = self.get_novelty(self.archive,self.archive)
-        self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
-        self.childlist = []
-        self.hardlist = []
-        self.parent = []
-        self.parent_all = []
-        self.max_step = max_step
-        self.boundary = boundary
-        self.reproduction_num = reproduction_num
-        self.choose_child_index = []
-        self.choose_archive_index = []
-        self.eval_score = np.zeros(shape=len(self.archive))
-        self.topk = 5
-
-    def produce_good_case(self, num_case, start_boundary, now_agent_num):
-        one_starts_landmark = []
-        one_starts_agent = []
-        archive = [] 
-        for j in range(num_case):
-            for i in range(now_agent_num):
-                # landmark_location = np.random.uniform(-start_boundary, +start_boundary, 2) 
-                landmark_location = np.array([np.random.uniform(start_boundary[0],start_boundary[1]),np.random.uniform(start_boundary[2],start_boundary[3])])
-                one_starts_landmark.append(copy.deepcopy(landmark_location))
-            # index_sample = BatchSampler(SubsetRandomSampler(range(now_agent_num)),now_agent_num,drop_last=True)
-            indices = random.sample(range(now_agent_num), now_agent_num)
-            for k in indices:
-                epsilon = -2 * 0.01 * random.random() + 0.01
-                one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
-            # select_starts.append(one_starts_agent+one_starts_landmark)
-            archive.append(one_starts_agent+one_starts_landmark)
-            one_starts_agent = []
-            one_starts_landmark = []
-        return archive
-
-    def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
-        # agent_size=0.1
-        cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size) + 1
-        grid = np.zeros(shape=(grid_num,grid_num))
-        one_starts_landmark = []
-        one_starts_landmark_grid = []
-        one_starts_agent = []
-        archive = [] 
-        for j in range(num_case):
-            for i in range(now_agent_num):
-                while 1:
-                    landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    extra_room = np.random.uniform(-0.05, +0.05, 2) 
-                    if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
-                        continue
-                    else:
-                        grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
-                        one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + extra_room -start_boundary
-                        one_starts_landmark.append(copy.deepcopy(landmark_location))
-                        break
-            indices = random.sample(range(now_agent_num), now_agent_num)
-            for k in indices:
-                epsilons = np.array([[-1,0],[1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]])
-                epsilon = epsilons[random.sample(range(8),8)]
-                # extra_room = -2 * 0.02 * random.random() + 0.02
-                for epsilon_id in range(epsilon.shape[0]):
-                    agent_location_grid = one_starts_landmark_grid[k] + epsilon[epsilon_id]
-                    if agent_location_grid[0] >= grid.shape[0]:
-                        agent_location_grid[0] = grid.shape[0]-1
-                    if agent_location_grid[1] >= grid.shape[1]:
-                        agent_location_grid[1] = grid.shape[1]-1
-                    if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
-                        grid[agent_location_grid[0],agent_location_grid[1]]=2
-                        break
-                noise = np.random.uniform(-0.01, +0.01)
-                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary+noise
-                one_starts_agent.append(copy.deepcopy(agent_location))
-            # select_starts.append(one_starts_agent+one_starts_landmark)
-            archive.append(one_starts_agent+one_starts_landmark)
-            grid = np.zeros(shape=(grid_num,grid_num))
-            one_starts_agent = []
-            one_starts_landmark_grid = []
-            one_starts_landmark = []
-        return archive
-
-    def get_novelty(self,list1,list2):
-        # list1是需要求novelty的
-        topk=5
-        dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
-        if len(list2) < topk+1:
-            dist_k = dist
-            novelty = np.sum(dist_k,axis=1)/len(list2)
-        else:
-            dist_k = np.partition(dist,topk+1,axis=1)[:,0:topk+1]
-            novelty = np.sum(dist_k,axis=1)/topk
-        return novelty
-
-    def novelty_sort(self, buffer, buffer_novelty):
-        zipped = zip(buffer,buffer_novelty)
-        sort_zipped = sorted(zipped,key=lambda x:(x[1],np.mean(x[0])))
-        result = zip(*sort_zipped)
-        buffer_new, buffer_novelty_new = [list(x) for x in result]
-        return buffer_new, buffer_novelty_new
-
-    def SampleNearby_novelty(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
-        if len(self.parent_all) > self.topk + 1:
-            self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
-            self.parent_all, self.parent_all_novelty = self.novelty_sort(self.parent_all, self.parent_all_novelty)
-            novelty_threshold = np.mean(self.parent_all_novelty)
-        else:
-            novelty_threshold = 0
-        # novelty_threshold = child_novelty_threshold
-        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
-        parents = parents + []
-        len_start = len(parents)
-        child_new = []
-        if parents==[]:
-            return []
-        else:
-            add_num = 0
-            while add_num < self.reproduction_num:
-                for k in range(len_start):
-                    st = copy.deepcopy(parents[k])
-                    s_len = len(st)
-                    for i in range(s_len):
-                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
-                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
-                        st[i][0] = st[i][0] + epsilon_x
-                        st[i][1] = st[i][1] + epsilon_y
-                        if st[i][0] > self.boundary:
-                            st[i][0] = self.boundary - random.random()*0.01
-                        if st[i][0] < -self.boundary:
-                            st[i][0] = -self.boundary + random.random()*0.01
-                        if st[i][1] > self.boundary:
-                            st[i][1] = self.boundary - random.random()*0.01
-                        if st[i][1] < -self.boundary:
-                            st[i][1] = -self.boundary + random.random()*0.01
-                    if len(self.parent_all) > self.topk + 1:
-                        if self.get_novelty([st],self.parent_all) > novelty_threshold:
-                            child_new.append(copy.deepcopy(st))
-                            add_num += 1
-                    else:
-                        child_new.append(copy.deepcopy(st))
-                        add_num += 1
-            child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
-            return child_new
-
-    def SampleNearby(self, starts): # produce new children and return
-        starts = starts + []
-        len_start = len(starts)
-        starts_new = []
-        if starts==[]:
-            return []
-        else:
-            add_num = 0
-            while add_num < self.reproduction_num:
-                for i in range(len_start):
-                    st = copy.deepcopy(starts[i])
-                    s_len = len(st)
-                    for i in range(s_len):
-                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
-                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
-                        st[i][0] = st[i][0] + epsilon_x
-                        st[i][1] = st[i][1] + epsilon_y
-                        if st[i][0] > self.boundary:
-                            st[i][0] = self.boundary - random.random()*0.01
-                        if st[i][0] < -self.boundary:
-                            st[i][0] = -self.boundary + random.random()*0.01
-                        if st[i][1] > self.boundary:
-                            st[i][1] = self.boundary - random.random()*0.01
-                        if st[i][1] < -self.boundary:
-                            st[i][1] = -self.boundary + random.random()*0.01
-                    starts_new.append(copy.deepcopy(st))
-                    add_num += 1
-            starts_new = random.sample(starts_new, self.reproduction_num)
-            return starts_new
-
-    def sample_starts(self, N_child, N_archive, N_parent=0):
-        self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
-        self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
-        self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_child + N_archive + N_parent - len(self.choose_child_index)-len(self.choose_parent_index)))
-        if len(self.choose_archive_index) < N_archive:
-            self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child + N_archive + N_parent - len(self.choose_archive_index)-len(self.choose_parent_index)))
-        if len(self.choose_child_index) < N_child:
-            self.choose_parent_index = random.sample(range(len(self.parent_all)), min(len(self.parent_all), N_child + N_archive + N_parent - len(self.choose_archive_index)-len(self.choose_child_index)))
-        self.choose_child_index = np.sort(self.choose_child_index)
-        self.choose_archive_index = np.sort(self.choose_archive_index)
-        self.choose_parent_index = np.sort(self.choose_parent_index)
-        one_length = len(self.choose_child_index) + len(self.choose_archive_index) # 需要搬运的点个数
-        starts_length = len(self.choose_child_index) + len(self.choose_archive_index) + len(self.choose_parent_index)
-        starts = []
-        for i in range(len(self.choose_child_index)):
-            starts.append(self.childlist[self.choose_child_index[i]])
-        for i in range(len(self.choose_archive_index)):
-            starts.append(self.archive[self.choose_archive_index[i]])
-        for i in range(len(self.choose_parent_index)):
-            starts.append(self.parent_all[self.choose_parent_index[i]])
-        print('sample_archive: ', len(self.choose_archive_index))
-        print('sample_childlist: ', len(self.choose_child_index))
-        print('sample_parent: ', len(self.choose_parent_index))
-        return starts, one_length, starts_length
-    
-    def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
-        del_child_num = 0
-        del_archive_num = 0
-        del_easy_num = 0
-        add_hard_num = 0
-        drop_num = 0
-        self.parent = []
-        child2archive = []
-        for i in range(one_length):
-            if i < len(self.choose_child_index):
-                if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
-                    child2archive.append(copy.deepcopy(self.childlist[self.choose_child_index[i]-del_child_num]))
-                    del self.childlist[self.choose_child_index[i]-del_child_num]
-                    del_child_num += 1
-                elif self.eval_score[i] > Rmax:
-                    del self.childlist[self.choose_child_index[i]-del_child_num]
-                    del_child_num += 1
-                    drop_num += 1
-                else:
-                    self.hardlist.append(copy.deepcopy(self.childlist[self.choose_child_index[i]-del_child_num]))
-                    del self.childlist[self.choose_child_index[i]-del_child_num]
-                    del_child_num += 1
-                    add_hard_num += 1
-            else:
-                if self.eval_score[i]>Rmax:
-                    self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i-len(self.choose_child_index)]-del_archive_num]))
-                    del self.archive[self.choose_archive_index[i-len(self.choose_child_index)]-del_archive_num]
-                    del_archive_num += 1
-        if use_child_novelty and len(child2archive)!=0:
-            child2archive_novelty = self.get_novelty(child2archive,self.parent_all)
-            child2archive, child2archive_novelty = self.novelty_sort(child2archive,child2archive_novelty)
-            for i in range(len(child2archive)):
-                if child2archive_novelty[i] > child_novelty_threshold:
-                    self.archive.append(child2archive[i])
-            # child2archive = child2archive[int(len(child2archive)/2):]
-        else:
-            self.archive += child2archive
-        # self.archive += child2archive
-        if use_parent_novelty:
-            start_sort = time.time()
-            parent_novelty = []
-            if len(self.parent_all) > self.topk+1 and self.parent!=[]:
-                parent_novelty = self.get_novelty(self.parent,self.parent_all)
-                self.parent, parent_novelty = self.novelty_sort(self.parent, parent_novelty)
-                self.parent = self.parent[int(len(self.parent)/2):]
-            end_sort = time.time()
-            print('sort_archive: ', end_sort-start_sort)
-        self.parent_all += self.parent
-        print('child_drop: ', drop_num)
-        print('add_hard_num: ', add_hard_num )
-        print('parent: ', len(self.parent))
-        if len(self.childlist) > self.buffer_length:
-            self.childlist = self.childlist[len(self.childlist)-self.buffer_length:]
-        if len(self.archive) > self.buffer_length:
-            if del_switch=='novelty' : # novelty del
-                self.archive_novelty = self.get_novelty(self.archive,self.archive)
-                self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
-                self.archive = self.archive[len(self.archive)-self.buffer_length:]
-            elif del_switch=='random': # random del
-                del_num = len(self.archive) - self.buffer_length
-                del_index = random.sample(range(len(self.archive)),del_num)
-                del_index = np.sort(del_index)
-                del_archive_num = 0
-                for i in range(del_num):
-                    del self.archive[del_index[i]-del_archive_num]
-                    del_archive_num += 1
-            else: # old del
-                self.archive = self.archive[len(self.archive)-self.buffer_length:]
-        if len(self.parent_all) > self.buffer_length:
-            self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
-        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
-        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
-        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
-        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
-    
-    def save_node(self, dir_path, episode):
-        # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
-        if self.agent_num!=0:
-            save_path = dir_path / ('%iagents' % (self.agent_num))
-            if not os.path.exists(save_path):
-                os.makedirs(save_path / 'childlist')
-                os.makedirs(save_path / 'archive')
-                os.makedirs(save_path / 'archive_novelty')
-                os.makedirs(save_path / 'parent')
-                os.makedirs(save_path / 'parent_all')
-            with open(save_path / 'childlist'/ ('child_%i' %(episode)),'w+') as fp:
-                for line in self.childlist:
-                    fp.write(str(np.array(line).reshape(-1))+'\n')
-            with open(save_path / 'archive' / ('archive_%i' %(episode)),'w+') as fp:
-                for line in self.archive:
-                    fp.write(str(np.array(line).reshape(-1))+'\n')
-            self.novelty = self.get_novelty(self.archive,self.archive)
-            with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
-                for line in self.archive_novelty:
-                    fp.write(str(np.array(line).reshape(-1))+'\n')
-            with open(save_path / 'parent' / ('parent_%i' %(episode)),'w+') as fp:
-                for line in self.parent:
-                    fp.write(str(np.array(line).reshape(-1))+'\n')
-            with open(save_path / 'parent_all' / ('parent_all_%i' %(episode)),'w+') as fp:
-                for line in self.parent_all:
-                    fp.write(str(np.array(line).reshape(-1))+'\n')
-        else:
-            return 0
-
-class goal_proposal():
-    def __init__(self,num_agents, boundary, env_name, critic_k, buffer_capacity, proposal_batch):
-        # TODO: zip env parameters
-        self.num_agents = num_agents
-        self.boundary = boundary
-        self.env_name = env_name
-        self.critic_k = critic_k
-        self.buffer_capacity = buffer_capacity
-        self.proposal_batch = proposal_batch
-
-    # def easy_sampling(self, starts_length, start_boundary):
-    #     one_starts_landmark = []
-    #     one_starts_agent = []
-    #     archive = [] 
-    #     for j in range(starts_length):
-    #         for i in range(self.num_agents):
-    #             landmark_location = np.array([np.random.uniform(start_boundary['x'][0],start_boundary['x'][1]),np.random.uniform(start_boundary['y'][0],start_boundary['y'][1])])
-    #             one_starts_landmark.append(copy.deepcopy(landmark_location))
-    #         indices = random.sample(range(self.num_agents), self.num_agents)
-    #         for k in indices:
-    #             epsilon = -2 * 0.01 * random.random() + 0.01
-    #             one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
-    #         # select_starts.append(one_starts_agent+one_starts_landmark)
-    #         archive.append(one_starts_agent+one_starts_landmark)
-    #         one_starts_agent = []
-    #         one_starts_landmark = []
-    #     return archive
-
-    def uniform_sampling(self, starts_length, boundary):
-        if self.env_name == 'simple_spread':
-            one_starts_landmark = []
-            one_starts_agent = []
-            archive = [] 
-            for j in range(starts_length):
-                for i in range(self.num_agents): 
-                    landmark_location = np.array([np.random.uniform(boundary['x'][0],boundary['x'][1]),np.random.uniform(boundary['y'][0],boundary['y'][1])])
-                    one_starts_landmark.append(copy.deepcopy(landmark_location))
-                    agent_location = np.array([np.random.uniform(boundary['x'][0],boundary['x'][1]),np.random.uniform(boundary['y'][0],boundary['y'][1])])
-                    one_starts_agent.append(copy.deepcopy(agent_location))
-                archive.append(one_starts_agent+one_starts_landmark)
-                one_starts_agent = []
-                one_starts_landmark = []
-            return archive
-
-    def value_disagreement_sampling(self, starts, actor_critic, starts_share_obs, starts_obs, starts_recurrent_hidden_states, starts_recurrent_hidden_states_critic, starts_masks):
-        starts_value_list = np.zeros((self.buffer_capacity, self.num_agents, self.critic_k)).astype(np.float32)
-        for agent_id in range(self.num_agents):
-            starts_value,_,_ = actor_critic.get_value(
-                                        torch.FloatTensor(starts_share_obs[:,agent_id]),
-                                        torch.FloatTensor(starts_obs[:,agent_id]),
-                                        torch.FloatTensor(starts_recurrent_hidden_states[:,agent_id]),
-                                        torch.FloatTensor(starts_recurrent_hidden_states_critic[:,agent_id]),
-                                        torch.FloatTensor(starts_masks[:,agent_id]))
-            starts_value = starts_value.detach().cpu().numpy().squeeze(-1)
-            starts_value_list[:,agent_id,:] = starts_value
-        # deal with multi-agent, VDN or Q-mix
-        starts_value_list = np.sum(starts_value_list,axis=1)
-        # value std
-        starts_value_list = np.std(starts_value_list,axis=1)
-        average_value_disagreement = np.mean(starts_value_list)
-        # probability
-        starts_value_list = starts_value_list / np.sum(starts_value_list)
-        starts_index = np.arange(0,self.buffer_capacity,1)
-        # no repeat sampling
-        starts_proposal_index = np.random.choice(starts_index,size=self.proposal_batch,replace=False,p=starts_value_list)
-        starts_proposal = []
-        for start_id in range(len(starts_proposal_index)):
-            starts_proposal.append(starts[starts_proposal_index[start_id]])
-        # end region
-        return starts_proposal, average_value_disagreement
-        
 
 def main():
     args = get_config()
@@ -482,13 +104,22 @@ def main():
     # env
     envs = make_parallel_env(args)
     num_agents = args.num_agents
-    critic_k = 10
+    critic_k = 3
+    use_novelty_sample = True
+    use_past_sampling = True
+    use_running_average = False
+    del_switch = 'novelty'
     starts = []
-    buffer_capacity = 10000 # uniform distribution G, capacity means exploration
-    easy_batch = 100
-    proposal_batch = args.n_rollout_threads-easy_batch
+    buffer_length = 2000 # archive 长度
+    N_child = 325
+    N_archive = 150
+    N_parent = 25
+    M = N_child
+    value_threshold = 1.5
+    rho = 0.9
     boundary = {'x':[-1,1],'y':[-1,1]}
-    easy_boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
+    start_boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
+    max_step = 0.6
     check_frequency = 1
     historical_length = 5
     random.seed(args.seed)
@@ -610,16 +241,18 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-    goal_proposal_module = goal_proposal(num_agents=num_agents, boundary=boundary,
-                                        env_name='simple_spread', critic_k=critic_k,
-                                        buffer_capacity=buffer_capacity, proposal_batch=proposal_batch)
-    
     # run
     begin = time.time()
     episodes = int(args.num_env_steps) // args.episode_length // args.n_rollout_threads
     curriculum_episode = 0
     current_timestep = 0
     starts_length = args.n_rollout_threads
+    last_node = node_buffer(num_agents,buffer_length,
+                           archive_initial_length=args.n_rollout_threads,
+                           reproduction_num=M,
+                           max_step=max_step,
+                           start_boundary=start_boundary,
+                           boundary=boundary)
 
     for episode in range(episodes):
         if args.use_linear_lr_decay:# decrease learning rate linearly
@@ -629,29 +262,35 @@ def main():
                 for agent_id in range(num_agents):
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
         
-        # region goal proposal
-        # uniform sampling = exploration
-        starts = goal_proposal_module.uniform_sampling(buffer_capacity, boundary)
-        obs = []
-        for epoch_id in range(int(buffer_capacity/proposal_batch)):
-            obs_epoch = envs.new_starts_obs(starts[epoch_id*proposal_batch:(epoch_id+1)*proposal_batch], num_agents, proposal_batch)
-            obs.append(obs_epoch)
-        obs = np.concatenate(obs,axis=0)
-        starts_share_obs = obs.reshape(buffer_capacity, -1)
+        # reproduction
+        if use_novelty_sample:
+            last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, logger, current_timestep)
+        else:
+            last_node.childlist += last_node.SampleNearby(last_node.parent)
+        # sample training batch
+        if use_past_sampling:
+            starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)
+        else:
+            starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive)
+        # get score and move nodes
+        obs = envs.new_starts_obs(starts, num_agents, starts_length)
+        starts_share_obs = obs.reshape(starts_length, -1)
         starts_share_obs = np.expand_dims(starts_share_obs,1).repeat(num_agents,axis=1)
         starts_obs = obs.copy()
-        starts_recurrent_hidden_states = np.zeros((buffer_capacity, num_agents, critic_k, args.hidden_size)).astype(np.float32)
-        starts_recurrent_hidden_states_critic = np.zeros((buffer_capacity, num_agents, critic_k, args.hidden_size)).astype(np.float32)
-        starts_masks = np.ones((buffer_capacity, num_agents, 1)).astype(np.float32)
-        starts_proposal, average_value_disagreement = goal_proposal_module.value_disagreement_sampling(starts, actor_critic, starts_share_obs,starts_obs,
-                                                                            starts_recurrent_hidden_states,starts_recurrent_hidden_states_critic,
-                                                                            starts_masks)
-        easy_starts = goal_proposal_module.uniform_sampling(starts_length=easy_batch, boundary=easy_boundary)
-        # starts_proposal += easy_starts
-        training_batch = starts_proposal + easy_starts
-        wandb.log({'average_value_disagreement': average_value_disagreement},current_timestep)
-        # end region
-        obs = envs.new_starts_obs(training_batch, num_agents, args.n_rollout_threads)
+        starts_recurrent_hidden_states = np.zeros((starts_length, num_agents, critic_k, args.hidden_size)).astype(np.float32)
+        starts_recurrent_hidden_states_critic = np.zeros((starts_length, num_agents, critic_k, args.hidden_size)).astype(np.float32)
+        starts_masks = np.ones((starts_length, num_agents, 1)).astype(np.float32)
+        score, average_value_disagreement, average_value_disagreement_norm = value_disagreement_score(args, args.n_rollout_threads, starts, actor_critic, starts_share_obs, starts_obs, starts_recurrent_hidden_states, starts_recurrent_hidden_states_critic, starts_masks)
+        wandb.log({'average_value_disagreement':average_value_disagreement},current_timestep)
+        wandb.log({'average_value_disagreement_norm':average_value_disagreement_norm},current_timestep)
+        if use_running_average:
+            last_node.eval_score[:N_child] = score[:N_child]
+            last_node.eval_score[N_child:] = rho * last_node.eval_score[N_child:] + (1-rho) * score[N_child:]
+        else:
+            last_node.eval_score = score
+        last_node.move_nodes_value(one_length, value_threshold, del_switch, logger, current_timestep)
+
+        obs = envs.new_starts_obs(starts, num_agents, args.n_rollout_threads)
         #replay buffer
         rollouts = RolloutStorage_critic_k(num_agents,
                     args.episode_length, 
@@ -678,6 +317,7 @@ def main():
                 rollouts[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
                 rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                 rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
+        step_cover_rate = np.zeros(shape=(one_length,args.episode_length))
         for step in range(args.episode_length):
             # Sample actions
             values = []
@@ -733,6 +373,10 @@ def main():
             
             # Obser reward and next obs
             obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
+            cover_rate_list = []
+            for env_id in range(one_length):
+                cover_rate_list.append(infos[env_id][0]['cover_rate'])
+            step_cover_rate[:,step] = np.array(cover_rate_list)
 
             # If done then clean the history of observations.
             # insert data in buffer
@@ -777,9 +421,9 @@ def main():
                             np.array(values[agent_id]),
                             rewards[:,agent_id], 
                             np.array(masks)[:,agent_id])
-        # logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
-        # wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
-        # print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+        logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+        wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+        print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
         current_timestep += args.episode_length * starts_length
         curriculum_episode += 1
         # last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
@@ -861,12 +505,11 @@ def main():
 
         # test
         if episode % check_frequency==0:
-            test_starts = goal_proposal_module.uniform_sampling(args.n_rollout_threads,boundary)
+            test_starts = last_node.uniform_sampling(args.n_rollout_threads,boundary,args.scenario_name)
             obs = envs.new_starts_obs(test_starts, num_agents, args.n_rollout_threads)
-            episode_length = 70
             #replay buffer
             rollouts = RolloutStorage_critic_k(num_agents,
-                        args.episode_length, 
+                        args.test_episode_length, 
                         starts_length,
                         critic_k,
                         envs.observation_space[0], 
@@ -891,8 +534,8 @@ def main():
                     rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                     rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
 
-            test_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
-            for step in range(episode_length):
+            test_cover_rate = np.zeros(shape=(args.n_rollout_threads,args.test_episode_length))
+            for step in range(args.test_episode_length):
                 # Sample actions
                 values = []
                 actions= []
