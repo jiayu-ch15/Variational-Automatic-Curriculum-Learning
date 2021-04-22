@@ -8,13 +8,13 @@ eval_num_agents=4
 # algo='mixed_ratio55_0.9_load_optimizer_gradclip20'
 # algo='transfer_0.9_load_optimizer_gradclip10'
 # algo='transfer_0.9_load_optimizer_check'
-algo='decay_fre30iter_add0.1_load_optimizer_wogradclip'
-# algo='transfer_warmup150iter'
+# algo='decay_fre30iter_add0.1_load_optimizer_wogradclip'
+# algo='transfer_load_optimizer_pb'
 # algo='transfer_switch0.9_check3'
-# algo='check'
+algo='check'
 load_algo='transfer_switch0.9'
 load_num_agents=2
-seed=3
+seed=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
 

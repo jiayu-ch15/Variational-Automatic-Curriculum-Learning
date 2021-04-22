@@ -143,13 +143,15 @@ def main():
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
-                           boundary=boundary)
+                           boundary=boundary,
+                           env_name=args.scenario_name)
     now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=int(args.n_rollout_threads),
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
-                           boundary=boundary)
+                           boundary=boundary,
+                           env_name=args.scenario_name)
 
     # region load curricula and model
     load_curricula = True
@@ -176,7 +178,8 @@ def main():
                         reproduction_num=M,
                         max_step=max_step,
                         start_boundary=start_boundary,
-                        boundary=boundary)
+                        boundary=boundary,
+                        env_name=args.scenario_name)
         # load last node
         # load archive
         last_node.num_agents = last_agent_num
@@ -516,7 +519,8 @@ def main():
                                 reproduction_num=M,
                                 max_step=max_step,
                                 start_boundary=start_boundary,
-                                boundary=boundary)
+                                boundary=boundary,
+                                env_name=args.scenario_name)
                     agents.actor_critic.num_agents = now_node.num_agents
                     if now_node.num_agents==8:
                         agents.num_mini_batch = 16

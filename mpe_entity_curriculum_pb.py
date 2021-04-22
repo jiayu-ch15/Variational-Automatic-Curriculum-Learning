@@ -15,7 +15,7 @@ from tensorboardX import SummaryWriter
 from envs import MPEEnv
 from algorithm.ppo import PPO,PPO3
 from algorithm.autocurriculum import node_buffer, make_parallel_env, evaluation, collect_data, save
-from algorithm.model import Policy,Policy3,ATTBase,ATTBase_actor_dist_add, ATTBase_critic_add
+from algorithm.model import Policy, Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -101,10 +101,10 @@ def main():
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = {'x':[-1,1],'y':[-1,1]}
+    boundary = {'x':[-2,2],'y':[-2,2]}
     start_boundary = {'x':[-0.4,0.4],'y':[-0.4,0.4]}
     upper_bound = 0.9
-    transfer = False
+    transfer = True
     if transfer:
         mix_flag = False
         decay = False
@@ -112,7 +112,7 @@ def main():
         target_num = args.eval_num_agents
         last_box_num = 0
         last_agent_num = last_box_num
-        now_box_num = 4
+        now_box_num = 2
         now_agent_num = now_box_num
     else:
         mix_flag = False
@@ -126,7 +126,7 @@ def main():
         target_num = args.eval_num_agents
         last_box_num = 0
         last_agent_num = last_box_num
-        now_box_num = 4
+        now_box_num = 2
         now_agent_num = now_box_num
     last_mean_cover_rate = 0
     now_mean_cover_rate = 0
@@ -143,16 +143,18 @@ def main():
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
-                           boundary=boundary)
+                           boundary=boundary,
+                           env_name=args.scenario_name)
     now_node = node_buffer(now_agent_num,buffer_length,
                            archive_initial_length=int(args.n_rollout_threads),
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
-                           boundary=boundary)
+                           boundary=boundary,
+                           env_name=args.scenario_name)
 
     # region load curricula and model
-    load_curricula = True
+    load_curricula = False
     initial_optimizer = False
     warm_up = False
     warmup_iter = 150
@@ -176,7 +178,8 @@ def main():
                         reproduction_num=M,
                         max_step=max_step,
                         start_boundary=start_boundary,
-                        boundary=boundary)
+                        boundary=boundary,
+                        env_name=args.scenario_name)
         # load last node
         # load archive
         last_node.num_agents = last_agent_num
@@ -479,20 +482,18 @@ def main():
             print('----------evaluation-------------')
             # current
             eval_num_agents = now_node.num_agents
-            mean_cover_rate_current, mean_success_rate_current, collision_num_current, eval_episode_reward_current = evaluation(envs, agents.actor_critic, args, eval_num_agents, current_timestep)
+            mean_cover_rate_current, eval_episode_reward_current = evaluation(envs, agents.actor_critic, args, eval_num_agents, current_timestep)
             print('current cover rate ' + str(eval_num_agents) + ': ',mean_cover_rate_current)
             wandb.log({str(eval_num_agents) + 'cover_rate': mean_cover_rate_current}, current_timestep)
-            wandb.log({str(eval_num_agents) + 'success_rate': mean_success_rate_current}, current_timestep)
-            wandb.log({str(eval_num_agents) + 'test_collision_num': collision_num_current}, current_timestep)
+            # wandb.log({str(eval_num_agents) + 'success_rate': mean_success_rate_current}, current_timestep)
+            # wandb.log({str(eval_num_agents) + 'test_collision_num': collision_num_current}, current_timestep)
             wandb.log({str(eval_num_agents) + 'eval_episode_reward': eval_episode_reward_current}, current_timestep)
             # # target
             # if eval_num_agents != args.eval_num_agents:
             #     eval_num_agents = args.eval_num_agents
-            #     mean_cover_rate_target, mean_success_rate_target, collision_num_target, eval_episode_reward_target = evaluation(envs, actor_critic, args, eval_num_agents, current_timestep)
+            #     mean_cover_rate_target, eval_episode_reward_target = evaluation(envs, actor_critic, args, eval_num_agents, current_timestep)
             #     print('target cover rate ' + str(eval_num_agents) + ': ',mean_cover_rate_target)
             #     wandb.log({str(eval_num_agents) + 'cover_rate': mean_cover_rate_target}, current_timestep)
-            #     wandb.log({str(eval_num_agents) + 'success_rate': mean_success_rate_target}, current_timestep)
-            #     wandb.log({str(eval_num_agents) + 'test_collision_num': collision_num_target}, current_timestep)
             #     wandb.log({str(eval_num_agents) + 'eval_episode_reward': eval_episode_reward_target}, current_timestep)
         # end region
         
@@ -516,7 +517,8 @@ def main():
                                 reproduction_num=M,
                                 max_step=max_step,
                                 start_boundary=start_boundary,
-                                boundary=boundary)
+                                boundary=boundary,
+                                env_name=args.scenario_name)
                     agents.actor_critic.num_agents = now_node.num_agents
                     if now_node.num_agents==8:
                         agents.num_mini_batch = 16

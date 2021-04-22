@@ -30,10 +30,10 @@ def make_parallel_env(args):
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 class node_buffer():
-    def __init__(self,num_agents,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
+    def __init__(self,num_agents,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,env_name):
         self.num_agents = num_agents
         self.buffer_length = buffer_length
-        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.num_agents)
+        self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.num_agents, env_name)
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
         self.childlist = []
@@ -48,26 +48,131 @@ class node_buffer():
         self.eval_score = np.zeros(shape=len(self.archive))
         self.topk = 5
 
-    def produce_good_case(self, num_case, start_boundary, now_agent_num):
-        one_starts_landmark = []
-        one_starts_agent = []
-        archive = [] 
-        # pdb.set_trace()
-        for j in range(num_case):
-            for i in range(now_agent_num):
-                landmark_location = np.array([np.random.uniform(start_boundary['x'][0],start_boundary['x'][1]),np.random.uniform(start_boundary['y'][0],start_boundary['y'][1])])
-                one_starts_landmark.append(copy.deepcopy(landmark_location))
-            # index_sample = BatchSampler(SubsetRandomSampler(range(now_agent_num)),now_agent_num,drop_last=True)
-            indices = random.sample(range(now_agent_num), now_agent_num)
-            for k in indices:
-                epsilon = -2 * 0.01 * random.random() + 0.01
-                one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
-            # select_starts.append(one_starts_agent+one_starts_landmark)
-            archive.append(one_starts_agent+one_starts_landmark)
-            one_starts_agent = []
+    def produce_good_case(self, num_case, start_boundary, now_agent_num, env_name):
+        if env_name == 'simple_spread':
             one_starts_landmark = []
-        # pdb.set_trace()
-        return archive
+            one_starts_agent = []
+            archive = [] 
+            # pdb.set_trace()
+            for j in range(num_case):
+                for i in range(now_agent_num):
+                    landmark_location = np.array([np.random.uniform(start_boundary['x'][0],start_boundary['x'][1]),np.random.uniform(start_boundary['y'][0],start_boundary['y'][1])])
+                    one_starts_landmark.append(copy.deepcopy(landmark_location))
+                # index_sample = BatchSampler(SubsetRandomSampler(range(now_agent_num)),now_agent_num,drop_last=True)
+                indices = random.sample(range(now_agent_num), now_agent_num)
+                for k in indices:
+                    epsilon = -2 * 0.01 * random.random() + 0.01
+                    one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
+                # select_starts.append(one_starts_agent+one_starts_landmark)
+                archive.append(one_starts_agent+one_starts_landmark)
+                one_starts_agent = []
+                one_starts_landmark = []
+            # pdb.set_trace()
+            return archive
+        elif env_name == 'push_ball':
+            landmark_size = 0.3
+            box_size = 0.3
+            agent_size = 0.2
+            now_box_num = now_agent_num
+            cell_size = max([landmark_size,box_size,agent_size]) + 0.1
+            grid_num = round((start_boundary['x'][1]-start_boundary['x'][0]) / cell_size)
+            init_origin_node = np.array([start_boundary['x'][0]+0.5*cell_size,start_boundary['y'][0]-0.5*cell_size]) # left, up
+            assert grid_num ** 2 >= now_agent_num + now_box_num
+            grid = np.zeros(shape=(grid_num,grid_num))
+            grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
+            one_starts_landmark = []
+            one_starts_agent = []
+            one_starts_box = []
+            one_starts_box_grid = []
+            archive = [] 
+            for j in range(num_case):
+                # box location
+                for i in range(now_box_num):
+                    while 1:
+                        box_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                        if grid[box_location_grid[0],box_location_grid[1]]==1:
+                            continue
+                        else:
+                            grid[box_location_grid[0],box_location_grid[1]] = 1
+                            extra_room = (cell_size - landmark_size) / 2
+                            extra_x = np.random.uniform(-extra_room,extra_room)
+                            extra_y = np.random.uniform(-extra_room,extra_room)
+                            box_location = np.array([(box_location_grid[0]+0.5)*cell_size+extra_x,-(box_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                            one_starts_box.append(copy.deepcopy(box_location))
+                            one_starts_box_grid.append(copy.deepcopy(box_location_grid))
+                            break
+                grid_without_landmark = copy.deepcopy(grid)
+                # landmark location
+                indices = random.sample(range(now_box_num), now_box_num)
+                num_try = 0
+                num_tries = 200
+                for k in indices:
+                    around = 1
+                    while num_try < num_tries:
+                        delta_x_direction = random.randint(-around,around)
+                        delta_y_direction = random.randint(-around,around)
+                        landmark_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
+                        landmark_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
+                        landmark_location_grid = np.array([landmark_location_x,landmark_location_y])
+                        if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
+                            num_try += 1
+                            if num_try >= num_tries and around==1:
+                                around = 2
+                                num_try = 0
+                            assert num_try<num_tries or around==1, 'case %i can not find landmark pos'%j
+                            continue
+                        else:
+                            grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
+                            extra_room = (cell_size - landmark_size) / 2
+                            extra_x = np.random.uniform(-extra_room,extra_room)
+                            extra_y = np.random.uniform(-extra_room,extra_room)
+                            landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size+extra_x,-(landmark_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                            one_starts_landmark.append(copy.deepcopy(landmark_location))
+                            break
+                # agent_location
+                indices_agent = random.sample(range(now_box_num), now_box_num)
+                num_try = 0
+                num_tries = 200
+                for k in indices_agent:
+                    around = 1
+                    while num_try < num_tries:
+                        delta_x_direction = random.randint(-around,around)
+                        delta_y_direction = random.randint(-around,around)
+                        agent_location_x = one_starts_box_grid[k][0]+delta_x_direction
+                        agent_location_y = one_starts_box_grid[k][1]+delta_y_direction
+                        agent_location_grid = np.array([agent_location_x,agent_location_y])
+                        if agent_location_x < 0 or agent_location_y < 0 or agent_location_x > grid.shape[0]-1 or  agent_location_y > grid.shape[0]-1:
+                            extra_room = (cell_size - landmark_size) / 2
+                            extra_x = np.random.uniform(-extra_room,extra_room)
+                            extra_y = np.random.uniform(-extra_room,extra_room)
+                            agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                            one_starts_agent.append(copy.deepcopy(agent_location))
+                            break
+                        else:
+                            if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
+                                num_try += 1
+                                if num_try >= num_tries and around==1:
+                                    around = 2
+                                    num_try = 0
+                                assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
+                                continue
+                            else:
+                                grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
+                                extra_room = (cell_size - landmark_size) / 2
+                                extra_x = np.random.uniform(-extra_room,extra_room)
+                                extra_y = np.random.uniform(-extra_room,extra_room)
+                                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                                one_starts_agent.append(copy.deepcopy(agent_location))
+                                break
+                # select_starts.append(one_starts_agent+one_starts_landmark)
+                archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
+                grid = np.zeros(shape=(grid_num,grid_num))
+                grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
+                one_starts_agent = []
+                one_starts_landmark = []
+                one_starts_box = []
+                one_starts_box_grid = []
+            return archive
 
     def uniform_sampling(self, starts_length, boundary, env_name):
         if env_name == 'simple_spread':
@@ -84,53 +189,6 @@ class node_buffer():
                 one_starts_agent = []
                 one_starts_landmark = []
             return archive
-
-    def produce_good_case_grid(self, num_case, start_boundary, now_agent_num):
-        # agent_size=0.1
-        cell_size = 0.2
-        grid_num = int(start_boundary * 2 / cell_size) + 1
-        grid = np.zeros(shape=(grid_num,grid_num))
-        one_starts_landmark = []
-        one_starts_landmark_grid = []
-        one_starts_agent = []
-        archive = [] 
-        for j in range(num_case):
-            for i in range(now_agent_num):
-                while 1:
-                    landmark_location_grid = np.random.randint(0, grid.shape[0], 2) 
-                    extra_room = np.random.uniform(-0.05, +0.05, 2) 
-                    if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
-                        continue
-                    else:
-                        grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
-                        one_starts_landmark_grid.append(copy.deepcopy(landmark_location_grid))
-                        landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size,(landmark_location_grid[1]+0.5)*cell_size]) + extra_room -start_boundary
-                        one_starts_landmark.append(copy.deepcopy(landmark_location))
-                        break
-            indices = random.sample(range(now_agent_num), now_agent_num)
-            for k in indices:
-                epsilons = np.array([[-1,0],[1,0],[0,1],[0,-1],[1,1],[1,-1],[-1,1],[-1,-1]])
-                epsilon = epsilons[random.sample(range(8),8)]
-                # extra_room = -2 * 0.02 * random.random() + 0.02
-                for epsilon_id in range(epsilon.shape[0]):
-                    agent_location_grid = one_starts_landmark_grid[k] + epsilon[epsilon_id]
-                    if agent_location_grid[0] >= grid.shape[0]:
-                        agent_location_grid[0] = grid.shape[0]-1
-                    if agent_location_grid[1] >= grid.shape[1]:
-                        agent_location_grid[1] = grid.shape[1]-1
-                    if grid[agent_location_grid[0],agent_location_grid[1]]!=2:
-                        grid[agent_location_grid[0],agent_location_grid[1]]=2
-                        break
-                noise = np.random.uniform(-0.01, +0.01)
-                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size,(agent_location_grid[1]+0.5)*cell_size])-start_boundary+noise
-                one_starts_agent.append(copy.deepcopy(agent_location))
-            # select_starts.append(one_starts_agent+one_starts_landmark)
-            archive.append(one_starts_agent+one_starts_landmark)
-            grid = np.zeros(shape=(grid_num,grid_num))
-            one_starts_agent = []
-            one_starts_landmark_grid = []
-            one_starts_landmark = []
-        return archive
 
     def get_novelty(self,list1,list2):
         # list1是需要求novelty的
@@ -782,7 +840,10 @@ def evaluation(envs, actor_critic, args, eval_num_agents, timestep):
     envs = make_parallel_env(args)
     # reset num_agents
     actor_critic.num_agents = eval_num_agents
-    obs, _ = envs.reset(eval_num_agents)
+    if args.scenario_name == 'simple_spread':
+        obs, _ = envs.reset(eval_num_agents)
+    elif args.scenario_name == 'push_ball':
+        obs, _ = envs.reset(eval_num_agents, eval_num_agents)
     #replay buffer
     rollouts = RolloutStorage_share(eval_num_agents,
                 args.test_episode_length, 
@@ -809,8 +870,8 @@ def evaluation(envs, actor_critic, args, eval_num_agents, timestep):
             rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
             rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
     test_cover_rate = np.zeros(shape=(args.n_rollout_threads,args.test_episode_length))
-    test_collision_num = np.zeros(shape=args.n_rollout_threads)
-    test_success = np.zeros(shape=(args.n_rollout_threads,args.test_episode_length))
+    # test_collision_num = np.zeros(shape=args.n_rollout_threads)
+    # test_success = np.zeros(shape=(args.n_rollout_threads,args.test_episode_length))
     for step in range(args.test_episode_length):
         # Sample actions
         values = []
@@ -870,16 +931,15 @@ def evaluation(envs, actor_critic, args, eval_num_agents, timestep):
         # Obser reward and next obs
         obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, eval_num_agents)
         cover_rate_list = []
-        collision_list = []
-        success_list = []
+        # collision_list = []
+        # success_list = []
         for env_id in range(args.n_rollout_threads):
             cover_rate_list.append(infos[env_id][0]['cover_rate'])
-            collision_list.append(infos[env_id][0]['collision'])
-            success_list.append(int(infos[env_id][0]['success']))
+            # collision_list.append(infos[env_id][0]['collision'])
+            # success_list.append(int(infos[env_id][0]['success']))
         test_cover_rate[:,step] = np.array(cover_rate_list)
-        test_collision_num += np.array(collision_list)
-        test_success[:,step] = np.array(success_list)
-        # step_cover_rate[:,step] = np.array(infos)[:,0]
+        # test_collision_num += np.array(collision_list)
+        # test_success[:,step] = np.array(success_list)
 
         # If done then clean the history of observations.
         # insert data in buffer
@@ -924,14 +984,14 @@ def evaluation(envs, actor_critic, args, eval_num_agents, timestep):
                         rewards[:,agent_id], 
                         np.array(masks)[:,agent_id])
     mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-args.historical_length:],axis=1))
-    mean_success_rate = np.mean(np.mean(test_success[:,-args.historical_length:],axis=1))
-    collision_num = np.mean(test_collision_num)
+    # mean_success_rate = np.mean(np.mean(test_success[:,-args.historical_length:],axis=1))
+    # collision_num = np.mean(test_collision_num)
     rew = []
     for i in range(rollouts.rewards.shape[1]):
         rew.append(np.sum(rollouts.rewards[:,i]))
     average_episode_reward = np.mean(rew)
     envs.close()
-    return mean_cover_rate, mean_success_rate, collision_num, average_episode_reward
+    return mean_cover_rate, average_episode_reward
 
 def collect_data(envs, agents, actor_critic, args, node, starts, starts_length, one_length, timestep):
     # update envs
@@ -940,7 +1000,10 @@ def collect_data(envs, agents, actor_critic, args, node, starts, starts_length, 
     envs = make_parallel_env(args)
     # reset num_agents
     actor_critic.num_agents = node.num_agents
-    obs = envs.new_starts_obs(starts, node.num_agents, starts_length)
+    if args.scenario_name == 'simple_spread':
+        obs = envs.new_starts_obs(starts, node.num_agents, starts_length)
+    elif args.scenario_name == 'push_ball':
+        obs = envs.new_starts_obs_pb(starts, node.num_agents, node.num_agents, starts_length)
     #replay buffer
     rollouts = RolloutStorage_share(node.num_agents,
                 args.episode_length, 
@@ -966,8 +1029,8 @@ def collect_data(envs, agents, actor_critic, args, node, starts, starts_length, 
             rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
             rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
     step_cover_rate = np.zeros(shape=(one_length,args.episode_length))
-    step_collision_num = np.zeros(shape=one_length)
-    step_success = np.zeros(shape=(one_length,args.episode_length))
+    # step_collision_num = np.zeros(shape=one_length)
+    # step_success = np.zeros(shape=(one_length,args.episode_length))
     for step in range(args.episode_length):
         # Sample actions
         values = []
@@ -1026,15 +1089,15 @@ def collect_data(envs, agents, actor_critic, args, node, starts, starts_length, 
         # Obser reward and next obs
         obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, node.num_agents)
         cover_rate_list = []
-        collision_list = []
-        success_list = []
+        # collision_list = []
+        # success_list = []
         for env_id in range(one_length):
             cover_rate_list.append(infos[env_id][0]['cover_rate'])
-            collision_list.append(infos[env_id][0]['collision'])
-            success_list.append(int(infos[env_id][0]['success']))
+            # collision_list.append(infos[env_id][0]['collision'])
+            # success_list.append(int(infos[env_id][0]['success']))
         step_cover_rate[:,step] = np.array(cover_rate_list)
-        step_collision_num += np.array(collision_list)
-        step_success[:,step] = np.array(success_list)
+        # step_collision_num += np.array(collision_list)
+        # step_success[:,step] = np.array(success_list)
 
         # If done then clean the history of observations.
         # insert data in buffer
@@ -1078,10 +1141,10 @@ def collect_data(envs, agents, actor_critic, args, node, starts, starts_length, 
                         np.array(masks)[:,agent_id])
     # import pdb;pdb.set_trace()
     wandb.log({str(node.num_agents)+'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-args.historical_length:],axis=1))}, timestep)
-    wandb.log({str(node.num_agents)+'training_success_rate': np.mean(np.mean(step_success[:,-args.historical_length:],axis=1))}, timestep)
+    # wandb.log({str(node.num_agents)+'training_success_rate': np.mean(np.mean(step_success[:,-args.historical_length:],axis=1))}, timestep)
     print(str(node.num_agents) + 'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-args.historical_length:],axis=1)), end=' ')
     print('threads: ', args.n_rollout_threads)
-    wandb.log({str(node.num_agents)+'train_collision_num': np.mean(step_collision_num)},timestep)
+    # wandb.log({str(node.num_agents)+'train_collision_num': np.mean(step_collision_num)},timestep)
     timestep += args.episode_length * starts_length
     node.eval_score += np.mean(step_cover_rate[:,-args.historical_length:],axis=1)
                                 
