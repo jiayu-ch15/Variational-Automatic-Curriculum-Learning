@@ -310,7 +310,7 @@ class node_buffer():
         wandb.log({str(self.num_agents)+'parentlist_length': len(self.parent)},timestep)
         wandb.log({str(self.num_agents)+'drop_num': drop_num},timestep)
 
-    def move_nodes_value(self, one_length, value_threshold, del_switch, writer, timestep): 
+    def move_nodes_value(self, one_length, value_threshold, del_switch, writer, timestep, inverted=False): 
         del_child_num = 0
         del_archive_num = 0
         del_easy_num = 0
@@ -320,19 +320,36 @@ class node_buffer():
         child2archive = []
         for i in range(one_length):
             if i < len(self.choose_child_index):
-                if self.eval_score[i] >= value_threshold:
-                    child2archive.append(copy.deepcopy(self.childlist[self.choose_child_index[i]-del_child_num]))
-                    del self.childlist[self.choose_child_index[i]-del_child_num]
-                    del_child_num += 1
+                if self.eval_score[i] <= value_threshold:
+                    if inverted: # value disagreement, low score means parent
+                        self.parent.append(copy.deepcopy(self.childlist[self.choose_child_index[i]-del_child_num]))
+                        del self.childlist[self.choose_child_index[i]-del_child_num]
+                        del_child_num += 1
+                    else: # value error, low score means child
+                        child2archive.append(copy.deepcopy(self.childlist[self.choose_child_index[i]-del_child_num]))
+                        del self.childlist[self.choose_child_index[i]-del_child_num]
+                        del_child_num += 1
                 else:
-                    self.parent.append(copy.deepcopy(self.childlist[self.choose_child_index[i]-del_child_num]))
-                    del self.childlist[self.choose_child_index[i]-del_child_num]
-                    del_child_num += 1
+                    if inverted:
+                        child2archive.append(copy.deepcopy(self.childlist[self.choose_child_index[i]-del_child_num]))
+                        del self.childlist[self.choose_child_index[i]-del_child_num]
+                        del_child_num += 1
+                    else:
+                        self.parent.append(copy.deepcopy(self.childlist[self.choose_child_index[i]-del_child_num]))
+                        del self.childlist[self.choose_child_index[i]-del_child_num]
+                        del_child_num += 1
             else:
-                if self.eval_score[i]< value_threshold:
+                if self.eval_score[i] > value_threshold:
+                    # value error, high score means parent
                     self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i-len(self.choose_child_index)]-del_archive_num]))
                     del self.archive[self.choose_archive_index[i-len(self.choose_child_index)]-del_archive_num]
                     del_archive_num += 1
+                if inverted: # disagreement
+                    if self.eval_score[i] < value_threshold:
+                        # value error, high score means parent
+                        self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i-len(self.choose_child_index)]-del_archive_num]))
+                        del self.archive[self.choose_archive_index[i-len(self.choose_child_index)]-del_archive_num]
+                        del_archive_num += 1
 
         self.archive += child2archive
         self.parent_all += self.parent
@@ -563,84 +580,6 @@ class goal_proposal():
         # end region
         return starts_proposal, average_TD_error
 
-def TD_error_score(args, batch_num, starts, envs, actor_critic, starts_share_obs, starts_obs, starts_recurrent_hidden_states, starts_recurrent_hidden_states_critic, starts_masks):
-    starts_value_list = np.zeros((batch_num, args.num_agents, 2)).astype(np.float32)
-    # get V(s0) and action
-    actions= []
-    recurrent_hidden_statess = []
-    recurrent_hidden_statess_critic = []
-    for agent_id in range(args.num_agents):
-        actor_critic.eval()
-        value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
-            torch.FloatTensor(starts_share_obs[:,agent_id]), 
-            torch.FloatTensor(starts_obs[:,agent_id]), 
-            torch.FloatTensor(starts_recurrent_hidden_states[:,agent_id]), 
-            torch.FloatTensor(starts_recurrent_hidden_states_critic[:,agent_id]),
-            torch.FloatTensor(starts_masks[:,agent_id]))
-        value = value.detach().cpu().numpy().squeeze(-1)
-        starts_value_list[:,agent_id,0] = value # get V(si)
-        actions.append(action.detach().cpu().numpy())
-        recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
-        recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
-    # rearrange action
-    actions_env = []
-    for i in range(batch_num):
-        one_hot_action_env = []
-        for agent_id in range(args.num_agents):
-            if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
-                uc_action = []
-                for j in range(envs.action_space[agent_id].shape):
-                    uc_one_hot_action = np.zeros(envs.action_space[agent_id].high[j]+1)
-                    uc_one_hot_action[actions[agent_id][i][j]] = 1
-                    uc_action.append(uc_one_hot_action)
-                uc_action = np.concatenate(uc_action)
-                one_hot_action_env.append(uc_action)
-                    
-            elif envs.action_space[agent_id].__class__.__name__ == 'Discrete':    
-                one_hot_action = np.zeros(envs.action_space[agent_id].n)
-                one_hot_action[actions[agent_id][i]] = 1
-                one_hot_action_env.append(one_hot_action)
-            else:
-                raise NotImplementedError
-        actions_env.append(one_hot_action_env)
-    # get s1
-    obs = []
-    rewards = []
-    for epoch_id in range(int(batch_num/args.n_rollout_threads)):
-        obs_epoch = envs.new_starts_obs(starts[epoch_id*args.n_rollout_threads:(epoch_id+1)*args.n_rollout_threads], args.num_agents, args.n_rollout_threads)
-        obs_epoch, rewards_epoch, dones, infos, _ = envs.step(actions_env[epoch_id*args.n_rollout_threads:(epoch_id+1)*args.n_rollout_threads], args.n_rollout_threads, args.num_agents)
-        obs.append(obs_epoch)
-        rewards.append(rewards_epoch)
-    obs = np.concatenate(obs,axis=0)
-    rewards = np.concatenate(rewards,axis=0).squeeze(axis=2)
-    share_obs = obs.reshape(batch_num, -1)        
-    share_obs = np.expand_dims(share_obs,1).repeat(args.num_agents,axis=1) 
-    recurrent_hidden_states = np.array(recurrent_hidden_statess).transpose(1,0,2)
-    recurrent_hidden_states_critic = np.array(recurrent_hidden_statess_critic).transpose(1,0,2)
-    # get V(s1)
-    for agent_id in range(args.num_agents):
-        actor_critic.eval() 
-        value,_,_ = actor_critic.get_value(agent_id,
-                                    torch.FloatTensor(share_obs[:,agent_id]),
-                                    torch.FloatTensor(obs[:,agent_id]),
-                                    torch.FloatTensor(recurrent_hidden_states[:,agent_id]),
-                                    torch.FloatTensor(recurrent_hidden_states_critic[:,agent_id]),
-                                    torch.FloatTensor(starts_masks[:,agent_id]))
-        value = value.detach().cpu().numpy().squeeze(-1)
-        starts_value_list[:,agent_id,1] = value
-    # get TD_error(0)
-    TD_error = np.zeros((batch_num, args.num_agents)).astype(np.float32)
-    TD_error = np.abs(rewards + args.gamma * starts_value_list[:,:,1] - starts_value_list[:,:,0])
-
-    # deal with multi-agent, VDN
-    TD_error = np.sum(TD_error,axis=1)
-    average_TD_error = np.mean(TD_error)
-    # normalization
-    TD_error_std = np.std(TD_error)
-    TD_error_score = TD_error / TD_error_std
-    average_TD_error_norm = np.mean(TD_error)
-    return TD_error_score, average_TD_error, average_TD_error_norm
-
 def value_error_score(args, batch_num, starts, envs, agents, actor_critic, use_gae, use_one_step):
     obs = envs.new_starts_obs(starts, args.num_agents, args.n_rollout_threads)
     #replay buffer
@@ -812,10 +751,9 @@ def value_error_score(args, batch_num, starts, envs, agents, actor_critic, use_g
         value_error = np.mean(value_error,axis=0)
     average_value_error = np.mean(value_error)
     # normalization
-    value_error_std = np.std(value_error)
-    value_error_score = value_error / value_error_std
-    average_value_error_norm = np.mean(value_error_score)
-    return value_error_score, average_value_error, average_value_error_norm
+    value_error_score = np.arctan(value_error) * 2 / np.pi
+    # value_error_score = softmax(value_error)
+    return value_error_score, average_value_error
 
 def value_disagreement_score(args, batch_num, starts, actor_critic, starts_share_obs, starts_obs, starts_recurrent_hidden_states, starts_recurrent_hidden_states_critic, starts_masks):
     starts_value_list = np.zeros((batch_num, args.num_agents, args.critic_k)).astype(np.float32)
@@ -832,12 +770,10 @@ def value_disagreement_score(args, batch_num, starts, actor_critic, starts_share
     starts_value_list = np.sum(starts_value_list,axis=1)
     # value std
     starts_value_list = np.std(starts_value_list,axis=1)
-    # normalization
-    value_disagreement_std = np.std(starts_value_list)
     average_value_disagreement = np.mean(starts_value_list)
-    disagreement_score = starts_value_list / value_disagreement_std
-    average_value_disagreement_norm = np.mean(disagreement_score)
-    return disagreement_score, average_value_disagreement, average_value_disagreement_norm
+    # normalization
+    disagreement_score = np.arctan(starts_value_list) * 2 / np.pi
+    return disagreement_score, average_value_disagreement
 
 def evaluation(envs, actor_critic, args, eval_num_agents, timestep):
     # update envs
@@ -1192,3 +1128,6 @@ def save(save_path, agents):
     torch.save({'model': agents.actor_critic, 
                 'optimizer_actor': agents.optimizer_actor,
                 'optimizer_critic': agents.optimizer_critic}, save_path)
+
+def softmax(z):
+    return np.exp(z)/sum(np.exp(z))

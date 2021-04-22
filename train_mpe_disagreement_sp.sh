@@ -4,7 +4,7 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-algo="disagreement_map2_critic3_threshold1.5"
+algo="disagreement_map2_critic3_threshold0.1_arctan"
 # algo='check'
 seed=1
 

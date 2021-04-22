@@ -115,7 +115,7 @@ def main():
     N_archive = 150
     N_parent = 25
     M = N_child
-    value_threshold = 1.5
+    value_threshold = 0.1
     rho = 0.9
     boundary = {'x':[-1,1],'y':[-1,1]}
     start_boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
@@ -280,15 +280,14 @@ def main():
         starts_recurrent_hidden_states = np.zeros((starts_length, num_agents, critic_k, args.hidden_size)).astype(np.float32)
         starts_recurrent_hidden_states_critic = np.zeros((starts_length, num_agents, critic_k, args.hidden_size)).astype(np.float32)
         starts_masks = np.ones((starts_length, num_agents, 1)).astype(np.float32)
-        score, average_value_disagreement, average_value_disagreement_norm = value_disagreement_score(args, args.n_rollout_threads, starts, actor_critic, starts_share_obs, starts_obs, starts_recurrent_hidden_states, starts_recurrent_hidden_states_critic, starts_masks)
+        score, average_value_disagreement = value_disagreement_score(args, args.n_rollout_threads, starts, actor_critic, starts_share_obs, starts_obs, starts_recurrent_hidden_states, starts_recurrent_hidden_states_critic, starts_masks)
         wandb.log({'average_value_disagreement':average_value_disagreement},current_timestep)
-        wandb.log({'average_value_disagreement_norm':average_value_disagreement_norm},current_timestep)
         if use_running_average:
             last_node.eval_score[:N_child] = score[:N_child]
             last_node.eval_score[N_child:] = rho * last_node.eval_score[N_child:] + (1-rho) * score[N_child:]
         else:
             last_node.eval_score = score
-        last_node.move_nodes_value(one_length, value_threshold, del_switch, logger, current_timestep)
+        last_node.move_nodes_value(one_length, value_threshold, del_switch, logger, current_timestep, inverted=True)
 
         obs = envs.new_starts_obs(starts, num_agents, args.n_rollout_threads)
         #replay buffer

@@ -101,8 +101,8 @@ def main():
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = {'x':[-3,3],'y':[-3,3]}
-    start_boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
+    boundary = {'x':[-1,1],'y':[-1,1]}
+    start_boundary = {'x':[-0.4,0.4],'y':[-0.4,0.4]}
     upper_bound = 0.9
     transfer = False
     if transfer:
@@ -157,7 +157,7 @@ def main():
     warm_up = False
     warmup_iter = 150
     load_model_path = None
-    if load_curricula: # 默认从4、8混合开始训练
+    if load_curricula: # 默认从2、4混合开始训练
         # load path
         load_curricula_path = Path('./curricula') / args.env_name / args.scenario_name / args.load_algorithm_name
         load_model_path = Path('./results') / args.env_name / args.scenario_name / args.load_algorithm_name 
@@ -165,9 +165,9 @@ def main():
         model_path = 'models/%iagent_model_0.9.pt'%args.load_num_agents
         load_curricula_path = load_curricula_path / seed_path / Path('%iagents'%args.load_num_agents)
         load_model_path = load_model_path / seed_path / model_path
-        last_agent_num = 4
-        now_agent_num = 8
-        start_boundary = {'x':[-1,1],'y':[-1,1]}
+        last_agent_num = 2
+        now_agent_num = 4
+        start_boundary = {'x':[-0.8,0.8],'y':[-0.8,0.8]}
         if not transfer:
             mix_flag = True
         # initialize now node
@@ -223,9 +223,9 @@ def main():
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:
-        actor_base = ATTBase_actor_dist_add(envs.observation_space[0].shape[0], envs.action_space[0], num_agents)
-        critic_base = ATTBase_critic_add(envs.observation_space[0].shape[0], num_agents)
-        actor_critic = Policy3(envs.observation_space[0], 
+        actor_base = ATTBase_actor_dist_pb_add(envs.observation_space[0].shape[0], envs.action_space[0], num_agents)
+        critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0], num_agents)
+        actor_critic = Policy_pb_3(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
                     base=None,

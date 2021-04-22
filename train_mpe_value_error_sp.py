@@ -106,8 +106,8 @@ def main():
     use_novelty_sample = True
     use_past_sampling = True
     use_running_average = False
-    use_gae = False
-    use_one_step = False
+    use_gae = True
+    use_one_step = True
     del_switch = 'novelty'
     starts = []
     buffer_length = 2000 # archive 长度
@@ -115,7 +115,7 @@ def main():
     N_archive = 150
     N_parent = 25
     M = N_child
-    value_threshold = 1.5
+    value_threshold = 0.9 # > threshold means parent
     rho = 0.9
     boundary = {'x':[-1,1],'y':[-1,1]}
     start_boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
@@ -273,11 +273,10 @@ def main():
         else:
             starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive)
         # get score and move nodes
-        score, average_value_error, average_value_error_norm = value_error_score(args, args.n_rollout_threads, starts, envs, agents, actor_critic, use_gae, use_one_step)
+        score, average_value_error = value_error_score(args, args.n_rollout_threads, starts, envs, agents, actor_critic, use_gae, use_one_step)
         last_node.eval_score = score
         wandb.log({'average_value_error':average_value_error},current_timestep)
-        wandb.log({'average_value_error_norm':average_value_error_norm},current_timestep)
-        last_node.move_nodes_value(one_length, value_threshold, del_switch, logger, current_timestep)
+        last_node.move_nodes_value(one_length, value_threshold, del_switch, logger, current_timestep,inverted=False)
 
         # reset env
         obs = envs.new_starts_obs(starts, num_agents, args.n_rollout_threads)
