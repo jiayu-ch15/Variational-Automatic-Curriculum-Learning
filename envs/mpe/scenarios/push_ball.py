@@ -142,7 +142,7 @@ class Scenario(BaseScenario):
     def get_state(self, world):
         pass
 
-    def info_coverage_rate(self, world):
+    def get_info(self, world):
         num = 0
         for l in world.landmarks:
             dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents if a.adversary == False]

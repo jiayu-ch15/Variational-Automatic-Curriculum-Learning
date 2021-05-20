@@ -775,7 +775,7 @@ class Policy_pb_3(nn.Module): # actor critic 分开, 2个optimizer
         self.mixed_action = False
         self.multi_discrete = False
         self.device = device
-        self.agents_num = num_agents
+        self.num_agents = num_agents
         if base_kwargs is None:
             base_kwargs = {}
         
@@ -870,7 +870,7 @@ class Policy_pb_3(nn.Module): # actor critic 分开, 2个optimizer
         if available_actions is not None:
             available_actions = available_actions.to(self.device)
         # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        dist = self.actor_base(inputs, self.agents_num, self.agents_num) 
+        dist = self.actor_base(inputs, self.num_agents, self.num_agents) 
         if deterministic:
             action = dist.mode()
         else:
@@ -878,7 +878,7 @@ class Policy_pb_3(nn.Module): # actor critic 分开, 2个optimizer
         action_log_probs = dist.log_probs(action)
         action_out = action
         action_log_probs_out = action_log_probs 
-        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.agents_num, self.agents_num, rnn_hxs_actor, masks)         
+        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_agents, rnn_hxs_actor, masks)         
  
         return value, action_out, action_log_probs_out, rnn_hxs_actor, rnn_hxs_critic
 
@@ -891,7 +891,7 @@ class Policy_pb_3(nn.Module): # actor critic 分开, 2个optimizer
         masks = masks.to(self.device)
         
         # value, _, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.agents_num, self.agents_num, rnn_hxs_actor, masks)
+        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_agents, rnn_hxs_actor, masks)
         
         return value, rnn_hxs_actor, rnn_hxs_critic
 
@@ -905,12 +905,12 @@ class Policy_pb_3(nn.Module): # actor critic 分开, 2个optimizer
         high_masks = high_masks.to(self.device)
         action = action.to(self.device)
         # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        dist = self.actor_base(inputs, self.agents_num, self.agents_num) 
+        dist = self.actor_base(inputs, self.num_agents, self.num_agents) 
         action_log_probs = dist.log_probs(action)
         dist_entropy = dist.entropy()
         action_log_probs_out = action_log_probs
         dist_entropy_out = dist_entropy.mean()
-        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.agents_num, self.agents_num, rnn_hxs_actor, masks) 
+        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_agents, rnn_hxs_actor, masks) 
 
         return value, action_log_probs_out, dist_entropy_out, rnn_hxs_actor, rnn_hxs_critic
 
@@ -1721,6 +1721,51 @@ class ATTBase_critic_add(NNBase):
                 init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
                 nn.LayerNorm(hidden_size),
                 init_(nn.Linear(hidden_size, 1)))
+
+    def forward(self, share_inputs, inputs, agent_num, rnn_hxs, masks):
+        """
+        share_inputs: [batch_size, obs_dim*agent_num]
+        inputs: [batch_size, obs_dim]
+        """
+        batch_size = inputs.shape[0]
+        obs_dim = inputs.shape[-1]
+        f_ii = self.encoder(inputs, agent_num)
+        obs_beta_ij = torch.matmul(f_ii.view(batch_size,1,-1), self.correlation_mat) # (batch,1,hidden_size)
+        
+        # 矩阵f_ij
+        f_ij = self.encoder(share_inputs.reshape(-1,obs_dim),agent_num)
+        obs_encoder = f_ij.reshape(batch_size,agent_num,-1) # (batch_size, nagents, hidden_size)
+        
+        beta = torch.matmul(obs_beta_ij, obs_encoder.permute(0,2,1)).squeeze(1) # (batch_size,nagents)
+        alpha = F.softmax(beta,dim = 1).unsqueeze(2) # (batch_size,nagents,1)
+        vi = torch.mul(alpha,obs_encoder)
+        vi = torch.sum(vi,dim = 1)
+        value = self.critic_linear(vi)
+
+        return value, rnn_hxs, rnn_hxs
+
+class ATTBase_critic_add_littleinit(NNBase):
+    def __init__(self, num_inputs, agent_num, recurrent=False, assign_id=False, hidden_size=64):
+        super(ATTBase_critic_add_littleinit, self).__init__(num_inputs, agent_num)
+        if recurrent:
+            num_inputs = hidden_size
+
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+        littleinit_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(0.01))
+
+        self.agent_num = agent_num
+        # self.encoder = ObsEncoder(hidden_size=hidden_size)
+        self.encoder = ObsEncoder_add(hidden_size=hidden_size)
+
+        self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
+        nn.init.orthogonal_(self.correlation_mat.data, gain=1)
+
+        self.critic_linear = nn.Sequential(
+                init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
+                nn.LayerNorm(hidden_size),
+                littleinit_(nn.Linear(hidden_size, 1)))
 
     def forward(self, share_inputs, inputs, agent_num, rnn_hxs, masks):
         """

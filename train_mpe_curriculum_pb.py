@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO, PPO3
-from algorithm.model import Policy_pb, Policy_pb_3, ATTBase_pb, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
+from algorithm.model import Policy_pb, Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -265,6 +265,50 @@ class node_buffer():
             child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
             return child_new
 
+    def SampleNearby_novelty_activeAndsolve(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
+        self.activeAndsolve = self.archive + self.parent_all
+        if len(self.activeAndsolve) > self.topk + 1:
+            self.activeAndsolve_novelty = self.get_novelty(self.activeAndsolve,self.activeAndsolve)
+            self.activeAndsolve, self.activeAndsolve_novelty = self.novelty_sort(self.activeAndsolve, self.activeAndsolve_novelty)
+            novelty_threshold = np.mean(self.activeAndsolve_novelty)
+        else:
+            novelty_threshold = 0
+        # novelty_threshold = child_novelty_threshold
+        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
+        parents = parents + []
+        len_start = len(parents)
+        child_new = []
+        if parents==[]:
+            return []
+        else:
+            add_num = 0
+            while add_num < self.reproduction_num:
+                for k in range(len_start):
+                    st = copy.deepcopy(parents[k])
+                    s_len = len(st)
+                    for i in range(s_len):
+                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                        st[i][0] = st[i][0] + epsilon_x
+                        st[i][1] = st[i][1] + epsilon_y
+                        if st[i][0] > self.boundary:
+                            st[i][0] = self.boundary - random.random()*0.01
+                        if st[i][0] < -self.boundary:
+                            st[i][0] = -self.boundary + random.random()*0.01
+                        if st[i][1] > self.boundary:
+                            st[i][1] = self.boundary - random.random()*0.01
+                        if st[i][1] < -self.boundary:
+                            st[i][1] = -self.boundary + random.random()*0.01
+                    if len(self.activeAndsolve) > self.topk + 1:
+                        if self.get_novelty([st],self.activeAndsolve) > novelty_threshold:
+                            child_new.append(copy.deepcopy(st))
+                            add_num += 1
+                    else:
+                        child_new.append(copy.deepcopy(st))
+                        add_num += 1
+            child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
+            return child_new
+
     def SampleNearby(self, starts): # produce new children and return
         starts = starts + []
         len_start = len(starts)
@@ -294,6 +338,55 @@ class node_buffer():
                     add_num += 1
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
+
+    def Sample_gradient(self,parents,timestep):
+        parents = parents + []
+        len_start = len(parents)
+        child_new = []
+        if parents==[]:
+            return []
+        else:
+            add_num = 0
+            while add_num < self.reproduction_num:
+                for parent in parents:
+                    parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all)
+                    if not parent_gradient_zero:
+                        stepsize = self.max_step * random.random()
+                    new_parent = []
+                    for parent_of_entity_id in range(len(parent)):
+                        st = copy.deepcopy(parent[parent_of_entity_id])
+                        if not parent_gradient_zero:
+                            st[0] += parent_gradient[parent_of_entity_id * 2] * stepsize
+                            st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * stepsize
+                        else:
+                            stepsizex = -2 * self.max_step * random.random() + self.max_step
+                            stepsizey = -2 * self.max_step * random.random() + self.max_step
+                            st[0] += stepsizex
+                            st[1] += stepsizey
+                        if st[0] > self.boundary:
+                            st[0] = self.boundary - random.random()*0.01
+                        if st[0] < -self.boundary:
+                            st[0] = -self.boundary + random.random()*0.01
+                        if st[1] > self.boundary:
+                            st[1] = self.boundary - random.random()*0.01
+                        if st[1] < -self.boundary:
+                            st[1] = -self.boundary + random.random()*0.01
+                        new_parent.append(st)
+                    child_new.append(new_parent)
+                    add_num += 1
+            return child_new
+
+    def gradient_of_state(self,state,buffer):
+        gradient = np.zeros(state.shape)
+        for buffer_state in buffer:
+            gradient += 2 * (state - np.array(buffer_state).reshape(-1))
+        norm = np.linalg.norm(gradient, ord=2)
+        if norm > 0.0:
+            gradient = gradient / np.linalg.norm(gradient, ord=2)
+            gradient_zero = False
+        else:
+            gradient_zero = True
+        return gradient, gradient_zero
 
     def sample_starts(self, N_child, N_archive, N_parent=0):
         self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
@@ -325,6 +418,25 @@ class node_buffer():
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
     
+    def sample_starts_uniform_from_activeAndsolve(self, N_child, N_archive, N_parent=0):
+        self.archiveAndparent = self.archive + self.parent_all
+        self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
+        self.choose_archive_index = random.sample(range(len(self.archiveAndparent)), min(len(self.archiveAndparent), N_child + N_archive + N_parent - len(self.choose_child_index)))
+        if len(self.choose_archive_index) < N_archive:
+            self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child + N_archive + N_parent - len(self.choose_archive_index)))
+        self.choose_child_index = np.sort(self.choose_child_index)
+        self.choose_archive_index = np.sort(self.choose_archive_index)
+        one_length = len(self.choose_child_index) + len(self.choose_archive_index) # 需要搬运的点个数
+        starts_length = len(self.choose_child_index) + len(self.choose_archive_index) 
+        starts = []
+        for i in range(len(self.choose_child_index)):
+            starts.append(self.childlist[self.choose_child_index[i]])
+        for i in range(len(self.choose_archive_index)):
+            starts.append(self.archiveAndparent[self.choose_archive_index[i]])
+        print('sample_archive: ', len(self.choose_archive_index))
+        print('sample_childlist: ', len(self.choose_child_index))
+        return starts, one_length, starts_length
+
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
         del_archive_num = 0
@@ -417,9 +529,11 @@ class node_buffer():
             with open(save_path / 'archive' / ('archive_%i' %(episode)),'w+') as fp:
                 for line in self.archive:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
-            with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
-                for line in self.archive_novelty:
-                    fp.write(str(np.array(line).reshape(-1))+'\n')
+            if len(self.archive) > 0:
+                self.novelty = self.get_novelty(self.archive,self.archive)
+                with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
+                    for line in self.archive_novelty:
+                        fp.write(str(np.array(line).reshape(-1))+'\n')
             with open(save_path / 'parent' / ('parent_%i' %(episode)),'w+') as fp:
                 for line in self.parent:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
@@ -485,12 +599,11 @@ def main():
     #Policy network
     if args.share_policy:
         # share_base = ATTBase_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
-        actor_base = ATTBase_actor_dist_pb_add(envs.observation_space[0].shape[0], envs.action_space[0],num_agents,num_boxes)
-        critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0],num_agents,num_boxes)
+        actor_base = ATTBase_actor_dist_pb_add(envs.observation_space[0].shape[0], envs.action_space[0],num_agents)
+        critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0],num_agents)
         actor_critic = Policy_pb_3(envs.observation_space[0],
                     envs.action_space[0],
                     num_agents = num_agents,
-                    num_box = num_boxes,
                     base=None,
                     actor_base=actor_base,
                     critic_base=critic_base,
@@ -604,24 +717,31 @@ def main():
     use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
     use_novelty_sample = True
     use_parent_sample = True
+    use_uniform_from_activeAndsolve = False
+    use_novelty_sample_activeAndsolve = False
+    use_gradient_sample = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
-    if use_parent_sample:
-        N_parent = 25
+    if use_uniform_from_activeAndsolve:
+        N_parent = 90
+        N_archive = 90
+        N_child = args.n_rollout_threads - N_archive - N_parent
     else:
-        N_parent = 0
-    N_archive = 150
-    N_child = args.n_rollout_threads - N_archive - N_parent
+        if use_parent_sample:
+            N_parent = 25
+        else:
+            N_parent = 0
+        N_archive = 150
+        N_child = args.n_rollout_threads - N_archive - N_parent
     max_step = 0.4
     TB = 1
     M = N_child
-    Rmin = 0.75
+    Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
     start_boundary = [-0.4,0.4,-0.4,0.4]
-    # start_boundary = {'x':[-0.4,0.4],'y':[-0.4,0.4]} # bad init
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -664,11 +784,17 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction
-        if use_samplenearby:
-            if use_novelty_sample:
-                last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+        if use_gradient_sample:
+            last_node.childlist += last_node.Sample_gradient(last_node.parent, current_timestep)
+        else:
+            if use_novelty_sample_activeAndsolve:
+                last_node.childlist += last_node.SampleNearby_novelty_activeAndsolve(last_node.parent, child_novelty_threshold,logger, current_timestep)
             else:
-                last_node.childlist += last_node.SampleNearby(last_node.parent)
+                if use_samplenearby:
+                    if use_novelty_sample:
+                        last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+                    else:
+                        last_node.childlist += last_node.SampleNearby(last_node.parent)
         
         # reset env 
         # one length = now_process_num
@@ -767,7 +893,10 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
-                step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
+                cover_rate_list = []
+                for env_id in range(one_length):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                step_cover_rate[:,step] = np.array(cover_rate_list)
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -855,7 +984,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, current_timestep, False) 
                 wandb.log(
                     {'value_loss': value_loss},
                     current_timestep)      
@@ -989,7 +1118,10 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
-                test_cover_rate[:,step] = np.array(infos)[:,0]
+                cover_rate_list = []
+                for env_id in range(args.n_rollout_threads):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                test_cover_rate[:,step] = np.array(cover_rate_list)
 
                 # If done then clean the history of observations.
                 # insert data in buffer

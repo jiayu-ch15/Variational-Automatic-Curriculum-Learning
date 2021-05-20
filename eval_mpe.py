@@ -8,6 +8,7 @@ from pathlib import Path
 
 import torch
 from tensorboardX import SummaryWriter
+from algorithm.autocurriculum import goal_proposal
 
 from envs import MPEEnv
 
@@ -289,6 +290,35 @@ def produce_uniform_case_grid_pb(num_case, start_boundary, now_agent_num, now_bo
         one_starts_landmark_grid = []
     return archive
 
+def produce_uniform_case_H(num_case, now_agent_num, boundary): # 产生H_map的随机态
+    one_starts_landmark = []
+    one_starts_agent = []
+    archive = [] 
+    # boundary_x x轴活动范围
+    # boundary_y 是y轴活动范围
+    # agent只能在middle room出发，目标点在left and right room
+    boundary_x_agent = boundary['agent']['x']
+    boundary_y_agent = boundary['agent']['y']
+    boundary_x_landmark = boundary['landmark']['x']
+    boundary_y_landmark = boundary['landmark']['y']
+    for j in range(num_case):
+        for i in range(now_agent_num):
+            location_id = np.random.randint(len(boundary_x_landmark))
+            landmark_location_x = np.random.uniform(boundary_x_landmark[location_id][0],boundary_x_landmark[location_id][1])
+            landmark_location_y = np.random.uniform(boundary_y_landmark[location_id][0],boundary_y_landmark[location_id][1])
+            landmark_location = np.array([landmark_location_x,landmark_location_y])
+            one_starts_landmark.append(copy.deepcopy(landmark_location))
+        for i in range(now_agent_num):
+            location_id = np.random.randint(len(boundary_x_agent))
+            agent_location_x = np.random.uniform(boundary_x_agent[location_id][0],boundary_x_agent[location_id][1])
+            agent_location_y = np.random.uniform(boundary_y_agent[location_id][0],boundary_y_agent[location_id][1])
+            agent_location = np.array([agent_location_x,agent_location_y])
+            one_starts_agent.append(copy.deepcopy(agent_location))
+        archive.append(one_starts_agent+one_starts_landmark)
+        one_starts_agent = []
+        one_starts_landmark = []
+    return archive
+
 def main():
     args = get_config()
     
@@ -313,13 +343,7 @@ def main():
     num_agents = args.num_agents
    
     # actor_critic = torch.load('/home/chenjy/curriculum/results/MPE/simple_spread/check/run10/models/agent_model.pt')['model'].to(device)
-    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/50agent_model.pt')['model'].to(device)
-    # filename = '/home/tsing73/curriculum/'
-    # for name, para in zip(actor_critic.actor_base.state_dict(),actor_critic.actor_base.parameters()):
-    #     pdb.set_trace()
-    #     a = para.transpose(0,1).reshape(1,-1)
-    #     np.savetxt(filename+ name + '.txt',np.array(a.to('cpu').detach()),delimiter=',\n')
-    # pdb.set_trace()
+    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/valueerror_map2_p1.0_startscale1.0/run2/models/agent_model.pt')['model'].to(device)
     actor_critic.agents_num = args.num_agents
     actor_critic.boxes_num = args.num_boxes
     num_agents = args.num_agents
@@ -328,16 +352,13 @@ def main():
     cover_rate = 0
     random.seed(1)
     np.random.seed(1)
-    
-    # load files
-    dir_path = '/home/chenjy/curriculum/diversified_left/' + ('archive_' + str(89))
-    if os.path.exists(dir_path):
-        with open(dir_path,'r') as fp :
-            archive = fp.readlines()
-        for i in range(len(archive)):
-            archive[i] = np.array(archive[i][1:-2].split(),dtype=float)
-
-    # starts = produce_good_case_grid_pb(500,[-0.6,0.6,-0.6,0.6],num_agents,num_boxes)
+    boundary = {'x':[-1,1],'y':[-1,1]}
+    goals =  goal_proposal(
+        num_agents=num_agents, boundary=boundary, env_name=args.scenario_name, critic_k=1, 
+        buffer_capacity=5005, proposal_batch=args.n_rollout_threads, restart_p=0.5, 
+        score_type='value_error'
+    )
+    starts = goals.uniform_sampling(500, boundary)
     for eval_episode in range(args.eval_episodes):
         print(eval_episode)
         eval_env = MPEEnv(args)
@@ -346,8 +367,8 @@ def main():
             all_frames.append(image)
         
         # eval_obs, _ = eval_env.reset(num_agents,num_boxes)
-        eval_obs, _ = eval_env.reset(num_agents)
-        # eval_obs = eval_env.new_starts_obs(start,num_agents)
+        # eval_obs, _ = eval_env.reset(num_agents)
+        eval_obs = eval_env.new_starts_obs(starts[eval_episode],num_agents)
         # eval_obs = eval_env.new_starts_obs_pb(starts[eval_episode],num_agents,num_boxes)
         eval_obs = np.array(eval_obs)       
         eval_share_obs = eval_obs.reshape(1, -1)

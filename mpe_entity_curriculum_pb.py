@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import copy
 import glob
 import os
@@ -37,7 +36,7 @@ np.set_printoptions(linewidth=10000)
 
 def main():
     args = get_config()
-    run = wandb.init(project='entity_curriculum',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    run = wandb.init(project='entity_curriculum_pb',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -96,15 +95,16 @@ def main():
     N_child = 325
     N_archive = 150
     N_parent = 25
-    max_step = 0.6
+    max_step = 0.4
     TB = 1
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
     boundary = {'x':[-2,2],'y':[-2,2]}
     start_boundary = {'x':[-0.4,0.4],'y':[-0.4,0.4]}
+    next_phase_para = {'last_agent_num':2, 'now_agent_num':4, 'num_mini_batch': 8, 'next_start_boundary':{'x':[-0.8,0.8],'y':[-0.8,0.8]}}
     upper_bound = 0.9
-    transfer = True
+    transfer = False
     if transfer:
         mix_flag = False
         decay = False
@@ -118,7 +118,7 @@ def main():
         mix_flag = False
         decay = True
         stop_mix_signal = 0.9
-        mix_add_frequency = 30 # 改变比例的频率
+        mix_add_frequency = 300 # 改变比例的频率
         mix_add_count = 0
         ratio_current = 0.1
         if decay:
@@ -130,7 +130,7 @@ def main():
         now_agent_num = now_box_num
     last_mean_cover_rate = 0
     now_mean_cover_rate = 0
-    eval_frequency = 3 #需要fix几个回合
+    eval_frequency = 3
     check_frequency = 1
     save_node_frequency = 3
     save_node_flag = False
@@ -139,14 +139,14 @@ def main():
     random.seed(args.seed)
     np.random.seed(args.seed)
     last_node = node_buffer(last_agent_num,buffer_length,
-                           archive_initial_length=int(args.n_rollout_threads),
+                           archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary,
                            env_name=args.scenario_name)
     now_node = node_buffer(now_agent_num,buffer_length,
-                           archive_initial_length=int(args.n_rollout_threads),
+                           archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
                            max_step=max_step,
                            start_boundary=start_boundary,
@@ -154,11 +154,12 @@ def main():
                            env_name=args.scenario_name)
 
     # region load curricula and model
-    load_curricula = False
+    load_curricula = True
     initial_optimizer = False
     warm_up = False
     warmup_iter = 150
     load_model_path = None
+    only_eval = True
     if load_curricula: # 默认从2、4混合开始训练
         # load path
         load_curricula_path = Path('./curricula') / args.env_name / args.scenario_name / args.load_algorithm_name
@@ -167,9 +168,9 @@ def main():
         model_path = 'models/%iagent_model_0.9.pt'%args.load_num_agents
         load_curricula_path = load_curricula_path / seed_path / Path('%iagents'%args.load_num_agents)
         load_model_path = load_model_path / seed_path / model_path
-        last_agent_num = 2
-        now_agent_num = 4
-        start_boundary = {'x':[-0.8,0.8],'y':[-0.8,0.8]}
+        last_agent_num = next_phase_para['last_agent_num']
+        now_agent_num = next_phase_para['now_agent_num']
+        start_boundary = next_phase_para['next_start_boundary']
         if not transfer:
             mix_flag = True
         # initialize now node
@@ -190,7 +191,7 @@ def main():
         archive_load = []
         for i in range(len(tmp)): 
             archive_load_one = []
-            for j in range(last_node.num_agents * 2):
+            for j in range(int(tmp[0].shape[0]/2)):
                 archive_load_one.append(tmp[i][j*2:(j+1)*2])
             archive_load.append(archive_load_one)
         last_node.archive = copy.deepcopy(archive_load)
@@ -202,7 +203,7 @@ def main():
         parent_load = []
         for i in range(len(tmp)): 
             parent_load_one = []
-            for j in range(last_node.num_agents * 2):
+            for j in range(int(tmp[0].shape[0]/2)):
                 parent_load_one.append(tmp[i][j*2:(j+1)*2])
             parent_load.append(parent_load_one)
         last_node.parent = copy.deepcopy(parent_load)
@@ -214,12 +215,10 @@ def main():
         parent_all_load = []
         for i in range(len(tmp)): 
             parent_all_load_one = []
-            for j in range(last_node.num_agents * 2):
+            for j in range(int(tmp[0].shape[0]/2)):
                 parent_all_load_one.append(tmp[i][j*2:(j+1)*2])
             parent_all_load.append(parent_all_load_one)
         last_node.parent_all = copy.deepcopy(parent_all_load)
-    # end region
-    only_eval = False
 
     # env
     envs = make_parallel_env(args)
@@ -275,7 +274,8 @@ def main():
                    use_popart=args.use_popart,
                    device=device) 
         if load_curricula:
-            agents.load(load_model_path=load_model_path, initial_optimizer=initial_optimizer)     
+            agents.load(load_model_path=load_model_path, initial_optimizer=initial_optimizer)  
+            agents.num_mini_batch = next_phase_para['num_mini_batch']   
     else:
         actor_critic = []
         agents = []
@@ -511,7 +511,7 @@ def main():
                     last_node = copy.deepcopy(now_node)
                     if save_curricula:
                         last_node.save_phase_curricula(save_curricula_dir, upper_bound)
-                    start_boundary = 1.0
+                    start_boundary = next_phase_para['next_start_boundary']
                     now_node = node_buffer(now_agent_num,buffer_length,
                                 archive_initial_length=args.n_rollout_threads,
                                 reproduction_num=M,
@@ -520,9 +520,8 @@ def main():
                                 boundary=boundary,
                                 env_name=args.scenario_name)
                     agents.actor_critic.num_agents = now_node.num_agents
-                    if now_node.num_agents==8:
-                        agents.num_mini_batch = 16
-        # end region
+                    if now_node.num_agents==next_phase_para['now_agent_num']:
+                        agents.num_mini_batch = next_phase_para['num_mini_batch']
                         
         # region turn off mixed_switch
         if not transfer:

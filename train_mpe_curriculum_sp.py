@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO,PPO3
-from algorithm.model import Policy,Policy3, ATTBase_add, ATTBase_actor_dist_add, ATTBase_critic_add
+from algorithm.model import Policy,Policy3, ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -198,6 +198,100 @@ class node_buffer():
             child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
             return child_new
 
+    def SampleNearby_novelty_activeAndsolve(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
+        self.activeAndsolve = self.archive + self.parent_all
+        if len(self.activeAndsolve) > self.topk + 1:
+            self.activeAndsolve_novelty = self.get_novelty(self.activeAndsolve,self.activeAndsolve)
+            self.activeAndsolve, self.activeAndsolve_novelty = self.novelty_sort(self.activeAndsolve, self.activeAndsolve_novelty)
+            novelty_threshold = np.mean(self.activeAndsolve_novelty)
+        else:
+            novelty_threshold = 0
+        # novelty_threshold = child_novelty_threshold
+        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
+        parents = parents + []
+        len_start = len(parents)
+        child_new = []
+        if parents==[]:
+            return []
+        else:
+            add_num = 0
+            while add_num < self.reproduction_num:
+                for k in range(len_start):
+                    st = copy.deepcopy(parents[k])
+                    s_len = len(st)
+                    for i in range(s_len):
+                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                        st[i][0] = st[i][0] + epsilon_x
+                        st[i][1] = st[i][1] + epsilon_y
+                        if st[i][0] > self.boundary:
+                            st[i][0] = self.boundary - random.random()*0.01
+                        if st[i][0] < -self.boundary:
+                            st[i][0] = -self.boundary + random.random()*0.01
+                        if st[i][1] > self.boundary:
+                            st[i][1] = self.boundary - random.random()*0.01
+                        if st[i][1] < -self.boundary:
+                            st[i][1] = -self.boundary + random.random()*0.01
+                    if len(self.activeAndsolve) > self.topk + 1:
+                        if self.get_novelty([st],self.activeAndsolve) > novelty_threshold:
+                            child_new.append(copy.deepcopy(st))
+                            add_num += 1
+                    else:
+                        child_new.append(copy.deepcopy(st))
+                        add_num += 1
+            child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
+            return child_new
+
+    def Sample_gradient(self,parents,timestep):
+        parents = parents + []
+        len_start = len(parents)
+        child_new = []
+        if parents==[]:
+            return []
+        else:
+            add_num = 0
+            while add_num < self.reproduction_num:
+                for parent in parents:
+                    pdb.set_trace()
+                    parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all)
+                    if not parent_gradient_zero:
+                        stepsize = self.max_step * random.random()
+                    new_parent = []
+                    for parent_of_entity_id in range(len(parent)):
+                        st = copy.deepcopy(parent[parent_of_entity_id])
+                        if not parent_gradient_zero:
+                            st[0] += parent_gradient[parent_of_entity_id * 2] * stepsize
+                            st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * stepsize
+                        else:
+                            stepsizex = -2 * self.max_step * random.random() + self.max_step
+                            stepsizey = -2 * self.max_step * random.random() + self.max_step
+                            st[0] += stepsizex
+                            st[1] += stepsizey
+                        if st[0] > self.boundary:
+                            st[0] = self.boundary - random.random()*0.01
+                        if st[0] < -self.boundary:
+                            st[0] = -self.boundary + random.random()*0.01
+                        if st[1] > self.boundary:
+                            st[1] = self.boundary - random.random()*0.01
+                        if st[1] < -self.boundary:
+                            st[1] = -self.boundary + random.random()*0.01
+                        new_parent.append(st)
+                    child_new.append(new_parent)
+                    add_num += 1
+            return child_new
+
+    def gradient_of_state(self,state,buffer):
+        gradient = np.zeros(state.shape)
+        for buffer_state in buffer:
+            gradient += 2 * (state - np.array(buffer_state).reshape(-1))
+        norm = np.linalg.norm(gradient, ord=2)
+        if norm > 0.0:
+            gradient = gradient / np.linalg.norm(gradient, ord=2)
+            gradient_zero = False
+        else:
+            gradient_zero = True
+        return gradient, gradient_zero
+
     def SampleNearby(self, starts): # produce new children and return
         starts = starts + []
         len_start = len(starts)
@@ -252,7 +346,7 @@ class node_buffer():
         print('sample_childlist: ', len(self.choose_child_index))
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
-    
+
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
         del_archive_num = 0
@@ -327,7 +421,7 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
         wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
         wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
-    
+
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
         if self.agent_num!=0:
@@ -344,10 +438,11 @@ class node_buffer():
             with open(save_path / 'archive' / ('archive_%i' %(episode)),'w+') as fp:
                 for line in self.archive:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
-            self.novelty = self.get_novelty(self.archive,self.archive)
-            with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
-                for line in self.archive_novelty:
-                    fp.write(str(np.array(line).reshape(-1))+'\n')
+            if len(self.archive) > 0:
+                self.novelty = self.get_novelty(self.archive,self.archive)
+                with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
+                    for line in self.archive_novelty:
+                        fp.write(str(np.array(line).reshape(-1))+'\n')
             with open(save_path / 'parent' / ('parent_%i' %(episode)),'w+') as fp:
                 for line in self.parent:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
@@ -531,16 +626,24 @@ def main():
     use_child_novelty = False # 保持false
     use_novelty_sample = True
     use_parent_sample = True
+    use_uniform_from_activeAndsolve = False
+    use_novelty_sample_activeAndsolve = False
+    use_gradient_sample = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
-    if use_parent_sample:
-        N_parent = 25
+    if use_uniform_from_activeAndsolve:
+        N_parent = 90
+        N_archive = 90
+        N_child = args.n_rollout_threads - N_archive - N_parent
     else:
-        N_parent = 0
-    N_archive = 150
-    N_child = args.n_rollout_threads - N_archive - N_parent
+        if use_parent_sample:
+            N_parent = 25
+        else:
+            N_parent = 0
+        N_archive = 150
+        N_child = args.n_rollout_threads - N_archive - N_parent
     TB = 1
     M = N_child
     Rmin = 0.5
@@ -587,10 +690,16 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction
-        if use_novelty_sample:
-            last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+        if use_gradient_sample:
+            last_node.childlist += last_node.Sample_gradient(last_node.parent, current_timestep)
         else:
-            last_node.childlist += last_node.SampleNearby(last_node.parent)
+            if use_novelty_sample_activeAndsolve:
+                last_node.childlist += last_node.SampleNearby_novelty_activeAndsolve(last_node.parent, child_novelty_threshold,logger, current_timestep)
+            else:
+                if use_novelty_sample:
+                    last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+                else:
+                    last_node.childlist += last_node.SampleNearby(last_node.parent)
         
         # reset env 
         # one length = now_process_num
@@ -777,8 +886,8 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False) 
-                print('value_loss: ', value_loss)
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, current_timestep,False) 
+                # print('value_loss: ', value_loss)
                 wandb.log(
                     {'value_loss': value_loss},
                     current_timestep)

@@ -958,10 +958,10 @@ class PPO3():# actor_critic分开
                     
                     actor_norm, actor_grad_norm = get_p_and_g_mean_norm(self.actor_critic.actor_base.parameters())
                     critic_norm, critic_grad_norm = get_p_and_g_mean_norm(self.actor_critic.critic_base.parameters())
-                    wandb.log({'actor_weight':actor_norm}, timesteps)
-                    wandb.log({'critic_weight':critic_norm}, timesteps)
-                    wandb.log({'actor_grad':actor_grad_norm}, timesteps)
-                    wandb.log({'critic_grad':critic_grad_norm}, timesteps)
+                    # wandb.log({'actor_weight':actor_norm}, timesteps)
+                    # wandb.log({'critic_weight':critic_norm}, timesteps)
+                    # wandb.log({'actor_grad':actor_grad_norm}, timesteps)
+                    # wandb.log({'critic_grad':critic_grad_norm}, timesteps)
                         
                     if self.use_max_grad_norm:
                         nn.utils.clip_grad_norm_(self.actor_critic.actor_base.parameters(), self.max_grad_norm)

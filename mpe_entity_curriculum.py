@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import copy
 import glob
 import os
@@ -103,6 +102,7 @@ def main():
     Rmax = 0.95
     boundary = {'x':[-3,3],'y':[-3,3]}
     start_boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
+    next_phase_para = {'last_agent_num':4, 'now_agent_num':8, 'num_mini_batch': 16, 'next_start_boundary':{'x':[-1,1],'y':[-1,1]}}
     upper_bound = 0.9
     transfer = False
     if transfer:
@@ -167,9 +167,9 @@ def main():
         model_path = 'models/%iagent_model_0.9.pt'%args.load_num_agents
         load_curricula_path = load_curricula_path / seed_path / Path('%iagents'%args.load_num_agents)
         load_model_path = load_model_path / seed_path / model_path
-        last_agent_num = 4
-        now_agent_num = 8
-        start_boundary = {'x':[-1,1],'y':[-1,1]}
+        last_agent_num = next_phase_para['last_agent_num']
+        now_agent_num = next_phase_para['now_agent_num']
+        start_boundary = next_phase_para['next_start_boundary']
         if not transfer:
             mix_flag = True
         # initialize now node
@@ -219,7 +219,7 @@ def main():
             parent_all_load.append(parent_all_load_one)
         last_node.parent_all = copy.deepcopy(parent_all_load)
     # end region
-    only_eval = False
+    only_eval = True
 
     # env
     envs = make_parallel_env(args)
@@ -482,11 +482,11 @@ def main():
             print('----------evaluation-------------')
             # current
             eval_num_agents = now_node.num_agents
-            mean_cover_rate_current, mean_success_rate_current, collision_num_current, eval_episode_reward_current = evaluation(envs, agents.actor_critic, args, eval_num_agents, current_timestep)
+            mean_cover_rate_current, eval_episode_reward_current = evaluation(envs, agents.actor_critic, args, eval_num_agents, current_timestep)
             print('current cover rate ' + str(eval_num_agents) + ': ',mean_cover_rate_current)
             wandb.log({str(eval_num_agents) + 'cover_rate': mean_cover_rate_current}, current_timestep)
-            wandb.log({str(eval_num_agents) + 'success_rate': mean_success_rate_current}, current_timestep)
-            wandb.log({str(eval_num_agents) + 'test_collision_num': collision_num_current}, current_timestep)
+            # wandb.log({str(eval_num_agents) + 'success_rate': mean_success_rate_current}, current_timestep)
+            # wandb.log({str(eval_num_agents) + 'test_collision_num': collision_num_current}, current_timestep)
             wandb.log({str(eval_num_agents) + 'eval_episode_reward': eval_episode_reward_current}, current_timestep)
             # # target
             # if eval_num_agents != args.eval_num_agents:
@@ -513,7 +513,7 @@ def main():
                     last_node = copy.deepcopy(now_node)
                     if save_curricula:
                         last_node.save_phase_curricula(save_curricula_dir, upper_bound)
-                    start_boundary = 1.0
+                    start_boundary = next_phase_para['next_start_boundary']
                     now_node = node_buffer(now_agent_num,buffer_length,
                                 archive_initial_length=args.n_rollout_threads,
                                 reproduction_num=M,
@@ -521,9 +521,9 @@ def main():
                                 start_boundary=start_boundary,
                                 boundary=boundary,
                                 env_name=args.scenario_name)
-                    agents.actor_critic.num_agents = now_node.num_agents
-                    if now_node.num_agents==8:
-                        agents.num_mini_batch = 16
+                    agents.actor_critic.agents_num = now_node.num_agents
+                    if now_node.num_agents==next_phase_para['now_agent_num']:
+                        agents.num_mini_batch = next_phase_para['num_mini_batch']
         # end region
                         
         # region turn off mixed_switch

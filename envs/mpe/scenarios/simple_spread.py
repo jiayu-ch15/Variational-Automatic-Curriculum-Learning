@@ -94,7 +94,7 @@ class Scenario(BaseScenario):
                     break
         return 0.1*rew
 
-    def info_coverage_rate(self, world):
+    def get_info(self, world):
         # cover
         num = 0
         success = False
@@ -118,7 +118,14 @@ class Scenario(BaseScenario):
                     if self.is_collision(a, agent) and a!=agent:
                         collision_num += 1
                         break
-        info_list = {'cover_rate': num/len(world.landmarks),'collision': collision_num, 'success': success}
+        
+        # position info
+        pos_info = []
+        for agent in world.agents:
+            pos_info.append(agent.state.p_pos)
+        for landmark in world.landmarks:
+            pos_info.append(landmark.state.p_pos)
+        info_list = {'cover_rate': num/len(world.landmarks),'collision': collision_num, 'success': success, 'pos_state': np.array(pos_info)}
         return info_list
 
     def observation(self, agent, world):

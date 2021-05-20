@@ -1,4 +1,5 @@
 import numpy as np
+import os
 import random
 import pdb
 import wandb
@@ -484,7 +485,7 @@ class node_buffer():
             return 0
 
 class goal_proposal():
-    def __init__(self,num_agents, boundary, env_name, critic_k, buffer_capacity, proposal_batch):
+    def __init__(self,num_agents, boundary, env_name, critic_k, buffer_capacity, proposal_batch, restart_p, score_type='value_error'):
         # TODO: zip env parameters
         self.num_agents = num_agents
         self.boundary = boundary
@@ -492,6 +493,89 @@ class goal_proposal():
         self.critic_k = critic_k
         self.buffer_capacity = buffer_capacity
         self.proposal_batch = proposal_batch
+        self.restart_p = restart_p
+        self.buffer = [] # store restart states
+        self.buffer_priority = []# store the priority of restart states
+        self.score_type = score_type
+
+    def restart_sampling(self, boundary, start_boundary, args, envs, agents, actor_critic, use_gae, use_one_step, use_easy_sampling,timestep):
+        starts = []
+        if len(self.buffer) > 0:
+            self.buffer, self.buffer_priority = self.priority_sort(self.buffer, self.buffer_priority)
+            num_restart = 0
+            for index in range(self.proposal_batch):
+                num_restart += np.random.choice([0,1],size=1,replace=True,p=[1-self.restart_p,self.restart_p])[0]
+        else:
+            num_restart = 0
+        # wandb.log({'num_restart':num_restart},timestep)
+        if num_restart == 0:
+            if use_easy_sampling:
+                starts += self.easy_sampling(starts_length=self.proposal_batch,start_boundary=start_boundary)
+            else:
+                starts += self.uniform_sampling(starts_length=self.proposal_batch,boundary=boundary)
+        else:
+            # restart and pop up the "num_restart" biggest states
+            if len(self.buffer) >= num_restart:
+                starts += self.priority_sampling(starts_length=num_restart,timestep=timestep)
+                # uniform sampling 
+                if use_easy_sampling:
+                    starts += self.easy_sampling(starts_length=self.proposal_batch-num_restart,start_boundary=start_boundary)
+                else:
+                    starts += self.uniform_sampling(starts_length=self.proposal_batch-num_restart,boundary=boundary)
+            else:
+                starts += self.priority_sampling(starts_length=len(self.buffer),timestep=timestep)
+                # uniform sampling 
+                if use_easy_sampling:
+                    starts += self.easy_sampling(starts_length=self.proposal_batch-len(self.buffer),start_boundary=start_boundary)
+                else:
+                    starts += self.uniform_sampling(starts_length=self.proposal_batch-len(self.buffer),boundary=boundary)
+        return starts
+        
+    def add_restart_states(self, restart_states, restart_states_value, args, envs, agents, actor_critic, use_gae, use_one_step, use_states_clip=False):
+        # priority means array
+        if use_states_clip:
+            for state in restart_states:
+                for entity_id in range(state.shape[0]):
+                    noise = np.random.uniform(-0.01,0.01)
+                    state[entity_id] = np.clip(state[entity_id],self.boundary['x'][0],self.boundary['x'][1]) + noise
+
+        if len(self.buffer) > 0:
+            self.buffer_priority = self.get_priority(self.buffer, args, envs, agents, actor_critic, use_gae, use_one_step)
+        self.buffer += restart_states
+        self.buffer_priority = np.array(self.buffer_priority).reshape(-1)
+        self.buffer_priority = np.concatenate((self.buffer_priority,restart_states_value))
+        if len(self.buffer) > self.buffer_capacity:
+            self.buffer, self.buffer_priority = self.priority_sort(self.buffer, self.buffer_priority)
+            self.buffer = self.buffer[len(self.buffer)-self.buffer_capacity:]
+            self.buffer_priority = self.buffer_priority[len(self.buffer_priority)-self.buffer_capacity:]
+
+    def priority_sampling(self, starts_length,timestep):
+        starts = self.buffer[len(self.buffer)-starts_length:]
+        wandb.log({'training_value_error':np.mean(self.buffer_priority[len(self.buffer_priority)-starts_length:])},timestep)
+        self.buffer = self.buffer[0:len(self.buffer)-starts_length]
+        self.buffer_priority = self.buffer_priority[0:len(self.buffer_priority)-starts_length]
+        return starts
+
+    def get_priority(self, buffer, args, envs, agents, actor_critic, use_gae, use_one_step):
+        if self.score_type == 'value_error':
+            score = []
+            if len(buffer) > args.n_rollout_threads:
+                for batch_id in range(int(len(buffer)/args.n_rollout_threads)):
+                    value_error_score_batch, _ = value_error_score(buffer[batch_id*args.n_rollout_threads:(batch_id+1)*args.n_rollout_threads], args, envs, agents, actor_critic, use_gae, use_one_step)
+                    score.append(value_error_score_batch)
+                score = np.concatenate(score)
+            else:
+                score, _ = value_error_score(buffer, args, envs, agents, actor_critic, use_gae, use_one_step)
+        return score
+        # elif self.score_type == 'value_disagreement':
+        #     pass
+ 
+    def priority_sort(self, buffer, buffer_priority):
+        zipped = zip(buffer,buffer_priority)
+        sort_zipped = sorted(zipped,key=lambda x:(x[1],np.mean(x[0])))
+        result = zip(*sort_zipped)
+        buffer_new, buffer_priority_new = [list(x) for x in result]
+        return buffer_new, buffer_priority_new
 
     def easy_sampling(self, starts_length, start_boundary):
         one_starts_landmark = []
@@ -506,7 +590,7 @@ class goal_proposal():
                 epsilon = -2 * 0.01 * random.random() + 0.01
                 one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
             # select_starts.append(one_starts_agent+one_starts_landmark)
-            archive.append(one_starts_agent+one_starts_landmark)
+            archive.append(np.array(one_starts_agent+one_starts_landmark))
             one_starts_agent = []
             one_starts_landmark = []
         return archive
@@ -522,134 +606,39 @@ class goal_proposal():
                     one_starts_landmark.append(copy.deepcopy(landmark_location))
                     agent_location = np.array([np.random.uniform(boundary['x'][0],boundary['x'][1]),np.random.uniform(boundary['y'][0],boundary['y'][1])])
                     one_starts_agent.append(copy.deepcopy(agent_location))
-                archive.append(one_starts_agent+one_starts_landmark)
+                # agent first, landmarks second
+                archive.append(np.array(one_starts_agent+one_starts_landmark))
                 one_starts_agent = []
                 one_starts_landmark = []
             return archive
 
-    def value_disagreement_sampling(self, starts, actor_critic, starts_share_obs, starts_obs, starts_recurrent_hidden_states, starts_recurrent_hidden_states_critic, starts_masks):
-        starts_value_list = np.zeros((self.buffer_capacity, self.num_agents, self.critic_k)).astype(np.float32)
-        for agent_id in range(self.num_agents):
-            actor_critic.eval() 
-            starts_value,_,_ = actor_critic.get_value(
-                                        torch.FloatTensor(starts_share_obs[:,agent_id]),
-                                        torch.FloatTensor(starts_obs[:,agent_id]),
-                                        torch.FloatTensor(starts_recurrent_hidden_states[:,agent_id]),
-                                        torch.FloatTensor(starts_recurrent_hidden_states_critic[:,agent_id]),
-                                        torch.FloatTensor(starts_masks[:,agent_id]))
-            starts_value = starts_value.detach().cpu().numpy().squeeze(-1)
-            starts_value_list[:,agent_id,:] = starts_value
-        # deal with multi-agent, VDN or Q-mix
-        starts_value_list = np.sum(starts_value_list,axis=1)
-        # value std
-        starts_value_list = np.std(starts_value_list,axis=1)
-        average_value_disagreement = np.mean(starts_value_list)
-        # probability
-        starts_value_list = starts_value_list / np.sum(starts_value_list)
-        starts_index = np.arange(0,self.buffer_capacity,1)
-        # no repeat sampling
-        starts_proposal_index = np.random.choice(starts_index,size=self.proposal_batch,replace=False,p=starts_value_list)
-        starts_proposal = []
-        for start_id in range(len(starts_proposal_index)):
-            starts_proposal.append(starts[starts_proposal_index[start_id]])
-        # end region
-        return starts_proposal, average_value_disagreement
-    
-    def TD_error_sampling(self, args, starts, envs, actor_critic, starts_share_obs, starts_obs, starts_recurrent_hidden_states, starts_recurrent_hidden_states_critic, starts_masks):
-        starts_value_list = np.zeros((self.buffer_capacity, self.num_agents, 2)).astype(np.float32)
-        # get V(s0) and action
-        actions= []
-        recurrent_hidden_statess = []
-        recurrent_hidden_statess_critic = []
-        for agent_id in range(self.num_agents):
-            actor_critic.eval()
-            value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
-                torch.FloatTensor(starts_share_obs[:,agent_id]), 
-                torch.FloatTensor(starts_obs[:,agent_id]), 
-                torch.FloatTensor(starts_recurrent_hidden_states[:,agent_id]), 
-                torch.FloatTensor(starts_recurrent_hidden_states_critic[:,agent_id]),
-                torch.FloatTensor(starts_masks[:,agent_id]))
-            value = value.detach().cpu().numpy().squeeze(-1)
-            starts_value_list[:,agent_id,0] = value # get V(si)
-            actions.append(action.detach().cpu().numpy())
-            recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
-            recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
-        # rearrange action
-        actions_env = []
-        for i in range(self.buffer_capacity):
-            one_hot_action_env = []
-            for agent_id in range(self.num_agents):
-                if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
-                    uc_action = []
-                    for j in range(envs.action_space[agent_id].shape):
-                        uc_one_hot_action = np.zeros(envs.action_space[agent_id].high[j]+1)
-                        uc_one_hot_action[actions[agent_id][i][j]] = 1
-                        uc_action.append(uc_one_hot_action)
-                    uc_action = np.concatenate(uc_action)
-                    one_hot_action_env.append(uc_action)
-                        
-                elif envs.action_space[agent_id].__class__.__name__ == 'Discrete':    
-                    one_hot_action = np.zeros(envs.action_space[agent_id].n)
-                    one_hot_action[actions[agent_id][i]] = 1
-                    one_hot_action_env.append(one_hot_action)
-                else:
-                    raise NotImplementedError
-            actions_env.append(one_hot_action_env)
-        # get s1
-        obs = []
-        rewards = []
-        for epoch_id in range(int(self.buffer_capacity/self.proposal_batch)):
-            obs_epoch = envs.new_starts_obs(starts[epoch_id*self.proposal_batch:(epoch_id+1)*self.proposal_batch], self.num_agents, self.proposal_batch)
-            obs_epoch, rewards_epoch, dones, infos, _ = envs.step(actions_env[epoch_id*self.proposal_batch:(epoch_id+1)*self.proposal_batch], self.proposal_batch, self.num_agents)
-            obs.append(obs_epoch)
-            rewards.append(rewards_epoch)
-        obs = np.concatenate(obs,axis=0)
-        rewards = np.concatenate(rewards,axis=0).squeeze(axis=2)
-        share_obs = obs.reshape(self.buffer_capacity, -1)        
-        share_obs = np.expand_dims(share_obs,1).repeat(self.num_agents,axis=1) 
-        recurrent_hidden_states = np.array(recurrent_hidden_statess).transpose(1,0,2)
-        recurrent_hidden_states_critic = np.array(recurrent_hidden_statess_critic).transpose(1,0,2)
-        # get V(s1)
-        for agent_id in range(self.num_agents):
-            actor_critic.eval() 
-            value,_,_ = actor_critic.get_value(agent_id,
-                                        torch.FloatTensor(share_obs[:,agent_id]),
-                                        torch.FloatTensor(obs[:,agent_id]),
-                                        torch.FloatTensor(recurrent_hidden_states[:,agent_id]),
-                                        torch.FloatTensor(recurrent_hidden_states_critic[:,agent_id]),
-                                        torch.FloatTensor(starts_masks[:,agent_id]))
-            value = value.detach().cpu().numpy().squeeze(-1)
-            starts_value_list[:,agent_id,1] = value
-        # get TD_error(0)
-        TD_error = np.zeros((self.buffer_capacity, self.num_agents)).astype(np.float32)
-        TD_error = np.abs(rewards + args.gamma * starts_value_list[:,:,1] - starts_value_list[:,:,0])
+    def save_node(self, starts, dir_path, episode):
+        # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
+        save_path = dir_path
+        if not os.path.exists(save_path):
+            os.makedirs(save_path / 'starts')
+        with open(save_path / 'starts'/ ('starts_%i' %(episode)),'w+') as fp:
+            for line in starts:
+                fp.write(str(np.array(line).reshape(-1))+'\n')
 
-        # deal with multi-agent, VDN
-        TD_error = np.sum(TD_error,axis=1)
-        average_TD_error = np.mean(TD_error)
-        # probability
-        TD_error = TD_error / np.sum(TD_error)
-        starts_index = np.arange(0,self.buffer_capacity,1)
-        # no repeat sampling
-        starts_proposal_index = np.random.choice(starts_index,size=self.proposal_batch,replace=False,p=TD_error)
-        starts_proposal = []
-        for start_id in range(len(starts_proposal_index)):
-            starts_proposal.append(starts[starts_proposal_index[start_id]])
-        # end region
-        return starts_proposal, average_TD_error
-
-def value_error_score(args, batch_num, starts, envs, agents, actor_critic, use_gae, use_one_step):
-    obs = envs.new_starts_obs(starts, args.num_agents, args.n_rollout_threads)
+def value_error_score(starts, args, envs, agents, actor_critic, use_gae, use_one_step):
+    # update envs
+    envs.close()
+    envs = make_parallel_env(args)
+    if args.scenario_name == 'simple_spread':
+        obs = envs.new_starts_obs(starts, args.num_agents, len(starts))
+    elif args.scenario_name == 'push_ball':
+        obs = envs.new_starts_obs_pb(starts, args.num_agents, args.num_agents, len(starts))
     #replay buffer
     rollouts = RolloutStorage(args.num_agents,
                 args.episode_length, 
-                args.n_rollout_threads,
+                len(starts),
                 envs.observation_space[0], 
                 envs.action_space[0],
                 args.hidden_size) 
     # replay buffer init
     if args.share_policy: 
-        share_obs = obs.reshape(args.n_rollout_threads, -1)        
+        share_obs = obs.reshape(len(starts), -1)        
         share_obs = np.expand_dims(share_obs,1).repeat(args.num_agents,axis=1)    
         rollouts.share_obs[0] = share_obs.copy() 
         rollouts.obs[0] = obs.copy()               
@@ -700,7 +689,7 @@ def value_error_score(args, batch_num, starts, envs, agents, actor_critic, use_g
                 recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
         # rearrange action
         actions_env = []
-        for i in range(args.n_rollout_threads):
+        for i in range(len(starts)):
             one_hot_action_env = []
             for agent_id in range(args.num_agents):
                 if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
@@ -721,7 +710,7 @@ def value_error_score(args, batch_num, starts, envs, agents, actor_critic, use_g
             actions_env.append(one_hot_action_env)
         
         # Obser reward and next obs
-        obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, args.num_agents)
+        obs, rewards, dones, infos, _ = envs.step(actions_env, len(starts), args.num_agents)
         
         # If done then clean the history of observations.
         # insert data in buffer
@@ -738,7 +727,7 @@ def value_error_score(args, batch_num, starts, envs, agents, actor_critic, use_g
             masks.append(mask)
                         
         if args.share_policy: 
-            share_obs = obs.reshape(args.n_rollout_threads, -1)        
+            share_obs = obs.reshape(len(starts), -1)        
             share_obs = np.expand_dims(share_obs,1).repeat(args.num_agents,axis=1)    
             rollouts.insert(share_obs, 
                         obs, 
@@ -800,16 +789,16 @@ def value_error_score(args, batch_num, starts, envs, agents, actor_critic, use_g
                                             args.use_proper_time_limits,
                                             args.use_popart,
                                             agents[agent_id].value_normalizer)
-    value_error = np.abs(rollouts.returns[:,:] - rollouts.value_preds[step,:])
+    envs.close()
+    value_error = rollouts.returns[:-1,:] - rollouts.value_preds[:-1,:]
     # deal with multi-agent, VDN
     value_error = np.sum(value_error,axis=2)
+    value_error = np.abs(value_error)
     if use_one_step:
-        value_error = value_error[0]
+        value_error_score = value_error[0]
     else:
-        value_error = np.mean(value_error,axis=0)
-    average_value_error = np.mean(value_error)
-    # normalization
-    value_error_score = np.arctan(value_error) * 2 / np.pi
+        value_error_score = np.mean(value_error,axis=0)
+    average_value_error = np.mean(value_error_score)
     # value_error_score = softmax(value_error)
     return value_error_score, average_value_error
 
@@ -833,7 +822,7 @@ def value_disagreement_score(args, batch_num, starts, actor_critic, starts_share
     disagreement_score = np.arctan(starts_value_list) * 2 / np.pi
     return disagreement_score, average_value_disagreement
 
-def evaluation(envs, actor_critic, args, eval_num_agents, timestep):
+def evaluation(envs, actor_critic, args, eval_num_agents, timestep, test_starts=None):
     # update envs
     envs.close()
     args.n_rollout_threads = 500
@@ -841,9 +830,15 @@ def evaluation(envs, actor_critic, args, eval_num_agents, timestep):
     # reset num_agents
     actor_critic.num_agents = eval_num_agents
     if args.scenario_name == 'simple_spread':
-        obs, _ = envs.reset(eval_num_agents)
+        if test_starts is None:
+            obs, _ = envs.reset(eval_num_agents)
+        else:
+            obs = envs.new_starts_obs(test_starts, eval_num_agents, len(test_starts))
     elif args.scenario_name == 'push_ball':
-        obs, _ = envs.reset(eval_num_agents, eval_num_agents)
+        if test_starts is None:
+            obs, _ = envs.reset(eval_num_agents, eval_num_agents)
+        else:
+            obs = envs.new_starts_obs_pb(test_starts, eval_num_agents, eval_num_agents, len(test_starts))
     #replay buffer
     rollouts = RolloutStorage_share(eval_num_agents,
                 args.test_episode_length, 
@@ -1187,10 +1182,200 @@ def collect_data(envs, agents, actor_critic, args, node, starts, starts_length, 
     envs.close()
     return rollouts, timestep
 
+def collect_data_and_states(envs, agents, actor_critic, args, starts, starts_length, one_length, timestep):
+    # update envs
+    envs.close()
+    args.n_rollout_threads = starts_length
+    envs = make_parallel_env(args)
+    # reset num_agents
+    actor_critic.num_agents = args.num_agents
+    if args.scenario_name == 'simple_spread':
+        obs = envs.new_starts_obs(starts, args.num_agents, starts_length)
+    elif args.scenario_name == 'push_ball':
+        obs = envs.new_starts_obs_pb(starts, args.num_agents, args.num_agents, starts_length)
+    #replay buffer
+    rollouts = RolloutStorage_share(args.num_agents,
+                args.episode_length, 
+                starts_length,
+                envs.observation_space[0], 
+                envs.action_space[0],
+                args.hidden_size) 
+    # replay buffer init
+    if args.share_policy: 
+        share_obs = obs.reshape(starts_length, -1)   
+        rollouts.share_obs[0] = share_obs.copy() 
+        rollouts.obs[0] = obs.copy()               
+        rollouts.recurrent_hidden_states = np.zeros(rollouts.recurrent_hidden_states.shape).astype(np.float32)
+        rollouts.recurrent_hidden_states_critic = np.zeros(rollouts.recurrent_hidden_states_critic.shape).astype(np.float32)
+    else:
+        share_obs = []
+        for o in obs:
+            share_obs.append(list(itertools.chain(*o)))
+        share_obs = np.array(share_obs)
+        for agent_id in range(args.num_agents):    
+            rollouts[agent_id].share_obs[0] = share_obs.copy()
+            rollouts[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
+            rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
+            rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
+    step_cover_rate = np.zeros(shape=(one_length,args.episode_length))
+    # store states that agents have experienced
+    restart_states = []
+    for step in range(args.episode_length):
+        # Sample actions
+        values = []
+        actions= []
+        action_log_probs = []
+        recurrent_hidden_statess = []
+        recurrent_hidden_statess_critic = []
+        
+        with torch.no_grad():                
+            for agent_id in range(args.num_agents):
+                if args.share_policy:
+                    actor_critic.eval()
+                    value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
+                        torch.FloatTensor(rollouts.share_obs[step]), 
+                        torch.FloatTensor(rollouts.obs[step,:,agent_id]), 
+                        torch.FloatTensor(rollouts.recurrent_hidden_states[step,:,agent_id]), 
+                        torch.FloatTensor(rollouts.recurrent_hidden_states_critic[step,:,agent_id]),
+                        torch.FloatTensor(rollouts.masks[step,:,agent_id]))
+                else:
+                    actor_critic[agent_id].eval()
+                    value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic[agent_id].act(agent_id,
+                        torch.FloatTensor(rollouts[agent_id].share_obs[step,:]), 
+                        torch.FloatTensor(rollouts[agent_id].obs[step,:]), 
+                        torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states[step,:]), 
+                        torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states_critic[step,:]),
+                        torch.FloatTensor(rollouts[agent_id].masks[step,:]))
+                    
+                values.append(value.detach().cpu().numpy())
+                actions.append(action.detach().cpu().numpy())
+                action_log_probs.append(action_log_prob.detach().cpu().numpy())
+                recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
+                recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
+        
+        # rearrange action
+        actions_env = []
+        for i in range(starts_length):
+            one_hot_action_env = []
+            for agent_id in range(args.num_agents):
+                if envs.action_space[agent_id].__class__.__name__ == 'MultiDiscrete':
+                    uc_action = []
+                    for j in range(envs.action_space[agent_id].shape):
+                        uc_one_hot_action = np.zeros(envs.action_space[agent_id].high[j]+1)
+                        uc_one_hot_action[actions[agent_id][i][j]] = 1
+                        uc_action.append(uc_one_hot_action)
+                    uc_action = np.concatenate(uc_action)
+                    one_hot_action_env.append(uc_action)
+                        
+                elif envs.action_space[agent_id].__class__.__name__ == 'Discrete':    
+                    one_hot_action = np.zeros(envs.action_space[agent_id].n)
+                    one_hot_action[actions[agent_id][i]] = 1
+                    one_hot_action_env.append(one_hot_action)
+                else:
+                    raise NotImplementedError
+            actions_env.append(one_hot_action_env)
+        
+        # Obser reward and next obs
+        obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, args.num_agents)
+        cover_rate_list = []
+        for env_id in range(one_length):
+            cover_rate_list.append(infos[env_id][0]['cover_rate'])
+            restart_states.append(infos[env_id][0]['pos_state'])
+        step_cover_rate[:,step] = np.array(cover_rate_list)
+
+        # If done then clean the history of observations.
+        # insert data in buffer
+        masks = []
+        for i, done in enumerate(dones): 
+            mask = []               
+            for agent_id in range(args.num_agents): 
+                if done[agent_id]:    
+                    recurrent_hidden_statess[agent_id][i] = np.zeros(args.hidden_size).astype(np.float32)
+                    recurrent_hidden_statess_critic[agent_id][i] = np.zeros(args.hidden_size).astype(np.float32)    
+                    mask.append([0.0])
+                else:
+                    mask.append([1.0])
+            masks.append(mask)
+                        
+        if args.share_policy: 
+            share_obs = obs.reshape(starts_length, -1)           
+            rollouts.insert(share_obs, 
+                        obs, 
+                        np.array(recurrent_hidden_statess).transpose(1,0,2), 
+                        np.array(recurrent_hidden_statess_critic).transpose(1,0,2), 
+                        np.array(actions).transpose(1,0,2),
+                        np.array(action_log_probs).transpose(1,0,2), 
+                        np.array(values).transpose(1,0,2),
+                        rewards, 
+                        masks)
+        else:
+            share_obs = []
+            for o in obs:
+                share_obs.append(list(itertools.chain(*o)))
+            share_obs = np.array(share_obs)
+            for agent_id in range(args.num_agents):
+                rollouts[agent_id].insert(share_obs, 
+                        np.array(list(obs[:,agent_id])), 
+                        np.array(recurrent_hidden_statess[agent_id]), 
+                        np.array(recurrent_hidden_statess_critic[agent_id]), 
+                        np.array(actions[agent_id]),
+                        np.array(action_log_probs[agent_id]), 
+                        np.array(values[agent_id]),
+                        rewards[:,agent_id], 
+                        np.array(masks)[:,agent_id])
+    # import pdb;pdb.set_trace()
+    wandb.log({str(args.num_agents)+'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-args.historical_length:],axis=1))}, timestep)
+    # wandb.log({str(args.num_agents)+'training_success_rate': np.mean(np.mean(step_success[:,-args.historical_length:],axis=1))}, timestep)
+    print(str(args.num_agents) + 'training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-args.historical_length:],axis=1)), end=' ')
+    print('threads: ', args.n_rollout_threads)
+    # wandb.log({str(args.num_agents)+'train_collision_num': np.mean(step_collision_num)},timestep)
+    timestep += args.episode_length * starts_length
+                                
+    with torch.no_grad():  # get value and compute return
+        for agent_id in range(args.num_agents):         
+            if args.share_policy: 
+                actor_critic.eval()                
+                next_value,_,_ = actor_critic.get_value(agent_id,
+                                            # torch.FloatTensor(rollouts_last.share_obs[-1,:,agent_id]), 
+                                            torch.FloatTensor(rollouts.share_obs[-1]),
+                                            torch.FloatTensor(rollouts.obs[-1,:,agent_id]), 
+                                            torch.FloatTensor(rollouts.recurrent_hidden_states[-1,:,agent_id]),
+                                            torch.FloatTensor(rollouts.recurrent_hidden_states_critic[-1,:,agent_id]),
+                                            torch.FloatTensor(rollouts.masks[-1,:,agent_id]))
+                next_value = next_value.detach().cpu().numpy()
+                rollouts.compute_returns(agent_id,
+                                next_value, 
+                                args.use_gae, 
+                                args.gamma,
+                                args.gae_lambda, 
+                                args.use_proper_time_limits,
+                                args.use_popart,
+                                agents.value_normalizer)
+            else:
+                actor_critic[agent_id].eval()
+                next_value,_,_ = actor_critic[agent_id].get_value(agent_id,
+                                                        torch.FloatTensor(rollouts[agent_id].share_obs[-1,:]), 
+                                                        torch.FloatTensor(rollouts[agent_id].obs[-1,:]), 
+                                                        torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states[-1,:]),
+                                                        torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states_critic[-1,:]),
+                                                        torch.FloatTensor(rollouts[agent_id].masks[-1,:]))
+                next_value = next_value.detach().cpu().numpy()
+                rollouts[agent_id].compute_returns(next_value, 
+                                        args.use_gae, 
+                                        args.gamma,
+                                        args.gae_lambda, 
+                                        args.use_proper_time_limits,
+                                        args.use_popart,
+                                        agents[agent_id].value_normalizer)
+    envs.close()
+    value_error = rollouts.returns[:-1,:] - rollouts.value_preds[:-1,:]
+    # deal with multi-agent, VDN
+    value_error = np.sum(value_error,axis=2)
+    value_error = np.abs(value_error)
+    restart_states_value = value_error.reshape(-1)
+    return rollouts, timestep, restart_states, restart_states_value
+
 def save(save_path, agents):
     torch.save({'model': agents.actor_critic, 
                 'optimizer_actor': agents.optimizer_actor,
                 'optimizer_critic': agents.optimizer_critic}, save_path)
-
-def softmax(z):
-    return np.exp(z)/sum(np.exp(z))
