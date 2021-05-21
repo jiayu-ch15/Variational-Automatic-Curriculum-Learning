@@ -1241,6 +1241,8 @@ class PPO_teacher(): # teacher
                  use_clipped_value_loss=True,
                  use_common_layer=False,
                  use_huber_loss = False,
+                 use_accumulate_grad = True,
+                 use_grad_average = False,
                  huber_delta=2,
                  use_popart = True,
                  device = torch.device("cpu")):
@@ -1253,8 +1255,8 @@ class PPO_teacher(): # teacher
         self.clip_param = clip_param
         self.ppo_epoch = ppo_epoch
         self.num_mini_batch = num_mini_batch
-        self.use_accumulate_grad = args.use_accumulate_grad
-        self.use_grad_average = args.use_grad_average
+        self.use_accumulate_grad = use_accumulate_grad
+        self.use_grad_average = use_grad_average
         self.data_chunk_length = data_chunk_length
 
         self.value_loss_coef = value_loss_coef

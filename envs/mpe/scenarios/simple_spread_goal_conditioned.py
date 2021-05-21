@@ -94,7 +94,7 @@ class Scenario(BaseScenario):
                     break
         return 0.1*rew
 
-    def info_coverage_rate(self, world):
+    def get_info(self, world):
         # cover
         num = 0
         success = False

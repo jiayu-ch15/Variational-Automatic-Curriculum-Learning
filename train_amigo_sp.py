@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO,PPO3,PPO_teacher
-from algorithm.model import Policy,Policy3, Policy_teacher, ATTBase_add, ATTBase_actor_student, ATTBase_critic_student, ATTBase_actor_teacher, ATTBase_critic_teacher
+from algorithm.model import Policy,Policy3, Policy_teacher, ATTBase_actor_student, ATTBase_critic_student, ATTBase_actor_teacher, ATTBase_critic_teacher
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -584,10 +584,10 @@ def main():
 
     eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
-    boundary = {'x':[-3,3],'y':[-3,3]}
-    # boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
+    # boundary = {'x':[-3,3],'y':[-3,3]}
+    boundary = {'x':[-0.5,0.5],'y':[-0.5,0.5]}
     historical_length = 5
-    threshold = 0.15
+    threshold = 0.15 # cover threshold for collision
     random.seed(args.seed)
     np.random.seed(args.seed)
     
@@ -834,7 +834,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(num_agents, rollouts, False, initial_optimizer=False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(num_agents, rollouts, False, current_timestep) 
                 print('student_value_loss: ', value_loss)
                 wandb.log(
                     {'student_value_loss': value_loss},
@@ -867,6 +867,7 @@ def main():
                         (episode+1) * args.episode_length * one_length*eval_frequency)
                     rollouts[agent_id].after_update()
         
+        # teacher rewards
         teacher_rewards = np.ones((args.n_rollout_threads,1))
         for batch_id in range(args.n_rollout_threads):
             if timestep_student_reach_goal[batch_id] >= timestep_student_reach_threshold:
@@ -905,10 +906,10 @@ def main():
                             args.gae_lambda, 
                             args.use_proper_time_limits,
                             args.use_popart,
-                            agents.value_normalizer)
+                            teacher_agents.value_normalizer)
         # teacher update
         if count_teacher_step >= args.episode_length_teacher:
-            actor_critic.train()
+            teacher.train()
             teacher_value_loss, teacher_action_loss, teacher_dist_entropy = teacher_agents.update(rollouts_teacher, False, initial_optimizer=False) 
             print('teacher_value_loss: ', teacher_value_loss)
             wandb.log(

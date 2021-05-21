@@ -13,13 +13,13 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO, PPO3
-from algorithm.model import Policy_pb, Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
+from algorithm.ppo import PPO, PPO3, PPO_teacher
+from algorithm.model import Policy_pb, Policy_pb_3, Policy_teacher, ATTBase_actor_student_pb, ATTBase_critic_student_pb, ATTBase_actor_teacher_pb, ATTBase_critic_teacher_pb
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
 from utils.util import update_linear_schedule
-from utils.storage import RolloutStorage
+from utils.storage import RolloutStorage, RolloutStorage_teacher
 from utils.single_storage import SingleRolloutStorage
 import shutil
 import numpy as np
@@ -30,6 +30,7 @@ import copy
 import matplotlib.pyplot as plt
 import pdb
 import wandb
+from gym import spaces
 np.set_printoptions(linewidth=10000)
 
 
@@ -421,25 +422,7 @@ class node_buffer():
         print('sample_childlist: ', len(self.choose_child_index))
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
-
-    def sample_starts_wo_evaluation(self, N_archive, N_parent):
-        self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
-        self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_archive + N_parent - len(self.choose_parent_index)))
-        if len(self.choose_archive_index) < N_archive:
-            self.choose_parent_index = random.sample(range(len(self.parent_all)), min(len(self.parent_all), N_archive + N_parent - len(self.choose_archive_index)))
-        self.choose_archive_index = np.sort(self.choose_archive_index)
-        self.choose_parent_index = np.sort(self.choose_parent_index)
-        one_length = len(self.choose_archive_index)
-        starts_length = len(self.choose_archive_index) + len(self.choose_parent_index)
-        starts = []
-        for i in range(len(self.choose_archive_index)):
-            starts.append(self.archive[self.choose_archive_index[i]])
-        for i in range(len(self.choose_parent_index)):
-            starts.append(self.parent_all[self.choose_parent_index[i]])
-        print('sample_archive: ', len(self.choose_archive_index))
-        print('sample_parent: ', len(self.choose_parent_index))
-        return starts, one_length, starts_length
-
+    
     def sample_starts_uniform_from_activeAndsolve(self, N_child, N_archive, N_parent=0):
         self.archiveAndparent = self.archive + self.parent_all
         self.choose_child_index = random.sample(range(len(self.childlist)), min(len(self.childlist), N_child))
@@ -535,38 +518,6 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
         wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
     
-    def move_nodes_wo_evaluation(self, one_length, Rmax, Rmin, del_switch, timestep):
-        del_archive_num = 0
-        del_easy_num = 0
-        add_hard_num = 0
-        self.parent = []
-        child2archive = []
-        for i in range(one_length):
-            if self.eval_score[i] > Rmax:
-                self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i]-del_archive_num]))
-                del self.archive[self.choose_archive_index[i]-del_archive_num]
-                del_archive_num += 1
-        self.parent_all += self.parent
-        if len(self.archive) > self.buffer_length:
-            if del_switch=='novelty' : # novelty del
-                self.archive_novelty = self.get_novelty(self.archive,self.archive)
-                self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
-                self.archive = self.archive[len(self.archive)-self.buffer_length:]
-            elif del_switch=='random': # random del
-                del_num = len(self.archive) - self.buffer_length
-                del_index = random.sample(range(len(self.archive)),del_num)
-                del_index = np.sort(del_index)
-                del_archive_num = 0
-                for i in range(del_num):
-                    del self.archive[del_index[i]-del_archive_num]
-                    del_archive_num += 1
-            else: # old del
-                self.archive = self.archive[len(self.archive)-self.buffer_length:]
-        if len(self.parent_all) > self.buffer_length:
-            self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
-        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
-        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
-
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
         if self.agent_num!=0:
@@ -599,7 +550,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    run = wandb.init(project='pb_tricks',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    run = wandb.init(project='amigo_pb',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -651,10 +602,10 @@ def main():
     num_agents = args.num_agents
     num_boxes = args.num_landmarks
     #Policy network
+    student_obs_space = envs.observation_space[0].shape[0] + num_agents * 2
     if args.share_policy:
-        # share_base = ATTBase_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
-        actor_base = ATTBase_actor_dist_pb_add(envs.observation_space[0].shape[0], envs.action_space[0],num_agents)
-        critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0],num_agents)
+        actor_base = ATTBase_actor_student_pb(envs.observation_space[0].shape[0], envs.action_space[0],num_agents)
+        critic_base = ATTBase_critic_student_pb(envs.observation_space[0].shape[0],num_agents)
         actor_critic = Policy_pb_3(envs.observation_space[0],
                     envs.action_space[0],
                     num_agents = num_agents,
@@ -765,53 +716,70 @@ def main():
                     envs.action_space,
                     args.hidden_size)
             rollouts.append(ro)
-    
-    use_parent_novelty = False # 关闭
-    use_child_novelty = False # 关闭
-    use_samplenearby = True # 是否扩展，检验fixed set是否可以学会
-    use_novelty_sample = True
-    use_parent_sample = True
-    use_uniform_from_activeAndsolve = False
-    use_novelty_sample_activeAndsolve = False
-    use_gradient_sample = False
-    use_active_expansion = False
-    del_switch = 'novelty'
-    child_novelty_threshold = 0.5 
-    starts = []
-    buffer_length = 2000 # archive 长度
-    N_parent = 25
-    N_archive = args.n_rollout_threads - N_parent
-    max_step = 0.4
-    TB = 1
-    M = 325
-    Rmin = 0.5
-    Rmax = 0.95
-    boundary = 2.0
-    start_boundary = [-0.4,0.4,-0.4,0.4]
-    N_easy = 0
-    test_flag = 0
-    reproduce_flag = 0
-    last_agent_num = num_agents
-    last_box_num = num_agents
-    now_agent_num = num_agents
-    num_agents_test = 2
-    num_boxes_test = 2
-    mean_cover_rate = 0
-    eval_frequency = 3 #需要fix几个回合
+    # teacher network
+    teacher_obs_space = num_agents * 6 # agents and landmarks
+    teacher_action_space = num_agents * 2 # landmarks
+    teacher_actor_base = ATTBase_actor_teacher_pb(teacher_obs_space, teacher_action_space, num_agents)
+    teacher_critic_base = ATTBase_critic_teacher_pb(teacher_obs_space, num_agents)
+    teacher = Policy_teacher(
+                base=None,
+                actor_base=teacher_actor_base,
+                critic_base=teacher_critic_base,
+                base_kwargs={'naive_recurrent': args.naive_recurrent_policy,
+                                'recurrent': args.recurrent_policy,
+                                'hidden_size': args.hidden_size,
+                                'attn': args.attn,                                 
+                                'attn_size': args.attn_size,
+                                'attn_N': args.attn_N,
+                                'attn_heads': args.attn_heads,
+                                'dropout': args.dropout,
+                                'use_average_pool': args.use_average_pool,
+                                'use_common_layer':args.use_common_layer,
+                                'use_feature_normlization':args.use_feature_normlization,
+                                'use_feature_popart':args.use_feature_popart,
+                                'use_orthogonal':args.use_orthogonal,
+                                'layer_N':args.layer_N,
+                                'use_ReLU':args.use_ReLU
+                                },
+                device = device)
+    teacher.to(device)
+    # algorithm
+    teacher_agents = PPO_teacher(teacher,
+                args.clip_param,
+                args.ppo_epoch,
+                args.num_mini_batch,
+                args.data_chunk_length,
+                args.value_loss_coef,
+                args.entropy_coef,
+                logger,
+                lr=args.teacher_lr,
+                eps=args.eps,
+                weight_decay=args.weight_decay,
+                max_grad_norm=args.max_grad_norm,
+                use_max_grad_norm=args.use_max_grad_norm,
+                use_clipped_value_loss= args.use_clipped_value_loss,
+                use_common_layer=args.use_common_layer,
+                use_huber_loss=args.use_huber_loss,
+                huber_delta=args.huber_delta,
+                use_popart=args.use_popart,
+                device=device)
+
+    # teacher replay buffer
+    rollouts_teacher = RolloutStorage_teacher(num_agents,
+                args.episode_length_teacher, 
+                args.n_rollout_threads,
+                teacher_obs_space, 
+                teacher_action_space,
+                args.hidden_size) 
+
+    eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
-    save_node_frequency = 5
-    save_node_flag = False
-    save_90_flag = False
+    # boundary = {'x':[-3,3],'y':[-3,3]}
+    boundary = {'x':[-2,2],'y':[-2,2]}
     historical_length = 5
+    threshold = 0.3 # cover threshold for collision
     random.seed(args.seed)
     np.random.seed(args.seed)
-    last_node = node_buffer(last_agent_num,last_box_num, buffer_length,
-                           archive_initial_length=args.n_rollout_threads,
-                           reproduction_num=M,
-                           max_step=max_step,
-                           start_boundary=start_boundary,
-                           boundary=boundary)
-
     
     # run
     begin = time.time()
@@ -820,6 +788,12 @@ def main():
     current_timestep = 0
     one_length = args.n_rollout_threads
     starts_length = args.n_rollout_threads
+    count_teacher_step = 0
+    count_student_reach_goal = np.zeros(args.n_rollout_threads) # the times of reaching proposed goal
+    timestep_student_reach_goal = np.zeros(args.n_rollout_threads) # timestep of reaching proposed goal
+    timestep_student_reach_threshold = 20
+    alpha = 0.7
+    beta = 0.3
 
     for episode in range(episodes):
         if args.use_linear_lr_decay:# decrease learning rate linearly
@@ -829,36 +803,37 @@ def main():
                 for agent_id in range(num_agents):
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
-        # reproduction
-        if use_samplenearby:
-            if use_novelty_sample:
-                last_node.archive += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
-            else:
-                last_node.archive += last_node.SampleNearby(last_node.parent)
-        
-        # reset env 
-        # one length = now_process_num
-        start1 = time.time()
-        if use_parent_sample:
-            starts, one_length, starts_length = last_node.sample_starts_wo_evaluation(N_archive,N_parent)
-        else:
-            starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive)
-        end1 = time.time()
-        print('sample_time: ', end1- start1)
-        last_node.eval_score = np.zeros(shape=one_length)
-
-        actor_critic.agents_num = last_node.agent_num
-        actor_critic.boxes_num = last_node.box_num
         for times in range(eval_frequency):
-            obs = envs.new_starts_obs_pb(starts, num_agents, num_boxes, starts_length)
-            #replay buffer
+            obs, _ = envs.reset(num_agents, num_agents)
+            initial_state = envs.get_state() # agents states and landmark states
+            # teacher replay buffer init   
+            if count_teacher_step==0:
+                rollouts_teacher.obs[count_teacher_step] = initial_state.copy()
+            # teacher.act()
+            with torch.no_grad():
+                teacher.eval()
+                value_teacher, proposed_goal, proposed_goal_prob = teacher.act(torch.FloatTensor(initial_state))
+            # clip proposed_goal to boundary
+            def clip_state(proposed_goal, boundary):
+                for batch_id in range(proposed_goal.shape[0]):
+                    proposed_goal[batch_id] = np.clip(proposed_goal[batch_id],boundary['x'][0],boundary['x'][1])
+                return proposed_goal
+            proposed_goal = clip_state(proposed_goal.detach().cpu().numpy(),boundary) 
+
+            teacher_values = value_teacher.detach().cpu().numpy()
+            teacher_actions = proposed_goal
+            teacher_action_log_probs = proposed_goal_prob.detach().cpu().numpy()
+            goal_obs = np.expand_dims(proposed_goal,1).repeat(num_agents,axis=1) # n_thread * num_agents * obs_dim
+            
+            # student replay buffer
+            obs = np.concatenate((obs,goal_obs),axis=2)
             rollouts = RolloutStorage(num_agents,
                         args.episode_length, 
-                        starts_length,
-                        envs.observation_space[0], 
+                        args.n_rollout_threads,
+                        spaces.Box(low=-np.inf, high=+np.inf, shape=(student_obs_space,), dtype=np.float32), 
                         envs.action_space[0],
                         args.hidden_size) 
-            # replay buffer init
+            # student replay buffer init
             if args.share_policy: 
                 share_obs = obs.reshape(starts_length, -1)        
                 share_obs = np.expand_dims(share_obs,1).repeat(num_agents,axis=1)    
@@ -876,7 +851,7 @@ def main():
                     rollouts[agent_id].obs[0] = np.array(list(obs[:,agent_id])).copy()               
                     rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                     rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
-            step_cover_rate = np.zeros(shape=(one_length,args.episode_length))
+            step_cover_rate = np.zeros(shape=(args.n_rollout_threads,args.episode_length))
             for step in range(args.episode_length):
                 # Sample actions
                 values = []
@@ -932,7 +907,30 @@ def main():
                     actions_env.append(one_hot_action_env)
                 
                 # Obser reward and next obs
-                obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
+                obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
+                # get raw extrinsic reward
+                extrinsic_reward = rewards[:,0]
+                # concatenate goal obs
+                obs = np.concatenate((obs,goal_obs),axis=2)
+                # add intrinsic reward
+                current_reached_goal = envs.get_state()
+                current_reached_goal = current_reached_goal[:,num_agents*2:num_agents*4] # ball state
+                def is_reach_goal(current_reached_goal, proposed_goal, num_agents, threshold):
+                    cover_flag = True
+                    for landmark_id in range(num_agents):
+                        delta_pos = current_reached_goal[landmark_id*2:(landmark_id+1)*2] - proposed_goal[landmark_id*2:(landmark_id+1)*2]
+                        dist = np.sqrt(np.sum(np.square(delta_pos)))
+                        cover_flag = cover_flag and (dist <= threshold)
+                    return cover_flag
+                intrinsic_reward = np.zeros((args.n_rollout_threads,1))
+                for batch_id in range(args.n_rollout_threads):
+                    if is_reach_goal(current_reached_goal[batch_id],proposed_goal[batch_id], num_agents, threshold):
+                        intrinsic_reward[batch_id] = 1
+                        count_student_reach_goal[batch_id] += 1
+                        timestep_student_reach_goal[batch_id] = step
+                intrinsic_reward = np.expand_dims(intrinsic_reward,1).repeat(num_agents,axis=1) 
+                rewards += intrinsic_reward
+
                 cover_rate_list = []
                 for env_id in range(one_length):
                     cover_rate_list.append(infos[env_id][0]['cover_rate'])
@@ -983,7 +981,6 @@ def main():
             wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             curriculum_episode += 1
             current_timestep += args.episode_length * starts_length
-            last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
                                         
             with torch.no_grad():  # get value and compute return
                 for agent_id in range(num_agents):         
@@ -1024,10 +1021,11 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, current_timestep, False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(num_agents, rollouts, current_timestep, False) 
+                print('student_value_loss: ', value_loss)
                 wandb.log(
-                    {'value_loss': value_loss},
-                    current_timestep)      
+                    {'student_value_loss': value_loss},
+                    current_timestep) 
                 rew = []
                 for i in range(rollouts.rewards.shape[1]):
                     rew.append(np.sum(rollouts.rewards[:,i]))
@@ -1057,29 +1055,82 @@ def main():
                     
                     rollouts[agent_id].after_update()
 
-        # move nodes
-        last_node.eval_score = last_node.eval_score / eval_frequency
-        if use_samplenearby:
-            last_node.move_nodes_wo_evaluation(one_length, Rmax, Rmin, del_switch, current_timestep)
-        print('last_node_parent: ', len(last_node.parent))
-        # 需要改路径
-        if (episode+1) % save_node_frequency ==0 and save_node_flag:
-            last_node.save_node(save_node_dir, episode)
-        print('childlist: ', len(last_node.childlist))
-        print('archive: ', len(last_node.archive))
+        # teacher rewards
+        teacher_rewards = np.ones((args.n_rollout_threads,1))
+        for batch_id in range(args.n_rollout_threads):
+            if timestep_student_reach_goal[batch_id] >= timestep_student_reach_threshold:
+                teacher_rewards[batch_id] = teacher_rewards[batch_id] * alpha
+            else:
+                teacher_rewards[batch_id] = -teacher_rewards[batch_id] * beta
+        # add extrinsic reward
+        for batch_id in range(args.n_rollout_threads):
+            if np.mean(step_cover_rate[batch_id,-historical_length:]) == 1.0:
+                teacher_rewards[batch_id] += extrinsic_reward[batch_id]
+        if np.mean(count_student_reach_goal) >= 10:
+            timestep_student_reach_threshold += 1
+        wandb.log({'student_reach_threshold':timestep_student_reach_threshold},current_timestep)
+        # reset count and timestep
+        count_student_reach_goal = np.zeros(args.n_rollout_threads) 
+        timestep_student_reach_goal = np.zeros(args.n_rollout_threads)
+        # teacher insert
+        teacher_masks = np.ones((args.n_rollout_threads, 1))
+        rollouts_teacher.insert( 
+                    initial_state, 
+                    teacher_actions,
+                    teacher_action_log_probs, 
+                    teacher_values,
+                    teacher_rewards,
+                    teacher_masks)
+        count_teacher_step += 1
+        # teacher get value and update
+        with torch.no_grad():
+            teacher.eval()                
+            teacher_next_value = teacher.get_value(torch.FloatTensor(rollouts_teacher.obs[-1,:]))
+            teacher_next_value = teacher_next_value.detach().cpu().numpy()
+            rollouts_teacher.compute_returns(
+                            teacher_next_value, 
+                            args.use_gae, 
+                            args.gamma,
+                            args.gae_lambda, 
+                            args.use_proper_time_limits,
+                            args.use_popart,
+                            teacher_agents.value_normalizer)
+        # teacher update
+        if count_teacher_step >= args.episode_length_teacher:
+            teacher.train()
+            teacher_value_loss, teacher_action_loss, teacher_dist_entropy = teacher_agents.update(rollouts_teacher, False, initial_optimizer=False) 
+            print('teacher_value_loss: ', teacher_value_loss)
+            wandb.log(
+                {'teacher_value_loss': teacher_value_loss},
+                current_timestep)
+            rew = []
+            for i in range(rollouts_teacher.rewards.shape[1]):
+                rew.append(np.sum(rollouts_teacher.rewards[:,i]))
+            wandb.log(
+                {'teacher_average_episode_reward': np.mean(rew)},
+                current_timestep)
+            # clean the buffer and reset
+            rollouts_teacher.after_update()
+            count_teacher_step = 0
 
         # test
-        # eval 4agent4box
+        num_agents_test = num_agents
+        num_boxes_test = num_boxes
         actor_critic.agents_num = num_agents_test
         actor_critic.boxes_num = num_boxes_test
         if episode % check_frequency==0:
             obs, _ = envs.reset(num_agents_test,num_boxes_test)
+            # concat goal obs
+            test_initial_state = envs.get_state() 
+            test_initial_state = test_initial_state[:,num_agents_test*4:] # landmark states
+            test_goal_obs = np.expand_dims(test_initial_state,1).repeat(num_agents_test,axis=1)
+            obs = np.concatenate((obs,test_goal_obs),axis=2)
             episode_length = 120
             #replay buffer
             rollouts = RolloutStorage(num_agents_test,
                         episode_length, 
                         args.n_rollout_threads,
-                        envs.observation_space[0], 
+                        spaces.Box(low=-np.inf, high=+np.inf, shape=(student_obs_space,), dtype=np.float32), 
                         envs.action_space[0],
                         args.hidden_size) 
             # replay buffer init
@@ -1158,6 +1209,11 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
+                # concat goal obs
+                test_initial_state = envs.get_state() 
+                test_initial_state = test_initial_state[:,num_agents_test*4:] # landmark states
+                test_goal_obs = np.expand_dims(test_initial_state,1).repeat(num_agents_test,axis=1)
+                obs = np.concatenate((obs,test_goal_obs),axis=2)
                 cover_rate_list = []
                 for env_id in range(args.n_rollout_threads):
                     cover_rate_list.append(infos[env_id][0]['cover_rate'])
