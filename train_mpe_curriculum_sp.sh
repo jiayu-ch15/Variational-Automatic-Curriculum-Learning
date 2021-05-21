@@ -4,7 +4,7 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-algo="sp_gradient_noveltysearch_true"
+algo="sp_gradient_noise"
 # algo='check'
 seed=3
 

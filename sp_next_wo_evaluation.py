@@ -281,7 +281,6 @@ class node_buffer():
                         new_parent.append(st)
                     child_new.append(new_parent)
                     add_num += 1
-                    if add_num >= self.reproduction_num: break
             return child_new
 
     def gradient_of_state(self,state,buffer):
@@ -348,6 +347,24 @@ class node_buffer():
             starts.append(self.parent_all[self.choose_parent_index[i]])
         print('sample_archive: ', len(self.choose_archive_index))
         print('sample_childlist: ', len(self.choose_child_index))
+        print('sample_parent: ', len(self.choose_parent_index))
+        return starts, one_length, starts_length
+
+    def sample_starts_wo_evaluation(self, N_archive, N_parent):
+        self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
+        self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_archive + N_parent - len(self.choose_parent_index)))
+        if len(self.choose_archive_index) < N_archive:
+            self.choose_parent_index = random.sample(range(len(self.parent_all)), min(len(self.parent_all), N_archive + N_parent - len(self.choose_archive_index)))
+        self.choose_archive_index = np.sort(self.choose_archive_index)
+        self.choose_parent_index = np.sort(self.choose_parent_index)
+        one_length = len(self.choose_archive_index)
+        starts_length = len(self.choose_archive_index) + len(self.choose_parent_index)
+        starts = []
+        for i in range(len(self.choose_archive_index)):
+            starts.append(self.archive[self.choose_archive_index[i]])
+        for i in range(len(self.choose_parent_index)):
+            starts.append(self.parent_all[self.choose_parent_index[i]])
+        print('sample_archive: ', len(self.choose_archive_index))
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
 
@@ -426,6 +443,38 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
         wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
 
+    def move_nodes_wo_evaluation(self, one_length, Rmax, Rmin, del_switch, timestep):
+        del_archive_num = 0
+        del_easy_num = 0
+        add_hard_num = 0
+        self.parent = []
+        child2archive = []
+        for i in range(one_length):
+            if self.eval_score[i] > Rmax:
+                self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i]-del_archive_num]))
+                del self.archive[self.choose_archive_index[i]-del_archive_num]
+                del_archive_num += 1
+        self.parent_all += self.parent
+        if len(self.archive) > self.buffer_length:
+            if del_switch=='novelty' : # novelty del
+                self.archive_novelty = self.get_novelty(self.archive,self.archive)
+                self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
+                self.archive = self.archive[len(self.archive)-self.buffer_length:]
+            elif del_switch=='random': # random del
+                del_num = len(self.archive) - self.buffer_length
+                del_index = random.sample(range(len(self.archive)),del_num)
+                del_index = np.sort(del_index)
+                del_archive_num = 0
+                for i in range(del_num):
+                    del self.archive[del_index[i]-del_archive_num]
+                    del_archive_num += 1
+            else: # old del
+                self.archive = self.archive[len(self.archive)-self.buffer_length:]
+        if len(self.parent_all) > self.buffer_length:
+            self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
+        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
+        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
+
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
         if self.agent_num!=0:
@@ -442,7 +491,7 @@ class node_buffer():
             with open(save_path / 'archive' / ('archive_%i' %(episode)),'w+') as fp:
                 for line in self.archive:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
-            if len(self.archive) > 5:
+            if len(self.archive) > 0:
                 self.novelty = self.get_novelty(self.archive,self.archive)
                 with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
                     for line in self.archive_novelty:
@@ -632,25 +681,16 @@ def main():
     use_parent_sample = True
     use_uniform_from_activeAndsolve = False
     use_novelty_sample_activeAndsolve = False
-    use_gradient_sample = True
+    use_gradient_sample = False
     use_active_expansion = False
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
     buffer_length = 2000 # archive 长度
-    if use_uniform_from_activeAndsolve:
-        N_parent = 90
-        N_archive = 90
-        N_child = args.n_rollout_threads - N_archive - N_parent
-    else:
-        if use_parent_sample:
-            N_parent = 25
-        else:
-            N_parent = 0
-        N_archive = 150
-        N_child = args.n_rollout_threads - N_archive - N_parent
+    N_parent = 25
+    N_archive = args.n_rollout_threads - N_parent
     TB = 1
-    M = N_child
+    M = 325 # equal to curriculum_sp
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
@@ -695,25 +735,14 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction
-        if use_gradient_sample:
-            last_node.childlist += last_node.Sample_gradient(last_node.parent, current_timestep)
+        if use_novelty_sample:
+            last_node.archive += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
         else:
-            if use_novelty_sample_activeAndsolve:
-                last_node.childlist += last_node.SampleNearby_novelty_activeAndsolve(last_node.parent, child_novelty_threshold,logger, current_timestep)
-            else:
-                if use_active_expansion:
-                    starts_need_expand = random.sample(last_node.archive, N_child)
-                    last_node.childlist += last_node.SampleNearby_novelty(starts_need_expand, child_novelty_threshold,logger, current_timestep)
-                else:
-                    if use_novelty_sample:
-                        last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
-                    else:
-                        last_node.childlist += last_node.SampleNearby(last_node.parent)
+            last_node.archive += last_node.SampleNearby(last_node.parent)
         
         # reset env 
-        # one length = now_process_num
         if use_parent_sample:
-            starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)
+            starts, one_length, starts_length = last_node.sample_starts_wo_evaluation(N_archive,N_parent)
         else:
             starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive)
         last_node.eval_score = np.zeros(shape=one_length)
@@ -931,12 +960,11 @@ def main():
 
         # move nodes
         last_node.eval_score = last_node.eval_score / eval_frequency
-        last_node.move_nodes(one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, logger, current_timestep)
+        last_node.move_nodes_wo_evaluation(one_length, Rmax, Rmin, del_switch, current_timestep)
         print('last_node_parent: ', len(last_node.parent))
         # 需要改路径
         if (episode+1) % save_node_frequency ==0 and save_node_flag:
             last_node.save_node(save_node_dir, episode)
-        print('childlist: ', len(last_node.childlist))
         print('archive: ', len(last_node.archive))
 
         # test

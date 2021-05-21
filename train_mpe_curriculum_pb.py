@@ -339,7 +339,7 @@ class node_buffer():
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
 
-    def Sample_gradient(self,parents,timestep):
+    def Sample_gradient(self,parents,timestep,use_gradient_noise=True):
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -350,6 +350,10 @@ class node_buffer():
             while add_num < self.reproduction_num:
                 for parent in parents:
                     parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all)
+                    if use_gradient_noise:
+                        noise = np.random.uniform(-0.1,0.1,parent_gradient.shape[0])
+                        parent_gradient += noise
+                        parent_gradient = parent_gradient / np.linalg.norm(parent_gradient,ord=2)
                     if not parent_gradient_zero:
                         stepsize = self.max_step * random.random()
                     new_parent = []
@@ -719,7 +723,8 @@ def main():
     use_parent_sample = True
     use_uniform_from_activeAndsolve = False
     use_novelty_sample_activeAndsolve = False
-    use_gradient_sample = True
+    use_gradient_sample = False
+    use_active_expansion = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.5 
     starts = []
@@ -791,10 +796,14 @@ def main():
                 last_node.childlist += last_node.SampleNearby_novelty_activeAndsolve(last_node.parent, child_novelty_threshold,logger, current_timestep)
             else:
                 if use_samplenearby:
-                    if use_novelty_sample:
-                        last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+                    if use_active_expansion:
+                        starts_need_expand = random.sample(last_node.archive, N_child)
+                        last_node.childlist += last_node.SampleNearby_novelty(starts_need_expand, child_novelty_threshold,logger, current_timestep)
                     else:
-                        last_node.childlist += last_node.SampleNearby(last_node.parent)
+                        if use_novelty_sample:
+                            last_node.childlist += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+                        else:
+                            last_node.childlist += last_node.SampleNearby(last_node.parent)
         
         # reset env 
         # one length = now_process_num
