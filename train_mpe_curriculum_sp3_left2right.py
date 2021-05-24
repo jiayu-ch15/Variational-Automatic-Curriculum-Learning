@@ -51,9 +51,11 @@ def make_parallel_env(args):
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 class node_buffer():
-    def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region):
+    def __init__(self,agent_num, landmark_num, buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region):
         self.agent_num = agent_num
+        self.landmark_num = landmark_num
         self.buffer_length = buffer_length
+        self.topk = 5
         self.boundary = boundary
         self.start_boundary = start_boundary
         self.legal_region = legal_region
@@ -69,7 +71,6 @@ class node_buffer():
         self.choose_child_index = []
         self.choose_archive_index = []
         self.eval_score = np.zeros(shape=len(self.archive))
-        self.topk = 5
 
     def produce_good_case_H(self, num_case, now_agent_num): # 产生H_map的初始态
         one_starts_landmark = []
@@ -125,7 +126,7 @@ class node_buffer():
 
     def get_novelty(self,list1,list2):
         # list1是需要求novelty的
-        topk=5
+        topk=self.topk
         dist = cdist(np.array(list1).reshape(len(list1),-1),np.array(list2).reshape(len(list2),-1),metric='euclidean')
         if len(list2) < topk+1:
             dist_k = dist
@@ -143,8 +144,10 @@ class node_buffer():
         return buffer_new, buffer_novelty_new
 
     def SampleNearby_novelty_H(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
-        boundary_x = self.legal_region['x']
-        boundary_y = self.legal_region['y']
+        boundary_x_agent = self.legal_region['agent']['x']
+        boundary_y_agent = self.legal_region['agent']['y']
+        boundary_x_landmark = self.legal_region['landmark']['x']
+        boundary_y_landmark = self.legal_region['landmark']['y']
         
         if len(self.parent_all) > self.topk + 1:
             self.parent_all_novelty = self.get_novelty(self.parent_all,self.parent_all)
@@ -168,14 +171,30 @@ class node_buffer():
                     st = copy.deepcopy(parents[k])
                     s_len = len(st)
                     entity_id = 0
-                    while entity_id < s_len:
+                    while entity_id < self.agent_num:
                         epsilon_x = -2 * self.max_step * random.random() + self.max_step
                         epsilon_y = -2 * self.max_step * random.random() + self.max_step
                         tmp_st_x = st[entity_id][0] + epsilon_x
                         tmp_st_y = st[entity_id][1] + epsilon_y
                         # rejection sampling
                         num_try += 1
-                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x,boundary_y)
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x_agent,boundary_y_agent)
+                        if legal:
+                            st[entity_id][0] = tmp_st_x
+                            st[entity_id][1] = tmp_st_y
+                            entity_id += 1
+                            num_try = 0
+                        else:
+                            assert num_try <= num_tries, str(st[entity_id])
+                            continue
+                    while entity_id < self.agent_num + self.landmark_num: # landmark_pos_set
+                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                        tmp_st_x = st[entity_id][0] + epsilon_x
+                        tmp_st_y = st[entity_id][1] + epsilon_y
+                        # rejection sampling
+                        num_try += 1
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x_landmark,boundary_y_landmark)
                         if legal:
                             st[entity_id][0] = tmp_st_x
                             st[entity_id][1] = tmp_st_y
@@ -196,8 +215,10 @@ class node_buffer():
             return child_new
 
     def SampleNearby_H(self,starts):
-        boundary_x = self.legal_region['x']
-        boundary_y = self.legal_region['y']
+        boundary_x_agent = self.legal_region['agent']['x']
+        boundary_y_agent = self.legal_region['agent']['y']
+        boundary_x_landmark = self.legal_region['landmark']['x']
+        boundary_y_landmark = self.legal_region['landmark']['y']
         starts = starts + []
         len_start = len(starts)
         starts_new = []
@@ -212,14 +233,30 @@ class node_buffer():
                     st = copy.deepcopy(starts[i])
                     s_len = len(st)
                     entity_id = 0
-                    while entity_id < s_len:
+                    while entity_id < self.agent_num: # agent_pos_set
                         epsilon_x = -2 * self.max_step * random.random() + self.max_step
                         epsilon_y = -2 * self.max_step * random.random() + self.max_step
                         tmp_st_x = st[entity_id][0] + epsilon_x
                         tmp_st_y = st[entity_id][1] + epsilon_y
                         # rejection sampling
                         num_try += 1
-                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x,boundary_y)
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x_agent,boundary_y_agent)
+                        if legal:
+                            st[entity_id][0] = tmp_st_x
+                            st[entity_id][1] = tmp_st_y
+                            entity_id += 1
+                            num_try = 0
+                        else:
+                            assert num_try <= num_tries, str(st[entity_id])
+                            continue
+                    while entity_id < self.agent_num + self.landmark_num: # landmark_pos_set
+                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                        tmp_st_x = st[entity_id][0] + epsilon_x
+                        tmp_st_y = st[entity_id][1] + epsilon_y
+                        # rejection sampling
+                        num_try += 1
+                        legal = self.is_legal([tmp_st_x,tmp_st_y],boundary_x_landmark,boundary_y_landmark)
                         if legal:
                             st[entity_id][0] = tmp_st_x
                             st[entity_id][1] = tmp_st_y
@@ -234,6 +271,75 @@ class node_buffer():
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
 
+    def Sample_gradient(self,parents,timestep,random_stepsize=False,use_gradient_noise=True):
+        boundary_x = self.legal_region['x']
+        boundary_y = self.legal_region['y']
+        parents = parents + []
+        len_start = len(parents)
+        child_new = []
+        if parents==[]:
+            return []
+        else:
+            add_num = 0
+            while add_num < self.reproduction_num:
+                for parent in parents:
+                    parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all)
+                    if not parent_gradient_zero:
+                        if random_stepsize:
+                            stepsize = self.max_step * random.random()
+                        else:
+                            stepsize = self.max_step
+                    # gradient step
+                    new_parent = []
+                    for parent_of_entity_id in range(len(parent)):
+                        st = copy.deepcopy(parent[parent_of_entity_id])
+                        # execute gradient step
+                        if not parent_gradient_zero:
+                            st[0] += parent_gradient[parent_of_entity_id * 2] * stepsize
+                            st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * stepsize
+                        else:
+                            stepsizex = -2 * self.max_step * random.random() + self.max_step
+                            stepsizey = -2 * self.max_step * random.random() + self.max_step
+                            st[0] += stepsizex
+                            st[1] += stepsizey
+                        # clip
+                        st = self.clip_states(st,boundary_x,boundary_y)
+                        # rejection sampling
+                        if use_gradient_noise:
+                            num_tries = 20
+                            num_try = 0
+                            while num_try <= num_tries:
+                                epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                                epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                                tmp_x = st[0] + epsilon_x
+                                tmp_y = st[1] + epsilon_y
+                                is_legal = self.is_legal([tmp_x,tmp_y],boundary_x,boundary_y)
+                                num_try += 1
+                                if is_legal:
+                                    st[0] = tmp_x
+                                    st[1] = tmp_y
+                                    break
+                                else:
+                                    assert num_try <= num_tries, str(st)
+                                    continue
+                        new_parent.append(st)
+                    child_new.append(new_parent)
+                    add_num += 1
+                    if add_num >= self.reproduction_num: break
+            return child_new
+
+    def gradient_of_state(self,state,buffer):
+        gradient = np.zeros(state.shape)
+        for buffer_state in buffer:
+            gradient += 2 * (state - np.array(buffer_state).reshape(-1))
+        norm = np.linalg.norm(gradient, ord=2)
+        if norm > 0.0:
+            gradient = gradient / np.linalg.norm(gradient, ord=2)
+            gradient_zero = False
+        else:
+            gradient_zero = True
+        return gradient, gradient_zero
+
     def is_legal(self, pos, boundary_x, boundary_y):
         legal = False
         # 限制在整个大的范围内
@@ -246,6 +352,24 @@ class node_buffer():
                     legal = True
                     break
         return legal
+
+    def clip_states(self,pos, boundary_x, boundary_y):
+        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        # clip to [-map,map]
+        if pos[0] < boundary_x[0][0]:
+            pos[0] = boundary_x[0][0] + random.random()*0.01
+        elif pos[0] > boundary_x[-1][1]:
+            pos[0] = boundary_x[-1][1] - random.random()*0.01
+
+        for boundary_id in range(len(boundary_x)):
+            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
+                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
+                    break
+                elif pos[1] < boundary_y[boundary_id][0]:
+                    pos[1] = boundary_y[boundary_id][0] + random.random()*0.01
+                elif pos[1] > boundary_y[boundary_id][1]:
+                    pos[1] = boundary_y[boundary_id][1] - random.random()*0.01
+        return pos
 
     def SampleNearby(self, starts): # produce new children and return
         starts = starts + []
@@ -399,10 +523,11 @@ class node_buffer():
             with open(save_path / 'archive' / ('archive_%i' %(episode)),'w+') as fp:
                 for line in self.archive:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
-            self.novelty = self.get_novelty(self.archive,self.archive)
-            with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
-                for line in self.archive_novelty:
-                    fp.write(str(np.array(line).reshape(-1))+'\n')
+            if len(self.archive) >= self.topk + 2 :
+                self.novelty = self.get_novelty(self.archive,self.archive)
+                with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
+                    for line in self.archive_novelty:
+                        fp.write(str(np.array(line).reshape(-1))+'\n')
             with open(save_path / 'parent' / ('parent_%i' %(episode)),'w+') as fp:
                 for line in self.parent:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
@@ -583,7 +708,8 @@ def main():
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
     use_novelty_sample = True
-    use_parent_sample = False
+    use_parent_sample = True
+    use_gradient_sample = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
@@ -598,12 +724,13 @@ def main():
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
-    boundary = {'agent':{'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]},
-                'landmark':{'x':[[-4.9,-3.1],[-0.9,0.9],[3.1,4.9]],'y':[[-2.9,2.9],[-2.9,2.9],[-2.9,2.9]]}} # uniform distribution
-    # start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
-    start_boundary = {'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]} # good goal
-    legal_region = {'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-        'y': [[-2.9,2.9],[1.85,2.15],[-2.9,2.9],[-2.15,-1.85],[-2.9,2.9]]} # legal region for samplenearby
+    # left agent, right landmark, 10*2
+    boundary = {'agent':{'x':[[-4.9,-3.1]],'y':[[-0.9,0.9]]},
+                'landmark':{'x':[[3.1,4.9]],'y':[[-0.9,0.9]]}} # uniform distribution
+    start_boundary = {'x':[[3.7,4.3]],'y':[[-0.3,0.3]]} # good goal
+    legal_region = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+        'y': [[-0.9,0.9],[0.45,0.75],[-0.9,0.9],[-0.75,-0.45],[-0.9,0.9]]},
+        'landmark':{'x':[[3.1,4.9]],'y':[[-0.9,0.9]]}} # legal region for samplenearby
     max_step = 0.6
     N_easy = 0
     test_flag = 0
@@ -620,7 +747,7 @@ def main():
     historical_length = 5
     random.seed(args.seed)
     np.random.seed(args.seed)
-    last_node = node_buffer(last_agent_num,buffer_length,
+    last_node = node_buffer(last_agent_num,last_agent_num, buffer_length,
                            archive_initial_length=args.n_rollout_threads,
                            reproduction_num=M,
                            max_step=max_step,
@@ -645,10 +772,13 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction
-        if use_novelty_sample:
-            last_node.childlist += last_node.SampleNearby_novelty_H(last_node.parent, child_novelty_threshold,logger, current_timestep)
+        if use_gradient_sample:
+            last_node.childlist += last_node.Sample_gradient(last_node.parent,current_timestep)
         else:
-            last_node.childlist += last_node.SampleNearby_H(last_node.parent)
+            if use_novelty_sample:
+                last_node.childlist += last_node.SampleNearby_novelty_H(last_node.parent, child_novelty_threshold,logger, current_timestep)
+            else:
+                last_node.childlist += last_node.SampleNearby_H(last_node.parent)
         
         # reset env 
         # one length = now_process_num

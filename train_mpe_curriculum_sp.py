@@ -242,7 +242,7 @@ class node_buffer():
             child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
             return child_new
 
-    def Sample_gradient(self,parents,timestep,use_gradient_noise=True):
+    def Sample_gradient(self,parents,timestep,random_stepsize=False,use_gradient_noise=True):
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -254,11 +254,14 @@ class node_buffer():
                 for parent in parents:
                     parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all)
                     if use_gradient_noise:
-                        noise = np.random.uniform(-0.1,0.1,parent_gradient.shape[0])
+                        noise = np.random.uniform(-0.2,0.2,parent_gradient.shape[0])
                         parent_gradient += noise
                         parent_gradient = parent_gradient / np.linalg.norm(parent_gradient,ord=2)
                     if not parent_gradient_zero:
-                        stepsize = self.max_step * random.random()
+                        if random_stepsize:
+                            stepsize = self.max_step * random.random()
+                        else:
+                            stepsize = self.max_step
                     new_parent = []
                     for parent_of_entity_id in range(len(parent)):
                         st = copy.deepcopy(parent[parent_of_entity_id])
@@ -696,7 +699,7 @@ def main():
 
         # reproduction
         if use_gradient_sample:
-            last_node.childlist += last_node.Sample_gradient(last_node.parent, current_timestep)
+            last_node.childlist += last_node.Sample_gradient(last_node.parent, current_timestep, random_stepsize=False)
         else:
             if use_novelty_sample_activeAndsolve:
                 last_node.childlist += last_node.SampleNearby_novelty_activeAndsolve(last_node.parent, child_novelty_threshold,logger, current_timestep)
