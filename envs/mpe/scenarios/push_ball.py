@@ -148,7 +148,10 @@ class Scenario(BaseScenario):
             dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents if a.adversary == False]
             if min(dists) <= world.agents[-1].size + world.landmarks[0].size:
                 num = num + 1
-        info_list = {'cover_rate': num/len(world.landmarks)}
+        # success
+        if num==len(world.landmarks):
+            success = True
+        info_list = {'cover_rate': num/len(world.landmarks),'success': success}
         return info_list
 
     def share_reward(self, world):

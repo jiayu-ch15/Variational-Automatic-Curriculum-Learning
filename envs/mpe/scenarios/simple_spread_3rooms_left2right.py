@@ -105,7 +105,7 @@ class Scenario(BaseScenario):
                     break
         return 0.1*rew
 
-    def info_coverage_rate(self, world):
+    def get_info(self, world):
         # cover
         num = 0
         success = False
@@ -131,6 +131,9 @@ class Scenario(BaseScenario):
                         break
         info_list = {'cover_rate': num/len(world.landmarks),'collision': collision_num, 'success': success}
         return info_list
+    
+    def get_state(self):
+        pass
 
     def observation(self, agent, world):
         # get positions of all entities in this agent's reference frame

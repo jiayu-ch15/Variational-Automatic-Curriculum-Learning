@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO,PPO3
-from algorithm.model import Policy,Policy3, ATTBase_add, ATTBase_actor_dist_add, ATTBase_critic_add
+from algorithm.model import Policy,Policy3, ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -272,8 +272,10 @@ class node_buffer():
             return starts_new
 
     def Sample_gradient(self,parents,timestep,random_stepsize=False,use_gradient_noise=True):
-        boundary_x = self.legal_region['x']
-        boundary_y = self.legal_region['y']
+        boundary_x_agent = self.legal_region['agent']['x']
+        boundary_y_agent = self.legal_region['agent']['y']
+        boundary_x_landmark = self.legal_region['landmark']['x']
+        boundary_y_landmark = self.legal_region['landmark']['y']
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -303,10 +305,16 @@ class node_buffer():
                             st[0] += stepsizex
                             st[1] += stepsizey
                         # clip
+                        if parent_of_entity_id < self.agent_num:
+                            boundary_x = boundary_y_agent
+                            boundary_y = boundary_y_agent
+                        else:
+                            boundary_x = boundary_y_landmark
+                            boundary_y = boundary_y_landmark
                         st = self.clip_states(st,boundary_x,boundary_y)
                         # rejection sampling
                         if use_gradient_noise:
-                            num_tries = 20
+                            num_tries = 50
                             num_try = 0
                             while num_try <= num_tries:
                                 epsilon_x = -2 * self.max_step * random.random() + self.max_step
@@ -966,7 +974,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, current_timestep, False) 
                 print('value_loss: ', value_loss)
                 wandb.log(
                     {'value_loss': value_loss},

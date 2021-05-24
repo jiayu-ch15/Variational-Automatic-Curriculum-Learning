@@ -682,7 +682,7 @@ def main():
     use_uniform_from_activeAndsolve = False
     use_novelty_sample_activeAndsolve = False
     use_gradient_sample = False
-    use_active_expansion = False
+    use_active_expansion = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
@@ -735,10 +735,14 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction
-        if use_novelty_sample:
-            last_node.archive += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+        if use_active_expansion:
+            starts_need_expand = random.sample(last_node.archive, N_child)
+            last_node.archive += last_node.SampleNearby_novelty(starts_need_expand, child_novelty_threshold,logger, current_timestep)
         else:
-            last_node.archive += last_node.SampleNearby(last_node.parent)
+            if use_novelty_sample:
+                last_node.archive += last_node.SampleNearby_novelty(last_node.parent, child_novelty_threshold,logger, current_timestep)
+            else:
+                last_node.archive += last_node.SampleNearby(last_node.parent)
         
         # reset env 
         if use_parent_sample:
@@ -775,6 +779,7 @@ def main():
                     rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                     rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
             step_cover_rate = np.zeros(shape=(one_length,args.episode_length))
+            step_success = np.zeros(shape=(one_length,args.episode_length))
             for step in range(args.episode_length):
                 # Sample actions
                 values = []
@@ -832,9 +837,12 @@ def main():
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
                 cover_rate_list = []
+                success_list = []
                 for env_id in range(one_length):
                     cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                    success_list.append(int(infos[env_id][0]['success']))
                 step_cover_rate[:,step] = np.array(cover_rate_list)
+                step_success[:,step] = np.array(success_list)
                 # step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
 
                 # If done then clean the history of observations.
@@ -880,7 +888,7 @@ def main():
                                 np.array(masks)[:,agent_id])
             # logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
-            print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
+            wandb.log({'training_success_rate': np.mean(np.mean(step_success[:,-args.historical_length:],axis=1))}, current_timestep)
             current_timestep += args.episode_length * starts_length
             curriculum_episode += 1
             last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
