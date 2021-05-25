@@ -225,7 +225,7 @@ if __name__ == '__main__':
         or args.scenario_name=='simple_spread_3rooms_hard2' or args.scenario_name=='simple_spread_3rooms_leftup_rightdown':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp3_10*6.txt'
-    elif args.scenario_name=='simple_spread_3rooms_small' or args.scenario_name=='simple_spread_3rooms_small_asym':
+    elif args.scenario_name=='simple_spread_' or args.scenario_name=='simple_spread_3rooms_small_asym':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp3small_10*2.txt'
     elif args.scenario_name=='push_ball_3rooms':

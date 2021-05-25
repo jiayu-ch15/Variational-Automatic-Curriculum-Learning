@@ -271,7 +271,7 @@ class node_buffer():
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
 
-    def Sample_gradient(self,parents,timestep,random_stepsize=False,use_gradient_noise=True):
+    def Sample_gradient(self,parents,timestep,random_stepsize=False,use_gradient_noise=True,use_half_step=True):
         boundary_x_agent = self.legal_region['agent']['x']
         boundary_y_agent = self.legal_region['agent']['y']
         boundary_x_landmark = self.legal_region['landmark']['x']
@@ -286,11 +286,13 @@ class node_buffer():
             while add_num < self.reproduction_num:
                 for parent in parents:
                     parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all)
-                    if not parent_gradient_zero:
-                        if random_stepsize:
-                            stepsize = self.max_step * random.random()
-                        else:
-                            stepsize = self.max_step
+                    if random_stepsize:
+                        stepsize = self.max_step * random.random()
+                    else:
+                        stepsize = self.max_step
+                    if use_half_step:
+                        stepsize = 0.5 * stepsize
+                    
                     # gradient step
                     new_parent = []
                     for parent_of_entity_id in range(len(parent)):
@@ -300,25 +302,25 @@ class node_buffer():
                             st[0] += parent_gradient[parent_of_entity_id * 2] * stepsize
                             st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * stepsize
                         else:
-                            stepsizex = -2 * self.max_step * random.random() + self.max_step
-                            stepsizey = -2 * self.max_step * random.random() + self.max_step
+                            stepsizex = -2 * stepsize * random.random() + stepsize
+                            stepsizey = -2 * stepsize * random.random() + stepsize
                             st[0] += stepsizex
                             st[1] += stepsizey
                         # clip
                         if parent_of_entity_id < self.agent_num:
-                            boundary_x = boundary_y_agent
+                            boundary_x = boundary_x_agent
                             boundary_y = boundary_y_agent
                         else:
-                            boundary_x = boundary_y_landmark
+                            boundary_x = boundary_x_landmark
                             boundary_y = boundary_y_landmark
                         st = self.clip_states(st,boundary_x,boundary_y)
                         # rejection sampling
                         if use_gradient_noise:
-                            num_tries = 50
+                            num_tries = 100
                             num_try = 0
                             while num_try <= num_tries:
-                                epsilon_x = -2 * self.max_step * random.random() + self.max_step
-                                epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                                epsilon_x = -2 * stepsize * random.random() + stepsize
+                                epsilon_y = -2 * stepsize * random.random() + stepsize
                                 tmp_x = st[0] + epsilon_x
                                 tmp_y = st[1] + epsilon_y
                                 is_legal = self.is_legal([tmp_x,tmp_y],boundary_x,boundary_y)

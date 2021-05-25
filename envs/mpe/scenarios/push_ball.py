@@ -144,6 +144,7 @@ class Scenario(BaseScenario):
 
     def get_info(self, world):
         num = 0
+        success = False
         for l in world.landmarks:
             dists = [np.sqrt(np.sum(np.square(a.state.p_pos - l.state.p_pos))) for a in world.agents if a.adversary == False]
             if min(dists) <= world.agents[-1].size + world.landmarks[0].size:

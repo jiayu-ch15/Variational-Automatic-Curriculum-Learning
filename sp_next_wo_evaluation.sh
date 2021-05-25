@@ -6,7 +6,7 @@ num_landmarks=4
 num_agents=4
 algo="sp_wo_evaluation_expandfromactive"
 # algo='check'
-seed=1
+seed=3
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
 

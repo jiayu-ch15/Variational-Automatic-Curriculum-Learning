@@ -54,9 +54,12 @@ class node_buffer():
     def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
+        # self.init_archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
         self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
+        self.archive_score = np.zeros(len(self.archive))
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
-        self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
+        # self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
+        self.archive, self.archive_novelty, self.archive_score = self.novelty_score_sort(self.archive, self.archive_novelty, self.archive_score)
         self.childlist = []
         self.hardlist = []
         self.parent = []
@@ -154,6 +157,13 @@ class node_buffer():
         result = zip(*sort_zipped)
         buffer_new, buffer_novelty_new = [list(x) for x in result]
         return buffer_new, buffer_novelty_new
+    
+    def novelty_score_sort(self, buffer, buffer_novelty, buffer_score):
+        zipped = zip(buffer,buffer_novelty,buffer_score)
+        sort_zipped = sorted(zipped,key=lambda x:(x[1],np.mean(x[0])))
+        result = zip(*sort_zipped)
+        buffer_new, buffer_novelty_new, buffer_score_new = [list(x) for x in result]
+        return buffer_new, buffer_novelty_new, buffer_score_new
 
     def SampleNearby_novelty(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
         if len(self.parent_all) > self.topk + 1:
@@ -444,6 +454,14 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
 
     def move_nodes_wo_evaluation(self, one_length, Rmax, Rmin, del_switch, timestep):
+        # set active scores
+        tmp_archive_score = np.zeros(len(self.archive))
+        # get old score
+        for i in range(len(self.archive_score)):
+            tmp_archive_score[i] = self.archive_score[i]
+        for i in range(one_length):
+            tmp_archive_score[self.choose_archive_index[i]] = self.eval_score[i]
+        self.archive_score = copy.deepcopy(tmp_archive_score)
         del_archive_num = 0
         del_easy_num = 0
         add_hard_num = 0
@@ -458,7 +476,8 @@ class node_buffer():
         if len(self.archive) > self.buffer_length:
             if del_switch=='novelty' : # novelty del
                 self.archive_novelty = self.get_novelty(self.archive,self.archive)
-                self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
+                # self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
+                self.archive, self.archive_novelty, self.archive_score = self.novelty_score_sort(self.archive, self.archive_novelty, self.archive_score)
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
             elif del_switch=='random': # random del
                 del_num = len(self.archive) - self.buffer_length
@@ -605,15 +624,7 @@ def main():
                    use_huber_loss=args.use_huber_loss,
                    huber_delta=args.huber_delta,
                    use_popart=args.use_popart,
-                   device=device)
-                   
-        # #replay buffer
-        # rollouts = RolloutStorage(num_agents,
-        #             args.episode_length, 
-        #             args.n_rollout_threads,
-        #             envs.observation_space[0], 
-        #             envs.action_space[0],
-        #             args.hidden_size)        
+                   device=device)             
     else:
         actor_critic = []
         agents = []
@@ -688,6 +699,7 @@ def main():
     starts = []
     buffer_length = 2000 # archive 长度
     N_parent = 25
+    N_child = 325 # for active expansion
     N_archive = args.n_rollout_threads - N_parent
     TB = 1
     M = 325 # equal to curriculum_sp
@@ -736,7 +748,14 @@ def main():
 
         # reproduction
         if use_active_expansion:
-            starts_need_expand = random.sample(last_node.archive, N_child)
+            true_active = []
+            for task_id in range(len(last_node.archive)):
+                if last_node.archive_score[task_id] > Rmin:
+                    true_active.append(last_node.archive[task_id])
+            if len(true_active) > 0:
+                starts_need_expand = random.sample(true_active, min(N_child,len(true_active)))
+            else:
+                starts_need_expand = []
             last_node.archive += last_node.SampleNearby_novelty(starts_need_expand, child_novelty_threshold,logger, current_timestep)
         else:
             if use_novelty_sample:
@@ -1005,6 +1024,7 @@ def main():
                     rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                     rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
             test_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
+            test_success = np.zeros(shape=(args.n_rollout_threads,episode_length))
             for step in range(episode_length):
                 # Sample actions
                 values = []
@@ -1063,9 +1083,12 @@ def main():
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
                 cover_rate_list = []
+                success_list = []
                 for env_id in range(args.n_rollout_threads):
                     cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                    success_list.append(int(infos[env_id][0]['success']))
                 test_cover_rate[:,step] = np.array(cover_rate_list)
+                test_success[:,step] = np.array(success_list)
                 # test_cover_rate[:,step] = np.array(infos)[:,0]
 
                 # If done then clean the history of observations.
@@ -1110,9 +1133,6 @@ def main():
                                 np.array(values[agent_id]),
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
-            # import pdb;pdb.set_trace()
-            # logger.add_scalars('agent/cover_rate_1step',{'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
-            # logger.add_scalars('agent/cover_rate_5step',{'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             rew = []
             for i in range(rollouts.rewards.shape[1]):
                 rew.append(np.sum(rollouts.rewards[:,i]))
@@ -1121,12 +1141,11 @@ def main():
                 current_timestep)
             wandb.log({'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
             wandb.log({'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
+            wandb.log({'success_rate': np.mean(np.mean(test_success[:,-args.historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
             if mean_cover_rate >= 0.9 and args.algorithm_name=='ours' and save_90_flag:
                 torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")
                 save_90_flag = False
-            print('test_agent_num: ', last_node.agent_num)
-            print('test_mean_cover_rate: ', mean_cover_rate)
 
         total_num_steps = current_timestep
 

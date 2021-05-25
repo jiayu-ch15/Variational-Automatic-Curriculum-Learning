@@ -4,7 +4,7 @@ env="MPE"
 scenario="simple_spread_3rooms_left2right"
 num_landmarks=4
 num_agents=4
-algo="sp3_gradient_sample"
+algo="sp3_gradient_sample_halfstep"
 # algo='check'
 seed=3
 
