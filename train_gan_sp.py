@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO,PPO3
-from algorithm.model import Policy,Policy3, ATTBase_add, ATTBase_actor_dist_add, ATTBase_critic_add
+from algorithm.model import Policy,Policy3, ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -365,7 +365,7 @@ def main():
     target_num = 4
     # last_agent_num = 4
     # now_agent_num = num_agents
-    test_num_agents = 8
+    test_num_agents = 4
     mean_cover_rate = 0
     eval_frequency = 2 #需要fix几个回合
     check_frequency = 1
@@ -614,7 +614,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(num_agents, rollouts, False, initial_optimizer=False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(num_agents, rollouts, current_timestep, False) 
                 print('value_loss: ', value_loss)
                 wandb.log(
                     {'value_loss': value_loss},

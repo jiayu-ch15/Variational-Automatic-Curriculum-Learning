@@ -293,10 +293,14 @@ class node_buffer():
                     add_num += 1
             return child_new
 
-    def gradient_of_state(self,state,buffer):
+    def gradient_of_state(self,state,buffer,use_rbf=True):
         gradient = np.zeros(state.shape)
         for buffer_state in buffer:
-            gradient += 2 * (state - np.array(buffer_state).reshape(-1))
+            if use_rbf:
+                dist0 = state - np.array(buffer_state).reshape(-1)
+                gradient += -2 * dist0 * np.exp(-dist0**2)
+            else:
+                gradient += 2 * (state - np.array(buffer_state).reshape(-1))
         norm = np.linalg.norm(gradient, ord=2)
         if norm > 0.0:
             gradient = gradient / np.linalg.norm(gradient, ord=2)
@@ -748,14 +752,15 @@ def main():
 
         # reproduction
         if use_active_expansion:
-            true_active = []
-            for task_id in range(len(last_node.archive)):
-                if last_node.archive_score[task_id] > Rmin:
-                    true_active.append(last_node.archive[task_id])
-            if len(true_active) > 0:
-                starts_need_expand = random.sample(true_active, min(N_child,len(true_active)))
-            else:
-                starts_need_expand = []
+            # true_active = []
+            # for task_id in range(len(last_node.archive)):
+            #     if last_node.archive_score[task_id] > Rmin:
+            #         true_active.append(last_node.archive[task_id])
+            # if len(true_active) > 0:
+            #     starts_need_expand = random.sample(true_active, min(N_child,len(true_active)))
+            # else:
+            #     starts_need_expand = []
+            starts_need_expand = random.sample(last_node.archive, min(N_child,len(last_node.archive)))
             last_node.archive += last_node.SampleNearby_novelty(starts_need_expand, child_novelty_threshold,logger, current_timestep)
         else:
             if use_novelty_sample:

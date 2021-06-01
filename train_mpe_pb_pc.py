@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO, PPO3
-from algorithm.model import Policy, Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_actor_pb_add,ATTBase_critic_pb_add
+from algorithm.model import Policy, Policy_pb_3, ATTBase_actor_dist_pb_add,ATTBase_critic_pb_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -426,7 +426,7 @@ class node_buffer():
 
 def main():
     args = get_config()
-    run = wandb.init(project='phase_pb',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    run = wandb.init(project='pb_tricks',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -485,7 +485,6 @@ def main():
         actor_critic = Policy_pb_3(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
-                    num_box = num_boxes,
                     base=None,
                     actor_base=actor_base,
                     critic_base=critic_base,
@@ -610,7 +609,8 @@ def main():
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
-    target_num = 4
+    eval_agent_num = 2
+    target_num = 2
     last_box_num = 0
     now_box_num = num_boxes
     now_agent_num = now_box_num
@@ -757,9 +757,10 @@ def main():
                     # Obser reward and next obs
                     # start1 = time.time()
                     obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length_now, now_node.agent_num)
-                    # end1 = time.time()
-                    # print('step: ',end1-start1)
-                    step_cover_rate[:,step] = np.array(infos)[0:one_length_now,0]
+                    cover_rate_list = []
+                    for env_id in range(args.n_rollout_threads):
+                        cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                    step_cover_rate[:,step] = np.array(cover_rate_list)
 
                     # If done then clean the history of observations.
                     # insert data in buffer
@@ -853,7 +854,7 @@ def main():
                 # update the network
                 if args.share_policy:
                     actor_critic.train()
-                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, False, initial_optimizer=False) 
+                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, current_timestep, False) 
                     wandb.log(
                         {'value_loss': value_loss},
                         current_timestep)
@@ -889,12 +890,11 @@ def main():
             now_node.eval_score = now_node.eval_score / eval_frequency
 
         # test
-        eval_agent_num = 4
         actor_critic.agents_num = eval_agent_num
         actor_critic.boxes_num = eval_agent_num
         if episode % check_frequency==0 or eval_flag:
             obs, _ = envs.reset(eval_agent_num,eval_agent_num)
-            episode_length = 200
+            episode_length = 120
             #replay buffer
             rollouts = RolloutStorage_share(eval_agent_num,
                         episode_length, 
@@ -978,7 +978,10 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, now_node.agent_num)
-                test_cover_rate[:,step] = np.array(infos)[:,0]
+                cover_rate_list = []
+                for env_id in range(args.n_rollout_threads):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                test_cover_rate[:,step] = np.array(cover_rate_list)
 
                 # If done then clean the history of observations.
                 # insert data in buffer

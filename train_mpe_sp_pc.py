@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO, PPO3
-from algorithm.model import Policy, Policy2, Policy3, ATTBase_actor_add, ATTBase_actor_dist_add, ATTBase_critic_add
+from algorithm.model import Policy, Policy3, ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -564,7 +564,7 @@ def main():
     test_flag = 0
     reproduce_flag = 0
     upper_bound = 0.9
-    target_num = 8
+    target_num = 4
     last_agent_num = 0
     now_agent_num = num_agents
     mean_cover_rate = 0
@@ -808,7 +808,7 @@ def main():
                 # update the network
                 if args.share_policy:
                     actor_critic.train()
-                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, False, initial_optimizer=False) 
+                    value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(now_node.agent_num, rollouts_now, current_timestep,False) 
                     wandb.log(
                         {'value_loss': value_loss},
                         current_timestep)
@@ -847,7 +847,7 @@ def main():
 
         # test
         # actor_critic = torch.load('/home/chenjy/mappo-sc/results/MPE/simple_spread/check95_mini_batch8_8step_warmup_3iter/run1/models/8agent_model.pt')['model'].to(device)
-        eval_num_agents = 8
+        eval_num_agents = 4
         actor_critic.agents_num = eval_num_agents
         if episode % check_frequency==0 or eval_flag:
             obs, _ = envs.reset(eval_num_agents)

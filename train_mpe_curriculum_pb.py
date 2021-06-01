@@ -51,7 +51,7 @@ def make_parallel_env(args):
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 class node_buffer():
-    def __init__(self,agent_num, box_num, buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region):
+    def __init__(self,agent_num, box_num, buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region,epsilon,delta):
         self.agent_num = agent_num
         self.box_num = box_num
         self.buffer_length = buffer_length
@@ -74,6 +74,8 @@ class node_buffer():
         self.choose_parent = []
         self.eval_score = np.zeros(shape=len(self.archive))
         self.topk = 5
+        self.epsilon = epsilon
+        self.delta = delta
 
     def produce_good_case_pb(self, num_case, now_agent_num, now_box_num):
         one_starts_landmark = []
@@ -340,7 +342,7 @@ class node_buffer():
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
 
-    def Sample_gradient(self,parents,timestep,random_stepsize=False,use_gradient_noise=True,use_half_step=True):
+    def Sample_gradient(self,parents,timestep,h=100, use_gradient_noise=True):
         boundary_x_agent = self.legal_region['agent']['x']
         boundary_y_agent = self.legal_region['agent']['y']
         boundary_x_landmark = self.legal_region['landmark']['x']
@@ -354,13 +356,7 @@ class node_buffer():
             add_num = 0
             while add_num < self.reproduction_num:
                 for parent in parents:
-                    parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all)
-                    if random_stepsize:
-                        stepsize = self.max_step * random.random()
-                    else:
-                        stepsize = self.max_step
-                    if use_half_step:
-                        stepsize = 0.5 * stepsize
+                    parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all,h=h)
                     
                     # gradient step
                     new_parent = []
@@ -368,11 +364,11 @@ class node_buffer():
                         st = copy.deepcopy(parent[parent_of_entity_id])
                         # execute gradient step
                         if not parent_gradient_zero:
-                            st[0] += parent_gradient[parent_of_entity_id * 2] * stepsize
-                            st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * stepsize
+                            st[0] += parent_gradient[parent_of_entity_id * 2] * self.epsilon
+                            st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * self.epsilon
                         else:
-                            stepsizex = -2 * stepsize * random.random() + stepsize
-                            stepsizey = -2 * stepsize * random.random() + stepsize
+                            stepsizex = -2 * self.epsilon * random.random() + self.epsilon
+                            stepsizey = -2 * self.epsilon * random.random() + self.epsilon
                             st[0] += stepsizex
                             st[1] += stepsizey
                         # clip
@@ -388,8 +384,8 @@ class node_buffer():
                             num_tries = 100
                             num_try = 0
                             while num_try <= num_tries:
-                                epsilon_x = -2 * stepsize * random.random() + stepsize
-                                epsilon_y = -2 * stepsize * random.random() + stepsize
+                                epsilon_x = -2 * self.delta * random.random() + self.delta
+                                epsilon_y = -2 * self.delta * random.random() + self.delta
                                 tmp_x = st[0] + epsilon_x
                                 tmp_y = st[1] + epsilon_y
                                 is_legal = self.is_legal([tmp_x,tmp_y],boundary_x,boundary_y)
@@ -407,10 +403,14 @@ class node_buffer():
                     if add_num >= self.reproduction_num: break
             return child_new
 
-    def gradient_of_state(self,state,buffer):
+    def gradient_of_state(self,state,buffer,h=100.0,use_rbf=True):
         gradient = np.zeros(state.shape)
         for buffer_state in buffer:
-            gradient += 2 * (state - np.array(buffer_state).reshape(-1))
+            if use_rbf:
+                dist0 = state - np.array(buffer_state).reshape(-1)
+                gradient += -2 * dist0 * np.exp(-dist0**2 / h) / h
+            else:
+                gradient += 2 * (state - np.array(buffer_state).reshape(-1))
         norm = np.linalg.norm(gradient, ord=2)
         if norm > 0.0:
             gradient = gradient / np.linalg.norm(gradient, ord=2)
@@ -799,6 +799,9 @@ def main():
         N_archive = 150
         N_child = args.n_rollout_threads - N_archive - N_parent
     max_step = 0.4
+    epsilon = 0.4
+    delta = 0.4
+    h = 100
     TB = 1
     M = N_child
     Rmin = 0.5
@@ -830,7 +833,9 @@ def main():
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary,
-                           legal_region=legal_region)
+                           legal_region=legal_region,
+                           epsilon=epsilon,
+                           delta=delta)
 
     
     # run
@@ -851,7 +856,7 @@ def main():
 
         # reproduction
         if use_gradient_sample:
-            last_node.childlist += last_node.Sample_gradient(last_node.parent, current_timestep)
+            last_node.childlist += last_node.Sample_gradient(last_node.parent, current_timestep, h=h)
         else:
             if use_novelty_sample_activeAndsolve:
                 last_node.childlist += last_node.SampleNearby_novelty_activeAndsolve(last_node.parent, child_novelty_threshold,logger, current_timestep)

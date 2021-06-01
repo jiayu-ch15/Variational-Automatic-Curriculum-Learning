@@ -629,6 +629,7 @@ def main():
                                  'use_ReLU':args.use_ReLU
                                  },
                     device = device)
+        # actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/push_ball_goal_conditioned/amigo_pb_teacherhorizon10/run%i/models/agent_model.pt'%(args.seed))['model'].to(device)
         actor_critic.to(device)
         # algorithm
         agents = PPO3(actor_critic,
@@ -650,14 +651,7 @@ def main():
                    huber_delta=args.huber_delta,
                    use_popart=args.use_popart,
                    device=device)
-                   
-        # #replay buffer
-        # rollouts = RolloutStorage(num_agents,
-        #             args.episode_length, 
-        #             args.n_rollout_threads,
-        #             envs.observation_space[0], 
-        #             envs.action_space[0],
-        #             args.hidden_size)        
+                          
     else:
         actor_critic = []
         agents = []

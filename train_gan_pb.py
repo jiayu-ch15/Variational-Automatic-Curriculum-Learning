@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO,PPO3
-from algorithm.model import Policy,Policy3, Policy_pb_3,ATTBase_add, ATTBase_actor_dist_add, ATTBase_critic_add, ATTBase_actor_dist_pb_add,ATTBase_critic_pb_add
+from algorithm.model import Policy,Policy3, Policy_pb_3, ATTBase_actor_dist_add, ATTBase_critic_add, ATTBase_actor_dist_pb_add,ATTBase_critic_pb_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -195,7 +195,7 @@ def numpy_to_list(array, list_length, shape):
 
 def main():
     args = get_config()
-    run = wandb.init(project='push ball',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+    run = wandb.init(project='pb_tricks',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     # run = wandb.init(project='check',name='separate_reward')
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
@@ -254,7 +254,6 @@ def main():
         actor_critic = Policy_pb_3(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
-                    num_box = num_boxes,
                     base=None,
                     actor_base=actor_base,
                     critic_base=critic_base,
@@ -510,8 +509,10 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
-                step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
-                # step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
+                cover_rate_list = []
+                for env_id in range(one_length):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                step_cover_rate[:,step] = np.array(cover_rate_list)
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -616,7 +617,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_agent_num, rollouts, False, initial_optimizer=False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_agent_num, rollouts, current_timestep, False) 
                 print('value_loss: ', value_loss)
                 wandb.log(
                     {'value_loss': value_loss},
@@ -655,7 +656,7 @@ def main():
         # test
         if episode % check_frequency==0:
             obs, _ = envs.reset(num_agents, num_boxes)
-            episode_length = 70
+            episode_length = 120
             #replay buffer
             rollouts = RolloutStorage(num_agents,
                         episode_length, 
@@ -739,8 +740,10 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
-                test_cover_rate[:,step] = np.array(infos)[:,0]
-                # test_cover_rate[:,step] = np.array(infos)[:,0]
+                cover_rate_list = []
+                for env_id in range(args.n_rollout_threads):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                test_cover_rate[:,step] = np.array(cover_rate_list)
 
                 # If done then clean the history of observations.
                 # insert data in buffer

@@ -4,7 +4,7 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-algo="gan_sp_test8agents"
+algo="gan_sp_4agents"
 # algo='check'
 seed=3
 
