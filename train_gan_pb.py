@@ -425,6 +425,11 @@ def main():
             goals = np.vstack([goals, goals[:add_num]]) #补齐到num_new_goals+num_old_goals   
         # generate the starts
         starts = numpy_to_list(goals, list_length=num_envs, shape=(num_agents + num_boxes* 2, 2))
+        # add noise to execute mpe bugs
+        for start in starts:
+            for i in range(start.shape[0]):
+                noise = np.random.uniform(-0.01, +0.01, 2)
+                start[i] += noise
         for times in range(eval_frequency):
             obs = envs.new_starts_obs_pb(starts, num_agents, num_boxes, starts_length)
             #replay buffer

@@ -409,6 +409,25 @@ class node_buffer():
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
 
+    def sample_starts_wochild(self, N_archive, N_parent=0):
+        self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
+        self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive),  N_archive + N_parent - len(self.choose_parent_index)))
+        # fix the thread problem
+        tmp_index_length = len(self.choose_archive_index) + len(self.choose_parent_index)
+        sum_N = N_archive + N_parent
+        if  tmp_index_length < sum_N:
+            self.choose_parent_index += random.sample(range(len(self.parent_all)),min(len(self.parent_all), sum_N - tmp_index_length))
+        self.choose_archive_index = np.sort(self.choose_archive_index)
+        self.choose_parent_index = np.sort(self.choose_parent_index)
+        one_length = len(self.choose_archive_index) # 需要搬运的点个数
+        starts_length = len(self.choose_archive_index) + len(self.choose_parent_index)
+        starts = []
+        for i in range(len(self.choose_archive_index)):
+            starts.append(self.archive[self.choose_archive_index[i]])
+        for i in range(len(self.choose_parent_index)):
+            starts.append(self.parent_all[self.choose_parent_index[i]])
+        return starts, one_length, starts_length
+
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
         del_archive_num = 0
@@ -483,6 +502,50 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
         wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
         wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
+
+    def move_nodes_wochild(self, one_length, Rmax, Rmin, del_switch, timestep): 
+        del_archive_num = 0
+        del_easy_num = 0
+        add_hard_num = 0
+        drop_num = 0
+        self.parent = []
+        child2archive = []
+        for i in range(one_length):
+            if self.eval_score[i]>=Rmin and self.eval_score[i]<=Rmax:
+                pass
+            elif self.eval_score[i]>Rmax:
+                self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i]-del_archive_num]))
+                del self.archive[self.choose_archive_index[i]-del_archive_num]
+                del_archive_num += 1
+            else:
+                self.hardlist.append(copy.deepcopy(self.archive[self.choose_archive_index[i]-del_archive_num]))
+                del self.archive[self.choose_archive_index[i]-del_archive_num]
+                del_archive_num += 1
+                add_hard_num += 1
+
+        self.archive += child2archive
+        self.parent_all += self.parent
+        print('add_hard_num: ', add_hard_num )
+        print('parent: ', len(self.parent))
+        if len(self.archive) > self.buffer_length:
+            if del_switch=='novelty' : # novelty del
+                self.archive_novelty = self.get_novelty(self.archive,self.archive)
+                self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
+                self.archive = self.archive[len(self.archive)-self.buffer_length:]
+            elif del_switch=='random': # random del
+                del_num = len(self.archive) - self.buffer_length
+                del_index = random.sample(range(len(self.archive)),del_num)
+                del_index = np.sort(del_index)
+                del_archive_num = 0
+                for i in range(del_num):
+                    del self.archive[del_index[i]-del_archive_num]
+                    del_archive_num += 1
+            else: # old del
+                self.archive = self.archive[len(self.archive)-self.buffer_length:]
+        if len(self.parent_all) > self.buffer_length:
+            self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
+        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
+        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
 
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
@@ -708,7 +771,7 @@ def main():
         N_archive = 150
         N_child = args.n_rollout_threads - N_archive - N_parent
     TB = 1
-    M = N_child
+    M = 150
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
@@ -716,7 +779,7 @@ def main():
     legal_region = {'agent':{'x':[[-3,3]],'y': [[-3,3]]},
         'landmark':{'x':[[-3,3]],'y': [[-3,3]]}} # legal region for samplenearby
     max_step = 0.6
-    epsilon = 0.0
+    epsilon = 0.6
     delta = 0.6
     h = 1
     N_easy = 0
@@ -762,7 +825,8 @@ def main():
 
         # reproduction
         if use_gradient_sample:
-            last_node.childlist += last_node.Sample_gradient(last_node.parent, current_timestep,h=h)
+            # last_node.childlist += last_node.Sample_gradient(last_node.parent, current_timestep,h=h)
+            last_node.archive += last_node.Sample_gradient(last_node.parent, current_timestep,h=h)
         else:
             if use_novelty_sample_activeAndsolve:
                 last_node.childlist += last_node.SampleNearby_novelty_activeAndsolve(last_node.parent, child_novelty_threshold,logger, current_timestep)
@@ -779,7 +843,8 @@ def main():
         # reset env 
         # one length = now_process_num
         if use_parent_sample:
-            starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)
+            # starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive,N_parent)
+            starts, one_length, starts_length = last_node.sample_starts_wochild(N_archive + N_child, N_parent)
         else:
             starts, one_length, starts_length = last_node.sample_starts(N_child,N_archive)
         last_node.eval_score = np.zeros(shape=one_length)

@@ -10,13 +10,135 @@ from scipy.interpolate import make_interp_spline
 def main():
     scenario = 'simple_spread'
     save_dir = './' + scenario + '/'
-    save_name = 'main_results_sp'
+    save_name = 'gradient_vs_uniform_sp'
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     plt.style.use('ggplot')
     plt.figure(figsize=(8,6))
 
     # region nips ablation
+    exp_name = 'unifnoise_sp_4agents'
+    # data_dir =  './' + exp_name + '.csv'
+    x_step1 = []
+    y_seed1 = []
+    x_step2 = []
+    y_seed2 = []
+    x_step3 = []
+    y_seed3 = []
+    # load data ranking by seed
+    data_dir =  './' + exp_name + '_seed1' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step1.append(row[0])
+            y_seed1.append(row[1:])
+    data_dir =  './' + exp_name + '_seed2' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step2.append(row[0])
+            y_seed2.append(row[1:])
+    data_dir =  './' + exp_name + '_seed3' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step3.append(row[0])
+            y_seed3.append(row[1:])
+    x_step1 = x_step1[1:]
+    y_seed1 = y_seed1[1:]
+    x_step2 = x_step2[1:]
+    y_seed2 = y_seed2[1:]
+    x_step3 = x_step3[1:]
+    y_seed3 = y_seed3[1:]
+    length = min((len(x_step1),len(x_step2),len(x_step3)))
+    for i in range(len(x_step1)):
+        x_step1[i] = np.float(x_step1[i])
+        for j in range(len(y_seed1[i])):
+            y_seed1[i][j] = np.float(y_seed1[i][j])
+    for i in range(len(x_step2)):
+        x_step2[i] = np.float(x_step2[i])
+        for j in range(len(y_seed2[i])):
+            y_seed2[i][j] = np.float(y_seed2[i][j])
+    for i in range(len(x_step3)):
+        x_step3[i] = np.float(x_step3[i])
+        for j in range(len(y_seed3[i])):
+            y_seed3[i][j] = np.float(y_seed3[i][j])
+    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
+    mean_seed = np.mean(y_seed,axis=1)
+    std_seed = np.std(y_seed,axis=1)
+    timesteps = np.mean(x_step,axis=1)
+    # plt.plot(timesteps,mean_seed,color='steelblue')
+    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='steelblue')
+    # region smooth
+    xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    plt.plot(xnew,mean_smooth,color='brown')
+    plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='brown')
+
+    exp_name = 'gradient_sp_4agents'
+    # data_dir =  './' + exp_name + '.csv'
+    x_step1 = []
+    y_seed1 = []
+    x_step2 = []
+    y_seed2 = []
+    x_step3 = []
+    y_seed3 = []
+    # load data ranking by seed
+    data_dir =  './' + exp_name + '_seed1' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step1.append(row[0])
+            y_seed1.append(row[1:])
+    data_dir =  './' + exp_name + '_seed2' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step2.append(row[0])
+            y_seed2.append(row[1:])
+    data_dir =  './' + exp_name + '_seed3' + '.csv'
+    with open(data_dir,'r') as csvfile:
+        plots = csv.reader(csvfile)
+        for row in plots:
+            x_step3.append(row[0])
+            y_seed3.append(row[1:])
+    x_step1 = x_step1[1:]
+    y_seed1 = y_seed1[1:]
+    x_step2 = x_step2[1:]
+    y_seed2 = y_seed2[1:]
+    x_step3 = x_step3[1:]
+    y_seed3 = y_seed3[1:]
+    length = min((len(x_step1),len(x_step2),len(x_step3)))
+    for i in range(len(x_step1)):
+        x_step1[i] = np.float(x_step1[i])
+        for j in range(len(y_seed1[i])):
+            y_seed1[i][j] = np.float(y_seed1[i][j])
+    for i in range(len(x_step2)):
+        x_step2[i] = np.float(x_step2[i])
+        for j in range(len(y_seed2[i])):
+            y_seed2[i][j] = np.float(y_seed2[i][j])
+    for i in range(len(x_step3)):
+        x_step3[i] = np.float(x_step3[i])
+        for j in range(len(y_seed3[i])):
+            y_seed3[i][j] = np.float(y_seed3[i][j])
+    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
+    mean_seed = np.mean(y_seed,axis=1)
+    std_seed = np.std(y_seed,axis=1)
+    timesteps = np.mean(x_step,axis=1)
+    # plt.plot(timesteps,mean_seed,color='steelblue')
+    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='steelblue')
+    # region smooth
+    xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    plt.plot(xnew,mean_smooth,color='mediumpurple')
+    plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='mediumpurple')
+
     # exp_name = 'sp_uniform_from_activeAndsolve'
     # # data_dir =  './' + exp_name + '.csv'
     # x_step1 = []
@@ -940,455 +1062,783 @@ def main():
     # plt.fill_between(x_step,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='mediumpurple')
     # # end region
 
-    # region main results
-    # ours
-    exp_name = 'mix_sp_train4eval8'
-    x_step1 = []
-    y_seed1 = []
-    x_step2 = []
-    y_seed2 = []
-    x_step3 = []
-    y_seed3 = []
-    # load data ranking by seed
-    data_dir =  './' + exp_name + '_seed1' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step1.append(row[0])
-            y_seed1.append(row[1:])
-    data_dir =  './' + exp_name + '_seed2' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step2.append(row[0])
-            y_seed2.append(row[1:])
-    data_dir =  './' + exp_name + '_seed3' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step3.append(row[0])
-            y_seed3.append(row[1:])
-    x_step1 = x_step1[1:]
-    y_seed1 = y_seed1[1:]
-    x_step2 = x_step2[1:]
-    y_seed2 = y_seed2[1:]
-    x_step3 = x_step3[1:]
-    y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step3)))
-    for i in range(len(x_step1)):
-        x_step1[i] = np.float(x_step1[i])
-        for j in range(len(y_seed1[i])):
-            y_seed1[i][j] = np.float(y_seed1[i][j])
-    for i in range(len(x_step2)):
-        x_step2[i] = np.float(x_step2[i])
-        for j in range(len(y_seed2[i])):
-            y_seed2[i][j] = np.float(y_seed2[i][j])
-    for i in range(len(x_step3)):
-        x_step3[i] = np.float(x_step3[i])
-        for j in range(len(y_seed3[i])):
-            y_seed3[i][j] = np.float(y_seed3[i][j])
-    x_step4 = x_step1[0:202]
-    x_step5 = x_step2[0:241]
-    x_step6 = x_step3[0:207]
-    y_seed4 = y_seed1[0:202]
-    y_seed5 = y_seed2[0:241]
-    y_seed6 = y_seed3[0:207]
-    # concat
-    exp_name = 'decay_30iter_woclip'
-    x_step1 = []
-    y_seed1 = []
-    x_step2 = []
-    y_seed2 = []
-    x_step3 = []
-    y_seed3 = []
-    # load data ranking by seed
-    data_dir =  './' + exp_name + '_seed1' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step1.append(row[0])
-            y_seed1.append(row[1:])
-    data_dir =  './' + exp_name + '_seed2' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step2.append(row[0])
-            y_seed2.append(row[1:])
-    data_dir =  './' + exp_name + '_seed3' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step3.append(row[0])
-            y_seed3.append(row[1:])
-    x_step1 = x_step1[1:]
-    y_seed1 = y_seed1[1:]
-    x_step2 = x_step2[1:]
-    y_seed2 = y_seed2[1:]
-    x_step3 = x_step3[1:]
-    y_seed3 = y_seed3[1:]
-    # length = min((len(x_step1),len(x_step3)))
-    for i in range(len(x_step1)):
-        x_step1[i] = np.float(x_step1[i]) + x_step4[-1]
-        for j in range(len(y_seed1[i])):
-            y_seed1[i][j] = np.float(y_seed1[i][j])
-    for i in range(len(x_step2)):
-        x_step2[i] = np.float(x_step2[i]) + x_step5[-1]
-        for j in range(len(y_seed2[i])):
-            y_seed2[i][j] = np.float(y_seed2[i][j])
-    for i in range(len(x_step3)):
-        x_step3[i] = np.float(x_step3[i]) + x_step6[-1]
-        for j in range(len(y_seed3[i])):
-            y_seed3[i][j] = np.float(y_seed3[i][j])
-    x_step1 = x_step4 + x_step1
-    x_step2 = x_step5 + x_step2
-    x_step3 = x_step6 + x_step3
-    y_seed1 = y_seed4 + y_seed1
-    y_seed2 = y_seed5 + y_seed2
-    y_seed3 = y_seed6 + y_seed3
-    length = min((len(x_step1),len(x_step2),len(x_step3)))
-    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:530]
-    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
-    x_step = x_step-x_step[0] # 从0开始计数
-    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:530]
-    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    mean_seed = np.mean(y_seed,axis=1)
-    std_seed = np.std(y_seed,axis=1)
-    timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='ACM')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='mediumpurple')
-    # region smooth
-    xnew = np.linspace(timesteps.min(),timesteps.max(),20)
-    mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
-    std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
-    plt.plot(xnew,mean_smooth,color='mediumpurple')
-    plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='mediumpurple')
-    # end region
+    # # region main results 4agents
+    # # ours
+    # exp_name = 'ours_sp_4agents'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # # length = min((len(x_step1),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:1714]
+    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
+    # x_step = x_step-x_step[0] # 从0开始计数
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:1714]
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,label='RCG')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='brown')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='mediumpurple')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='mediumpurple')
+    # # end region
 
-    # reverse 8agents
-    exp_name = 'reverse_sp_8agents'
-    # data_dir =  './' + exp_name + '.csv'
-    x_step1 = []
-    y_seed1 = []
-    x_step2 = []
-    y_seed2 = []
-    x_step3 = []
-    y_seed3 = []
-    # load data ranking by seed
-    data_dir =  './' + exp_name + '_seed1' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step1.append(row[0])
-            y_seed1.append(row[1:])
-    data_dir =  './' + exp_name + '_seed2' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step2.append(row[0])
-            y_seed2.append(row[1:])
-    data_dir =  './' + exp_name + '_seed3' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step3.append(row[0])
-            y_seed3.append(row[1:])
-    x_step1 = x_step1[1:]
-    y_seed1 = y_seed1[1:]
-    x_step2 = x_step2[1:]
-    y_seed2 = y_seed2[1:]
-    x_step3 = x_step3[1:]
-    y_seed3 = y_seed3[1:]
-    length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # length = min((len(x_step1),len(x_step3)))
-    for i in range(len(x_step1)):
-        x_step1[i] = np.float(x_step1[i])
-        for j in range(len(y_seed1[i])):
-            y_seed1[i][j] = np.float(y_seed1[i][j])
-    for i in range(len(x_step2)):
-        x_step2[i] = np.float(x_step2[i])
-        for j in range(len(y_seed2[i])):
-            y_seed2[i][j] = np.float(y_seed2[i][j])
-    for i in range(len(x_step3)):
-        x_step3[i] = np.float(x_step3[i])
-        for j in range(len(y_seed3[i])):
-            y_seed3[i][j] = np.float(y_seed3[i][j])
-    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:1714]
-    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
-    x_step = x_step-x_step[0] # 从0开始计数
-    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:1714]
-    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    mean_seed = np.mean(y_seed,axis=1)
-    std_seed = np.std(y_seed,axis=1)
-    timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='RCG')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='brown')
-    # region smooth
-    xnew = np.linspace(timesteps.min(),timesteps.max(),20)
-    mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
-    std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
-    plt.plot(xnew,mean_smooth,color='brown')
-    plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='brown')
-    # end region
+    # # reverse 4agents
+    # exp_name = 'reverse_sp_4agents'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # # length = min((len(x_step1),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:1714]
+    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
+    # x_step = x_step-x_step[0] # 从0开始计数
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:1714]
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,label='RCG')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='brown')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='brown')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='brown')
+    # # end region
 
-    # gan 8agents
-    exp_name = 'gan_sp'
-    # data_dir =  './' + exp_name + '.csv'
-    x_step1 = []
-    y_seed1 = []
-    x_step2 = []
-    y_seed2 = []
-    x_step3 = []
-    y_seed3 = []
-    # load data ranking by seed
-    data_dir =  './' + exp_name + '_seed1' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step1.append(row[0])
-            y_seed1.append(row[1:])
-    data_dir =  './' + exp_name + '_seed2' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step2.append(row[0])
-            y_seed2.append(row[1:])
-    data_dir =  './' + exp_name + '_seed3' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step3.append(row[0])
-            y_seed3.append(row[1:])
-    x_step1 = x_step1[1:]
-    y_seed1 = y_seed1[1:]
-    x_step2 = x_step2[1:]
-    y_seed2 = y_seed2[1:]
-    x_step3 = x_step3[1:]
-    y_seed3 = y_seed3[1:]
-    length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # length = min((len(x_step1),len(x_step3)))
-    for i in range(len(x_step1)):
-        x_step1[i] = np.float(x_step1[i])
-        for j in range(len(y_seed1[i])):
-            y_seed1[i][j] = np.float(y_seed1[i][j])
-    for i in range(len(x_step2)):
-        x_step2[i] = np.float(x_step2[i])
-        for j in range(len(y_seed2[i])):
-            y_seed2[i][j] = np.float(y_seed2[i][j])
-    for i in range(len(x_step3)):
-        x_step3[i] = np.float(x_step3[i])
-        for j in range(len(y_seed3[i])):
-            y_seed3[i][j] = np.float(y_seed3[i][j])
-    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:857]
-    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
-    x_step = x_step-x_step[0] # 从0开始计数
-    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:857]
-    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    mean_seed = np.mean(y_seed,axis=1)
-    std_seed = np.std(y_seed,axis=1)
-    timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='AGG')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='steelblue')
-    # region smooth
-    xnew = np.linspace(timesteps.min(),timesteps.max(),20)
-    mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
-    std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
-    plt.plot(xnew,mean_smooth,color='steelblue')
-    plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='steelblue')
-    # end region
+    # # gan 4agents
+    # exp_name = 'gan_sp_4agents'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # # length = min((len(x_step1),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:857]
+    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
+    # x_step = x_step-x_step[0] # 从0开始计数
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:857]
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,label='AGG')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='steelblue')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='steelblue')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='steelblue')
+    # # end region
 
-    # MAPPO
-    exp_name = 'sp_8agents'
-    # data_dir =  './' + exp_name + '.csv'
-    x_step1 = []
-    y_seed1 = []
-    x_step2 = []
-    y_seed2 = []
-    x_step3 = []
-    y_seed3 = []
-    # load data ranking by seed
-    data_dir =  './' + exp_name + '_seed1' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step1.append(row[0])
-            y_seed1.append(row[1:])
-    data_dir =  './' + exp_name + '_seed2' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step2.append(row[0])
-            y_seed2.append(row[1:])
-    data_dir =  './' + exp_name + '_seed3' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step3.append(row[0])
-            y_seed3.append(row[1:])
-    x_step1 = x_step1[1:]
-    y_seed1 = y_seed1[1:]
-    x_step2 = x_step2[1:]
-    y_seed2 = y_seed2[1:]
-    x_step3 = x_step3[1:]
-    y_seed3 = y_seed3[1:]
-    length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # length = min((len(x_step1),len(x_step3)))
-    for i in range(len(x_step1)):
-        x_step1[i] = np.float(x_step1[i])
-        for j in range(len(y_seed1[i])):
-            y_seed1[i][j] = np.float(y_seed1[i][j])
-    for i in range(len(x_step2)):
-        x_step2[i] = np.float(x_step2[i])
-        for j in range(len(y_seed2[i])):
-            y_seed2[i][j] = np.float(y_seed2[i][j])
-    for i in range(len(x_step3)):
-        x_step3[i] = np.float(x_step3[i])
-        for j in range(len(y_seed3[i])):
-            y_seed3[i][j] = np.float(y_seed3[i][j])
-    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:1714]
-    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
-    x_step = x_step-x_step[0] # 从0开始计数
-    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:1714]
-    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    mean_seed = np.mean(y_seed,axis=1)
-    std_seed = np.std(y_seed,axis=1)
-    timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='MAPPO')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='coral')
-    # region smooth
-    xnew = np.linspace(timesteps.min(),timesteps.max(),20)
-    mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
-    std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
-    plt.plot(xnew,mean_smooth,color='coral')
-    plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='coral')
-    # end region
+    # # MAPPO
+    # exp_name = 'mappo_sp_4agents'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # # length = min((len(x_step1),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:1714]
+    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
+    # x_step = x_step-x_step[0] # 从0开始计数
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:1714]
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,label='MAPPO')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='coral')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='coral')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='coral')
+    # # end region
 
-    # PC MAPPO
-    exp_name = 'pc_sp'
-    # data_dir =  './' + exp_name + '.csv'
-    x_step1 = []
-    y_seed1 = []
-    x_step2 = []
-    y_seed2 = []
-    x_step3 = []
-    y_seed3 = []
-    # load data ranking by seed
-    data_dir =  './' + exp_name + '_seed1' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step1.append(row[0])
-            y_seed1.append(row[1:])
-    data_dir =  './' + exp_name + '_seed2' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step2.append(row[0])
-            y_seed2.append(row[1:])
-    data_dir =  './' + exp_name + '_seed3' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step3.append(row[0])
-            y_seed3.append(row[1:])
-    x_step1 = x_step1[1:]
-    y_seed1 = y_seed1[1:]
-    x_step2 = x_step2[1:]
-    y_seed2 = y_seed2[1:]
-    x_step3 = x_step3[1:]
-    y_seed3 = y_seed3[1:]
-    length = min((len(x_step1),len(x_step2),len(x_step3)))
-    # length = min((len(x_step1),len(x_step3)))
-    for i in range(len(x_step1)):
-        x_step1[i] = np.float(x_step1[i])
-        for j in range(len(y_seed1[i])):
-            y_seed1[i][j] = np.float(y_seed1[i][j])
-    for i in range(len(x_step2)):
-        x_step2[i] = np.float(x_step2[i])
-        for j in range(len(y_seed2[i])):
-            y_seed2[i][j] = np.float(y_seed2[i][j])
-    for i in range(len(x_step3)):
-        x_step3[i] = np.float(x_step3[i])
-        for j in range(len(y_seed3[i])):
-            y_seed3[i][j] = np.float(y_seed3[i][j])
-    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:1714]
-    # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
-    x_step = x_step-x_step[0] # 从0开始计数
-    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:1714]
-    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    mean_seed = np.mean(y_seed,axis=1)
-    std_seed = np.std(y_seed,axis=1)
-    timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,label='PC-MAPPO')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='dimgray')
-    # region smooth
-    xnew = np.linspace(timesteps.min(),timesteps.max(),20)
-    mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
-    std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
-    plt.plot(xnew,mean_smooth,color='dimgray')
-    plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='dimgray')
-    # end region
+    # exp_name = 'amigo_sp_4agents'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,color='steelblue')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='steelblue')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='green')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='green')
+    # # end region
 
-    exp_name = 'amigo_sp'
-    # data_dir =  './' + exp_name + '.csv'
-    x_step1 = []
-    y_seed1 = []
-    x_step2 = []
-    y_seed2 = []
-    x_step3 = []
-    y_seed3 = []
-    # load data ranking by seed
-    data_dir =  './' + exp_name + '_seed1' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step1.append(row[0])
-            y_seed1.append(row[1:])
-    data_dir =  './' + exp_name + '_seed2' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step2.append(row[0])
-            y_seed2.append(row[1:])
-    data_dir =  './' + exp_name + '_seed3' + '.csv'
-    with open(data_dir,'r') as csvfile:
-        plots = csv.reader(csvfile)
-        for row in plots:
-            x_step3.append(row[0])
-            y_seed3.append(row[1:])
-    x_step1 = x_step1[1:]
-    y_seed1 = y_seed1[1:]
-    x_step2 = x_step2[1:]
-    y_seed2 = y_seed2[1:]
-    x_step3 = x_step3[1:]
-    y_seed3 = y_seed3[1:]
-    length = min((len(x_step1),len(x_step2),len(x_step3)))
-    for i in range(len(x_step1)):
-        x_step1[i] = np.float(x_step1[i])
-        for j in range(len(y_seed1[i])):
-            y_seed1[i][j] = np.float(y_seed1[i][j])
-    for i in range(len(x_step2)):
-        x_step2[i] = np.float(x_step2[i])
-        for j in range(len(y_seed2[i])):
-            y_seed2[i][j] = np.float(y_seed2[i][j])
-    for i in range(len(x_step3)):
-        x_step3[i] = np.float(x_step3[i])
-        for j in range(len(y_seed3[i])):
-            y_seed3[i][j] = np.float(y_seed3[i][j])
-    x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
-    y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
-    # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
-    mean_seed = np.mean(y_seed,axis=1)
-    std_seed = np.std(y_seed,axis=1)
-    timesteps = np.mean(x_step,axis=1)
-    # plt.plot(timesteps,mean_seed,color='steelblue')
-    # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='steelblue')
-    # region smooth
-    xnew = np.linspace(timesteps.min(),timesteps.max(),20)
-    mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
-    std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
-    plt.plot(xnew,mean_smooth,color='green')
-    plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='green')
-    # end region
+
+    # # region main results
+    # # ours
+    # exp_name = 'mix_sp_train4eval8'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # # length = min((len(x_step1),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step4 = x_step1[0:202]
+    # x_step5 = x_step2[0:241]
+    # x_step6 = x_step3[0:207]
+    # y_seed4 = y_seed1[0:202]
+    # y_seed5 = y_seed2[0:241]
+    # y_seed6 = y_seed3[0:207]
+    # # concat
+    # exp_name = 'decay_30iter_woclip'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # # length = min((len(x_step1),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i]) + x_step4[-1]
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i]) + x_step5[-1]
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i]) + x_step6[-1]
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step1 = x_step4 + x_step1
+    # x_step2 = x_step5 + x_step2
+    # x_step3 = x_step6 + x_step3
+    # y_seed1 = y_seed4 + y_seed1
+    # y_seed2 = y_seed5 + y_seed2
+    # y_seed3 = y_seed6 + y_seed3
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:530]
+    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
+    # x_step = x_step-x_step[0] # 从0开始计数
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:530]
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,label='ACM')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='mediumpurple')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='mediumpurple')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='mediumpurple')
+    # # end region
+
+    # # reverse 8agents
+    # exp_name = 'reverse_sp_8agents'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # # length = min((len(x_step1),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:1714]
+    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
+    # x_step = x_step-x_step[0] # 从0开始计数
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:1714]
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,label='RCG')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='brown')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='brown')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='brown')
+    # # end region
+
+    # # gan 8agents
+    # exp_name = 'gan_sp'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # # length = min((len(x_step1),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:857]
+    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
+    # x_step = x_step-x_step[0] # 从0开始计数
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:857]
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,label='AGG')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='steelblue')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='steelblue')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='steelblue')
+    # # end region
+
+    # # MAPPO
+    # exp_name = 'sp_8agents'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # # length = min((len(x_step1),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:1714]
+    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
+    # x_step = x_step-x_step[0] # 从0开始计数
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:1714]
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,label='MAPPO')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='coral')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='coral')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='coral')
+    # # end region
+
+    # # PC MAPPO
+    # exp_name = 'pc_sp'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # # length = min((len(x_step1),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)[0:1714]
+    # # x_step = np.stack((x_step1[0:length],x_step3[0:length]),axis=1)
+    # x_step = x_step-x_step[0] # 从0开始计数
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:1714]
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,label='PC-MAPPO')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='dimgray')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='dimgray')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='dimgray')
+    # # end region
+
+    # exp_name = 'amigo_sp'
+    # # data_dir =  './' + exp_name + '.csv'
+    # x_step1 = []
+    # y_seed1 = []
+    # x_step2 = []
+    # y_seed2 = []
+    # x_step3 = []
+    # y_seed3 = []
+    # # load data ranking by seed
+    # data_dir =  './' + exp_name + '_seed1' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step1.append(row[0])
+    #         y_seed1.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed2' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step2.append(row[0])
+    #         y_seed2.append(row[1:])
+    # data_dir =  './' + exp_name + '_seed3' + '.csv'
+    # with open(data_dir,'r') as csvfile:
+    #     plots = csv.reader(csvfile)
+    #     for row in plots:
+    #         x_step3.append(row[0])
+    #         y_seed3.append(row[1:])
+    # x_step1 = x_step1[1:]
+    # y_seed1 = y_seed1[1:]
+    # x_step2 = x_step2[1:]
+    # y_seed2 = y_seed2[1:]
+    # x_step3 = x_step3[1:]
+    # y_seed3 = y_seed3[1:]
+    # length = min((len(x_step1),len(x_step2),len(x_step3)))
+    # for i in range(len(x_step1)):
+    #     x_step1[i] = np.float(x_step1[i])
+    #     for j in range(len(y_seed1[i])):
+    #         y_seed1[i][j] = np.float(y_seed1[i][j])
+    # for i in range(len(x_step2)):
+    #     x_step2[i] = np.float(x_step2[i])
+    #     for j in range(len(y_seed2[i])):
+    #         y_seed2[i][j] = np.float(y_seed2[i][j])
+    # for i in range(len(x_step3)):
+    #     x_step3[i] = np.float(x_step3[i])
+    #     for j in range(len(y_seed3[i])):
+    #         y_seed3[i][j] = np.float(y_seed3[i][j])
+    # x_step = np.stack((x_step1[0:length],x_step2[0:length],x_step3[0:length]),axis=1)
+    # y_seed = np.stack((y_seed1[0:length],y_seed2[0:length],y_seed3[0:length]),axis=1).squeeze(2)
+    # # y_seed = np.stack((y_seed1[0:length],y_seed3[0:length]),axis=1).squeeze(2)[0:190]
+    # mean_seed = np.mean(y_seed,axis=1)
+    # std_seed = np.std(y_seed,axis=1)
+    # timesteps = np.mean(x_step,axis=1)
+    # # plt.plot(timesteps,mean_seed,color='steelblue')
+    # # plt.fill_between(timesteps,mean_seed-std_seed,mean_seed+std_seed,alpha=0.1,color='steelblue')
+    # # region smooth
+    # xnew = np.linspace(timesteps.min(),timesteps.max(),20)
+    # mean_smooth = make_interp_spline(timesteps,mean_seed)(xnew)
+    # std_smooth = make_interp_spline(timesteps,std_seed)(xnew)
+    # plt.plot(xnew,mean_smooth,color='green')
+    # plt.fill_between(xnew,mean_smooth-std_smooth,mean_smooth+std_smooth,alpha=0.1,color='green')
+    # # end region
 
     # # good results
     # exp_name = 'sp_eval3'

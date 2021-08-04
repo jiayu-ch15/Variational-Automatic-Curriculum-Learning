@@ -5,6 +5,7 @@ import numpy as np
 import torch
 from multiprocessing import Process, Pipe
 from baselines.common.vec_env import VecEnv, CloudpickleWrapper
+import pdb
 
 def simplifyworker(remote, parent_remote, env_fn_wrapper):
     parent_remote.close()

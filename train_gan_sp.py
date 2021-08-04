@@ -421,6 +421,12 @@ def main():
         # generate the starts
         starts = numpy_to_list(goals, list_length=num_envs, shape=(num_agents*2,2))
 
+        # add noise to execute mpe bugs
+        for start in starts:
+            for i in range(start.shape[0]):
+                noise = np.random.uniform(-0.01, +0.01, 2)
+                start[i] += noise
+
         for times in range(eval_frequency):
             actor_critic.agents_num = num_agents
             obs = envs.new_starts_obs(starts, num_agents, starts_length)

@@ -93,7 +93,7 @@ def main():
     buffer_length = 2000 # archive 长度
     boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
     start_boundary = {'x':[-0.3,0.3],'y':[-0.3,0.3]}
-    restart_p = 0.9
+    restart_p = 0.3
     eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
     use_gae = True
@@ -102,7 +102,8 @@ def main():
     use_adaptive = False
     use_start_states = True
     use_states_clip = False
-    use_little_init = False
+    use_little_init = True
+    use_double_check = False
     save_node_fre = 5
     save_node = True
     random.seed(args.seed)
@@ -280,9 +281,9 @@ def main():
             for times in range(eval_frequency):
                 rollouts, current_timestep, restart_states, restart_states_value = collect_data_and_states(envs, agents, agents.actor_critic, args, starts, len(starts), len(starts), current_timestep)
                 if use_start_states:
-                    goals.add_restart_states(restart_states[0:len(starts)],restart_states_value[0:len(starts)], args, envs, agents, actor_critic, use_gae, use_one_step)
+                    goals.add_restart_states(restart_states[0:len(starts)],restart_states_value[0:len(starts)], args, envs, agents, actor_critic, use_gae, use_one_step, use_double_check, use_states_clip)
                 else:
-                    goals.add_restart_states(restart_states,restart_states_value, args, envs, agents, actor_critic, use_gae, use_one_step, use_states_clip)
+                    goals.add_restart_states(restart_states,restart_states_value, args, envs, agents, actor_critic, use_gae, use_one_step, use_double_check, use_states_clip)
                 # update the network
                 if args.share_policy:
                     agents.actor_critic.train()

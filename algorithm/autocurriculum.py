@@ -531,7 +531,7 @@ class goal_proposal():
                     starts += self.uniform_sampling(starts_length=self.proposal_batch-len(self.buffer),boundary=boundary)
         return starts
         
-    def add_restart_states(self, restart_states, restart_states_value, args, envs, agents, actor_critic, use_gae, use_one_step, use_states_clip=False):
+    def add_restart_states(self, restart_states, restart_states_value, args, envs, agents, actor_critic, use_gae, use_one_step, use_double_check=False, use_states_clip=False):
         # priority means array
         if use_states_clip:
             for state in restart_states:
@@ -539,11 +539,13 @@ class goal_proposal():
                     noise = np.random.uniform(-0.01,0.01)
                     state[entity_id] = np.clip(state[entity_id],self.boundary['x'][0],self.boundary['x'][1]) + noise
 
-        if len(self.buffer) > 0:
+        if len(self.buffer) > 0 and use_double_check:
             self.buffer_priority = self.get_priority(self.buffer, args, envs, agents, actor_critic, use_gae, use_one_step)
+            self.buffer_priority = np.array(self.buffer_priority).reshape(-1)
+            self.buffer_priority = np.concatenate((self.buffer_priority,restart_states_value))
+        else:
+            self.buffer_priority += restart_states_value.tolist()
         self.buffer += restart_states
-        self.buffer_priority = np.array(self.buffer_priority).reshape(-1)
-        self.buffer_priority = np.concatenate((self.buffer_priority,restart_states_value))
         if len(self.buffer) > self.buffer_capacity:
             self.buffer, self.buffer_priority = self.priority_sort(self.buffer, self.buffer_priority)
             self.buffer = self.buffer[len(self.buffer)-self.buffer_capacity:]

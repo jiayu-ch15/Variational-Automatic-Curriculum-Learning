@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO,PPO3
-from algorithm.model import Policy_pb, Policy_pb_3, ATTBase_pb, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
+from algorithm.model import Policy_pb, Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -512,7 +512,6 @@ def main():
         actor_critic = Policy_pb_3(envs.observation_space[0],
                     envs.action_space[0],
                     num_agents = num_agents,
-                    num_box = num_boxes,
                     base=None,
                     actor_base=actor_base,
                     critic_base=critic_base,
@@ -642,16 +641,16 @@ def main():
     Rmin = 0.5
     Rmax = 0.95
     boundary = 2.0
-    # start_boundary = [-0.3,0.3,-0.3,0.3]
-    start_boundary = [-0.8,0.8,-0.8,0.8]
+    start_boundary = [-0.4,0.4,-0.4,0.4]
+    # start_boundary = [-0.8,0.8,-0.8,0.8]
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
-    last_agent_num = 4
-    last_box_num = 4
+    last_agent_num = num_agents
+    last_box_num = num_boxes
     now_agent_num = num_agents
-    num_agents_test = 4 
-    num_boxes_test = 4
+    num_agents_test = 2
+    num_boxes_test = 2
     mean_cover_rate = 0
     eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
@@ -796,7 +795,10 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
-                step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
+                cover_rate_list = []
+                for env_id in range(one_length):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                step_cover_rate[:,step] = np.array(cover_rate_list)
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -887,7 +889,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, current_timestep, False) 
                 wandb.log(
                     {'value_loss': value_loss},
                     current_timestep)        
@@ -1018,7 +1020,10 @@ def main():
                 
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
-                test_cover_rate[:,step] = np.array(infos)[:,0]
+                cover_rate_list = []
+                for env_id in range(args.n_rollout_threads):
+                    cover_rate_list.append(infos[env_id][0]['cover_rate'])
+                test_cover_rate[:,step] = np.array(cover_rate_list)
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -1066,8 +1071,8 @@ def main():
             wandb.log({str(num_agents_test) + 'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
             wandb.log({str(num_agents_test) + 'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
-            print('test_agent_num: ', num_agents_test)
-            print('test_mean_cover_rate: ', mean_cover_rate)
+            print('[test_agent_num]: ', num_agents_test)
+            print('[test_mean_cover_rate]: ', mean_cover_rate)
 
         total_num_steps = current_timestep
 

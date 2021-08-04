@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO,PPO3
-from algorithm.model import Policy,Policy3, ATTBase_add, ATTBase_actor_dist_add, ATTBase_critic_add
+from algorithm.model import Policy,Policy3, ATTBase_actor_dist_add, ATTBase_critic_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -51,7 +51,7 @@ def make_parallel_env(args):
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 class node_buffer():
-    def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region):
+    def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region,epsilon,delta):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
         self.boundary = boundary
@@ -70,6 +70,8 @@ class node_buffer():
         self.choose_archive_index = []
         self.eval_score = np.zeros(shape=len(self.archive))
         self.topk = 5
+        self.epsilon = epsilon
+        self.delta = delta
 
     def produce_good_case_H(self, num_case, now_agent_num): # 产生H_map的初始态
         one_starts_landmark = []
@@ -195,9 +197,11 @@ class node_buffer():
             child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
             return child_new
 
-    def Sample_gradient(self,parents,timestep,random_stepsize=False,use_gradient_noise=True):
-        boundary_x = self.legal_region['x']
-        boundary_y = self.legal_region['y']
+    def Sample_gradient(self,parents,timestep,h=100, use_gradient_noise=True):
+        boundary_x_agent = self.legal_region['agent']['x']
+        boundary_y_agent = self.legal_region['agent']['y']
+        boundary_x_landmark = self.legal_region['landmark']['x']
+        boundary_y_landmark = self.legal_region['landmark']['y']
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -207,34 +211,36 @@ class node_buffer():
             add_num = 0
             while add_num < self.reproduction_num:
                 for parent in parents:
-                    parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all)
-                    if not parent_gradient_zero:
-                        if random_stepsize:
-                            stepsize = self.max_step * random.random()
-                        else:
-                            stepsize = self.max_step
+                    parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all,h=h)
+                    
                     # gradient step
                     new_parent = []
                     for parent_of_entity_id in range(len(parent)):
                         st = copy.deepcopy(parent[parent_of_entity_id])
                         # execute gradient step
                         if not parent_gradient_zero:
-                            st[0] += parent_gradient[parent_of_entity_id * 2] * stepsize
-                            st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * stepsize
+                            st[0] += parent_gradient[parent_of_entity_id * 2] * self.epsilon
+                            st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * self.epsilon
                         else:
-                            stepsizex = -2 * self.max_step * random.random() + self.max_step
-                            stepsizey = -2 * self.max_step * random.random() + self.max_step
+                            stepsizex = -2 * self.epsilon * random.random() + self.epsilon
+                            stepsizey = -2 * self.epsilon * random.random() + self.epsilon
                             st[0] += stepsizex
                             st[1] += stepsizey
                         # clip
+                        if parent_of_entity_id < self.agent_num:
+                            boundary_x = boundary_x_agent
+                            boundary_y = boundary_y_agent
+                        else:
+                            boundary_x = boundary_x_landmark
+                            boundary_y = boundary_y_landmark
                         st = self.clip_states(st,boundary_x,boundary_y)
                         # rejection sampling
                         if use_gradient_noise:
-                            num_tries = 20
+                            num_tries = 100
                             num_try = 0
                             while num_try <= num_tries:
-                                epsilon_x = -2 * self.max_step * random.random() + self.max_step
-                                epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                                epsilon_x = -2 * self.delta * random.random() + self.delta
+                                epsilon_y = -2 * self.delta * random.random() + self.delta
                                 tmp_x = st[0] + epsilon_x
                                 tmp_y = st[1] + epsilon_y
                                 is_legal = self.is_legal([tmp_x,tmp_y],boundary_x,boundary_y)
@@ -252,10 +258,15 @@ class node_buffer():
                     if add_num >= self.reproduction_num: break
             return child_new
 
-    def gradient_of_state(self,state,buffer):
+    def gradient_of_state(self,state,buffer,h=100.0,use_rbf=True):
         gradient = np.zeros(state.shape)
         for buffer_state in buffer:
-            gradient += 2 * (state - np.array(buffer_state).reshape(-1))
+            if use_rbf:
+                dist0 = state - np.array(buffer_state).reshape(-1)
+                # gradient += -2 * dist0 * np.exp(-dist0**2 / h) / h
+                gradient += 2 * dist0 * np.exp(-dist0**2 / h) / h
+            else:
+                gradient += 2 * (state - np.array(buffer_state).reshape(-1))
         norm = np.linalg.norm(gradient, ord=2)
         if norm > 0.0:
             gradient = gradient / np.linalg.norm(gradient, ord=2)
@@ -263,6 +274,37 @@ class node_buffer():
         else:
             gradient_zero = True
         return gradient, gradient_zero
+
+    def is_legal(self, pos, boundary_x, boundary_y):
+        legal = False
+        # 限制在整个大的范围内
+        if pos[0] < boundary_x[0][0] or pos[0] > boundary_x[-1][1]:
+            return False
+        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        for boundary_id in range(len(boundary_x)):
+            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
+                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
+                    legal = True
+                    break
+        return legal
+
+    def clip_states(self,pos, boundary_x, boundary_y):
+        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        # clip to [-map,map]
+        if pos[0] < boundary_x[0][0]:
+            pos[0] = boundary_x[0][0] + random.random()*0.01
+        elif pos[0] > boundary_x[-1][1]:
+            pos[0] = boundary_x[-1][1] - random.random()*0.01
+
+        for boundary_id in range(len(boundary_x)):
+            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
+                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
+                    break
+                elif pos[1] < boundary_y[boundary_id][0]:
+                    pos[1] = boundary_y[boundary_id][0] + random.random()*0.01
+                elif pos[1] > boundary_y[boundary_id][1]:
+                    pos[1] = boundary_y[boundary_id][1] - random.random()*0.01
+        return pos
 
     def SampleNearby_H(self,starts):
         boundary_x = self.legal_region['x']
@@ -302,37 +344,6 @@ class node_buffer():
                     add_num += 1
             starts_new = random.sample(starts_new, self.reproduction_num)
             return starts_new
-
-    def is_legal(self, pos, boundary_x, boundary_y):
-        legal = False
-        # 限制在整个大的范围内
-        if pos[0] < boundary_x[0][0] or pos[0] > boundary_x[-1][1]:
-            return False
-        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        for boundary_id in range(len(boundary_x)):
-            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
-                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
-                    legal = True
-                    break
-        return legal
-
-    def clip_states(self,pos, boundary_x, boundary_y):
-        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
-        # clip to [-map,map]
-        if pos[0] < boundary_x[0][0]:
-            pos[0] = boundary_x[0][0] + random.random()*0.01
-        elif pos[0] > boundary_x[-1][1]:
-            pos[0] = boundary_x[-1][1] - random.random()*0.01
-
-        for boundary_id in range(len(boundary_x)):
-            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
-                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
-                    break
-                elif pos[1] < boundary_y[boundary_id][0]:
-                    pos[1] = boundary_y[boundary_id][0] + random.random()*0.01
-                elif pos[1] > boundary_y[boundary_id][1]:
-                    pos[1] = boundary_y[boundary_id][1] - random.random()*0.01
-        return pos
 
     def SampleNearby(self, starts): # produce new children and return
         starts = starts + []
@@ -670,7 +681,8 @@ def main():
     use_parent_novelty = False # 保持false
     use_child_novelty = False # 保持false
     use_novelty_sample = True
-    use_parent_sample = False
+    use_parent_sample = True
+    use_gradient_sample = True
     del_switch = 'novelty'
     child_novelty_threshold = 0.8
     starts = []
@@ -685,13 +697,28 @@ def main():
     M = N_child
     Rmin = 0.5
     Rmax = 0.95
+    # boundary = {'agent':{'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]},
+    #             'landmark':{'x':[[-4.9,-3.1],[-0.9,0.9],[3.1,4.9]],'y':[[-2.9,2.9],[-2.9,2.9],[-2.9,2.9]]}} # uniform distribution
+    # # start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
+    # start_boundary = {'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]} # good goal
+    # legal_region = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+    #     'y': [[-2.9,2.9],[1.85,2.15],[-2.9,2.9],[-2.15,-1.85],[-2.9,2.9]]},
+    #     'landmark':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+    #     'y': [[-2.9,2.9],[1.85,2.15],[-2.9,2.9],[-2.15,-1.85],[-2.9,2.9]]}} # legal region for samplenearby
+    
+    # only boundary room
     boundary = {'agent':{'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]},
-                'landmark':{'x':[[-4.9,-3.1],[-0.9,0.9],[3.1,4.9]],'y':[[-2.9,2.9],[-2.9,2.9],[-2.9,2.9]]}} # uniform distribution
+                'landmark':{'x':[[-4.9,-3.1],[3.1,4.9]],'y':[[-2.9,2.9],[-2.9,2.9]]}} # uniform distribution
     # start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
-    start_boundary = {'x':[[-0.9,0.9]],'y':[[-2.9,2.9]]} # good goal
-    legal_region = {'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-        'y': [[-2.9,2.9],[1.85,2.15],[-2.9,2.9],[-2.15,-1.85],[-2.9,2.9]]} # legal region for samplenearby
+    start_boundary = {'x':[[-4.9,-3.1],[3.1,4.9]],'y':[[-2.9,2.9],[-2.9,2.9]]} # good goal
+    legal_region = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+        'y': [[-2.9,2.9],[1.85,2.15],[-2.9,2.9],[-2.15,-1.85],[-2.9,2.9]]},
+        'landmark':{'x':[[-4.9,-3.1],[3.1,4.9]],
+        'y': [[-2.9,2.9],[-2.9,2.9]]}} # legal region for samplenearby
     max_step = 0.6
+    epsilon = 0.6
+    delta = 0.6
+    h = 1
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -713,7 +740,9 @@ def main():
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary,
-                           legal_region=legal_region)
+                           legal_region=legal_region,
+                           epsilon=epsilon,
+                           delta=delta)
     
     # run
     begin = time.time()
@@ -732,10 +761,13 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction
-        if use_novelty_sample:
-            last_node.childlist += last_node.SampleNearby_novelty_H(last_node.parent, child_novelty_threshold,logger, current_timestep)
+        if use_gradient_sample:
+            last_node.childlist += last_node.Sample_gradient(last_node.parent,current_timestep,h=h)
         else:
-            last_node.childlist += last_node.SampleNearby_H(last_node.parent)
+            if use_novelty_sample:
+                last_node.childlist += last_node.SampleNearby_novelty_H(last_node.parent, child_novelty_threshold,logger, current_timestep)
+            else:
+                last_node.childlist += last_node.SampleNearby_H(last_node.parent)
         
         # reset env 
         # one length = now_process_num
@@ -923,7 +955,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, False, initial_optimizer=False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, current_timestep, False) 
                 print('value_loss: ', value_loss)
                 wandb.log(
                     {'value_loss': value_loss},

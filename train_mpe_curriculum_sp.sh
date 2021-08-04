@@ -4,9 +4,9 @@ env="MPE"
 scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-algo="sp_uniform_noise"
+algo="sp_gradient_sampling_FIFO"
 # algo='check'
-seed=3
+seed=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
 

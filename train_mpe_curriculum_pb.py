@@ -408,7 +408,7 @@ class node_buffer():
         for buffer_state in buffer:
             if use_rbf:
                 dist0 = state - np.array(buffer_state).reshape(-1)
-                gradient += -2 * dist0 * np.exp(-dist0**2 / h) / h
+                gradient += 2 * dist0 * np.exp(-dist0**2 / h) / h
             else:
                 gradient += 2 * (state - np.array(buffer_state).reshape(-1))
         norm = np.linalg.norm(gradient, ord=2)
@@ -783,7 +783,7 @@ def main():
     use_novelty_sample_activeAndsolve = False
     use_gradient_sample = True
     use_active_expansion = False
-    del_switch = 'novelty'
+    del_switch = 'old'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
@@ -801,7 +801,7 @@ def main():
     max_step = 0.4
     epsilon = 0.4
     delta = 0.4
-    h = 100
+    h = 1
     TB = 1
     M = N_child
     Rmin = 0.5
