@@ -333,6 +333,37 @@ class node_buffer():
             gradient_zero = True
         return gradient, gradient_zero
 
+    def is_legal(self, pos, boundary_x, boundary_y):
+        legal = False
+        # 限制在整个大的范围内
+        if pos[0] < boundary_x[0][0] or pos[0] > boundary_x[-1][1]:
+            return False
+        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        for boundary_id in range(len(boundary_x)):
+            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
+                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
+                    legal = True
+                    break
+        return legal
+
+    def clip_states(self,pos, boundary_x, boundary_y):
+        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        # clip to [-map,map]
+        if pos[0] < boundary_x[0][0]:
+            pos[0] = boundary_x[0][0] + random.random()*0.01
+        elif pos[0] > boundary_x[-1][1]:
+            pos[0] = boundary_x[-1][1] - random.random()*0.01
+
+        for boundary_id in range(len(boundary_x)):
+            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
+                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
+                    break
+                elif pos[1] < boundary_y[boundary_id][0]:
+                    pos[1] = boundary_y[boundary_id][0] + random.random()*0.01
+                elif pos[1] > boundary_y[boundary_id][1]:
+                    pos[1] = boundary_y[boundary_id][1] - random.random()*0.01
+        return pos
+
     def SampleNearby(self, starts): # produce new children and return
         starts = starts + []
         len_start = len(starts)
@@ -481,23 +512,26 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
         wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
 
-    def move_nodes_wo_evaluation(self, one_length, Rmax, Rmin, del_switch, timestep):
+    def move_nodes_Qact_Qsol(self, one_length, Rmax, Rmin, del_switch, timestep):
         # set active scores
-        tmp_archive_score = np.zeros(len(self.archive))
+        tmp_archive_score = np.zeros(len(self.archive_score))
         # get old score
         for i in range(len(self.archive_score)):
             tmp_archive_score[i] = self.archive_score[i]
         for i in range(one_length):
             tmp_archive_score[self.choose_archive_index[i]] = self.eval_score[i]
         self.archive_score = copy.deepcopy(tmp_archive_score)
+        # archive_score invalid
         del_archive_num = 0
         del_easy_num = 0
         add_hard_num = 0
         self.parent = []
-        child2archive = []
         for i in range(one_length):
             if self.eval_score[i] > Rmax:
                 self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i]-del_archive_num]))
+                del self.archive[self.choose_archive_index[i]-del_archive_num]
+                del_archive_num += 1
+            elif self.eval_score[i] < Rmin:
                 del self.archive[self.choose_archive_index[i]-del_archive_num]
                 del_archive_num += 1
         self.parent_all += self.parent
@@ -723,13 +757,12 @@ def main():
     del_switch = 'novelty'
     starts = []
     buffer_length = 2000 # archive 长度
-    N_parent = 0
+    N_parent = 25
     N_archive = args.n_rollout_threads - N_parent
-    h = 1
+    h = 1000
     epsilon = 0.6
     delta = 0.6
-    TB = 1
-    M = 150 # equal to curriculum_sp
+    B_exp = 150 # equal to curriculum_sp
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
@@ -754,7 +787,7 @@ def main():
     np.random.seed(args.seed)
     last_node = node_buffer(last_agent_num,buffer_length,
                            archive_initial_length=args.n_rollout_threads,
-                           reproduction_num=M,
+                           reproduction_num=B_exp,
                            max_step=max_step,
                            start_boundary=start_boundary,
                            boundary=boundary,
@@ -1023,7 +1056,7 @@ def main():
 
         # move nodes
         last_node.eval_score = last_node.eval_score / eval_frequency
-        last_node.move_nodes_wo_evaluation(one_length, Rmax, Rmin, del_switch, current_timestep)
+        last_node.move_nodes_Qact_Qsol(one_length, Rmax, Rmin, del_switch, current_timestep)
         print('last_node_parent: ', len(last_node.parent))
         # 需要改路径
         if (episode+1) % save_node_frequency ==0 and save_node_flag:
