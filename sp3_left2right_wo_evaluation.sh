@@ -4,9 +4,9 @@ env="MPE"
 scenario="simple_spread_3rooms_left2right"
 num_landmarks=4
 num_agents=4
-algo="sp3_rbfgradient_h1000_woevaluation"
+algo="sp3_worejection"
 # algo='check'
-seed=1
+seed=3
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
 

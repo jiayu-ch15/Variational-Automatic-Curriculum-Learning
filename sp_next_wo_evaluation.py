@@ -513,15 +513,14 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
 
     def move_nodes_Qact_Qsol(self, one_length, Rmax, Rmin, del_switch, timestep):
-        # set active scores
-        tmp_archive_score = np.zeros(len(self.archive_score))
-        # get old score
-        for i in range(len(self.archive_score)):
-            tmp_archive_score[i] = self.archive_score[i]
-        for i in range(one_length):
-            tmp_archive_score[self.choose_archive_index[i]] = self.eval_score[i]
-        self.archive_score = copy.deepcopy(tmp_archive_score)
-        # archive_score invalid
+        # # set active scores
+        # tmp_archive_score = np.zeros(len(self.archive_score))
+        # # get old score
+        # for i in range(len(self.archive_score)):
+        #     tmp_archive_score[i] = self.archive_score[i]
+        # for i in range(one_length):
+        #     tmp_archive_score[self.choose_archive_index[i]] = self.eval_score[i]
+        # self.archive_score = copy.deepcopy(tmp_archive_score)
         del_archive_num = 0
         del_easy_num = 0
         add_hard_num = 0
@@ -531,9 +530,9 @@ class node_buffer():
                 self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i]-del_archive_num]))
                 del self.archive[self.choose_archive_index[i]-del_archive_num]
                 del_archive_num += 1
-            elif self.eval_score[i] < Rmin:
-                del self.archive[self.choose_archive_index[i]-del_archive_num]
-                del_archive_num += 1
+            # elif self.eval_score[i] < Rmin:
+            #     del self.archive[self.choose_archive_index[i]-del_archive_num]
+            #     del_archive_num += 1
         self.parent_all += self.parent
         if len(self.archive) > self.buffer_length:
             if del_switch=='novelty' : # novelty del
@@ -759,7 +758,7 @@ def main():
     buffer_length = 2000 # archive 长度
     N_parent = 25
     N_archive = args.n_rollout_threads - N_parent
-    h = 1000
+    h = 1
     epsilon = 0.6
     delta = 0.6
     B_exp = 150 # equal to curriculum_sp
@@ -813,7 +812,7 @@ def main():
 
         # reproduction
         if use_gradient_sample:
-            last_node.archive += last_node.Sample_gradient(last_node.parent, current_timestep,h=h)
+            last_node.archive += last_node.Sample_gradient(last_node.parent, current_timestep,h=h, use_gradient_noise=True)
         
         # if use_active_expansion:
         #     # true_active = []

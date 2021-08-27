@@ -783,7 +783,7 @@ def main():
     use_novelty_sample_activeAndsolve = False
     use_gradient_sample = True
     use_active_expansion = False
-    del_switch = 'old'
+    del_switch = 'novelty'
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度

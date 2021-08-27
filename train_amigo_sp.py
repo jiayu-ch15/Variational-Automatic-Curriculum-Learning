@@ -52,23 +52,29 @@ def make_parallel_env(args):
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 class node_buffer():
-    def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary):
+    def __init__(self,agent_num,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,legal_region,epsilon,delta):
         self.agent_num = agent_num
         self.buffer_length = buffer_length
+        # self.init_archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
         self.archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
+        self.archive_score = np.zeros(len(self.archive))
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
-        self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
+        # self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
+        self.archive, self.archive_novelty, self.archive_score = self.novelty_score_sort(self.archive, self.archive_novelty, self.archive_score)
         self.childlist = []
         self.hardlist = []
         self.parent = []
         self.parent_all = []
         self.max_step = max_step
         self.boundary = boundary
+        self.legal_region = legal_region
         self.reproduction_num = reproduction_num
         self.choose_child_index = []
         self.choose_archive_index = []
         self.eval_score = np.zeros(shape=len(self.archive))
         self.topk = 5
+        self.epsilon = epsilon
+        self.delta = delta
 
     def produce_good_case(self, num_case, start_boundary, now_agent_num):
         one_starts_landmark = []
@@ -155,6 +161,13 @@ class node_buffer():
         result = zip(*sort_zipped)
         buffer_new, buffer_novelty_new = [list(x) for x in result]
         return buffer_new, buffer_novelty_new
+    
+    def novelty_score_sort(self, buffer, buffer_novelty, buffer_score):
+        zipped = zip(buffer,buffer_novelty,buffer_score)
+        sort_zipped = sorted(zipped,key=lambda x:(x[1],np.mean(x[0])))
+        result = zip(*sort_zipped)
+        buffer_new, buffer_novelty_new, buffer_score_new = [list(x) for x in result]
+        return buffer_new, buffer_novelty_new, buffer_score_new
 
     def SampleNearby_novelty(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
         if len(self.parent_all) > self.topk + 1:
@@ -198,6 +211,159 @@ class node_buffer():
                         add_num += 1
             child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
             return child_new
+
+    def SampleNearby_novelty_activeAndsolve(self, parents, child_novelty_threshold, writer, timestep): # produce high novelty children and return 
+        self.activeAndsolve = self.archive + self.parent_all
+        if len(self.activeAndsolve) > self.topk + 1:
+            self.activeAndsolve_novelty = self.get_novelty(self.activeAndsolve,self.activeAndsolve)
+            self.activeAndsolve, self.activeAndsolve_novelty = self.novelty_sort(self.activeAndsolve, self.activeAndsolve_novelty)
+            novelty_threshold = np.mean(self.activeAndsolve_novelty)
+        else:
+            novelty_threshold = 0
+        # novelty_threshold = child_novelty_threshold
+        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
+        parents = parents + []
+        len_start = len(parents)
+        child_new = []
+        if parents==[]:
+            return []
+        else:
+            add_num = 0
+            while add_num < self.reproduction_num:
+                for k in range(len_start):
+                    st = copy.deepcopy(parents[k])
+                    s_len = len(st)
+                    for i in range(s_len):
+                        epsilon_x = -2 * self.max_step * random.random() + self.max_step
+                        epsilon_y = -2 * self.max_step * random.random() + self.max_step
+                        st[i][0] = st[i][0] + epsilon_x
+                        st[i][1] = st[i][1] + epsilon_y
+                        if st[i][0] > self.boundary:
+                            st[i][0] = self.boundary - random.random()*0.01
+                        if st[i][0] < -self.boundary:
+                            st[i][0] = -self.boundary + random.random()*0.01
+                        if st[i][1] > self.boundary:
+                            st[i][1] = self.boundary - random.random()*0.01
+                        if st[i][1] < -self.boundary:
+                            st[i][1] = -self.boundary + random.random()*0.01
+                    if len(self.activeAndsolve) > self.topk + 1:
+                        if self.get_novelty([st],self.activeAndsolve) > novelty_threshold:
+                            child_new.append(copy.deepcopy(st))
+                            add_num += 1
+                    else:
+                        child_new.append(copy.deepcopy(st))
+                        add_num += 1
+            child_new = random.sample(child_new, min(self.reproduction_num,len(child_new)))
+            return child_new
+
+    def Sample_gradient(self,parents,timestep,h=100, use_gradient_noise=True):
+        boundary_x_agent = self.legal_region['agent']['x']
+        boundary_y_agent = self.legal_region['agent']['y']
+        boundary_x_landmark = self.legal_region['landmark']['x']
+        boundary_y_landmark = self.legal_region['landmark']['y']
+        parents = parents + []
+        len_start = len(parents)
+        child_new = []
+        if parents==[]:
+            return []
+        else:
+            add_num = 0
+            while add_num < self.reproduction_num:
+                for parent in parents:
+                    parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all,h=h)
+                    
+                    # gradient step
+                    new_parent = []
+                    for parent_of_entity_id in range(len(parent)):
+                        st = copy.deepcopy(parent[parent_of_entity_id])
+                        # execute gradient step
+                        if not parent_gradient_zero:
+                            st[0] += parent_gradient[parent_of_entity_id * 2] * self.epsilon
+                            st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * self.epsilon
+                        else:
+                            stepsizex = -2 * self.epsilon * random.random() + self.epsilon
+                            stepsizey = -2 * self.epsilon * random.random() + self.epsilon
+                            st[0] += stepsizex
+                            st[1] += stepsizey
+                        # clip
+                        if parent_of_entity_id < self.agent_num:
+                            boundary_x = boundary_x_agent
+                            boundary_y = boundary_y_agent
+                        else:
+                            boundary_x = boundary_x_landmark
+                            boundary_y = boundary_y_landmark
+                        st = self.clip_states(st,boundary_x,boundary_y)
+                        # rejection sampling
+                        if use_gradient_noise:
+                            num_tries = 100
+                            num_try = 0
+                            while num_try <= num_tries:
+                                epsilon_x = -2 * self.delta * random.random() + self.delta
+                                epsilon_y = -2 * self.delta * random.random() + self.delta
+                                tmp_x = st[0] + epsilon_x
+                                tmp_y = st[1] + epsilon_y
+                                is_legal = self.is_legal([tmp_x,tmp_y],boundary_x,boundary_y)
+                                num_try += 1
+                                if is_legal:
+                                    st[0] = tmp_x
+                                    st[1] = tmp_y
+                                    break
+                                else:
+                                    assert num_try <= num_tries, str(st)
+                                    continue
+                        new_parent.append(st)
+                    child_new.append(new_parent)
+                    add_num += 1
+                    if add_num >= self.reproduction_num: break
+            return child_new
+
+    def gradient_of_state(self,state,buffer,h=100.0,use_rbf=True):
+        gradient = np.zeros(state.shape)
+        for buffer_state in buffer:
+            if use_rbf:
+                dist0 = state - np.array(buffer_state).reshape(-1)
+                # gradient += -2 * dist0 * np.exp(-dist0**2 / h) / h
+                gradient += 2 * dist0 * np.exp(-dist0**2 / h) / h
+            else:
+                gradient += 2 * (state - np.array(buffer_state).reshape(-1))
+        norm = np.linalg.norm(gradient, ord=2)
+        if norm > 0.0:
+            gradient = gradient / np.linalg.norm(gradient, ord=2)
+            gradient_zero = False
+        else:
+            gradient_zero = True
+        return gradient, gradient_zero
+
+    def is_legal(self, pos, boundary_x, boundary_y):
+        legal = False
+        # 限制在整个大的范围内
+        if pos[0] < boundary_x[0][0] or pos[0] > boundary_x[-1][1]:
+            return False
+        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        for boundary_id in range(len(boundary_x)):
+            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
+                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
+                    legal = True
+                    break
+        return legal
+
+    def clip_states(self,pos, boundary_x, boundary_y):
+        # boundary_x = [[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]]
+        # clip to [-map,map]
+        if pos[0] < boundary_x[0][0]:
+            pos[0] = boundary_x[0][0] + random.random()*0.01
+        elif pos[0] > boundary_x[-1][1]:
+            pos[0] = boundary_x[-1][1] - random.random()*0.01
+
+        for boundary_id in range(len(boundary_x)):
+            if pos[0] >= boundary_x[boundary_id][0] and pos[0] <= boundary_x[boundary_id][1]:
+                if pos[1] >= boundary_y[boundary_id][0] and pos[1] <= boundary_y[boundary_id][1]:
+                    break
+                elif pos[1] < boundary_y[boundary_id][0]:
+                    pos[1] = boundary_y[boundary_id][0] + random.random()*0.01
+                elif pos[1] > boundary_y[boundary_id][1]:
+                    pos[1] = boundary_y[boundary_id][1] - random.random()*0.01
+        return pos
 
     def SampleNearby(self, starts): # produce new children and return
         starts = starts + []
@@ -253,7 +419,25 @@ class node_buffer():
         print('sample_childlist: ', len(self.choose_child_index))
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
-    
+
+    def sample_starts_wo_evaluation(self, N_archive, N_parent):
+        self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
+        self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_archive + N_parent - len(self.choose_parent_index)))
+        if len(self.choose_archive_index) < N_archive:
+            self.choose_parent_index = random.sample(range(len(self.parent_all)), min(len(self.parent_all), N_archive + N_parent - len(self.choose_archive_index)))
+        self.choose_archive_index = np.sort(self.choose_archive_index)
+        self.choose_parent_index = np.sort(self.choose_parent_index)
+        one_length = len(self.choose_archive_index)
+        starts_length = len(self.choose_archive_index) + len(self.choose_parent_index)
+        starts = []
+        for i in range(len(self.choose_archive_index)):
+            starts.append(self.archive[self.choose_archive_index[i]])
+        for i in range(len(self.choose_parent_index)):
+            starts.append(self.parent_all[self.choose_parent_index[i]])
+        print('sample_archive: ', len(self.choose_archive_index))
+        print('sample_parent: ', len(self.choose_parent_index))
+        return starts, one_length, starts_length
+
     def move_nodes(self, one_length, Rmax, Rmin, use_child_novelty, use_parent_novelty, child_novelty_threshold, del_switch, writer, timestep): 
         del_child_num = 0
         del_archive_num = 0
@@ -328,7 +512,50 @@ class node_buffer():
         wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
         wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
         wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
-    
+
+    def move_nodes_Qact_Qsol(self, one_length, Rmax, Rmin, del_switch, timestep):
+        # # set active scores
+        # tmp_archive_score = np.zeros(len(self.archive_score))
+        # # get old score
+        # for i in range(len(self.archive_score)):
+        #     tmp_archive_score[i] = self.archive_score[i]
+        # for i in range(one_length):
+        #     tmp_archive_score[self.choose_archive_index[i]] = self.eval_score[i]
+        # self.archive_score = copy.deepcopy(tmp_archive_score)
+        del_archive_num = 0
+        del_easy_num = 0
+        add_hard_num = 0
+        self.parent = []
+        for i in range(one_length):
+            if self.eval_score[i] > Rmax:
+                self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i]-del_archive_num]))
+                del self.archive[self.choose_archive_index[i]-del_archive_num]
+                del_archive_num += 1
+            # elif self.eval_score[i] < Rmin:
+            #     del self.archive[self.choose_archive_index[i]-del_archive_num]
+            #     del_archive_num += 1
+        self.parent_all += self.parent
+        if len(self.archive) > self.buffer_length:
+            if del_switch=='novelty' : # novelty del
+                self.archive_novelty = self.get_novelty(self.archive,self.archive)
+                # self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
+                self.archive, self.archive_novelty, self.archive_score = self.novelty_score_sort(self.archive, self.archive_novelty, self.archive_score)
+                self.archive = self.archive[len(self.archive)-self.buffer_length:]
+            elif del_switch=='random': # random del
+                del_num = len(self.archive) - self.buffer_length
+                del_index = random.sample(range(len(self.archive)),del_num)
+                del_index = np.sort(del_index)
+                del_archive_num = 0
+                for i in range(del_num):
+                    del self.archive[del_index[i]-del_archive_num]
+                    del_archive_num += 1
+            else: # old del
+                self.archive = self.archive[len(self.archive)-self.buffer_length:]
+        if len(self.parent_all) > self.buffer_length:
+            self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
+        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
+        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
+
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
         if self.agent_num!=0:
@@ -345,10 +572,11 @@ class node_buffer():
             with open(save_path / 'archive' / ('archive_%i' %(episode)),'w+') as fp:
                 for line in self.archive:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
-            self.novelty = self.get_novelty(self.archive,self.archive)
-            with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
-                for line in self.archive_novelty:
-                    fp.write(str(np.array(line).reshape(-1))+'\n')
+            if len(self.archive) > 0:
+                self.novelty = self.get_novelty(self.archive,self.archive)
+                with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
+                    for line in self.archive_novelty:
+                        fp.write(str(np.array(line).reshape(-1))+'\n')
             with open(save_path / 'parent' / ('parent_%i' %(episode)),'w+') as fp:
                 for line in self.parent:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
@@ -584,8 +812,7 @@ def main():
 
     eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
-    # boundary = {'x':[-3,3],'y':[-3,3]}
-    boundary = {'x':[-0.5,0.5],'y':[-0.5,0.5]}
+    boundary = {'x':[-3,3],'y':[-3,3]}
     historical_length = 5
     threshold = 0.15 # cover threshold for collision
     random.seed(args.seed)
@@ -604,6 +831,17 @@ def main():
     timestep_student_reach_threshold = 20
     alpha = 0.7
     beta = 0.3
+    start_boundary = [-0.3,0.3,-0.3,0.3]
+    node = node_buffer(args.num_agents,2000,
+                           archive_initial_length=args.n_rollout_threads,
+                           reproduction_num=150,
+                           max_step=0.6,
+                           start_boundary=start_boundary,
+                           boundary=start_boundary,
+                           legal_region=None,
+                           epsilon=0,
+                           delta=0)
+    easy_cases = node.produce_good_case(num_case=args.n_rollout_threads, start_boundary=start_boundary, now_agent_num=args.num_agents)
 
     for episode in range(episodes):
         if args.use_linear_lr_decay:# decrease learning rate linearly
@@ -614,7 +852,11 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         for times in range(eval_frequency):
-            obs, _ = envs.reset(num_agents)
+            # add easy cases
+            if episode == 0:
+                obs = envs.new_starts_obs(easy_cases, args.num_agents, args.n_rollout_threads)
+            else:
+                obs, _ = envs.reset(num_agents)
             initial_state = envs.get_state() # agents states and landmark states
             # teacher replay buffer init   
             if count_teacher_step==0:

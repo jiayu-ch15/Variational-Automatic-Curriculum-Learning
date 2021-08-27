@@ -334,6 +334,60 @@ class node_buffer():
                     if add_num >= self.reproduction_num: break
             return child_new
 
+    def Sample_gradient_worejection(self,parents,timestep,h=100, use_gradient_noise=True):
+        boundary_x_agent = self.legal_region['agent']['x']
+        boundary_y_agent = self.legal_region['agent']['y']
+        boundary_x_landmark = self.legal_region['landmark']['x']
+        boundary_y_landmark = self.legal_region['landmark']['y']
+        parents = parents + []
+        len_start = len(parents)
+        child_new = []
+        if parents==[]:
+            return []
+        else:
+            add_num = 0
+            for parent in parents:
+                parent_gradient, parent_gradient_zero = self.gradient_of_state(np.array(parent).reshape(-1),self.parent_all,h=h)
+                
+                # gradient step
+                new_parent = []
+                for parent_of_entity_id in range(len(parent)):
+                    st = copy.deepcopy(parent[parent_of_entity_id])
+                    # execute gradient step
+                    if not parent_gradient_zero:
+                        st[0] += parent_gradient[parent_of_entity_id * 2] * self.epsilon
+                        st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * self.epsilon
+                    else:
+                        stepsizex = -2 * self.epsilon * random.random() + self.epsilon
+                        stepsizey = -2 * self.epsilon * random.random() + self.epsilon
+                        st[0] += stepsizex
+                        st[1] += stepsizey
+                    # clip
+                    if parent_of_entity_id < self.agent_num:
+                        boundary_x = boundary_x_agent
+                        boundary_y = boundary_y_agent
+                    else:
+                        boundary_x = boundary_x_landmark
+                        boundary_y = boundary_y_landmark
+                    st = self.clip_states(st,boundary_x,boundary_y)
+                    # rejection sampling
+                    if use_gradient_noise:
+                        epsilon_x = -2 * self.delta * random.random() + self.delta
+                        epsilon_y = -2 * self.delta * random.random() + self.delta
+                        tmp_x = st[0] + epsilon_x
+                        tmp_y = st[1] + epsilon_y
+                        is_legal = self.is_legal([tmp_x,tmp_y],boundary_x,boundary_y)
+                        if is_legal:
+                            st[0] = tmp_x
+                            st[1] = tmp_y
+                        else:
+                            break
+                    new_parent.append(st)
+                if len(new_parent) == len(parent):
+                    child_new.append(new_parent)
+            print('real_B_exp: ', len(child_new))
+            return child_new
+
     def gradient_of_state(self,state,buffer,h=100.0,use_rbf=True):
         gradient = np.zeros(state.shape)
         for buffer_state in buffer:
@@ -836,7 +890,8 @@ def main():
 
         # reproduction
         if use_gradient_sample:
-            last_node.archive += last_node.Sample_gradient(last_node.parent,current_timestep,h=h)
+            # last_node.archive += last_node.Sample_gradient(last_node.parent,current_timestep,h=h)
+            last_node.archive += last_node.Sample_gradient_worejection(last_node.parent,current_timestep,h=h)
         else:
             if use_novelty_sample:
                 last_node.archive += last_node.SampleNearby_novelty_H(last_node.parent, child_novelty_threshold,logger, current_timestep)

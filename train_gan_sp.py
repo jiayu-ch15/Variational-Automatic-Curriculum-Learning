@@ -388,6 +388,9 @@ def main():
     
     # init the StateCollection
     all_goals = StateCollection(distance_threshold=goal_configs['coll_eps'])
+    # add easy cases
+    easy_goals = generate_initial_goals(num_case = args.n_rollout_threads, start_boundary = start_boundary, agent_num = args.num_agents)
+    all_goals.append(easy_goals)
 
     # run
     begin = time.time()
