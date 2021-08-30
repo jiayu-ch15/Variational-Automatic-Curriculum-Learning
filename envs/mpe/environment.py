@@ -110,7 +110,7 @@ class MultiAgentEnv(gym.Env):
             return np.zeros(0)
         return self.state_callback(self.world)
 
-    # step  this is env.step()
+    # step this is env.step()
     def step(self, action_n):
         obs_n = []
         reward_n = []
@@ -347,6 +347,29 @@ class MultiAgentEnv(gym.Env):
         obs_n = []
         for agent in self.agents:
             obs_n.append(self._get_obs(agent))
+        return obs_n
+
+    def new_starts_obs_sl(self, starts_one):
+        self.current_step = 0
+        # reset world
+        self.reset_callback(self.world)
+        # reset renderer
+        self._reset_render()
+        self.agents = self.world.policy_agents
+        # record observations for each agent
+        obs_n = []
+        # set agent and landmark
+        for i, agent in enumerate(self.agents):
+            agent.state.p_pos = starts_one[i]
+            agent.state.p_vel = np.zeros(self.world.dim_p)
+            agent.state.c = np.zeros(self.world.dim_c)
+        for i, landmark in enumerate(self.world.landmarks):
+            landmark.state.p_pos = starts_one[i+self.n]
+            landmark.state.p_vel = np.zeros(self.world.dim_p)
+
+        for agent in self.agents:
+            obs_n.append(self._get_obs(agent))
+
         return obs_n
 
     # get info used for benchmarking

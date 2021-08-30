@@ -136,6 +136,10 @@ def worker(remote, parent_remote, env_fn_wrapper):
             starts_one = cmd[3]
             ob = env.new_starts_obs_pb(starts_one, now_agent_num, now_box_num)
             remote.send(ob)
+        elif cmd[0] == 'new_starts_obs_sl':
+            starts_one = cmd[1]
+            ob = env.new_starts_obs_sl(starts_one)
+            remote.send(ob)
         elif cmd == 'get_state':
             state = env.get_state()
             remote.send(state)
@@ -236,6 +240,24 @@ class SubprocVecEnv(VecEnv):
         for remote in self.remotes:
             if i < now_num_processes:
                 tmp_list = ['new_starts_obs_pb', now_agent_num, now_box_num, starts[i]]
+                remote.send((tmp_list, None))
+                i += 1
+        i = 0
+        for remote in self.remotes:
+            if i < now_num_processes:
+                results.append(remote.recv())
+                i += 1
+        self.remotes[0].send(('get_spaces', None))
+        observation_space, action_space = self.remotes[0].recv()
+        VecEnv.__init__(self, self.length, observation_space, action_space)
+        return np.stack(results)
+    
+    def new_starts_obs_sl(self, starts, now_num_processes):
+        i = 0
+        results = []
+        for remote in self.remotes:
+            if i < now_num_processes:
+                tmp_list = ['new_starts_obs_sl', starts[i]]
                 remote.send((tmp_list, None))
                 i += 1
         i = 0

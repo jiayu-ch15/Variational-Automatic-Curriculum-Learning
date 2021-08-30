@@ -3,14 +3,14 @@ from envs.mpe.core import World, Agent, Landmark
 from envs.mpe.scenario import BaseScenario
 
 class Scenario(BaseScenario):
-    def make_world(self, args):
+    def make_world(self, args, now_agent_num=None):
         world = World()
         # set any world properties first
         world.dim_c = 3
-        num_landmarks = args.num_landmarks#3
+        num_landmarks = 3
         world.collaborative = True
         # add agents
-        num_agents = args.num_agents #2
+        num_agents = 2
         assert num_agents==2, ("only 2 agents is supported, check the config.py.")
         world.agents = [Agent() for i in range(num_agents)]
         for i, agent in enumerate(world.agents):
@@ -51,11 +51,11 @@ class Scenario(BaseScenario):
         world.agents[0].goal_a.color = world.agents[0].goal_b.color + np.array([0.45, 0.45, 0.45])
         # set random initial states
         for agent in world.agents:
-            agent.state.p_pos = np.random.uniform(-1,+1, world.dim_p)
+            agent.state.p_pos = np.random.uniform(-3,+3, world.dim_p)
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
         for i, landmark in enumerate(world.landmarks):
-            landmark.state.p_pos = np.random.uniform(-1,+1, world.dim_p)
+            landmark.state.p_pos = np.random.uniform(-3,+3, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
 
     def benchmark_data(self, agent, world):
@@ -64,9 +64,51 @@ class Scenario(BaseScenario):
 
     def reward(self, agent, world):
         # squared distance from listener to landmark
+        reward = 0
         a = world.agents[0]
         dist2 = np.sum(np.square(a.goal_a.state.p_pos - a.goal_b.state.p_pos))
-        return -dist2
+
+        # sparse reward
+        cover_num = 0
+        if dist2 < world.agents[0].size + world.landmarks[0].size:
+            cover_num += 1
+        if cover_num == 1:
+            reward += 1
+        return 0.1 * reward
+
+    def share_reward(self, world):
+        return 0.0
+
+    def landmark_cover_state(self, world):
+        return None
+
+    def get_state(self, world):
+        pass
+
+    def get_info(self, world):
+        num = 0
+        success = False
+        entity_cover_state = []
+        infos = {}
+        
+        # cover
+        a = world.agents[0]
+        dist2 = np.sum(np.square(a.goal_a.state.p_pos - a.goal_b.state.p_pos))
+        num = 0.0
+        if dist2 < world.agents[0].size + world.landmarks[0].size:
+            num += 1.0
+        success = False
+        if num == 1:
+            success = True
+        
+        # position info
+        pos_info = []
+        for agent in world.agents:
+            pos_info.append(agent.state.p_pos)
+        for landmark in world.landmarks:
+            pos_info.append(landmark.state.p_pos)
+        info_list = {'cover_rate': num, 'success': success, 'pos_state': np.array(pos_info)}
+        return info_list
 
     def observation(self, agent, world):
         # goal color

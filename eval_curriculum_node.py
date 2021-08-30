@@ -27,7 +27,6 @@ from config import get_config
 
 np.set_printoptions(linewidth=1000)
 
-
 def make_parallel_env(args):
     def get_env_fn(rank):
         def init_env():
