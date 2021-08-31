@@ -729,7 +729,7 @@ def main():
     del_switch = 'novelty'
     starts = []
     buffer_length = 2000 # archive 长度
-    N_parent = 25
+    N_parent = 5
     N_archive = args.n_rollout_threads - N_parent
     h = 1
     epsilon = 0.6
