@@ -303,7 +303,7 @@ def main():
         rollouts = []
         obs_role_dim = {'speaker': envs.observation_space[0].shape[0], 'listener': envs.observation_space[1].shape[0]}
         actor_base = {'speaker': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[0], num_agents,role='speaker'),
-                        'listener': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[0], num_agents,role='listener')}
+                        'listener': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[1], num_agents,role='listener')}
         critic_base = ATTBase_critic_sl(envs.observation_space[0].shape[0], num_agents, obs_role_dim)
         for agent_id in range(num_agents):
             if agent_id == 0:
@@ -370,9 +370,9 @@ def main():
             rollouts.append(ro)
     
    
-    boundary = 1
+    boundary = 3
     start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
-    max_step = 0.1
+    max_step = 0.6
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0

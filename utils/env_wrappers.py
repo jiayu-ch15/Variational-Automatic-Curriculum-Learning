@@ -143,6 +143,9 @@ def worker(remote, parent_remote, env_fn_wrapper):
         elif cmd == 'get_state':
             state = env.get_state()
             remote.send(state)
+        elif cmd == 'get_goal':
+            state, goal = env.get_state()
+            remote.send((state,goal))
         elif cmd == 'reset_task':
             ob = env.reset_task()
             remote.send(ob)
@@ -201,7 +204,14 @@ class SubprocVecEnv(VecEnv):
             remote.send(('get_state', None))
         state = [remote.recv() for remote in self.remotes]
         return np.stack(state)
-
+    
+    def get_goal(self):
+        for remote in self.remotes:
+            remote.send(('get_goal', None))
+        results = [remote.recv() for remote in self.remotes]
+        state, goal = zip(*results)
+        return np.stack(state), np.stack(goal)
+        
     def reset(self, now_agent_num, now_box_num=None):
         if now_box_num is None:
             for remote in self.remotes:

@@ -426,7 +426,6 @@ class Policy3(nn.Module): # actor critic分开，把dist放入actor
 
         return value, action_log_probs_out, dist_entropy_out, rnn_hxs_actor, rnn_hxs_critic
 
-
 class Policy(nn.Module):
     def __init__(self, obs_space, action_space, num_agents, base=None, base_kwargs=None, device=torch.device("cpu")):
         super(Policy, self).__init__()
@@ -526,8 +525,8 @@ class Policy(nn.Module):
         masks = masks.to(self.device)
         if available_actions is not None:
             available_actions = available_actions.to(self.device)
-        # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num, rnn_hxs_actor, masks)        
+        value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
+        # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num, rnn_hxs_actor, masks)        
         
         if self.mixed_action:
             dist, action, action_log_probs = [None, None], [None, None], [None, None]
@@ -585,8 +584,8 @@ class Policy(nn.Module):
         rnn_hxs_critic = rnn_hxs_critic.to(self.device)
         masks = masks.to(self.device)
         
-        # value, _, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        value, _, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num, rnn_hxs_actor, masks)
+        value, _, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
+        # value, _, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num, rnn_hxs_actor, masks)
         
         return value, rnn_hxs_actor, rnn_hxs_critic
 
@@ -599,8 +598,8 @@ class Policy(nn.Module):
         masks = masks.to(self.device)
         high_masks = high_masks.to(self.device)
         action = action.to(self.device)
-        # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num,rnn_hxs_actor, masks)
+        value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
+        # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num,rnn_hxs_actor, masks)
 
 
         if self.mixed_action:
@@ -1369,8 +1368,7 @@ class MLPBase(NNBase):
             if self._use_same_dim:
                 share_x = self.encoder_critic(share_x)
             else:
-                share_x = self.encoder_critic(share_x, agent_id)
-                            
+                share_x = self.encoder_critic(share_x, agent_id)                      
         if self._use_common_layer:
             hidden_actor = self.actor(x)
             hidden_critic = self.critic(share_x)
@@ -1441,6 +1439,56 @@ class Policy_teacher(nn.Module): # actor critic分开，把dist放入actor
         value = self.critic_base(inputs) 
 
         return value, action_log_probs_out, dist_entropy_out
+
+# sl
+class ATTBase_actor_teacher_sl(NNBase):
+    def __init__(self, num_inputs, action_space, num_agents, hidden_size=64):
+        super(ATTBase_actor_teacher_sl, self).__init__(num_inputs, num_agents)
+
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+
+        self.actor = ObsEncoder_teacher_sl(num_inputs=num_inputs, hidden_size=hidden_size)
+        num_actions = action_space          
+        self.dist = DiagGaussian(hidden_size, num_actions)
+
+    def forward(self, inputs):
+        hidden_actor = self.actor(inputs)
+        dist = self.dist(hidden_actor)
+        return dist
+        # return action_out, action_log_probs_out, dist_entropy_out
+
+class ATTBase_critic_teacher_sl(NNBase):
+    def __init__(self, num_inputs, num_agents, hidden_size=64):
+        super(ATTBase_critic_teacher_sl, self).__init__(num_inputs,num_agents)
+
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+
+        self.encoder = ObsEncoder_teacher_sl(num_inputs=num_inputs, hidden_size=hidden_size)
+
+        self.critic_linear = init_(nn.Linear(hidden_size, 1))
+
+    def forward(self, inputs):
+        vector_embedding = self.encoder(inputs)
+        value = self.critic_linear(vector_embedding)
+
+        return value
+
+class ObsEncoder_teacher_sl(nn.Module):
+    def __init__(self, num_inputs, hidden_size=100):
+        super(ObsEncoder_teacher_sl, self).__init__()
+        
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+        self.encoder = nn.Sequential(
+                            init_(nn.Linear(num_inputs, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size),
+                            init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
+
+
+    def forward(self, inputs):
+        vector_embedding = self.encoder(inputs)
+        return vector_embedding
 
 # sp
 class ATTBase_actor_student(NNBase):
@@ -1635,7 +1683,6 @@ class ObsEncoder_teacher(nn.Module):
                             init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
 
 
-    # agent_num需要手动设置一下
     def forward(self, inputs):
         vector_embedding = self.encoder(inputs)
         return vector_embedding

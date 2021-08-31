@@ -543,7 +543,7 @@ def main():
         rollouts = []
         obs_role_dim = {'speaker': envs.observation_space[0].shape[0], 'listener': envs.observation_space[1].shape[0]}
         actor_base = {'speaker': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[0], num_agents,role='speaker'),
-                        'listener': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[0], num_agents,role='listener')}
+                        'listener': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[1], num_agents,role='listener')}
         critic_base = ATTBase_critic_sl(envs.observation_space[0].shape[0], num_agents, obs_role_dim)
         for agent_id in range(num_agents):
             if agent_id == 0:
