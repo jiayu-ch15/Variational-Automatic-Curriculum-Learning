@@ -1157,7 +1157,7 @@ def main():
             # add goal_obs to listener
             for thread in range(args.n_rollout_threads):
                 obs[thread][1] = np.concatenate((obs[thread][1],test_goal_obs[thread][1]))
-            episode_length = args.n_rollout_threads
+            episode_length = args.episode_length
             # replay buffer init
             if args.share_policy: 
                 share_obs = obs.reshape(args.n_rollout_threads, -1)        

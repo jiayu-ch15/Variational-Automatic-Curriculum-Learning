@@ -734,7 +734,7 @@ def main():
     h = 1
     epsilon = 0.6
     delta = 0.6
-    B_exp = 150 # equal to curriculum_sp
+    B_exp = 30 # equal to curriculum_sp
     Rmin = 0.5
     Rmax = 0.95
     boundary = 3
