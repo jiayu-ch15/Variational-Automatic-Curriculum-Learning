@@ -4,7 +4,7 @@ env="MPE"
 scenario="simple_speaker_listener"
 num_landmarks=3
 num_agents=2
-algo="VACL_sl"
+algo="VACL_sl_step0_1_map_2_2"
 # algo='check'
 seed=1
 
