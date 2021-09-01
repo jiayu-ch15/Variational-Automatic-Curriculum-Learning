@@ -343,11 +343,11 @@ def main():
     num_agents = args.num_agents
    
     # actor_critic = torch.load('/home/chenjy/curriculum/results/MPE/simple_spread/check/run10/models/agent_model.pt')['model'].to(device)
-    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/simple_spread/valueerror_map2_p1.0_startscale1.0/run2/models/agent_model.pt')['model'].to(device)
-    actor_critic.agents_num = args.num_agents
-    actor_critic.boxes_num = args.num_boxes
-    num_agents = args.num_agents
-    num_boxes = args.num_boxes
+    actor_critic = []
+    actor_critic.append(torch.load('/home/tsing73/curriculum/results/MPE/simple_speaker_listener/VACL_sl_Bexp30/run1/models/agent0_model.pt')['model'].to(device))
+    actor_critic.append(torch.load('/home/tsing73/curriculum/results/MPE/simple_speaker_listener/VACL_sl_Bexp30/run1/models/agent1_model.pt')['model'].to(device))
+    num_agents = 2
+    num_landmarks = 3
     all_frames = []
     cover_rate = 0
     random.seed(1)
@@ -367,11 +367,15 @@ def main():
             all_frames.append(image)
         
         # eval_obs, _ = eval_env.reset(num_agents,num_boxes)
-        # eval_obs, _ = eval_env.reset(num_agents)
-        eval_obs = eval_env.new_starts_obs(starts[eval_episode],num_agents)
+        eval_obs, _ = eval_env.reset(num_agents)
+        # eval_obs = eval_env.new_starts_obs(starts[eval_episode],num_agents)
         # eval_obs = eval_env.new_starts_obs_pb(starts[eval_episode],num_agents,num_boxes)
-        eval_obs = np.array(eval_obs)       
-        eval_share_obs = eval_obs.reshape(1, -1)
+        if args.share_policy:
+            eval_obs = np.array(eval_obs)       
+            eval_share_obs = eval_obs.reshape(1, -1)
+        else:
+            eval_share_obs = np.concatenate(eval_obs).reshape(1,-1)
+            eval_obs = np.array(eval_obs)
         eval_recurrent_hidden_states = np.zeros((num_agents,args.hidden_size)).astype(np.float32)
         eval_recurrent_hidden_states_critic = np.zeros((num_agents,args.hidden_size)).astype(np.float32)
         eval_masks = np.ones((num_agents,1)).astype(np.float32)
@@ -381,6 +385,7 @@ def main():
             calc_start = time.time()              
             eval_actions = []            
             for agent_id in range(num_agents):
+                role_id = 'speaker' if agent_id == 0 else 'listener'
                 if args.share_policy:
                     actor_critic.eval()
                     _, action, _, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic.act(agent_id,
@@ -393,28 +398,32 @@ def main():
                         deterministic=True)
                 else:
                     actor_critic[agent_id].eval()
-                    _, action, _, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic[agent_id].act(agent_id,
+                    _, action, _, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic[agent_id].act_role(agent_id,
                         torch.FloatTensor(eval_share_obs), 
-                        torch.FloatTensor(eval_obs[agent_id]), 
+                        torch.FloatTensor(eval_obs[agent_id].reshape(1,-1)), 
+                        role_id,
                         torch.FloatTensor(eval_recurrent_hidden_states[agent_id]), 
                         torch.FloatTensor(eval_recurrent_hidden_states_critic[agent_id]),
                         torch.FloatTensor(eval_masks[agent_id]),
-                        None,
                         deterministic=True)
                 eval_actions.append(action.detach().cpu().numpy())
                 eval_recurrent_hidden_states[agent_id] = recurrent_hidden_states.detach().cpu().numpy()
                 eval_recurrent_hidden_states_critic[agent_id] = recurrent_hidden_states_critic.detach().cpu().numpy()
-            # rearrange action           
+            # rearrange action         
             eval_actions_env = []
             for agent_id in range(num_agents):
-                one_hot_action = np.zeros(eval_env.action_space[0].n)
+                one_hot_action = np.zeros(eval_env.action_space[agent_id].n)
                 one_hot_action[eval_actions[agent_id][0]] = 1
                 eval_actions_env.append(one_hot_action)
             # Obser reward and next obs
             eval_obs, eval_rewards, eval_dones, eval_infos, _ = eval_env.step(eval_actions_env)
             step_cover_rate[step] = eval_infos[0]['cover_rate']
-            eval_obs = np.array(eval_obs)
-            eval_share_obs = eval_obs.reshape(1, -1)
+            if args.share_policy:
+                eval_obs = np.array(eval_obs)       
+                eval_share_obs = eval_obs.reshape(1, -1)
+            else:
+                eval_share_obs = np.concatenate(eval_obs).reshape(1,-1)
+                eval_obs = np.array(eval_obs)
             
             if args.save_gifs:
                 image = eval_env.render('rgb_array', close=False)[0]
