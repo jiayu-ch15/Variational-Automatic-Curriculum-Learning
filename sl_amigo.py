@@ -669,9 +669,9 @@ def main():
         agents = []
         rollouts = []
         obs_role_dim = {'speaker': student_obs_space[0].shape[0], 'listener': student_obs_space[1].shape[0]}
-        actor_base = {'speaker': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[0], num_agents,role='speaker'),
-                        'listener': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[1], num_agents,role='listener')}
-        critic_base = ATTBase_critic_sl(envs.observation_space[0].shape[0], num_agents, obs_role_dim)
+        actor_base = {'speaker': ATTBase_actor_sl(obs_role_dim['speaker'], envs.action_space[0], num_agents,role='speaker'),
+                        'listener': ATTBase_actor_sl(obs_role_dim['listener'], envs.action_space[1], num_agents,role='listener')}
+        critic_base = ATTBase_critic_sl(num_agents, obs_role_dim)
         for agent_id in range(num_agents):
             if agent_id == 0:
                 role = 'speaker'

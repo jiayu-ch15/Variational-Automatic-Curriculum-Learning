@@ -545,8 +545,8 @@ def main():
         rollouts = []
         obs_role_dim = {'speaker': envs.observation_space[0].shape[0], 'listener': envs.observation_space[1].shape[0]}
         actor_base = {'speaker': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[0], num_agents,role='speaker'),
-                        'listener': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[1], num_agents,role='listener')}
-        critic_base = ATTBase_critic_sl(envs.observation_space[0].shape[0], num_agents, obs_role_dim)
+                        'listener': ATTBase_actor_sl(envs.observation_space[1].shape[0], envs.action_space[1], num_agents,role='listener')}
+        critic_base = ATTBase_critic_sl(num_agents, obs_role_dim)
         for agent_id in range(num_agents):
             if agent_id == 0:
                 role = 'speaker'
@@ -626,12 +626,12 @@ def main():
         N_new = args.n_rollout_threads - N_parent - N_old # 325
     else:
         N_new = args.n_rollout_threads - N_old # 350
-    max_step = 0.6
+    max_step = 0.2
     TB = 1
-    M = 150
+    M = 30
     Rmin = 0.5
     Rmax = 0.95
-    boundary = 3
+    boundary = 1
     start_boundary = [-0.3,0.3,-0.3,0.3]
     # start_boundary = [-1.0,1.0,-1.0,1.0]
     N_easy = 0

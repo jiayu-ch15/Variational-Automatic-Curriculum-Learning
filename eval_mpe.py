@@ -381,6 +381,7 @@ def main():
         eval_masks = np.ones((num_agents,1)).astype(np.float32)
         step_cover_rate = np.zeros(shape=(args.episode_length))
         
+        pdb.set_trace()
         for step in range(args.episode_length): 
             calc_start = time.time()              
             eval_actions = []            
@@ -444,6 +445,11 @@ def main():
         #         gif_num += 1
         #     imageio.mimsave('./gifs/' + model_dir + '/%i_%i.gif' % (gif_num, ep_i),
         #                     frames, duration=ifi)
+        print('pos_state', eval_infos[0]['pos_state'])
+        print('achieved_goal', eval_infos[0]['achieved_goal'])
+        print('goal_state', eval_infos[0]['goal_state'])
+        print('speaker_obs', eval_obs[0])
+        print('speaker_action', eval_actions_env[0])
     print('average_cover_rate: ', cover_rate/args.eval_episodes)        
     eval_env.close()
 if __name__ == "__main__":

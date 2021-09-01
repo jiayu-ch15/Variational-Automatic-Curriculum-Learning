@@ -655,9 +655,9 @@ def main():
         agents = []
         rollouts = []
         obs_role_dim = {'speaker': envs.observation_space[0].shape[0], 'listener': envs.observation_space[1].shape[0]}
-        actor_base = {'speaker': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[0], num_agents,role='speaker'),
-                        'listener': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[1], num_agents,role='listener')}
-        critic_base = ATTBase_critic_sl(envs.observation_space[0].shape[0], num_agents, obs_role_dim)
+        actor_base = {'speaker': ATTBase_actor_sl(envs.observation_space[0].shape[0], envs.action_space[0], num_agents, role='speaker'),
+                        'listener': ATTBase_actor_sl(envs.observation_space[1].shape[0], envs.action_space[1], num_agents, role='listener')}
+        critic_base = ATTBase_critic_sl(num_agents, obs_role_dim)
         for agent_id in range(num_agents):
             if agent_id == 0:
                 role = 'speaker'
@@ -737,10 +737,10 @@ def main():
     B_exp = 30 # equal to curriculum_sp
     Rmin = 0.5
     Rmax = 0.95
-    boundary = 3
+    boundary = 1
     start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
-    legal_region = {'agent':{'x':[[-3,3]],'y': [[-3,3]]},
-        'landmark':{'x':[[-3,3]],'y': [[-3,3]]}} # legal region for samplenearby
+    legal_region = {'agent':{'x':[[-1,1]],'y': [[-1,1]]},
+        'landmark':{'x':[[-1,1]],'y': [[-1,1]]}} # legal region for samplenearby
     max_step = 0.6
     N_easy = 0
     test_flag = 0

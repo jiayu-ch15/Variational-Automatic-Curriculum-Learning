@@ -51,11 +51,11 @@ class Scenario(BaseScenario):
         world.agents[0].goal_a.color = world.agents[0].goal_b.color + np.array([0.45, 0.45, 0.45])
         # set random initial states
         for agent in world.agents:
-            agent.state.p_pos = np.random.uniform(-3,+3, world.dim_p)
+            agent.state.p_pos = np.random.uniform(-1,+1, world.dim_p)
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
         for i, landmark in enumerate(world.landmarks):
-            landmark.state.p_pos = np.random.uniform(-3,+3, world.dim_p)
+            landmark.state.p_pos = np.random.uniform(-1,+1, world.dim_p)
             landmark.state.p_vel = np.zeros(world.dim_p)
 
     def benchmark_data(self, agent, world):
@@ -75,6 +75,9 @@ class Scenario(BaseScenario):
         if cover_num == 1:
             reward += 1
         return 0.1 * reward
+
+        # # dense reward
+        # return -dist2
 
     def share_reward(self, world):
         return 0.0
@@ -107,7 +110,8 @@ class Scenario(BaseScenario):
             pos_info.append(agent.state.p_pos)
         for landmark in world.landmarks:
             pos_info.append(landmark.state.p_pos)
-        info_list = {'cover_rate': num, 'success': success, 'pos_state': np.array(pos_info)}
+
+        info_list = {'cover_rate': num, 'success': success, 'pos_state': np.array(pos_info), 'achieved_goal': world.agents[1].state.p_pos, 'goal_state': world.agents[0].goal_b.state.p_pos}
         return info_list
 
     def observation(self, agent, world):
