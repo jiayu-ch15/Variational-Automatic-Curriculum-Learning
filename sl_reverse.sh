@@ -4,7 +4,7 @@ env="MPE"
 scenario="simple_speaker_listener"
 num_landmarks=3
 num_agents=2
-algo="sl_reverse_Bexp30_step0_2"
+algo="sl_reverse_finalversion"
 # algo='check'
 seed=3
 

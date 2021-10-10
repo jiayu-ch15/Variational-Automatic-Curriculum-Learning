@@ -626,9 +626,9 @@ def main():
         N_new = args.n_rollout_threads - N_parent - N_old # 325
     else:
         N_new = args.n_rollout_threads - N_old # 350
-    max_step = 0.2
+    max_step = 0.1
     TB = 1
-    M = 30
+    M = 100
     Rmin = 0.5
     Rmax = 0.95
     boundary = 1
@@ -752,8 +752,7 @@ def main():
                         actions.append(action.detach().cpu().numpy())
                         action_log_probs.append(action_log_prob.detach().cpu().numpy())
                         recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
-                        recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
-                
+                        recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())     
                 # rearrange action
                 actions_env = []
                 for i in range(starts_length):
@@ -826,12 +825,10 @@ def main():
                                 np.array(masks)[:,agent_id])
             # import pdb;pdb.set_trace()
             wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
-            print('training_cover_rate: ', np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1)))
             current_timestep += args.episode_length * starts_length
             curriculum_episode += 1
             last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
-            
-                                        
+                           
             with torch.no_grad():  # get value and compute return
                 for agent_id in range(num_agents):    
                     role_id = 'speaker' if agent_id == 0 else 'listener'     
@@ -906,7 +903,7 @@ def main():
                     rew = []
                     for i in range(rollouts[agent_id].rewards.shape[1]):
                         rew.append(np.sum(rollouts[agent_id].rewards[:,i]))
-                    wandb.log({'average_episode_reward_%i'%agent_id: np.mean(rew)},current_timestep)
+                    wandb.log({'training_average_episode_reward_%i'%agent_id: np.mean(rew)},current_timestep)
                     
                     rollouts[agent_id].after_update()
 
@@ -969,7 +966,8 @@ def main():
                                 role_id,
                                 torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states[step,:]), 
                                 torch.FloatTensor(rollouts[agent_id].recurrent_hidden_states_critic[step,:]),
-                                torch.FloatTensor(rollouts[agent_id].masks[step,:]),deterministic=True)
+                                torch.FloatTensor(rollouts[agent_id].masks[step,:]),
+                                deterministic=True)
                             
                         values.append(value.detach().cpu().numpy())
                         actions.append(action.detach().cpu().numpy())
@@ -1048,10 +1046,12 @@ def main():
                                 np.array(values[agent_id]),
                                 rewards[:,agent_id], 
                                 np.array(masks)[:,agent_id])
-            # import pdb;pdb.set_trace()
-            # wandb.log(
-            #     {'eval_episode_reward': np.mean(rew)},
-            #     current_timestep)
+            rew = []
+            for i in range(rollouts[0].rewards.shape[1]):
+                rew.append(np.sum(rollouts[0].rewards[:,i]))
+            wandb.log(
+                {'eval_episode_reward': np.mean(rew)},
+                current_timestep)
             wandb.log({'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
             wandb.log({'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))

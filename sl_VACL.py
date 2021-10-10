@@ -55,12 +55,13 @@ class node_buffer():
         self.agent_num = agent_num
         self.landmark_num = landmark_num
         self.buffer_length = buffer_length
-        # self.init_archive = self.produce_good_case(archive_initial_length, start_boundary, self.agent_num)
-        self.archive = self.produce_good_case_sl(archive_initial_length, start_boundary, self.agent_num, self.landmark_num)
-        self.archive_score = np.zeros(len(self.archive))
-        self.archive_novelty = self.get_novelty(self.archive,self.archive)
-        # self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
-        self.archive, self.archive_novelty, self.archive_score = self.novelty_score_sort(self.archive, self.archive_novelty, self.archive_score)
+        self.archive_initial_length = archive_initial_length
+        self.archive = []
+        self.initial_archive = self.produce_good_case_sl(archive_initial_length, start_boundary, self.agent_num, self.landmark_num)
+        self.archive_score = np.zeros(len(self.initial_archive))
+        # self.archive_novelty = self.get_novelty(self.initial_archive,self.initial_archive)
+        # self.initial_archive, self.archive_novelty = self.novelty_sort(self.initial_archive, self.archive_novelty)
+        # self.archive, self.archive_novelty, self.archive_score = self.novelty_score_sort(self.archive, self.archive_novelty, self.archive_score)
         self.childlist = []
         self.hardlist = []
         self.parent = []
@@ -71,7 +72,7 @@ class node_buffer():
         self.reproduction_num = reproduction_num
         self.choose_child_index = []
         self.choose_archive_index = []
-        self.eval_score = np.zeros(shape=len(self.archive))
+        self.eval_score = np.zeros(shape=len(self.initial_archive))
         self.topk = 5
         self.epsilon = epsilon
         self.delta = delta
@@ -290,7 +291,7 @@ class node_buffer():
                     if add_num >= self.reproduction_num: break
             return child_new
 
-    def gradient_of_state(self, state,buffer, h=100.0, use_rbf=True):
+    def gradient_of_state(self,state,buffer,h=100.0,use_rbf=True):
         gradient = np.zeros(state.shape)
         for buffer_state in buffer:
             if use_rbf:
@@ -394,19 +395,39 @@ class node_buffer():
         return starts, one_length, starts_length
 
     def sample_starts_wo_evaluation(self, N_archive, N_parent):
+        # sample uniformly from archive and initial_archive
+        # check archive (>Rmax and < Rmin drop), particles from initial_archive (only drop > Rmax)
+        
         self.choose_parent_index = random.sample(range(len(self.parent_all)),min(len(self.parent_all), N_parent))
-        self.choose_archive_index = random.sample(range(len(self.archive)), min(len(self.archive), N_archive + N_parent - len(self.choose_parent_index)))
-        if len(self.choose_archive_index) < N_archive:
-            self.choose_parent_index = random.sample(range(len(self.parent_all)), min(len(self.parent_all), N_archive + N_parent - len(self.choose_archive_index)))
+        N_archive = N_archive + N_parent - len(self.choose_parent_index)
+        if len(self.initial_archive) > 0:
+            if len(self.archive) > 0:
+                N_initial_archive = int(N_archive * len(self.initial_archive) / (len(self.archive) + len(self.initial_archive)))
+            else:
+                N_initial_archive = N_archive
+        else:
+            N_initial_archive = 0
+        
+        N_archive = N_archive - N_initial_archive
+
+        self.choose_initial_archive_index = random.sample(range(len(self.initial_archive)), min(len(self.initial_archive), N_initial_archive))
+        self.choose_archive_index = random.sample(range(len(self.archive)),min(len(self.archive), N_archive + N_initial_archive + N_parent - len(self.choose_parent_index) - len(self.choose_initial_archive_index)))
+        if len(self.choose_initial_archive_index) + len(self.choose_archive_index) < N_archive + N_initial_archive:
+            self.choose_parent_index = random.sample(range(len(self.parent_all)), min(len(self.parent_all), N_archive + N_initial_archive + N_parent - len(self.choose_archive_index) - len(self.choose_initial_archive_index)))
+        
+        self.choose_initial_archive_index = np.sort(self.choose_initial_archive_index)
         self.choose_archive_index = np.sort(self.choose_archive_index)
         self.choose_parent_index = np.sort(self.choose_parent_index)
-        one_length = len(self.choose_archive_index)
-        starts_length = len(self.choose_archive_index) + len(self.choose_parent_index)
+        one_length = len(self.choose_initial_archive_index) + len(self.choose_archive_index)
+        starts_length = len(self.choose_initial_archive_index) + len(self.choose_archive_index) + len(self.choose_parent_index)
         starts = []
+        for i in range(len(self.choose_initial_archive_index)):
+            starts.append(self.initial_archive[self.choose_initial_archive_index[i]])
         for i in range(len(self.choose_archive_index)):
             starts.append(self.archive[self.choose_archive_index[i]])
         for i in range(len(self.choose_parent_index)):
             starts.append(self.parent_all[self.choose_parent_index[i]])
+        print('sample_initail_archive: ', len(self.choose_initial_archive_index))
         print('sample_archive: ', len(self.choose_archive_index))
         print('sample_parent: ', len(self.choose_parent_index))
         return starts, one_length, starts_length
@@ -488,20 +509,30 @@ class node_buffer():
 
     def move_nodes_Qact_Qsol(self, one_length, Rmax, Rmin, del_switch, timestep):
         del_archive_num = 0
+        del_initial_archive_num = 0
         del_easy_num = 0
         add_hard_num = 0
         self.parent = []
         for i in range(one_length):
-            if self.eval_score[i] > Rmax:
-                self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i]-del_archive_num]))
-                del self.archive[self.choose_archive_index[i]-del_archive_num]
-                del_archive_num += 1
+            if i >= len(self.choose_initial_archive_index): # deal with archive
+                if self.eval_score[i] > Rmax:
+                    self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i - len(self.choose_initial_archive_index)]-del_archive_num]))
+                    del self.archive[self.choose_archive_index[i - len(self.choose_initial_archive_index)]-del_archive_num]
+                    del_archive_num += 1
+                elif self.eval_score[i] < Rmin:
+                    del self.archive[self.choose_archive_index[i - len(self.choose_initial_archive_index)]-del_archive_num]
+                    del_archive_num += 1
+            else: # deal with initial archive
+                if self.eval_score[i] > Rmax:
+                    self.parent.append(copy.deepcopy(self.initial_archive[self.choose_initial_archive_index[i]-del_initial_archive_num]))
+                    del self.initial_archive[self.choose_initial_archive_index[i]-del_initial_archive_num]
+                    del_initial_archive_num += 1
         self.parent_all += self.parent
         if len(self.archive) > self.buffer_length:
             if del_switch=='novelty' : # novelty del
                 self.archive_novelty = self.get_novelty(self.archive,self.archive)
-                # self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
-                self.archive, self.archive_novelty, self.archive_score = self.novelty_score_sort(self.archive, self.archive_novelty, self.archive_score)
+                self.archive,self.archive_novelty = self.novelty_sort(self.archive,self.archive_novelty)
+                # self.archive, self.archive_novelty, self.archive_score = self.novelty_score_sort(self.archive, self.archive_novelty, self.archive_score)
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
             elif del_switch=='random': # random del
                 del_num = len(self.archive) - self.buffer_length
@@ -515,8 +546,10 @@ class node_buffer():
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
         if len(self.parent_all) > self.buffer_length:
             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
+        wandb.log({str(self.agent_num)+'initial_archive_length': len(self.initial_archive)},timestep)
         wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
         wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
+        wandb.log({str(self.agent_num)+'del_num': del_archive_num},timestep)
 
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
@@ -535,7 +568,7 @@ class node_buffer():
                 for line in self.archive:
                     fp.write(str(np.array(line).reshape(-1))+'\n')
             if len(self.archive) > 0:
-                self.novelty = self.get_novelty(self.archive,self.archive)
+                self.archive_novelty = self.get_novelty(self.archive,self.archive)
                 with open(save_path / 'archive_novelty' / ('archive_novelty_%i' %(episode)),'w+') as fp:
                     for line in self.archive_novelty:
                         fp.write(str(np.array(line).reshape(-1))+'\n')
@@ -723,17 +756,15 @@ def main():
             rollouts.append(ro)
     
     use_parent_sample = True
-    use_uniform_from_activeAndsolve = False
     use_gradient_sample = True
-    use_active_expansion = False
     del_switch = 'novelty'
     starts = []
     buffer_length = 2000 # archive 长度
     N_parent = 5
     N_archive = args.n_rollout_threads - N_parent
     h = 1
-    epsilon = 0.6
-    delta = 0.6
+    epsilon = 0.2
+    delta = 0.2
     B_exp = 30 # equal to curriculum_sp
     Rmin = 0.5
     Rmax = 0.95
@@ -741,7 +772,7 @@ def main():
     start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
     legal_region = {'agent':{'x':[[-1,1]],'y': [[-1,1]]},
         'landmark':{'x':[[-1,1]],'y': [[-1,1]]}} # legal region for samplenearby
-    max_step = 0.6
+    max_step = 0.2
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
@@ -785,6 +816,7 @@ def main():
 
         # reproduction
         if use_gradient_sample:
+            # last_node.archive += last_node.Sample_gradient(last_node.parent, current_timestep,h=h, use_gradient_noise=True)
             last_node.archive += last_node.Sample_gradient(last_node.parent, current_timestep,h=h, use_gradient_noise=True)
         
         # reset env 
@@ -863,8 +895,7 @@ def main():
                                 uc_one_hot_action[actions[agent_id][i][j]] = 1
                                 uc_action.append(uc_one_hot_action)
                             uc_action = np.concatenate(uc_action)
-                            one_hot_action_env.append(uc_action)
-                                
+                            one_hot_action_env.append(uc_action)              
                         elif envs.action_space[agent_id].__class__.__name__ == 'Discrete':    
                             one_hot_action = np.zeros(envs.action_space[agent_id].n)
                             one_hot_action[actions[agent_id][i]] = 1
@@ -876,13 +907,9 @@ def main():
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, starts_length, num_agents)
                 cover_rate_list = []
-                success_list = []
                 for env_id in range(one_length):
                     cover_rate_list.append(infos[env_id][0]['cover_rate'])
-                    success_list.append(int(infos[env_id][0]['success']))
                 step_cover_rate[:,step] = np.array(cover_rate_list)
-                step_success[:,step] = np.array(success_list)
-                # step_cover_rate[:,step] = np.array(infos)[0:one_length,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -927,7 +954,6 @@ def main():
                                 np.array(masks)[:,agent_id])
             # logger.add_scalars('agent/training_cover_rate',{'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
             wandb.log({'training_cover_rate': np.mean(np.mean(step_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
-            wandb.log({'training_success_rate': np.mean(np.mean(step_success[:,-args.historical_length:],axis=1))}, current_timestep)
             current_timestep += args.episode_length * starts_length
             curriculum_episode += 1
             last_node.eval_score += np.mean(step_cover_rate[:,-historical_length:],axis=1)
@@ -1040,7 +1066,6 @@ def main():
                     rollouts[agent_id].recurrent_hidden_states = np.zeros(rollouts[agent_id].recurrent_hidden_states.shape).astype(np.float32)
                     rollouts[agent_id].recurrent_hidden_states_critic = np.zeros(rollouts[agent_id].recurrent_hidden_states_critic.shape).astype(np.float32)
             test_cover_rate = np.zeros(shape=(args.n_rollout_threads,episode_length))
-            test_success = np.zeros(shape=(args.n_rollout_threads,episode_length))
             for step in range(episode_length):
                 # Sample actions
                 values = []
@@ -1102,13 +1127,9 @@ def main():
                 # Obser reward and next obs
                 obs, rewards, dones, infos, _ = envs.step(actions_env, args.n_rollout_threads, num_agents)
                 cover_rate_list = []
-                success_list = []
                 for env_id in range(args.n_rollout_threads):
                     cover_rate_list.append(infos[env_id][0]['cover_rate'])
-                    success_list.append(int(infos[env_id][0]['success']))
                 test_cover_rate[:,step] = np.array(cover_rate_list)
-                test_success[:,step] = np.array(success_list)
-                # test_cover_rate[:,step] = np.array(infos)[:,0]
 
                 # If done then clean the history of observations.
                 # insert data in buffer
@@ -1160,7 +1181,6 @@ def main():
                 current_timestep)
             wandb.log({'cover_rate_1step': np.mean(test_cover_rate[:,-1])},current_timestep)
             wandb.log({'cover_rate_5step': np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))}, current_timestep)
-            wandb.log({'success_rate': np.mean(np.mean(test_success[:,-args.historical_length:],axis=1))}, current_timestep)
             mean_cover_rate = np.mean(np.mean(test_cover_rate[:,-historical_length:],axis=1))
             if mean_cover_rate >= 0.9 and args.algorithm_name=='ours' and save_90_flag:
                 torch.save({'model': actor_critic}, str(save_dir) + "/cover09_agent_model.pt")

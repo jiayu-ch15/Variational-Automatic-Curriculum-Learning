@@ -150,7 +150,7 @@ def produce_uniform_case_pb_H(num_case, now_agent_num, now_box_num, boundary):
         one_starts_box = []
     return archive
 
-def produce_uniform_case_H(num_case, now_agent_num, boundary): # 产生H_map的随机态
+def produce_uniform_case_H(num_case, now_agent_num, now_landmark_num, boundary): # 产生H_map的随机态
     one_starts_landmark = []
     one_starts_agent = []
     archive = [] 
@@ -162,7 +162,7 @@ def produce_uniform_case_H(num_case, now_agent_num, boundary): # 产生H_map的�
     boundary_x_landmark = boundary['landmark']['x']
     boundary_y_landmark = boundary['landmark']['y']
     for j in range(num_case):
-        for i in range(now_agent_num):
+        for i in range(now_landmark_num):
             location_id = np.random.randint(len(boundary_x_landmark))
             landmark_location_x = np.random.uniform(boundary_x_landmark[location_id][0],boundary_x_landmark[location_id][1])
             landmark_location_y = np.random.uniform(boundary_y_landmark[location_id][0],boundary_y_landmark[location_id][1])
@@ -200,20 +200,18 @@ if __name__ == '__main__':
     cover_rate_sum = 0
     agent_num = args.num_agents
     box_num = args.num_boxes
-    data = []
+    landmark_num = args.num_landmarks
+    # data = []
     # # uniform data
-    # # map 10*2
-    # boundary = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
-    #     'y': [[-0.9,0.9],[-0.15,0.15],[-0.9,0.9],[-0.15,0.15],[-0.9,0.9]]},
-    #     'landmark':{'x':[[3.1,4.9]],
-    #     'y': [[-0.9,0.9]]}}
-    # starts = produce_uniform_case_H(10000, 4, boundary)
-    # with open('/home/tsing73/curriculum/node_data/sp3small_10*2.txt','w') as fp:
+    # boundary = {'agent':{'x':[[-1,1]],'y': [[-1,1]]},
+    #     'landmark':{'x':[[-1,1]],'y': [[-1,1]]}} 
+    # starts = produce_uniform_case_H(10000, agent_num,landmark_num, boundary)
+    # with open('/home/tsing73/curriculum/node_data/sl_22.txt','w') as fp:
     #     for i in range(len(starts)):
     #         fp.write(str(np.array(starts[i]).reshape(-1))+'\n')
     # pdb.set_trace()
 
-    mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run1'
+    mode_path = Path('./node') / args.env_name / args.scenario_name / args.algorithm_name / 'run4'
     if args.scenario_name=='simple_spread' or args.scenario_name=='simple_spread_H':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/sp_66_%i.txt' %agent_num
@@ -233,6 +231,9 @@ if __name__ == '__main__':
     elif args.scenario_name=='push_ball_H':
         mode_path = mode_path / ('%iagents'%agent_num)
         data_dir = '/home/tsing73/curriculum/node_data/pb3_6*2_2people2box.txt'
+    elif args.scenario_name == 'simple_speaker_listener':
+        mode_path = mode_path / ('%iagents'%agent_num)
+        data_dir = '/home/tsing73/curriculum/node_data/sl_22.txt'
     with open(data_dir,'r') as fp:
         data = fp.readlines()
     for i in range(len(data)):
@@ -251,7 +252,7 @@ if __name__ == '__main__':
     archive = []
     archive_novelty = []
     j = 0
-    while j<=1000:
+    while j<=2000:
         dir_path = mode_path  / 'archive' / ('archive_' + str(j))
         dir_path2 = mode_path  / 'archive_novelty' / ('archive_novelty' + str(j))
         if os.path.exists(dir_path):

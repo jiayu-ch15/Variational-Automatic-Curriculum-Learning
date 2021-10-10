@@ -371,7 +371,7 @@ def main():
     
     boundary = 1
     start_boundary = [-0.3,0.3,-0.3,0.3] # 分别代表x的范围和y的范围
-    max_step = 0.6
+    max_step = 0.2
     N_easy = 0
     test_flag = 0
     reproduce_flag = 0
