@@ -298,10 +298,13 @@ class Policy3(nn.Module): # actor critic分开，把dist放入actor
         if available_actions is not None:
             available_actions = available_actions.to(self.device)
         
-        if self.num_landmarks is None:
-            dist = self.actor_base(inputs, self.num_agents)
-        else:
-            dist = self.actor_base(inputs, self.num_agents, self.num_landmarks)
+        # if self.num_landmarks is None:
+        #     dist = self.actor_base(inputs, self.num_agents)
+        # else:
+        #     dist = self.actor_base(inputs, self.num_agents, self.num_landmarks)
+        self.num_agents = 4
+        self.num_landmarks = None
+        dist = self.actor_base(inputs, self.num_agents)
         if deterministic:
             action = dist.mode()
         else:

@@ -342,12 +342,12 @@ def main():
     
     num_agents = args.num_agents
    
-    # actor_critic = torch.load('/home/chenjy/curriculum/results/MPE/simple_spread/check/run10/models/agent_model.pt')['model'].to(device)
-    actor_critic = []
-    actor_critic.append(torch.load('/home/tsing73/curriculum/results/MPE/simple_speaker_listener/VACL_sl_Bexp30/run1/models/agent0_model.pt')['model'].to(device))
-    actor_critic.append(torch.load('/home/tsing73/curriculum/results/MPE/simple_speaker_listener/VACL_sl_Bexp30/run1/models/agent1_model.pt')['model'].to(device))
-    num_agents = 2
-    num_landmarks = 3
+    actor_critic = torch.load('/home/tsing73/curriculum/results/MPE/50agent_model.pt')['model'].to(device)
+    # actor_critic = []
+    # actor_critic.append(torch.load('/home/tsing73/curriculum/results/MPE/50agent_model.pt')['model'].to(device))
+    # actor_critic.append(torch.load('/home/tsing73/curriculum/results/MPE/50agent_model.pt')['model'].to(device))
+    num_agents = 4
+    num_landmarks = 4
     all_frames = []
     cover_rate = 0
     random.seed(1)
@@ -355,7 +355,7 @@ def main():
     boundary = {'x':[-1,1],'y':[-1,1]}
     goals =  goal_proposal(
         num_agents=num_agents, boundary=boundary, env_name=args.scenario_name, critic_k=1, 
-        buffer_capacity=5005, proposal_batch=args.n_rollout_threads, restart_p=0.5, 
+        buffer_capacity=5000, proposal_batch=args.n_rollout_threads, restart_p=0.5, 
         score_type='value_error'
     )
     starts = goals.uniform_sampling(500, boundary)
@@ -381,7 +381,6 @@ def main():
         eval_masks = np.ones((num_agents,1)).astype(np.float32)
         step_cover_rate = np.zeros(shape=(args.episode_length))
         
-        pdb.set_trace()
         for step in range(args.episode_length): 
             calc_start = time.time()              
             eval_actions = []            
