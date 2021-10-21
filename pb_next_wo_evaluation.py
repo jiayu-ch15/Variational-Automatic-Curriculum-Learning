@@ -14,7 +14,7 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.ppo import PPO, PPO3
-from algorithm.model import Policy_pb, Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
+from algorithm.model import Policy_pb_3, Policy, ATTBase_actor, ATTBase_critic
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -730,9 +730,9 @@ def main():
     #Policy network
     if args.share_policy:
         # share_base = ATTBase_pb(envs.observation_space[0].shape[0],num_agents,num_boxes)
-        actor_base = ATTBase_actor_dist_pb_add(envs.observation_space[0].shape[0], envs.action_space[0],num_agents)
-        critic_base = ATTBase_critic_pb_add(envs.observation_space[0].shape[0],num_agents)
-        actor_critic = Policy_pb_3(envs.observation_space[0],
+        actor_base = ATTBase_actor(envs.observation_space[0].shape[0], envs.action_space[0],num_agents,args.scenario_name)
+        critic_base = ATTBase_critic(envs.observation_space[0].shape[0],num_agents,args.scenario_name)
+        actor_critic = Policy(envs.observation_space[0],
                     envs.action_space[0],
                     num_agents = num_agents,
                     base=None,
@@ -949,7 +949,7 @@ def main():
         actor_critic.agents_num = last_node.agent_num
         actor_critic.boxes_num = last_node.box_num
         for times in range(eval_frequency):
-            obs = envs.new_starts_obs_pb(starts, num_agents, num_boxes, starts_length)
+            obs = envs.new_starts_obs(starts, num_agents, starts_length)
             #replay buffer
             rollouts = RolloutStorage(num_agents,
                         args.episode_length, 
@@ -1177,7 +1177,7 @@ def main():
         actor_critic.agents_num = num_agents_test
         actor_critic.boxes_num = num_boxes_test
         if episode % check_frequency==0:
-            obs, _ = envs.reset(num_agents_test,num_boxes_test)
+            obs, _ = envs.reset(num_agents_test)
             episode_length = 120
             #replay buffer
             rollouts = RolloutStorage(num_agents_test,

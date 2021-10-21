@@ -32,8 +32,6 @@ import pdb
 import wandb
 np.set_printoptions(linewidth=10000)
 
-# def trainer(envs, actor_critic, args):
-
 def main():
     args = get_config()
     run = wandb.init(project='entity_curriculum',name=str(args.algorithm_name) + "_seed" + str(args.seed))
@@ -219,7 +217,7 @@ def main():
             parent_all_load.append(parent_all_load_one)
         last_node.parent_all = copy.deepcopy(parent_all_load)
     # end region
-    only_eval = True
+    only_eval = False
 
     # env
     envs = make_parallel_env(args)

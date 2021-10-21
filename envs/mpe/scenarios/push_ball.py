@@ -4,7 +4,7 @@ from envs.mpe.scenario import BaseScenario
 
 
 class Scenario(BaseScenario):
-    def make_world(self, args, now_agent_num=None, now_box_num=None):
+    def make_world(self, args, now_agent_num=None):
         world = World()
         # set any world properties first
         world.dim_c = 2
@@ -14,8 +14,8 @@ class Scenario(BaseScenario):
             num_landmarks = args.num_landmarks
         else:
             num_people = now_agent_num
-            num_boxes = now_box_num
-            num_landmarks = now_box_num
+            num_boxes = now_agent_num
+            num_landmarks = now_agent_num
         self.num_boxes = num_boxes
         self.num_people = num_people
         self.num_agents = num_boxes + num_people # deactivate "good" agent

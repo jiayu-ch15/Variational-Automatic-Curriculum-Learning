@@ -28,182 +28,14 @@ class Flatten(nn.Module):
     def forward(self, x):
         return x.view(x.size(0), -1)
 
-class Policy4(nn.Module): # actor critic分开，把dist放入actor, k个critic网络
+class Policy(nn.Module):
     def __init__(self, obs_space, action_space, num_agents, base = None, actor_base=None, critic_base=None, base_kwargs=None, device=torch.device("cpu")):
-        super(Policy4, self).__init__()
-        self.mixed_obs = False
-        self.mixed_action = False
-        self.multi_discrete = False
-        self.device = device
-        self.agents_num = num_agents
-        self.critic_k = len(critic_base) # the number of critic network
-        if base_kwargs is None:
-            base_kwargs = {}
-        
-        if obs_space.__class__.__name__ == "Box":
-            obs_shape = obs_space.shape
-        elif obs_space.__class__.__name__ == "list":
-            if obs_space[-1].__class__.__name__ != "Box":
-                obs_shape = obs_space
-            else:# means all obs space is passed here
-                # num_agents means agent_id
-                # obs_space means all_obs_space
-                agent_id = num_agents
-                all_obs_space = obs_space
-                if all_obs_space[agent_id].__class__.__name__ == "Box":
-                    obs_shape = all_obs_space[agent_id].shape
-                else:
-                    obs_shape = all_obs_space[agent_id]
-                self.mixed_obs = True                
-        else:
-            raise NotImplementedError
-        
-        if base is None:
-            if self.mixed_obs:
-                if len(obs_shape) == 3:
-                    self.base = CNNBase(all_obs_space, agent_id, **base_kwargs)
-                elif len(obs_shape) == 1:
-                    self.base = MLPBase(all_obs_space, agent_id, **base_kwargs)
-                else:
-                    raise NotImplementedError
-            else:
-                if obs_shape[-1].__class__.__name__=='list':#attn
-                    self.base = MLPBase(obs_shape, num_agents, **base_kwargs)
-                else:
-                    if len(obs_shape) == 3:
-                        self.base = CNNBase(obs_shape, num_agents, **base_kwargs)
-                    else:
-                        self.base = MLPBase(obs_shape, num_agents, **base_kwargs)
-        else:
-            self.base = base
-        
-        self.actor_base = actor_base
-        self.critic_base = critic_base
-                
-        # if action_space.__class__.__name__ == "Discrete":
-        #     num_actions = action_space.n            
-        #     self.dist = Categorical(self.base.output_size, num_actions)
-        # elif action_space.__class__.__name__ == "Box":
-        #     num_actions = action_space.shape[0]
-        #     self.dist = DiagGaussian(self.base.output_size, num_actions)
-        # elif action_space.__class__.__name__ == "MultiBinary":
-        #     num_actions = action_space.shape[0]
-        #     self.dist = Bernoulli(self.base.output_size, num_actions)
-        # elif action_space.__class__.__name__ == "MultiDiscrete":
-        #     self.multi_discrete = True
-        #     self.discrete_N = action_space.shape
-        #     action_size = action_space.high-action_space.low+1
-        #     self.dists = []
-        #     for num_actions in action_size:
-        #         self.dists.append(Categorical(self.base.output_size, num_actions))
-        #     self.dists = nn.ModuleList(self.dists)
-        # else:# discrete+continous
-        #     self.mixed_action = True
-        #     continous = action_space[0].shape[0]
-        #     discrete = action_space[1].n
-        #     self.dist = nn.ModuleList([DiagGaussian(self.base.output_size, continous), Categorical(self.base.output_size, discrete)])
-
-    @property
-    def is_recurrent(self):
-        return self.base.is_recurrent
-
-    @property
-    def is_naive_recurrent(self):
-        return self.base.is_naive_recurrent
-        
-    @property
-    def is_attn(self):
-        return self.base.is_attn
-
-    @property
-    def recurrent_hidden_size(self):
-        """Size of rnn_hx."""
-        return self.base.recurrent_hidden_size
-
-    def forward(self, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks):
-        raise NotImplementedError
-
-    def act(self, agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks, available_actions=None, deterministic=False):
-        share_inputs = share_inputs.to(self.device)
-        inputs = inputs.to(self.device)
-        rnn_hxs_actor = rnn_hxs_actor.to(self.device)
-        rnn_hxs_critic = rnn_hxs_critic.to(self.device)
-        masks = masks.to(self.device)
-        if available_actions is not None:
-            available_actions = available_actions.to(self.device)
-        
-        dist = self.actor_base(inputs, self.agents_num)
-        if deterministic:
-            action = dist.mode()
-        else:
-            action = dist.sample()
-        action_log_probs = dist.log_probs(action)
-        action_out = action
-        action_log_probs_out = action_log_probs 
-
-        ensemble_value = []
-        ensemble_rnn_hxs_actor = []
-        ensemble_rnn_hxs_critic = []
-        for critic_id in range(self.critic_k):
-            value, rnn_hxs_actor_vector, rnn_hxs_critic = self.critic_base[critic_id](share_inputs, inputs, self.agents_num, rnn_hxs_actor[:,critic_id,:], masks) 
-            ensemble_value.append(value)
-            ensemble_rnn_hxs_actor.append(rnn_hxs_actor_vector)
-            ensemble_rnn_hxs_critic.append(rnn_hxs_critic)
-        ensemble_value = torch.stack(ensemble_value,dim=1)  
-        ensemble_rnn_hxs_actor = torch.stack(ensemble_rnn_hxs_actor,dim=1)
-        ensemble_rnn_hxs_critic = torch.stack(ensemble_rnn_hxs_critic,dim=1)
-               
-        return ensemble_value, action_out, action_log_probs_out, ensemble_rnn_hxs_actor, ensemble_rnn_hxs_critic
-
-    def get_value(self, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks):
-        share_inputs = share_inputs.to(self.device)
-        inputs = inputs.to(self.device)
-        rnn_hxs_actor = rnn_hxs_actor.to(self.device)
-        rnn_hxs_critic = rnn_hxs_critic.to(self.device)
-        masks = masks.to(self.device)
-        
-        ensemble_value = []
-        ensemble_rnn_hxs_actor = []
-        ensemble_rnn_hxs_critic = []
-        for critic_id in range(self.critic_k):
-            value, rnn_hxs_actor_vector, rnn_hxs_critic = self.critic_base[critic_id](share_inputs, inputs, self.agents_num, rnn_hxs_actor[:,critic_id,:], masks) 
-            ensemble_value.append(value)
-            ensemble_rnn_hxs_actor.append(rnn_hxs_actor_vector)
-            ensemble_rnn_hxs_critic.append(rnn_hxs_critic) 
-        ensemble_value = torch.stack(ensemble_value,dim=1)  
-        ensemble_rnn_hxs_actor = torch.stack(ensemble_rnn_hxs_actor,dim=1)
-        ensemble_rnn_hxs_critic = torch.stack(ensemble_rnn_hxs_critic,dim=1)
-        return ensemble_value, ensemble_rnn_hxs_actor, ensemble_rnn_hxs_critic
-
-    def evaluate_actions(self, critic_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks, high_masks, action):
-        share_inputs = share_inputs.to(self.device)
-        inputs = inputs.to(self.device)
-        rnn_hxs_actor = rnn_hxs_actor.to(self.device)
-        rnn_hxs_critic = rnn_hxs_critic.to(self.device)
-        masks = masks.to(self.device)
-        high_masks = high_masks.to(self.device)
-        action = action.to(self.device)
-        
-        dist = self.actor_base(inputs, self.agents_num)
-
-        action_log_probs = dist.log_probs(action)
-        dist_entropy = dist.entropy()
-        action_log_probs_out = action_log_probs
-        dist_entropy_out = dist_entropy.mean()
-
-        value, rnn_hxs_actor_vector, rnn_hxs_critic = self.critic_base[critic_id](share_inputs, inputs, self.agents_num, rnn_hxs_actor, masks) 
-
-        return value, action_log_probs_out, dist_entropy_out, rnn_hxs_actor, rnn_hxs_critic
-
-class Policy3(nn.Module): # actor critic分开，把dist放入actor
-    def __init__(self, obs_space, action_space, num_agents, num_landmarks=None, base = None, actor_base=None, critic_base=None, base_kwargs=None, device=torch.device("cpu")):
-        super(Policy3, self).__init__()
+        super(Policy, self).__init__()
         self.mixed_obs = False
         self.mixed_action = False
         self.multi_discrete = False
         self.device = device
         self.num_agents = num_agents
-        self.num_landmarks = num_landmarks
         if base_kwargs is None:
             base_kwargs = {}
         
@@ -245,29 +77,6 @@ class Policy3(nn.Module): # actor critic分开，把dist放入actor
             self.base = base
         self.actor_base = actor_base
         self.critic_base = critic_base
-                
-        # if action_space.__class__.__name__ == "Discrete":
-        #     num_actions = action_space.n            
-        #     self.dist = Categorical(self.base.output_size, num_actions)
-        # elif action_space.__class__.__name__ == "Box":
-        #     num_actions = action_space.shape[0]
-        #     self.dist = DiagGaussian(self.base.output_size, num_actions)
-        # elif action_space.__class__.__name__ == "MultiBinary":
-        #     num_actions = action_space.shape[0]
-        #     self.dist = Bernoulli(self.base.output_size, num_actions)
-        # elif action_space.__class__.__name__ == "MultiDiscrete":
-        #     self.multi_discrete = True
-        #     self.discrete_N = action_space.shape
-        #     action_size = action_space.high-action_space.low+1
-        #     self.dists = []
-        #     for num_actions in action_size:
-        #         self.dists.append(Categorical(self.base.output_size, num_actions))
-        #     self.dists = nn.ModuleList(self.dists)
-        # else:# discrete+continous
-        #     self.mixed_action = True
-        #     continous = action_space[0].shape[0]
-        #     discrete = action_space[1].n
-        #     self.dist = nn.ModuleList([DiagGaussian(self.base.output_size, continous), Categorical(self.base.output_size, discrete)])
 
     @property
     def is_recurrent(self):
@@ -298,13 +107,8 @@ class Policy3(nn.Module): # actor critic分开，把dist放入actor
         if available_actions is not None:
             available_actions = available_actions.to(self.device)
         
-        # if self.num_landmarks is None:
-        #     dist = self.actor_base(inputs, self.num_agents)
-        # else:
-        #     dist = self.actor_base(inputs, self.num_agents, self.num_landmarks)
-        self.num_agents = 4
-        self.num_landmarks = None
         dist = self.actor_base(inputs, self.num_agents)
+
         if deterministic:
             action = dist.mode()
         else:
@@ -312,10 +116,7 @@ class Policy3(nn.Module): # actor critic分开，把dist放入actor
         action_log_probs = dist.log_probs(action)
         action_out = action
         action_log_probs_out = action_log_probs 
-        if self.num_landmarks is None:
-            value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, rnn_hxs_actor, masks)    
-        else:
-            value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_landmarks, rnn_hxs_actor, masks)     
+        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, rnn_hxs_actor, masks)      
         
         return value, action_out, action_log_probs_out, rnn_hxs_actor, rnn_hxs_critic
 
@@ -327,10 +128,7 @@ class Policy3(nn.Module): # actor critic分开，把dist放入actor
         rnn_hxs_critic = rnn_hxs_critic.to(self.device)
         masks = masks.to(self.device)
         
-        if self.num_landmarks is None:
-            value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, rnn_hxs_actor, masks) 
-        else:
-            value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_landmarks, rnn_hxs_actor, masks)  
+        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, rnn_hxs_actor, masks)  
         
         return value, rnn_hxs_actor, rnn_hxs_critic
 
@@ -344,19 +142,13 @@ class Policy3(nn.Module): # actor critic分开，把dist放入actor
         high_masks = high_masks.to(self.device)
         action = action.to(self.device)
         
-        if self.num_landmarks is None:
-            dist = self.actor_base(inputs, self.num_agents)
-        else:
-            dist = self.actor_base(inputs, self.num_agents, self.num_landmarks)
+        dist = self.actor_base(inputs, self.num_agents)
 
         action_log_probs = dist.log_probs(action)
         dist_entropy = dist.entropy()
         action_log_probs_out = action_log_probs
         dist_entropy_out = dist_entropy.mean()
-        if self.num_landmarks is None:
-            value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, rnn_hxs_actor, masks) 
-        else:
-            value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_landmarks, rnn_hxs_actor, masks) 
+        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, rnn_hxs_actor, masks)  
 
         return value, action_log_probs_out, dist_entropy_out, rnn_hxs_actor, rnn_hxs_critic
 
@@ -429,434 +221,7 @@ class Policy3(nn.Module): # actor critic分开，把dist放入actor
 
         return value, action_log_probs_out, dist_entropy_out, rnn_hxs_actor, rnn_hxs_critic
 
-class Policy(nn.Module):
-    def __init__(self, obs_space, action_space, num_agents, base=None, base_kwargs=None, device=torch.device("cpu")):
-        super(Policy, self).__init__()
-        self.mixed_obs = False
-        self.mixed_action = False
-        self.multi_discrete = False
-        self.device = device
-        self.agents_num = num_agents
-        if base_kwargs is None:
-            base_kwargs = {}
-        
-        if obs_space.__class__.__name__ == "Box":
-            obs_shape = obs_space.shape
-        elif obs_space.__class__.__name__ == "list":
-            if obs_space[-1].__class__.__name__ != "Box":
-                obs_shape = obs_space
-            else:# means all obs space is passed here
-                # num_agents means agent_id
-                # obs_space means all_obs_space
-                agent_id = num_agents
-                all_obs_space = obs_space
-                if all_obs_space[agent_id].__class__.__name__ == "Box":
-                    obs_shape = all_obs_space[agent_id].shape
-                else:
-                    obs_shape = all_obs_space[agent_id]
-                self.mixed_obs = True                
-        else:
-            raise NotImplementedError
-        
-        if base is None:
-            if self.mixed_obs:
-                if len(obs_shape) == 3:
-                    self.base = CNNBase(all_obs_space, agent_id, **base_kwargs)
-                elif len(obs_shape) == 1:
-                    self.base = MLPBase(all_obs_space, agent_id, **base_kwargs)
-                else:
-                    raise NotImplementedError
-            else:
-                if obs_shape[-1].__class__.__name__=='list':#attn
-                    self.base = MLPBase(obs_shape, num_agents, **base_kwargs)
-                else:
-                    if len(obs_shape) == 3:
-                        self.base = CNNBase(obs_shape, num_agents, **base_kwargs)
-                    else:
-                        self.base = MLPBase(obs_shape, num_agents, **base_kwargs)
-        else:
-            self.base = base
-                
-        if action_space.__class__.__name__ == "Discrete":
-            num_actions = action_space.n            
-            self.dist = Categorical(self.base.output_size, num_actions)
-        elif action_space.__class__.__name__ == "Box":
-            num_actions = action_space.shape[0]
-            self.dist = DiagGaussian(self.base.output_size, num_actions)
-        elif action_space.__class__.__name__ == "MultiBinary":
-            num_actions = action_space.shape[0]
-            self.dist = Bernoulli(self.base.output_size, num_actions)
-        elif action_space.__class__.__name__ == "MultiDiscrete":
-            self.multi_discrete = True
-            self.discrete_N = action_space.shape
-            action_size = action_space.high-action_space.low+1
-            self.dists = []
-            for num_actions in action_size:
-                self.dists.append(Categorical(self.base.output_size, num_actions))
-            self.dists = nn.ModuleList(self.dists)
-        else:# discrete+continous
-            self.mixed_action = True
-            continous = action_space[0].shape[0]
-            discrete = action_space[1].n
-            self.dist = nn.ModuleList([DiagGaussian(self.base.output_size, continous), Categorical(self.base.output_size, discrete)])
-
-    @property
-    def is_recurrent(self):
-        return self.base.is_recurrent
-
-    @property
-    def is_naive_recurrent(self):
-        return self.base.is_naive_recurrent
-        
-    @property
-    def is_attn(self):
-        return self.base.is_attn
-
-    @property
-    def recurrent_hidden_size(self):
-        """Size of rnn_hx."""
-        return self.base.recurrent_hidden_size
-
-    def forward(self, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks):
-        raise NotImplementedError
-
-    def act(self, agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks, available_actions=None, deterministic=False):
-        share_inputs = share_inputs.to(self.device)
-        inputs = inputs.to(self.device)
-        rnn_hxs_actor = rnn_hxs_actor.to(self.device)
-        rnn_hxs_critic = rnn_hxs_critic.to(self.device)
-        masks = masks.to(self.device)
-        if available_actions is not None:
-            available_actions = available_actions.to(self.device)
-        value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num, rnn_hxs_actor, masks)        
-        
-        if self.mixed_action:
-            dist, action, action_log_probs = [None, None], [None, None], [None, None]
-            for i in range(2):
-                dist[i] = self.dist[i](actor_features, available_actions)
-    
-                if deterministic:
-                    action[i] = dist[i].mode().float()
-                else:
-                    action[i] = dist[i].sample().float()
-        
-                action_log_probs[i] = dist[i].log_probs(action[i])
-                
-            action_out = torch.cat(action,-1)
-            action_log_probs_out = torch.sum(torch.cat(action_log_probs, -1), -1, keepdim = True)
-            
-        elif self.multi_discrete:
-            action_out = []
-            action_log_probs_out = []
-            for i in range(self.discrete_N):
-                dist = self.dists[i](actor_features)
-                
-                if deterministic:
-                    action = dist.mode()
-                else:
-                    action = dist.sample()
-                    
-                action_log_probs = dist.log_probs(action)
-                
-                action_out.append(action)
-                action_log_probs_out.append(action_log_probs)
-                
-            action_out = torch.cat(action_out,-1)
-            action_log_probs_out = torch.sum(torch.cat(action_log_probs_out, -1), -1, keepdim = True)
-            
-        else:
-            dist = self.dist(actor_features, available_actions)
-    
-            if deterministic:
-                action = dist.mode()
-            else:
-                action = dist.sample()
-  
-            action_log_probs = dist.log_probs(action)
-            
-            action_out = action
-            action_log_probs_out = action_log_probs  
-        return value, action_out, action_log_probs_out, rnn_hxs_actor, rnn_hxs_critic
-
-    def get_value(self, agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks):
-    
-        share_inputs = share_inputs.to(self.device)
-        inputs = inputs.to(self.device)
-        rnn_hxs_actor = rnn_hxs_actor.to(self.device)
-        rnn_hxs_critic = rnn_hxs_critic.to(self.device)
-        masks = masks.to(self.device)
-        
-        value, _, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        # value, _, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num, rnn_hxs_actor, masks)
-        
-        return value, rnn_hxs_actor, rnn_hxs_critic
-
-    def evaluate_actions(self, agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks, high_masks, action):
-    
-        share_inputs = share_inputs.to(self.device)
-        inputs = inputs.to(self.device)
-        rnn_hxs_actor = rnn_hxs_actor.to(self.device)
-        rnn_hxs_critic = rnn_hxs_critic.to(self.device)
-        masks = masks.to(self.device)
-        high_masks = high_masks.to(self.device)
-        action = action.to(self.device)
-        value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num,rnn_hxs_actor, masks)
-
-
-        if self.mixed_action:
-            a, b = action.split((2, 1), -1)
-            b = b.long()
-            action = [a, b]
-            dist, action_log_probs, dist_entropy = [None, None], [None, None], [None, None]
-            for i in range(2):
-                dist[i] = self.dist[i](actor_features)
-                action_log_probs[i] = dist[i].log_probs(action[i])
-                if high_masks is not None:
-                    dist_entropy[i] = (dist[i].entropy()*high_masks.squeeze(-1)).sum()/high_masks.sum()
-                else:
-                    dist_entropy[i] = dist[i].entropy().mean()
-            action_log_probs_out = torch.sum(torch.cat(action_log_probs, -1), -1, keepdim = True)
-            dist_entropy_out = dist_entropy[0] / 2.0 + dist_entropy[1] / 0.98
-        elif self.multi_discrete:           
-            action = torch.transpose(action,0,1)
-            action_log_probs = []
-            dist_entropy = []
-            for i in range(self.discrete_N):
-                dist = self.dists[i](actor_features)
-                action_log_probs.append(dist.log_probs(action[i]))
-                if high_masks is not None:
-                    dist_entropy.append( (dist.entropy()*high_masks.squeeze(-1)).sum()/high_masks.sum() )
-                else:
-                    dist_entropy.append(dist.entropy().mean())
-                    
-            action_log_probs_out = torch.sum(torch.cat(action_log_probs, -1), -1, keepdim = True)
-            dist_entropy_out = torch.tensor(dist_entropy).mean()
-        else:
-            dist = self.dist(actor_features)
-            action_log_probs = dist.log_probs(action)
-            dist_entropy = (dist.entropy()*high_masks.squeeze(-1)).sum()/high_masks.sum()
-            action_log_probs_out = action_log_probs
-            dist_entropy_out = dist_entropy
-
-        return value, action_log_probs_out, dist_entropy_out, rnn_hxs_actor, rnn_hxs_critic
-
-class Policy_pb(nn.Module):
-    def __init__(self, obs_space, action_space, num_agents, num_box, base=None, base_kwargs=None, device=torch.device("cpu")):
-        super(Policy_pb, self).__init__()
-        self.mixed_obs = False
-        self.mixed_action = False
-        self.multi_discrete = False
-        self.device = device
-        self.agents_num = num_agents
-        self.boxes_num = num_box
-        if base_kwargs is None:
-            base_kwargs = {}
-        
-        if obs_space.__class__.__name__ == "Box":
-            obs_shape = obs_space.shape
-        elif obs_space.__class__.__name__ == "list":
-            if obs_space[-1].__class__.__name__ != "Box":
-                obs_shape = obs_space
-            else:# means all obs space is passed here
-                # num_agents means agent_id
-                # obs_space means all_obs_space
-                agent_id = num_agents
-                all_obs_space = obs_space
-                if all_obs_space[agent_id].__class__.__name__ == "Box":
-                    obs_shape = all_obs_space[agent_id].shape
-                else:
-                    obs_shape = all_obs_space[agent_id]
-                self.mixed_obs = True                
-        else:
-            raise NotImplementedError
-        
-        if base is None:
-            if self.mixed_obs:
-                if len(obs_shape) == 3:
-                    self.base = CNNBase(all_obs_space, agent_id, **base_kwargs)
-                elif len(obs_shape) == 1:
-                    self.base = MLPBase(all_obs_space, agent_id, **base_kwargs)
-                else:
-                    raise NotImplementedError
-            else:
-                if obs_shape[-1].__class__.__name__=='list':#attn
-                    self.base = MLPBase(obs_shape, num_agents, **base_kwargs)
-                else:
-                    if len(obs_shape) == 3:
-                        self.base = CNNBase(obs_shape, num_agents, **base_kwargs)
-                    else:
-                        self.base = MLPBase(obs_shape, num_agents, **base_kwargs)
-        else:
-            self.base = base
-                
-        if action_space.__class__.__name__ == "Discrete":
-            num_actions = action_space.n            
-            self.dist = Categorical(self.base.output_size, num_actions)
-        elif action_space.__class__.__name__ == "Box":
-            num_actions = action_space.shape[0]
-            self.dist = DiagGaussian(self.base.output_size, num_actions)
-        elif action_space.__class__.__name__ == "MultiBinary":
-            num_actions = action_space.shape[0]
-            self.dist = Bernoulli(self.base.output_size, num_actions)
-        elif action_space.__class__.__name__ == "MultiDiscrete":
-            self.multi_discrete = True
-            self.discrete_N = action_space.shape
-            action_size = action_space.high-action_space.low+1
-            self.dists = []
-            for num_actions in action_size:
-                self.dists.append(Categorical(self.base.output_size, num_actions))
-            self.dists = nn.ModuleList(self.dists)
-        else:# discrete+continous
-            self.mixed_action = True
-            continous = action_space[0].shape[0]
-            discrete = action_space[1].n
-            self.dist = nn.ModuleList([DiagGaussian(self.base.output_size, continous), Categorical(self.base.output_size, discrete)])
-
-    @property
-    def is_recurrent(self):
-        return self.base.is_recurrent
-
-    @property
-    def is_naive_recurrent(self):
-        return self.base.is_naive_recurrent
-        
-    @property
-    def is_attn(self):
-        return self.base.is_attn
-
-    @property
-    def recurrent_hidden_size(self):
-        """Size of rnn_hx."""
-        return self.base.recurrent_hidden_size
-
-    def forward(self, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks):
-        raise NotImplementedError
-
-    def act(self, agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks, available_actions=None, deterministic=False):
-        share_inputs = share_inputs.to(self.device)
-        inputs = inputs.to(self.device)
-        rnn_hxs_actor = rnn_hxs_actor.to(self.device)
-        rnn_hxs_critic = rnn_hxs_critic.to(self.device)
-        masks = masks.to(self.device)
-        if available_actions is not None:
-            available_actions = available_actions.to(self.device)
-        # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num, self.boxes_num,rnn_hxs_actor, masks)        
-        
-        if self.mixed_action:
-            dist, action, action_log_probs = [None, None], [None, None], [None, None]
-            for i in range(2):
-                dist[i] = self.dist[i](actor_features, available_actions)
-    
-                if deterministic:
-                    action[i] = dist[i].mode().float()
-                else:
-                    action[i] = dist[i].sample().float()
-        
-                action_log_probs[i] = dist[i].log_probs(action[i])
-                
-            action_out = torch.cat(action,-1)
-            action_log_probs_out = torch.sum(torch.cat(action_log_probs, -1), -1, keepdim = True)
-            
-        elif self.multi_discrete:
-            action_out = []
-            action_log_probs_out = []
-            for i in range(self.discrete_N):
-                dist = self.dists[i](actor_features)
-                
-                if deterministic:
-                    action = dist.mode()
-                else:
-                    action = dist.sample()
-                    
-                action_log_probs = dist.log_probs(action)
-                
-                action_out.append(action)
-                action_log_probs_out.append(action_log_probs)
-                
-            action_out = torch.cat(action_out,-1)
-            action_log_probs_out = torch.sum(torch.cat(action_log_probs_out, -1), -1, keepdim = True)
-            
-        else:
-            dist = self.dist(actor_features, available_actions)
-    
-            if deterministic:
-                action = dist.mode()
-            else:
-                action = dist.sample()
-  
-            action_log_probs = dist.log_probs(action)
-            
-            action_out = action
-            action_log_probs_out = action_log_probs  
-        return value, action_out, action_log_probs_out, rnn_hxs_actor, rnn_hxs_critic
-
-    def get_value(self, agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks):
-    
-        share_inputs = share_inputs.to(self.device)
-        inputs = inputs.to(self.device)
-        rnn_hxs_actor = rnn_hxs_actor.to(self.device)
-        rnn_hxs_critic = rnn_hxs_critic.to(self.device)
-        masks = masks.to(self.device)
-        
-        # value, _, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        value, _, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num, self.boxes_num, rnn_hxs_actor, masks)
-        
-        return value, rnn_hxs_actor, rnn_hxs_critic
-
-    def evaluate_actions(self, agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks, high_masks, action):
-    
-        share_inputs = share_inputs.to(self.device)
-        inputs = inputs.to(self.device)
-        rnn_hxs_actor = rnn_hxs_actor.to(self.device)
-        rnn_hxs_critic = rnn_hxs_critic.to(self.device)
-        masks = masks.to(self.device)
-        high_masks = high_masks.to(self.device)
-        action = action.to(self.device)
-        # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(share_inputs, inputs, self.agents_num,self.boxes_num,rnn_hxs_actor, masks)
-
-
-        if self.mixed_action:
-            a, b = action.split((2, 1), -1)
-            b = b.long()
-            action = [a, b]
-            dist, action_log_probs, dist_entropy = [None, None], [None, None], [None, None]
-            for i in range(2):
-                dist[i] = self.dist[i](actor_features)
-                action_log_probs[i] = dist[i].log_probs(action[i])
-                if high_masks is not None:
-                    dist_entropy[i] = (dist[i].entropy()*high_masks.squeeze(-1)).sum()/high_masks.sum()
-                else:
-                    dist_entropy[i] = dist[i].entropy().mean()
-            action_log_probs_out = torch.sum(torch.cat(action_log_probs, -1), -1, keepdim = True)
-            dist_entropy_out = dist_entropy[0] / 2.0 + dist_entropy[1] / 0.98
-        elif self.multi_discrete:           
-            action = torch.transpose(action,0,1)
-            action_log_probs = []
-            dist_entropy = []
-            for i in range(self.discrete_N):
-                dist = self.dists[i](actor_features)
-                action_log_probs.append(dist.log_probs(action[i]))
-                if high_masks is not None:
-                    dist_entropy.append( (dist.entropy()*high_masks.squeeze(-1)).sum()/high_masks.sum() )
-                else:
-                    dist_entropy.append(dist.entropy().mean())
-                    
-            action_log_probs_out = torch.sum(torch.cat(action_log_probs, -1), -1, keepdim = True)
-            dist_entropy_out = torch.tensor(dist_entropy).mean()
-        else:
-            dist = self.dist(actor_features)
-            action_log_probs = dist.log_probs(action)
-            dist_entropy = (dist.entropy()*high_masks.squeeze(-1)).sum()/high_masks.sum()
-            action_log_probs_out = action_log_probs
-            dist_entropy_out = dist_entropy
-
-        return value, action_log_probs_out, dist_entropy_out, rnn_hxs_actor, rnn_hxs_critic
-
-class Policy_pb_3(nn.Module): # actor critic 分开, 2个optimizer
+class Policy_pb_3(nn.Module): 
     def __init__(self, obs_space, action_space, num_agents, base=None, actor_base=None, critic_base=None, base_kwargs=None, device=torch.device("cpu")):
         super(Policy_pb_3, self).__init__()
         self.mixed_obs = False
@@ -1907,164 +1272,45 @@ class ObsEncoder_teacher_pb(nn.Module):
 
 # end region
 
-class ATTBase(NNBase):
-    def __init__(self, num_inputs, agent_num, recurrent=False, assign_id=False, hidden_size=64):
-        super(ATTBase, self).__init__(num_inputs, agent_num)
+class ATTBase_actor(NNBase):
+    def __init__(self, num_inputs, action_space, num_agents, model_name, recurrent=False, assign_id=False, hidden_size=100):
+        super(ATTBase_actor, self).__init__(num_inputs, num_agents)
         if recurrent:
             num_inputs = hidden_size
 
         init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
                                constant_(x, 0), np.sqrt(2))
 
-        self.agent_num = agent_num
-        self.actor = ObsEncoder(hidden_size=hidden_size)
-        #self.encoder = init_(nn.Linear(num_inputs, hidden_size))
-        self.encoder = ObsEncoder(hidden_size=hidden_size)
-
-        self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-        #self.correlation_mat.data.fill_(0.25)
-        nn.init.orthogonal_(self.correlation_mat.data, gain=1)
-
-        self.critic_linear = nn.Sequential(
-                init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
-                nn.LayerNorm(hidden_size),
-                init_(nn.Linear(hidden_size, 1)))
-
-        # self.inputs_norm = nn.LayerNorm(hidden_size)
-        # self.share_inputs_norm = nn.LayerNorm(hidden_size)
-        # self.train()
-
-    def forward(self, share_inputs, inputs, agent_num, rnn_hxs, masks):
-        """
-        share_inputs: [batch_size, obs_dim*agent_num]
-        inputs: [batch_size, obs_dim]
-        """
-        batch_size = inputs.shape[0]
-        obs_dim = inputs.shape[-1]
-        hidden_actor = self.actor(inputs, agent_num)
-        f_ii = self.encoder(inputs, agent_num)
-        obs_beta_ij = torch.matmul(f_ii.view(batch_size,1,-1), self.correlation_mat) # (batch,1,hidden_size)
-        
-        # 矩阵f_ij
-        f_ij = self.encoder(share_inputs.reshape(-1,obs_dim),agent_num)
-        obs_encoder = f_ij.reshape(batch_size,agent_num,-1) # (batch_size, nagents, hidden_size)
-              
-        beta = torch.matmul(obs_beta_ij, obs_encoder.permute(0,2,1)).squeeze(1) # (batch_size,nagents)
-        alpha = F.softmax(beta,dim = 1).unsqueeze(2) # (batch_size,nagents,1)
-        vi = torch.mul(alpha,obs_encoder)
-        vi = torch.sum(vi,dim = 1)
-        value = self.critic_linear(vi)
-
-        return value, hidden_actor, rnn_hxs, rnn_hxs
-
-class ATTBase_actor_dist_pb_add(NNBase):
-    def __init__(self, num_inputs, action_space, agent_num, recurrent=False, hidden_size=64):
-        super(ATTBase_actor_dist_pb_add, self).__init__(num_inputs, agent_num)
-        if recurrent:
-            num_inputs = hidden_size
-
-        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-                               constant_(x, 0), np.sqrt(2))
-
-        self.agent_num = agent_num
-        self.box_num = agent_num
-        self.actor = ObsEncoder_pb_add(hidden_size=hidden_size)
-        self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-        nn.init.orthogonal_(self.correlation_mat.data, gain=1)
-        self.critic_linear = nn.Sequential(
-                init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
-                nn.LayerNorm(hidden_size),
-                init_(nn.Linear(hidden_size, 1)))
-        num_actions = action_space.n            
-        self.dist = Categorical(hidden_size, num_actions)
-    
-    def forward(self, inputs, agent_num, box_num):
-        """
-        share_inputs: [batch_size, obs_dim*agent_num]
-        inputs: [batch_size, obs_dim]
-        """
-        hidden_actor = self.actor(inputs, agent_num, box_num, box_num)
-        dist = self.dist(hidden_actor, None)
-        return dist
-
-class ATTBase_critic_pb_add(NNBase):
-    def __init__(self, num_inputs, agent_num, recurrent=False, hidden_size=64):
-        super(ATTBase_critic_pb_add, self).__init__(num_inputs, agent_num)
-        if recurrent:
-            num_inputs = hidden_size
-
-        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-                               constant_(x, 0), np.sqrt(2))
-
-        self.agent_num = agent_num
-        self.box_num = agent_num
-        self.encoder = ObsEncoder_pb_add(hidden_size=hidden_size)
-
-        self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-        nn.init.orthogonal_(self.correlation_mat.data, gain=1)
-
-        self.critic_linear = nn.Sequential(
-                init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
-                nn.LayerNorm(hidden_size),
-                init_(nn.Linear(hidden_size, 1)))
-
-    def forward(self, share_inputs, inputs, agent_num, box_num, rnn_hxs, masks):
-        """
-        share_inputs: [batch_size, obs_dim*agent_num]
-        inputs: [batch_size, obs_dim]
-        """
-        batch_size = inputs.shape[0]
-        obs_dim = inputs.shape[-1]
-        f_ii = self.encoder(inputs, agent_num, box_num, box_num)
-        obs_beta_ij = torch.matmul(f_ii.view(batch_size,1,-1), self.correlation_mat) # (batch,1,hidden_size)
-        
-        # 矩阵f_ij
-        f_ij = self.encoder(share_inputs.reshape(-1,obs_dim),agent_num, box_num,box_num)
-        obs_encoder = f_ij.reshape(batch_size,agent_num,-1) # (batch_size, nagents, hidden_size)
-              
-        beta = torch.matmul(obs_beta_ij, obs_encoder.permute(0,2,1)).squeeze(1) # (batch_size,nagents)
-        alpha = F.softmax(beta,dim = 1).unsqueeze(2) # (batch_size,nagents,1)
-        vi = torch.mul(alpha,obs_encoder)
-        vi = torch.sum(vi,dim = 1)
-        value = self.critic_linear(vi)
-
-        return value, rnn_hxs, rnn_hxs
-
-class ATTBase_actor_dist_add(NNBase):
-    def __init__(self, num_inputs, action_space, agent_num, recurrent=False, assign_id=False, hidden_size=64):
-        super(ATTBase_actor_dist_add, self).__init__(num_inputs, agent_num)
-        if recurrent:
-            num_inputs = hidden_size
-
-        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-                               constant_(x, 0), np.sqrt(2))
-
-        self.agent_num = agent_num
-        self.actor = ObsEncoder_add(hidden_size=hidden_size)
+        self.num_agents = num_agents
+        if model_name == 'simple_spread' or 'hard_spread':
+            self.actor = ObsEncoder_add(hidden_size=hidden_size)
+        elif model_name == 'push_ball':
+            self.actor = ObsEncoder_pb_add(hidden_size=hidden_size)
         num_actions = action_space.n            
         self.dist = Categorical(hidden_size, num_actions)
 
-    def forward(self, inputs, agent_num):
+    def forward(self, inputs, num_agents):
         """
         inputs: [batch_size, obs_dim]
         """
-        hidden_actor = self.actor(inputs, agent_num)
+        hidden_actor = self.actor(inputs, num_agents)
         dist = self.dist(hidden_actor, None)
         return dist
-        # return action_out, action_log_probs_out, dist_entropy_out
 
-class ATTBase_critic_add(NNBase):
-    def __init__(self, num_inputs, agent_num, recurrent=False, assign_id=False, hidden_size=64):
-        super(ATTBase_critic_add, self).__init__(num_inputs, agent_num)
+class ATTBase_critic(NNBase):
+    def __init__(self, num_inputs, num_agents, model_name, recurrent=False, assign_id=False, hidden_size=100):
+        super(ATTBase_critic, self).__init__(num_inputs, num_agents)
         if recurrent:
             num_inputs = hidden_size
 
         init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
                                constant_(x, 0), np.sqrt(2))
 
-        self.agent_num = agent_num
-        # self.encoder = ObsEncoder(hidden_size=hidden_size)
-        self.encoder = ObsEncoder_add(hidden_size=hidden_size)
+        self.num_agents = num_agents
+        if model_name == 'simple_spread' or 'hard_spread':
+            self.encoder = ObsEncoder_add(hidden_size=hidden_size)
+        elif model_name == 'push_ball':
+            self.encoder = ObsEncoder_pb_add(hidden_size=hidden_size)
 
         self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
         nn.init.orthogonal_(self.correlation_mat.data, gain=1)
@@ -2074,64 +1320,19 @@ class ATTBase_critic_add(NNBase):
                 nn.LayerNorm(hidden_size),
                 init_(nn.Linear(hidden_size, 1)))
 
-    def forward(self, share_inputs, inputs, agent_num, rnn_hxs, masks):
+    def forward(self, share_inputs, inputs, num_agents, rnn_hxs, masks):
         """
-        share_inputs: [batch_size, obs_dim*agent_num]
+        share_inputs: [batch_size, obs_dim*num_agents]
         inputs: [batch_size, obs_dim]
         """
         batch_size = inputs.shape[0]
         obs_dim = inputs.shape[-1]
-        f_ii = self.encoder(inputs, agent_num)
+        f_ii = self.encoder(inputs, num_agents)
         obs_beta_ij = torch.matmul(f_ii.view(batch_size,1,-1), self.correlation_mat) # (batch,1,hidden_size)
         
         # 矩阵f_ij
-        f_ij = self.encoder(share_inputs.reshape(-1,obs_dim),agent_num)
-        obs_encoder = f_ij.reshape(batch_size,agent_num,-1) # (batch_size, nagents, hidden_size)
-        
-        beta = torch.matmul(obs_beta_ij, obs_encoder.permute(0,2,1)).squeeze(1) # (batch_size,nagents)
-        alpha = F.softmax(beta,dim = 1).unsqueeze(2) # (batch_size,nagents,1)
-        vi = torch.mul(alpha,obs_encoder)
-        vi = torch.sum(vi,dim = 1)
-        value = self.critic_linear(vi)
-
-        return value, rnn_hxs, rnn_hxs
-
-class ATTBase_critic_add_littleinit(NNBase):
-    def __init__(self, num_inputs, agent_num, recurrent=False, assign_id=False, hidden_size=64):
-        super(ATTBase_critic_add_littleinit, self).__init__(num_inputs, agent_num)
-        if recurrent:
-            num_inputs = hidden_size
-
-        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-                               constant_(x, 0), np.sqrt(2))
-        littleinit_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-                               constant_(x, 0), np.sqrt(0.01))
-
-        self.agent_num = agent_num
-        # self.encoder = ObsEncoder(hidden_size=hidden_size)
-        self.encoder = ObsEncoder_add(hidden_size=hidden_size)
-
-        self.correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-        nn.init.orthogonal_(self.correlation_mat.data, gain=1)
-
-        self.critic_linear = nn.Sequential(
-                init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
-                nn.LayerNorm(hidden_size),
-                littleinit_(nn.Linear(hidden_size, 1)))
-
-    def forward(self, share_inputs, inputs, agent_num, rnn_hxs, masks):
-        """
-        share_inputs: [batch_size, obs_dim*agent_num]
-        inputs: [batch_size, obs_dim]
-        """
-        batch_size = inputs.shape[0]
-        obs_dim = inputs.shape[-1]
-        f_ii = self.encoder(inputs, agent_num)
-        obs_beta_ij = torch.matmul(f_ii.view(batch_size,1,-1), self.correlation_mat) # (batch,1,hidden_size)
-        
-        # 矩阵f_ij
-        f_ij = self.encoder(share_inputs.reshape(-1,obs_dim),agent_num)
-        obs_encoder = f_ij.reshape(batch_size,agent_num,-1) # (batch_size, nagents, hidden_size)
+        f_ij = self.encoder(share_inputs.reshape(-1,obs_dim),num_agents)
+        obs_encoder = f_ij.reshape(batch_size,num_agents,-1) # (batch_size, nagents, hidden_size)
         
         beta = torch.matmul(obs_beta_ij, obs_encoder.permute(0,2,1)).squeeze(1) # (batch_size,nagents)
         alpha = F.softmax(beta,dim = 1).unsqueeze(2) # (batch_size,nagents,1)
@@ -2213,71 +1414,8 @@ class ATTBase_critic_sl(nn.Module):
 
         return value, rnn_hxs, rnn_hxs
 
-class ObsEncoder(nn.Module):
-    def __init__(self, hidden_size=100):
-        super(ObsEncoder, self).__init__()
-        
-        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-                               constant_(x, 0), np.sqrt(2))
-        self.self_encoder = nn.Sequential(
-                            init_(nn.Linear(4, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-        self.other_agent_encoder = nn.Sequential(
-                            init_(nn.Linear(2, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-        self.landmark_encoder = nn.Sequential(
-                            init_(nn.Linear(2, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-        self.agent_correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-        nn.init.orthogonal_(self.agent_correlation_mat.data, gain=1)
-        self.landmark_correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-        nn.init.orthogonal_(self.landmark_correlation_mat.data, gain=1)
-        self.fc = nn.Sequential(
-                    init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
-                    nn.LayerNorm(hidden_size)
-                    )
-        self.encoder_linear = nn.Sequential(
-                            init_(nn.Linear(hidden_size * 3, hidden_size)), nn.Tanh(),
-                            nn.LayerNorm(hidden_size),
-                            init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
-                            nn.LayerNorm(hidden_size)
-                            )
-
-    # agent_num需要手动设置一下
-    def forward(self, inputs, agent_num):
-        batch_size = inputs.shape[0]
-        obs_dim = inputs.shape[-1]
-        landmark_num = int((obs_dim-4)/2)-2*(agent_num-1)
-        #landmark_num = int((obs_dim-4-4*(agent_num-1))/3)
-        self_emb = self.self_encoder(inputs[:, :4])
-        other_agent_emb = []
-        beta_agent = []
-        landmark_emb = []
-        beta_landmark = []
-        #start = time.time()
-
-        agent_beta_ij = torch.matmul(self_emb.view(batch_size,1,-1), self.agent_correlation_mat)
-        landmark_beta_ij = torch.matmul(self_emb.view(batch_size,1,-1), self.landmark_correlation_mat) 
-
-        for i in range(agent_num - 1):
-            other_agent_emb.append(inputs[:, 4+2*landmark_num+2*i:4+2*landmark_num+2*(i+1)])
-        for i in range(landmark_num):
-            landmark_emb.append(inputs[:, 4+2*i:4+2*(i+1)])
-        other_agent_emb = torch.stack(other_agent_emb,dim = 1)    #(batch_size,n_agents-1,eb_dim)
-        other_agent_emb = self.other_agent_encoder(other_agent_emb)
-        beta_agent = torch.matmul(agent_beta_ij, other_agent_emb.permute(0,2,1)).squeeze(1)
-        landmark_emb = torch.stack(landmark_emb,dim = 1)    #(batch_size,n_agents-1,eb_dim)
-        landmark_emb = self.landmark_encoder(landmark_emb)
-        beta_landmark = torch.matmul(landmark_beta_ij, landmark_emb.permute(0,2,1)).squeeze(1)
-        alpha_agent = F.softmax(beta_agent,dim = 1).unsqueeze(2)   
-        alpha_landmark = F.softmax(beta_landmark,dim = 1).unsqueeze(2)
-        other_agent_vi = torch.mul(alpha_agent,other_agent_emb)
-        other_agent_vi = torch.sum(other_agent_vi,dim=1)
-        landmark_vi = torch.mul(alpha_landmark,landmark_emb)
-        landmark_vi = torch.sum(landmark_vi,dim=1)
-        gi = self.fc(self_emb)
-        f = self.encoder_linear(torch.cat([gi, other_agent_vi, landmark_vi], dim=1))
-        return f
-
-class ObsEncoder_add(nn.Module):
-    def __init__(self, hidden_size=100):
+class ObsEncoder_add(nn.Module): # simple spread
+    def __init__(self, hidden_size=64):
         super(ObsEncoder_add, self).__init__()
         
         init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
@@ -2340,177 +1478,8 @@ class ObsEncoder_add(nn.Module):
         f = self.encoder_linear(torch.cat([gi, other_agent_vi, landmark_vi], dim=1))
         return f
 
-# class ObsEncoder_listener(nn.Module):
-#     def __init__(self, num_inputs, hidden_size=100):
-#         super(ObsEncoder_listener, self).__init__()
-        
-#         init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-#                                constant_(x, 0), np.sqrt(2))
-#         self.self_embedding_dim = 2
-#         self.self_encoder = nn.Sequential(
-#                             init_(nn.Linear(self.self_embedding_dim, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-#         self.com_encoder = nn.Sequential(
-#                             init_(nn.Linear(3, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-#         self.landmark_encoder = nn.Sequential(
-#                             init_(nn.Linear(2, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-#         self.agent_correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-#         nn.init.orthogonal_(self.agent_correlation_mat.data, gain=1)
-#         self.landmark_correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-#         nn.init.orthogonal_(self.landmark_correlation_mat.data, gain=1)
-#         self.fc = nn.Sequential(
-#                     init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
-#                     nn.LayerNorm(hidden_size)
-#                     )
-#         self.encoder_linear = nn.Sequential(
-#                             init_(nn.Linear(hidden_size * 3, hidden_size)), nn.Tanh(),
-#                             nn.LayerNorm(hidden_size),
-#                             init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
-#                             nn.LayerNorm(hidden_size)
-#                             )
-
-#     # agent_num需要手动设置一下
-#     def forward(self, inputs, agent_num, landmark_num):
-#         batch_size = inputs.shape[0]
-#         obs_dim = inputs.shape[-1]
-#         self_emb = self.self_encoder(inputs[:, :self.self_embedding_dim])
-#         com_emb = []
-#         beta_agent = []
-#         landmark_emb = []
-#         beta_landmark = []
-
-#         agent_beta_ij = torch.matmul(self_emb.view(batch_size,1,-1), self.agent_correlation_mat)
-#         landmark_beta_ij = torch.matmul(self_emb.view(batch_size,1,-1), self.landmark_correlation_mat) 
-
-#         com_emb.append(inputs[:, -3:])
-#         for i in range(landmark_num):
-#             landmark_emb.append(inputs[:, self.self_embedding_dim+2*i:self.self_embedding_dim+2*(i+1)])
-#         com_emb = torch.stack(com_emb,dim = 1)    #(batch_size,1, eb_dim)
-#         com_emb = self.com_encoder(com_emb)
-#         beta_agent = torch.matmul(agent_beta_ij, com_emb.permute(0,2,1)).squeeze(1)
-#         landmark_emb = torch.stack(landmark_emb,dim = 1)    #(batch_size,n_agents-1,eb_dim)
-#         landmark_emb = self.landmark_encoder(landmark_emb)
-#         beta_landmark = torch.matmul(landmark_beta_ij, landmark_emb.permute(0,2,1)).squeeze(1)
-#         alpha_agent = F.softmax(beta_agent,dim = 1).unsqueeze(2)   
-#         alpha_landmark = F.softmax(beta_landmark,dim = 1).unsqueeze(2)
-#         com_vi = torch.mul(alpha_agent,com_emb)
-#         com_vi = torch.sum(com_vi,dim=1)
-#         landmark_vi = torch.mul(alpha_landmark,landmark_emb)
-#         landmark_vi = torch.sum(landmark_vi,dim=1)
-#         gi = self.fc(self_emb)
-#         f = self.encoder_linear(torch.cat([gi, com_vi, landmark_vi], dim=1))
-#         return f
-
-class ObsEncoder_listener(nn.Module):
-    def __init__(self, num_inputs , hidden_size=100):
-        super(ObsEncoder_listener, self).__init__()
-        
-        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-                               constant_(x, 0), np.sqrt(2))
-        self.encoder_linear = nn.Sequential(
-                            init_(nn.Linear(num_inputs, hidden_size)), nn.Tanh(),
-                            nn.LayerNorm(hidden_size)
-                            )
-
-    def forward(self, inputs, agent_num, landmark_num):
-        f = self.encoder_linear(inputs)
-        return f
-
-class ObsEncoder_speaker(nn.Module):
-    def __init__(self, hidden_size=100):
-        super(ObsEncoder_speaker, self).__init__()
-        
-        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-                               constant_(x, 0), np.sqrt(2))
-        self.encoder_linear = nn.Sequential(
-                            init_(nn.Linear(3, hidden_size)), nn.Tanh(),
-                            nn.LayerNorm(hidden_size)
-                            )
-
-    def forward(self, inputs, agent_num, landmark_num):
-        f = self.encoder_linear(inputs)
-        return f
-
-class ObsEncoder_pb(nn.Module): # push ball
-    def __init__(self, hidden_size=100):
-        super(ObsEncoder_pb, self).__init__()
-        
-        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
-                               constant_(x, 0), np.sqrt(2))
-        self.self_encoder = nn.Sequential(
-                            init_(nn.Linear(4, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-        self.landmark_encoder = nn.Sequential(
-                            init_(nn.Linear(2, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-        self.adv_encoder = nn.Sequential(
-                            init_(nn.Linear(2, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-        self.good_encoder = nn.Sequential(
-                            init_(nn.Linear(2, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-
-        self.adv_correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-        nn.init.orthogonal_(self.adv_correlation_mat.data, gain=1)
-        self.good_correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-        nn.init.orthogonal_(self.good_correlation_mat.data, gain=1)
-        self.landmark_correlation_mat = nn.Parameter(torch.FloatTensor(hidden_size,hidden_size),requires_grad=True)
-        nn.init.orthogonal_(self.landmark_correlation_mat.data, gain=1)
-        self.fc = nn.Sequential(
-                    init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(), nn.LayerNorm(hidden_size))
-        self.encoder_linear = nn.Sequential(
-                            init_(nn.Linear(hidden_size * 4, hidden_size)), nn.Tanh(),
-                            nn.LayerNorm(hidden_size),
-                            init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
-                            nn.LayerNorm(hidden_size))
-
-    def forward(self, inputs, adv_num, good_num, landmark_num):
-        batch_size = inputs.shape[0]
-        obs_dim = inputs.shape[-1]
-        emb_self = self.self_encoder(inputs[:, :4])
-      
-        emb_adv = []
-        beta_adv = []
-        emb_good = []
-        beta_good = []
-        emb_landmark = []
-        beta_landmark = []
-
-        beta_adv_ij = torch.matmul(emb_self.view(batch_size,1,-1), self.adv_correlation_mat)
-        beta_good_ij = torch.matmul(emb_self.view(batch_size,1,-1), self.good_correlation_mat)
-        beta_landmark_ij = torch.matmul(emb_self.view(batch_size,1,-1), self.landmark_correlation_mat) 
-        for i in range(adv_num-1):
-            emb_adv.append(inputs[:, 4+2*i:4+2*(i+1)])
-        good_offset = 4 + 2*(adv_num-1)
-        for i in range(good_num):
-            emb_good.append(inputs[:, good_offset+2*i:good_offset+2*(i+1)])
-        landmark_offset = 4 + 2*(adv_num-1) + 2*good_num
-        for i in range(landmark_num):
-            emb_landmark.append(inputs[:, landmark_offset+2*i:landmark_offset+2*(i+1)])
-
-        emb_adv = torch.stack(emb_adv,dim = 1)    #(batch_size,n_agents-1,eb_dim)
-        emb_adv = self.adv_encoder(emb_adv)
-        beta_adv = torch.matmul(beta_adv_ij, emb_adv.permute(0,2,1)).squeeze(1)
-
-        emb_good = torch.stack(emb_good,dim = 1)    #(batch_size,n_agents-1,eb_dim)
-        emb_good = self.good_encoder(emb_good)
-        beta_good = torch.matmul(beta_good_ij, emb_good.permute(0,2,1)).squeeze(1)
-
-        emb_landmark = torch.stack(emb_landmark,dim = 1)    #(batch_size,n_agents-1,eb_dim)
-        emb_landmark = self.landmark_encoder(emb_landmark)
-        beta_landmark = torch.matmul(beta_landmark_ij, emb_landmark.permute(0,2,1)).squeeze(1)
-
-        alpha_adv = F.softmax(beta_adv,dim = 1).unsqueeze(2)   
-        alpha_good = F.softmax(beta_good,dim = 1).unsqueeze(2)   
-        alpha_landmark = F.softmax(beta_landmark,dim = 1).unsqueeze(2)
-        adv_vi = torch.mul(alpha_adv,emb_adv)
-        adv_vi = torch.sum(adv_vi,dim=1)
-        good_vi = torch.mul(alpha_good,emb_good)
-        good_vi = torch.sum(good_vi,dim=1)
-        landmark_vi = torch.mul(alpha_landmark,emb_landmark)
-        landmark_vi = torch.sum(landmark_vi,dim=1)
-
-        gi = self.fc(emb_self)
-        f = self.encoder_linear(torch.cat([gi, adv_vi, good_vi, landmark_vi], dim=1))
-        return f
-
 class ObsEncoder_pb_add(nn.Module): # push ball
-    def __init__(self, hidden_size=100):
+    def __init__(self, hidden_size=64):
         super(ObsEncoder_pb_add, self).__init__()
         
         init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
@@ -2538,10 +1507,14 @@ class ObsEncoder_pb_add(nn.Module): # push ball
                             init_(nn.Linear(hidden_size, hidden_size)), nn.Tanh(),
                             nn.LayerNorm(hidden_size))
 
-    def forward(self, inputs, adv_num, good_num, landmark_num):
+    def forward(self, inputs, num_agents):
         batch_size = inputs.shape[0]
         obs_dim = inputs.shape[-1]
         emb_self = self.self_encoder(inputs[:, :4])
+
+        adv_num = num_agents
+        good_num = num_agents
+        landmark_num = num_agents
       
         emb_adv = []
         beta_adv = []
@@ -2587,6 +1560,38 @@ class ObsEncoder_pb_add(nn.Module): # push ball
         gi = self.fc(emb_self)
         f = self.encoder_linear(torch.cat([gi, adv_vi, good_vi, landmark_vi], dim=1))
         return f
+
+class ObsEncoder_listener(nn.Module):
+    def __init__(self, num_inputs , hidden_size=100):
+        super(ObsEncoder_listener, self).__init__()
+        
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+        self.encoder_linear = nn.Sequential(
+                            init_(nn.Linear(num_inputs, hidden_size)), nn.Tanh(),
+                            nn.LayerNorm(hidden_size)
+                            )
+
+    def forward(self, inputs, agent_num, landmark_num):
+        f = self.encoder_linear(inputs)
+        return f
+
+class ObsEncoder_speaker(nn.Module):
+    def __init__(self, hidden_size=100):
+        super(ObsEncoder_speaker, self).__init__()
+        
+        init_ = lambda m: init(m, nn.init.orthogonal_, lambda x: nn.init.
+                               constant_(x, 0), np.sqrt(2))
+        self.encoder_linear = nn.Sequential(
+                            init_(nn.Linear(3, hidden_size)), nn.Tanh(),
+                            nn.LayerNorm(hidden_size)
+                            )
+
+    def forward(self, inputs, agent_num, landmark_num):
+        f = self.encoder_linear(inputs)
+        return f
+
+# transformer
 
 class FeedForward(nn.Module):
 

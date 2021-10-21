@@ -111,13 +111,32 @@ def get_config():
     
     # eval
     parser.add_argument("--eval", action='store_true', default=False)
-    parser.add_argument("--eval_interval", type=int, default=10)
+    parser.add_argument("--eval_interval", type=int, default=5)
     parser.add_argument("--eval_episodes", type=int, default=32)
     
     # render
     parser.add_argument("--save_gifs", action='store_true', default=False)
     parser.add_argument("--ifi", type=float, default=0.333333)    
     parser.add_argument("--model_dir", type=str, default=None)
+
+    # wandb
+    parser.add_argument("--use_wandb", action='store_true', default=False)
+
+    # variational curriculum learning
+    parser.add_argument("--use_parent_sampling", action='store_false', default=True)
+    parser.add_argument("--use_gradient_step", action='store_false', default=True)
+    parser.add_argument("--del_switch", type=str, default='novelty', help="novelty means diversified, old means FIFO, random means random del")
+    parser.add_argument("--buffer_length", type=int, default=2000)
+    parser.add_argument("--h", type=float, default=1.0, help="h in the RBFkernel")
+    parser.add_argument("--epsilon", type=float, default=0.6, help="uniform noise")
+    parser.add_argument("--delta", type=float, default=0.6, help="gradient step")
+    parser.add_argument('--sol_prop', type=float, default=0.05, help="proportion of solved samples")
+    parser.add_argument('--B_exp', type=int, default=150, help="number of Bexp")
+    parser.add_argument('--Rmin', type=int, default=0.5, help="the lower bound of V")
+    parser.add_argument('--Rmax', type=int, default=0.95, help="the upper bound of V")
+    parser.add_argument('--fixed_interval', type=int, default=3, help='fixed episodes for training tasks')
+    parser.add_argument('--save_node',action='store_false', default=True)
+    parser.add_argument('--save_node_interval', type=int, default=10)
     
     args = parser.parse_args()
 

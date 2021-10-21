@@ -6,7 +6,7 @@ from .multi_discrete import MultiDiscrete
 from .core import Agent, Landmark
 
 # update bounds to center around agent
-cam_range = 2.5
+cam_range = 3
 
 # environment for all agents in the multiagent world
 # currently code assumes that no agents will be created/destroyed at runtime!
@@ -225,6 +225,7 @@ class MultiAgentEnv(gym.Env):
         self.reset_callback(self.world)
         self._reset_render()
         self.agents = self.world.policy_agents
+        num_agents_all = len(self.world.agents)
         # set required vectorized gym env property
         self.n = len(self.world.policy_agents)
         # if true, even the action is continuous, action will be performed discretely
@@ -273,7 +274,7 @@ class MultiAgentEnv(gym.Env):
             agent.state.p_vel = np.zeros(self.world.dim_p)
             agent.state.c = np.zeros(self.world.dim_c)
         for i, landmark in enumerate(self.world.landmarks):
-            landmark.state.p_pos = starts_one[i+now_agent_num]
+            landmark.state.p_pos = starts_one[i+num_agents_all]
             landmark.state.p_vel = np.zeros(self.world.dim_p)
         self._reset_render()
 
@@ -286,7 +287,7 @@ class MultiAgentEnv(gym.Env):
     def new_starts_obs_pb(self,starts_one, now_agent_num, now_box_num):
         # make a new world
         args = 0 # 无关参数
-        self.world = self.make_callback(args, now_agent_num, now_box_num)
+        self.world = self.make_callback(args, now_agent_num)
         # reset world
         self.reset_callback(self.world)
         self._reset_render()

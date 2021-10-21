@@ -350,8 +350,8 @@ def main():
     num_landmarks = 4
     all_frames = []
     cover_rate = 0
-    random.seed(1)
-    np.random.seed(1)
+    random.seed(args.seed)
+    np.random.seed(args.seed)
     boundary = {'x':[-1,1],'y':[-1,1]}
     goals =  goal_proposal(
         num_agents=num_agents, boundary=boundary, env_name=args.scenario_name, critic_k=1, 
