@@ -5,8 +5,8 @@ scenario="simple_spread"
 num_landmarks=4
 num_agents=4
 # algo="woparentsampling_sp_4agents"
-# algo="VACL_sp_check_newmovenodes"
-algo='check'
+algo="VACL_sp_check_withRmin"
+# algo='check'
 seed=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
