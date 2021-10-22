@@ -225,6 +225,8 @@ class MultiAgentEnv(gym.Env):
         self.reset_callback(self.world)
         self._reset_render()
         self.agents = self.world.policy_agents
+        # for balls
+        self.agents_all = self.world.agents 
         num_agents_all = len(self.world.agents)
         # set required vectorized gym env property
         self.n = len(self.world.policy_agents)
@@ -269,7 +271,7 @@ class MultiAgentEnv(gym.Env):
             agent.action.c = np.zeros(self.world.dim_c)
         
         # set agent and landmark
-        for i, agent in enumerate(self.agents):
+        for i, agent in enumerate(self.agents_all):
             agent.state.p_pos = starts_one[i]
             agent.state.p_vel = np.zeros(self.world.dim_p)
             agent.state.c = np.zeros(self.world.dim_c)
