@@ -523,10 +523,10 @@ class node_buffer():
                 self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i]-del_archive_num]))
                 del self.archive[self.choose_archive_index[i]-del_archive_num]
                 del_archive_num += 1
-            elif self.eval_score[i] < Rmin:
-                if len(self.archive) > self.archive_initial_length:
-                    del self.archive[self.choose_archive_index[i]-del_archive_num]
-                    del_archive_num += 1
+            # elif self.eval_score[i] < Rmin:
+            #     if len(self.archive) > self.archive_initial_length:
+            #         del self.archive[self.choose_archive_index[i]-del_archive_num]
+            #         del_archive_num += 1
         self.parent_all += self.parent
         if len(self.archive) > self.buffer_length:
             if del_switch=='novelty' : # novelty del

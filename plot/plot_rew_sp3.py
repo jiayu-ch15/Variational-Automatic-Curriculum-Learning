@@ -13,7 +13,7 @@ def main():
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
     plt.style.use('ggplot')
-    plt.figure(figsize=(8,6))
+    plt.figure(figsize=(7,6))
 
     # # region sp3_navigation
     # begin = 0
