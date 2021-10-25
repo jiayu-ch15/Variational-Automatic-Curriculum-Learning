@@ -1,8 +1,8 @@
-# MAPPO-SC (Multi-agent PPO for StarCraftII/Hanabi/ssd/mpe)
+# Variational Automatic Curriculum Learning
 
 ## 1.Install
 
-test on CUDA == 10.1
+test on CUDA == 10.0
 
 ```Bash
 git clone https://github.com/zoeyuchao/mappo-sc.git
