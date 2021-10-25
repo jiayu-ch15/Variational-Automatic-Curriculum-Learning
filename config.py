@@ -111,7 +111,7 @@ def get_config():
     
     # eval
     parser.add_argument("--eval", action='store_true', default=False)
-    parser.add_argument("--eval_interval", type=int, default=10)
+    parser.add_argument("--eval_interval", type=int, default=5)
     parser.add_argument("--eval_episodes", type=int, default=32)
     
     # render
@@ -132,6 +132,9 @@ def get_config():
     parser.add_argument('--fixed_interval', type=int, default=3, help='fixed episodes for training tasks')
     parser.add_argument('--save_node',action='store_false', default=True)
     parser.add_argument('--save_node_interval', type=int, default=10)
+
+    # wandb
+    parser.add_argument('--use_wandb',action='store_true', default=False)
     
     args = parser.parse_args()
 
