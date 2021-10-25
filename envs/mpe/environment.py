@@ -217,7 +217,7 @@ class MultiAgentEnv(gym.Env):
         
         return obs_n, available_action
 
-    def new_starts_obs(self,starts_one,now_agent_num):
+    def set_initial_tasks_sp(self,starts_one,now_agent_num):
         # make a new world
         args = 0 # 无关参数
         self.world = self.make_callback(args, now_agent_num)
@@ -283,10 +283,10 @@ class MultiAgentEnv(gym.Env):
             obs_n.append(self._get_obs(agent))
         return obs_n
 
-    def new_starts_obs_pb(self,starts_one, now_agent_num, now_box_num):
+    def set_initial_tasks_pb(self,starts_one, now_agent_num):
         # make a new world
         args = 0 # 无关参数
-        self.world = self.make_callback(args, now_agent_num, now_box_num)
+        self.world = self.make_callback(args, now_agent_num)
         # reset world
         self.reset_callback(self.world)
         self._reset_render()

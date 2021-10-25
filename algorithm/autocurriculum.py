@@ -537,7 +537,114 @@ class node_buffer():
                 one_starts_agent = []
                 one_starts_landmark = []
             return archive
-
+        elif self.args.env_name == 'MPE' and self.args.scenario_name == 'push_ball':
+            landmark_size = 0.3
+            box_size = 0.3
+            agent_size = 0.2
+            if now_agent_num <= 2:
+                start_boundary = [-0.4,0.4,-0.4,0.4]
+            else:
+                start_boundary = [-0.8,0.8,-0.8,0.8]
+            cell_size = max([landmark_size,box_size,agent_size]) + 0.1
+            grid_num = round((start_boundary[1]-start_boundary[0]) / cell_size)
+            init_origin_node = np.array([start_boundary[0]+0.5*cell_size,start_boundary[3]-0.5*cell_size]) # left, up
+            assert grid_num ** 2 >= now_agent_num + now_box_num
+            grid = np.zeros(shape=(grid_num,grid_num))
+            grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
+            one_starts_landmark = []
+            one_starts_agent = []
+            one_starts_box = []
+            one_starts_box_grid = []
+            archive = [] 
+            for j in range(num_case):
+                # box location
+                for i in range(now_box_num):
+                    while 1:
+                        box_location_grid = np.random.randint(0, grid.shape[0], 2) 
+                        if grid[box_location_grid[0],box_location_grid[1]]==1:
+                            continue
+                        else:
+                            grid[box_location_grid[0],box_location_grid[1]] = 1
+                            extra_room = (cell_size - landmark_size) / 2
+                            extra_x = np.random.uniform(-extra_room,extra_room)
+                            extra_y = np.random.uniform(-extra_room,extra_room)
+                            box_location = np.array([(box_location_grid[0]+0.5)*cell_size+extra_x,-(box_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                            one_starts_box.append(copy.deepcopy(box_location))
+                            one_starts_box_grid.append(copy.deepcopy(box_location_grid))
+                            break
+                grid_without_landmark = copy.deepcopy(grid)
+                # landmark location
+                indices = random.sample(range(now_box_num), now_box_num)
+                num_try = 0
+                num_tries = 50
+                for k in indices:
+                    around = 1
+                    while num_try < num_tries:
+                        delta_x_direction = random.randint(-around,around)
+                        delta_y_direction = random.randint(-around,around)
+                        landmark_location_x = min(max(0,one_starts_box_grid[k][0]+delta_x_direction),grid.shape[0]-1)
+                        landmark_location_y = min(max(0,one_starts_box_grid[k][1]+delta_y_direction),grid.shape[1]-1)
+                        landmark_location_grid = np.array([landmark_location_x,landmark_location_y])
+                        if grid[landmark_location_grid[0],landmark_location_grid[1]]==1:
+                            num_try += 1
+                            if num_try >= num_tries and around==1:
+                                around = 2
+                                num_try = 0
+                            assert num_try<num_tries or around==1, 'case %i can not find landmark pos'%j
+                            continue
+                        else:
+                            grid[landmark_location_grid[0],landmark_location_grid[1]] = 1
+                            extra_room = (cell_size - landmark_size) / 2
+                            extra_x = np.random.uniform(-extra_room,extra_room)
+                            extra_y = np.random.uniform(-extra_room,extra_room)
+                            landmark_location = np.array([(landmark_location_grid[0]+0.5)*cell_size+extra_x,-(landmark_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                            one_starts_landmark.append(copy.deepcopy(landmark_location))
+                            break
+                # agent_location
+                indices_agent = random.sample(range(now_box_num), now_box_num)
+                num_try = 0
+                num_tries = 50
+                for k in indices_agent:
+                    around = 1
+                    while num_try < num_tries:
+                        delta_x_direction = random.randint(-around,around)
+                        delta_y_direction = random.randint(-around,around)
+                        agent_location_x = one_starts_box_grid[k][0]+delta_x_direction
+                        agent_location_y = one_starts_box_grid[k][1]+delta_y_direction
+                        agent_location_grid = np.array([agent_location_x,agent_location_y])
+                        if agent_location_x < 0 or agent_location_y < 0 or agent_location_x > grid.shape[0]-1 or  agent_location_y > grid.shape[0]-1:
+                            extra_room = (cell_size - landmark_size) / 2
+                            extra_x = np.random.uniform(-extra_room,extra_room)
+                            extra_y = np.random.uniform(-extra_room,extra_room)
+                            agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                            one_starts_agent.append(copy.deepcopy(agent_location))
+                            break
+                        else:
+                            if grid_without_landmark[agent_location_grid[0],agent_location_grid[1]]==1:
+                                num_try += 1
+                                if num_try >= num_tries and around==1:
+                                    around = 2
+                                    num_try = 0
+                                assert num_try<num_tries or around==1, 'case %i can not find agent pos'%j
+                                continue
+                            else:
+                                grid_without_landmark[agent_location_grid[0],agent_location_grid[1]] = 1
+                                extra_room = (cell_size - landmark_size) / 2
+                                extra_x = np.random.uniform(-extra_room,extra_room)
+                                extra_y = np.random.uniform(-extra_room,extra_room)
+                                agent_location = np.array([(agent_location_grid[0]+0.5)*cell_size+extra_x,-(agent_location_grid[1]+0.5)*cell_size+extra_y]) + init_origin_node
+                                one_starts_agent.append(copy.deepcopy(agent_location))
+                                break
+                # select_starts.append(one_starts_agent+one_starts_landmark)
+                archive.append(one_starts_agent+one_starts_box+one_starts_landmark)
+                grid = np.zeros(shape=(grid_num,grid_num))
+                grid_without_landmark = np.zeros(shape=(grid_num,grid_num))
+                one_starts_agent = []
+                one_starts_landmark = []
+                one_starts_box = []
+                one_starts_box_grid = []
+            return archive
+            
     def get_novelty(self,list1,list2):
         # list1是需要求novelty的
         topk=5

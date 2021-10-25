@@ -125,16 +125,15 @@ def worker(remote, parent_remote, env_fn_wrapper):
             now_box_num = cmd[2]
             ob, available_actions= env.reset(now_agent_num,now_box_num)
             remote.send((ob, available_actions))
-        elif cmd[0] == 'new_starts_obs':
+        elif cmd[0] == 'set_initial_tasks_sp':
             now_agent_num = cmd[1]
             starts_one = cmd[2]
-            ob = env.new_starts_obs(starts_one,now_agent_num)
+            ob = env.set_initial_tasks_sp(starts_one,now_agent_num)
             remote.send(ob)
-        elif cmd[0] == 'new_starts_obs_pb':
+        elif cmd[0] == 'set_initial_tasks_pb':
             now_agent_num = cmd[1]
-            now_box_num = cmd[2]
-            starts_one = cmd[3]
-            ob = env.new_starts_obs_pb(starts_one, now_agent_num, now_box_num)
+            starts_one = cmd[2]
+            ob = env.set_initial_tasks_pb(starts_one, now_agent_num)
             remote.send(ob)
         elif cmd[0] == 'new_starts_obs_sl':
             starts_one = cmd[1]
@@ -226,12 +225,12 @@ class SubprocVecEnv(VecEnv):
         VecEnv.__init__(self, self.length, observation_space, action_space)
         return np.stack(obs), np.stack(available_actions)
 
-    def new_starts_obs(self, starts, now_agent_num, now_num_processes):
+    def set_initial_tasks_sp(self, starts, now_agent_num, now_num_processes):
         i = 0
         results = []
         for remote in self.remotes:
             if i < now_num_processes:
-                tmp_list = ['new_starts_obs', now_agent_num, starts[i]]
+                tmp_list = ['set_initial_tasks_sp', now_agent_num, starts[i]]
                 remote.send((tmp_list, None))
                 i += 1
         i = 0
@@ -243,13 +242,13 @@ class SubprocVecEnv(VecEnv):
         observation_space, action_space = self.remotes[0].recv()
         VecEnv.__init__(self, self.length, observation_space, action_space)
         return np.stack(results)
-
-    def new_starts_obs_pb(self, starts, now_agent_num, now_box_num, now_num_processes):
+        
+    def set_initial_tasks_pb(self, starts, now_agent_num, now_num_processes):
         i = 0
         results = []
         for remote in self.remotes:
             if i < now_num_processes:
-                tmp_list = ['new_starts_obs_pb', now_agent_num, now_box_num, starts[i]]
+                tmp_list = ['set_initial_tasks_pb', now_agent_num, starts[i]]
                 remote.send((tmp_list, None))
                 i += 1
         i = 0
