@@ -499,6 +499,8 @@ class node_buffer():
         self.archive_initial_length = archive_initial_length
         if args.env_name == 'MPE' and args.scenario_name == 'simple_spread':
             self.legal_region = {'agent':{'x':[[-3,3]],'y': [[-3,3]]},'landmark':{'x':[[-3,3]],'y': [[-3,3]]}}
+        elif args.env_name == 'MPE' and args.scenario_name == 'push_ball':
+            self.legal_region = {'agent':{'x':[[-2,2]],'y': [[-2,2]]},'landmark':{'x':[[-2,2]],'y': [[-2,2]]}}
         self.archive = self.initial_tasks(archive_initial_length, self.num_agents)
         # self.archive_score = np.zeros(len(self.archive))
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
@@ -541,6 +543,7 @@ class node_buffer():
             landmark_size = 0.3
             box_size = 0.3
             agent_size = 0.2
+            now_box_num = now_agent_num
             if now_agent_num <= 2:
                 start_boundary = [-0.4,0.4,-0.4,0.4]
             else:
@@ -576,7 +579,7 @@ class node_buffer():
                 # landmark location
                 indices = random.sample(range(now_box_num), now_box_num)
                 num_try = 0
-                num_tries = 50
+                num_tries = 100
                 for k in indices:
                     around = 1
                     while num_try < num_tries:
@@ -603,7 +606,7 @@ class node_buffer():
                 # agent_location
                 indices_agent = random.sample(range(now_box_num), now_box_num)
                 num_try = 0
-                num_tries = 50
+                num_tries = 100
                 for k in indices_agent:
                     around = 1
                     while num_try < num_tries:

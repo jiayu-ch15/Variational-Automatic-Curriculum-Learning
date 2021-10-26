@@ -14,8 +14,8 @@ from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
 from algorithm.autocurriculum import node_buffer, make_parallel_env,log_infos
-from algorithm.ppo import PPO,PPO3
-from algorithm.model import Policy,Policy3, ATTBase_actor_dist_add, ATTBase_critic_add
+from algorithm.ppo import PPO
+from algorithm.model import Policy, ATTBase_actor, ATTBase_critic
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -32,23 +32,6 @@ import matplotlib.pyplot as plt
 import pdb
 import wandb
 np.set_printoptions(linewidth=1000)
-
-def make_parallel_env(args):
-    def get_env_fn(rank):
-        def init_env():
-            if args.env_name == "MPE":
-                env = MPEEnv(args)
-            else:
-                print("Can not support the " + args.env_name + "environment." )
-                raise NotImplementedError
-            env.seed(args.seed + rank * 1000)
-            # np.random.seed(args.seed + rank * 1000)
-            return env
-        return init_env
-    if args.n_rollout_threads == 1:
-        return DummyVecEnv([get_env_fn(0)])
-    else:
-        return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 def main():
     args = get_config()
@@ -105,9 +88,10 @@ def main():
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:
-        actor_base = ATTBase_actor_dist_add(envs.observation_space[0].shape[0], envs.action_space[0], num_agents)
-        critic_base = ATTBase_critic_add(envs.observation_space[0].shape[0], num_agents)
-        actor_critic = Policy3(envs.observation_space[0], 
+        model_name = args.scenario_name
+        actor_base = ATTBase_actor(envs.observation_space[0].shape[0], envs.action_space[0], num_agents, model_name)
+        critic_base = ATTBase_critic(envs.observation_space[0].shape[0], num_agents, model_name)
+        actor_critic = Policy(envs.observation_space[0], 
                     envs.action_space[0],
                     num_agents = num_agents,
                     base=None,
@@ -132,7 +116,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO3(actor_critic,
+        agents = PPO(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
