@@ -14,7 +14,7 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.autocurriculum import node_buffer, make_parallel_env, log_infos
+from algorithm.autocurriculum import node_buffer, log_infos
 from algorithm.ppo import PPO
 from algorithm.model import Policy, ATTBase_actor, ATTBase_critic
 
@@ -32,6 +32,23 @@ import copy
 import wandb
 import pdb
 np.set_printoptions(linewidth=1000)
+
+def make_parallel_env(args):
+    def get_env_fn(rank):
+        def init_env():
+            if args.env_name == "MPE":
+                env = MPEEnv(args)
+            else:
+                print("Can not support the " + args.env_name + "environment." )
+                raise NotImplementedError
+            env.seed(args.seed + rank * 1000)
+            # np.random.seed(args.seed + rank * 1000)
+            return env
+        return init_env
+    if args.n_rollout_threads == 1:
+        return DummyVecEnv([get_env_fn(0)])
+    else:
+        return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 def main():
     args = get_config()
@@ -207,7 +224,7 @@ def main():
     np.random.seed(args.seed)
     node = node_buffer( args=args,
                         phase_num_agents=num_agents,
-                        archive_initial_length=args.n_rollout_threads)
+                        archive_initial_length=args.buffer_length)
     
     # run
     begin = time.time()

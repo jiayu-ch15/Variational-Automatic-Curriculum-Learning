@@ -32,15 +32,20 @@ def get_config():
     # evaluation
     parser.add_argument("--historical_length", type=int, default=5)
     
-    # do not need num_agents
     # starcraft2
     parser.add_argument("--map_name", type=str, default='3m')
     # hide and seek
+    parser.add_argument("--task_type", type=str, default='all')
     parser.add_argument("--num_seekers", type=int, default=1)
     parser.add_argument("--num_hiders", type=int, default=1)
     parser.add_argument("--num_boxes", type=int, default=1)
     parser.add_argument("--num_ramps", type=int, default=1)
     parser.add_argument("--num_food", type=int, default=0)
+    parser.add_argument("--floor_size", type=float, default=6.0)
+    parser.add_argument("--grid_size", type=int, default=30)
+    parser.add_argument("--fixed_door", action='store_false', default=True)
+    parser.add_argument("--spwan_obs", action='store_true', default=False)
+    parser.add_argument("--env_horizon", type=int, default=30)
     
     # network
     parser.add_argument("--share_policy", action='store_false', default=True, help='agent share the same policy')

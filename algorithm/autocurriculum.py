@@ -13,23 +13,6 @@ from envs import MPEEnv
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
 from utils.storage import RolloutStorage, RolloutStorage_share
 
-def make_parallel_env(args):
-    def get_env_fn(rank):
-        def init_env():
-            if args.env_name == "MPE":
-                env = MPEEnv(args)
-            else:
-                print("Can not support the " + args.env_name + "environment." )
-                raise NotImplementedError
-            env.seed(args.seed + rank * 1000)
-            # np.random.seed(args.seed + rank * 1000)
-            return env
-        return init_env
-    if args.n_rollout_threads == 1:
-        return DummyVecEnv([get_env_fn(0)])
-    else:
-        return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
-
 class node_buffer_old():
     def __init__(self,num_agents,buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary,env_name):
         self.num_agents = num_agents

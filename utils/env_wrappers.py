@@ -149,6 +149,14 @@ def simplifyworker(remote, parent_remote, env_fn_wrapper):
                 if all(done):
                     ob = env.reset()           
             remote.send((ob, reward, done, info))
+        elif cmd[0] == 'init_box_locking':
+            starts_one = cmd[1]
+            ob = env.reset(starts_one)
+            remote.send(ob)
+        elif cmd[0] == 'init_hidenseek':
+            starts_one = cmd[1]
+            ob = env.reset(starts_one)
+            remote.send(ob)
         elif cmd == 'reset':
             ob = env.reset()         
             remote.send((ob))
@@ -203,6 +211,36 @@ class SimplifySubprocVecEnv(ShareVecEnv):
             remote.send(('get_state', None))
         state = [remote.recv() for remote in self.remotes]
         return np.stack(state)
+
+    def init_box_locking(self, starts, now_num_processes):
+        i = 0
+        results = []
+        for remote in self.remotes:
+            if i < now_num_processes:
+                tmp_list = ['init_box_locking',starts[i]]
+                remote.send((tmp_list, None))
+                i += 1
+        i = 0
+        for remote in self.remotes:
+            if i < now_num_processes:
+                results.append(remote.recv())
+                i += 1
+        return np.stack(results)
+    
+    def init_hidenseek(self, starts, now_num_processes):
+        i = 0
+        results = []
+        for remote in self.remotes:
+            if i < now_num_processes:
+                tmp_list = ['init_hidenseek',starts[i]]
+                remote.send((tmp_list, None))
+                i += 1
+        i = 0
+        for remote in self.remotes:
+            if i < now_num_processes:
+                results.append(remote.recv())
+                i += 1
+        return np.stack(results)
 
     def reset(self):
         for remote in self.remotes:
