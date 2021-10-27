@@ -148,13 +148,10 @@ class MultiAgentEnv(gym.Env):
            
         return obs_n, reward_n, done_n, info_n, available_action
 
-    def reset(self, now_agent_num, now_box_num=None):        
+    def reset(self, now_agent_num):        
         # make a new world
         args = 0 # 无关参数
-        if now_box_num is None:
-            self.world = self.make_callback(args, now_agent_num)
-        else:
-            self.world = self.make_callback(args, now_agent_num, now_box_num)
+        self.world = self.make_callback(args, now_agent_num)
         # reset world
         self.reset_callback(self.world)
         self._reset_render()

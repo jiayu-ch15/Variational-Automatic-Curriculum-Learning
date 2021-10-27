@@ -111,7 +111,7 @@ def get_config():
     
     # eval
     parser.add_argument("--eval", action='store_true', default=False)
-    parser.add_argument("--eval_interval", type=int, default=5)
+    parser.add_argument("--eval_interval", type=int, default=1)
     parser.add_argument("--eval_episodes", type=int, default=32)
     
     # render

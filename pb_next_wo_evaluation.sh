@@ -4,9 +4,9 @@ env="MPE"
 scenario="push_ball"
 num_landmarks=2
 num_agents=2
-algo="woparentsampling_pb"
+algo="pb_woevalute_eval1check"
 # algo="check"
-seed=3
+seed=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
 

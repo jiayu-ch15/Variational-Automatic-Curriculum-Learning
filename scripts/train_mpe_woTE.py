@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+import sys
+sys.path.append("..")
 import copy
 import glob
 import os
@@ -13,7 +14,7 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.autocurriculum import node_buffer, make_parallel_env,log_infos
+from algorithm.autocurriculum import node_buffer, make_parallel_env, log_infos
 from algorithm.ppo import PPO
 from algorithm.model import Policy, ATTBase_actor, ATTBase_critic
 
@@ -28,15 +29,14 @@ import itertools
 from scipy.spatial.distance import cdist
 import random
 import copy
-import matplotlib.pyplot as plt
-import pdb
 import wandb
+import pdb
 np.set_printoptions(linewidth=1000)
 
 def main():
     args = get_config()
     if args.use_wandb:
-        run = wandb.init(project='curriculum',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+        run = wandb.init(project='pb_tricks',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -196,7 +196,6 @@ def main():
                     args.hidden_size)
             rollouts.append(ro)
     
-
     starts = []
     N_parent = int(args.n_rollout_threads * args.sol_prop)
     N_active = args.n_rollout_threads - N_parent

@@ -284,8 +284,8 @@ class Policy_pb_3(nn.Module):
         masks = masks.to(self.device)
         if available_actions is not None:
             available_actions = available_actions.to(self.device)
-        # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        dist = self.actor_base(inputs, self.num_agents, self.num_agents) 
+        # dist = self.actor_base(inputs, self.num_agents, self.num_agents) 
+        dist = self.actor_base(inputs, self.num_agents) 
         if deterministic:
             action = dist.mode()
         else:
@@ -293,7 +293,8 @@ class Policy_pb_3(nn.Module):
         action_log_probs = dist.log_probs(action)
         action_out = action
         action_log_probs_out = action_log_probs 
-        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_agents, rnn_hxs_actor, masks)         
+        # value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_agents, rnn_hxs_actor, masks)   
+        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, rnn_hxs_actor, masks)       
  
         return value, action_out, action_log_probs_out, rnn_hxs_actor, rnn_hxs_critic
 
@@ -305,8 +306,8 @@ class Policy_pb_3(nn.Module):
         rnn_hxs_critic = rnn_hxs_critic.to(self.device)
         masks = masks.to(self.device)
         
-        # value, _, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_agents, rnn_hxs_actor, masks)
+        # value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_agents, rnn_hxs_actor, masks)
+        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, rnn_hxs_actor, masks)
         
         return value, rnn_hxs_actor, rnn_hxs_critic
 
@@ -319,13 +320,14 @@ class Policy_pb_3(nn.Module):
         masks = masks.to(self.device)
         high_masks = high_masks.to(self.device)
         action = action.to(self.device)
-        # value, actor_features, rnn_hxs_actor, rnn_hxs_critic = self.base(agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks)
-        dist = self.actor_base(inputs, self.num_agents, self.num_agents) 
+        # dist = self.actor_base(inputs, self.num_agents, self.num_agents) 
+        dist = self.actor_base(inputs, self.num_agents) 
         action_log_probs = dist.log_probs(action)
         dist_entropy = dist.entropy()
         action_log_probs_out = action_log_probs
         dist_entropy_out = dist_entropy.mean()
-        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_agents, rnn_hxs_actor, masks) 
+        # value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, self.num_agents, rnn_hxs_actor, masks) 
+        value, rnn_hxs_actor, rnn_hxs_critic = self.critic_base(share_inputs, inputs, self.num_agents, rnn_hxs_actor, masks) 
 
         return value, action_log_probs_out, dist_entropy_out, rnn_hxs_actor, rnn_hxs_critic
 

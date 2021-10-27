@@ -13,8 +13,8 @@ import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
 from envs import MPEEnv
-from algorithm.ppo import PPO, PPO3
-from algorithm.model import Policy_pb, Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
+from algorithm.ppo import PPO
+from algorithm.model import Policy_pb_3, ATTBase_actor_dist_pb_add, ATTBase_critic_pb_add
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -51,17 +51,17 @@ def make_parallel_env(args):
         return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
 
 class node_buffer():
-    def __init__(self,agent_num, box_num, buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary, legal_region,epsilon,delta):
-        self.agent_num = agent_num
+    def __init__(self,num_agents, box_num, buffer_length,archive_initial_length,reproduction_num,max_step,start_boundary,boundary, legal_region,epsilon,delta):
+        self.num_agents = num_agents
         self.box_num = box_num
         self.buffer_length = buffer_length
         self.start_boundary = start_boundary
         # self.archive = self.produce_good_case_pb(archive_initial_length, self.agent_num, self.box_num)
-        self.archive = self.produce_good_case_grid_pb(archive_initial_length, start_boundary, self.agent_num, self.box_num)
+        self.archive = self.produce_good_case_grid_pb(archive_initial_length, start_boundary, self.num_agents, self.box_num)
         self.archive_score = np.zeros(len(self.archive))
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
-        # self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
-        self.archive, self.archive_novelty, self.archive_score = self.novelty_score_sort(self.archive, self.archive_novelty, self.archive_score)
+        self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
+        # self.archive, self.archive_novelty, self.archive_score = self.novelty_score_sort(self.archive, self.archive_novelty, self.archive_score)
         self.childlist = []
         self.parent = []
         self.parent_all = []
@@ -242,7 +242,7 @@ class node_buffer():
         else:
             novelty_threshold = 0
         # novelty_threshold = child_novelty_threshold
-        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
+        wandb.log({str(self.num_agents)+'novelty_threshold': novelty_threshold},timestep)
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -286,7 +286,7 @@ class node_buffer():
         else:
             novelty_threshold = 0
         # novelty_threshold = child_novelty_threshold
-        wandb.log({str(self.agent_num)+'novelty_threshold': novelty_threshold},timestep)
+        wandb.log({str(self.num_agents)+'novelty_threshold': novelty_threshold},timestep)
         parents = parents + []
         len_start = len(parents)
         child_new = []
@@ -381,7 +381,7 @@ class node_buffer():
                             st[0] += stepsizex
                             st[1] += stepsizey
                         # clip
-                        if parent_of_entity_id < self.agent_num:
+                        if parent_of_entity_id < self.num_agents:
                             boundary_x = boundary_x_agent
                             boundary_y = boundary_y_agent
                         else:
@@ -598,10 +598,10 @@ class node_buffer():
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
         if len(self.parent_all) > self.buffer_length:
             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
-        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
-        wandb.log({str(self.agent_num)+'childlist_length': len(self.childlist)},timestep)
-        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
-        wandb.log({str(self.agent_num)+'drop_num': drop_num},timestep)
+        wandb.log({str(self.num_agents)+'archive_length': len(self.archive)},timestep)
+        wandb.log({str(self.num_agents)+'childlist_length': len(self.childlist)},timestep)
+        wandb.log({str(self.num_agents)+'parentlist_length': len(self.parent)},timestep)
+        wandb.log({str(self.num_agents)+'drop_num': drop_num},timestep)
     
     def move_nodes_wo_evaluation(self, one_length, Rmax, Rmin, del_switch, timestep):
         # # set active scores
@@ -641,13 +641,13 @@ class node_buffer():
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
         if len(self.parent_all) > self.buffer_length:
             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
-        wandb.log({str(self.agent_num)+'archive_length': len(self.archive)},timestep)
-        wandb.log({str(self.agent_num)+'parentlist_length': len(self.parent)},timestep)
+        wandb.log({str(self.num_agents)+'archive_length': len(self.archive)},timestep)
+        wandb.log({str(self.num_agents)+'parentlist_length': len(self.parent)},timestep)
 
     def save_node(self, dir_path, episode):
         # dir_path: '/home/chenjy/mappo-curriculum/' + args.model_dir
-        if self.agent_num!=0:
-            save_path = dir_path / ('%iagents' % (self.agent_num))
+        if self.num_agents!=0:
+            save_path = dir_path / ('%iagents' % (self.num_agents))
             if not os.path.exists(save_path):
                 os.makedirs(save_path / 'childlist')
                 os.makedirs(save_path / 'archive')
@@ -757,7 +757,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO3(actor_critic,
+        agents = PPO(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
@@ -856,7 +856,7 @@ def main():
     child_novelty_threshold = 0.5 
     starts = []
     buffer_length = 2000 # archive 长度
-    N_parent = 0
+    N_parent = 25
     N_child = 325 # invalid
     N_archive = args.n_rollout_threads - N_parent
     max_step = 0.4
@@ -880,7 +880,7 @@ def main():
     num_agents_test = 2
     num_boxes_test = 2
     mean_cover_rate = 0
-    eval_frequency = 3 #需要fix几个回合
+    eval_frequency = 1 #需要fix几个回合
     check_frequency = 1
     save_node_frequency = 5
     save_node_flag = False
@@ -897,6 +897,7 @@ def main():
                            legal_region=legal_region,
                            epsilon=epsilon,
                            delta=delta)
+    # pdb.set_trace()
 
     
     # run
@@ -946,10 +947,10 @@ def main():
         print('sample_time: ', end1- start1)
         last_node.eval_score = np.zeros(shape=one_length)
 
-        actor_critic.agents_num = last_node.agent_num
-        actor_critic.boxes_num = last_node.box_num
+        actor_critic.agents_num = last_node.num_agents
+        actor_critic.boxes_num = last_node.num_agents
         for times in range(eval_frequency):
-            obs = envs.new_starts_obs_pb(starts, num_agents, num_boxes, starts_length)
+            obs = envs.set_initial_tasks_pb(starts, last_node.num_agents, starts_length)
             #replay buffer
             rollouts = RolloutStorage(num_agents,
                         args.episode_length, 
@@ -1128,7 +1129,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.agent_num, rollouts, current_timestep, False) 
+                value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(last_node.num_agents, rollouts, current_timestep, False) 
                 wandb.log(
                     {'value_loss': value_loss},
                     current_timestep)      
@@ -1177,7 +1178,7 @@ def main():
         actor_critic.agents_num = num_agents_test
         actor_critic.boxes_num = num_boxes_test
         if episode % check_frequency==0:
-            obs, _ = envs.reset(num_agents_test,num_boxes_test)
+            obs, _ = envs.reset(num_agents_test)
             episode_length = 120
             #replay buffer
             rollouts = RolloutStorage(num_agents_test,

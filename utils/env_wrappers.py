@@ -347,13 +347,15 @@ class SubprocVecEnv(ShareVecEnv):
         state, goal = zip(*results)
         return np.stack(state), np.stack(goal)
         
-    def reset(self, now_agent_num, now_box_num=None):
-        if now_box_num is None:
-            for remote in self.remotes:
-                remote.send((['reset',now_agent_num], None))
-        else:
-            for remote in self.remotes:
-                remote.send((['reset_pb',now_agent_num, now_box_num], None))
+    def reset(self, now_agent_num):
+        # if now_box_num is None:
+        #     for remote in self.remotes:
+        #         remote.send((['reset',now_agent_num], None))
+        # else:
+        #     for remote in self.remotes:
+        #         remote.send((['reset_pb',now_agent_num, now_box_num], None))
+        for remote in self.remotes:
+            remote.send((['reset',now_agent_num], None))
         results = [remote.recv() for remote in self.remotes]
         obs, available_actions = zip(*results)
         self.remotes[0].send(('get_spaces', None))
