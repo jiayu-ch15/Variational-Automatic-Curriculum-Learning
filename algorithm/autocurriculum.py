@@ -485,7 +485,7 @@ class node_buffer_old():
             return 0
 
 class node_buffer():
-    def __init__(self, args, phase_num_agents):
+    def __init__(self, args, phase_num_agents, archive_initial_length):
         self.args = args
         self.num_agents = phase_num_agents
         self.buffer_length = args.buffer_length

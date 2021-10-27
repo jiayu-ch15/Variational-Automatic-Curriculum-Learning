@@ -206,7 +206,8 @@ def main():
     random.seed(args.seed)
     np.random.seed(args.seed)
     node = node_buffer(args=args,
-                        phase_num_agents=num_agents)
+                        phase_num_agents=num_agents,
+                        archive_initial_length=args.n_rollout_threads)
     
     # run
     begin = time.time()
