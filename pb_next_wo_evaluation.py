@@ -917,8 +917,10 @@ def main():
                     update_linear_schedule(agents[agent_id].optimizer, episode, episodes, args.lr)           
 
         # reproduction
+        print('before', len(last_node.archive))
         if use_gradient_sample:
             last_node.archive += last_node.Sample_gradient(last_node.parent, current_timestep,h=h)
+        print('after', len(last_node.archive))
         # if use_samplenearby:
         #     if use_active_expansion:
         #         true_active = []

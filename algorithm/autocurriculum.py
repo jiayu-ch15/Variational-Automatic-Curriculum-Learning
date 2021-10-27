@@ -485,7 +485,7 @@ class node_buffer_old():
             return 0
 
 class node_buffer():
-    def __init__(self, args, phase_num_agents, archive_initial_length):
+    def __init__(self, args, phase_num_agents):
         self.args = args
         self.num_agents = phase_num_agents
         self.buffer_length = args.buffer_length
@@ -496,7 +496,7 @@ class node_buffer():
         self.Rmin = args.Rmin
         self.Rmax = args.Rmax
         self.del_switch = args.del_switch
-        self.archive_initial_length = archive_initial_length
+        # self.archive_initial_length = args.buffer_length
         if args.env_name == 'MPE' and args.scenario_name == 'simple_spread':
             self.legal_region = {'agent':{'x':[[-3,3]],'y': [[-3,3]]},'landmark':{'x':[[-3,3]],'y': [[-3,3]]}}
         elif args.env_name == 'MPE' and args.scenario_name == 'push_ball':
@@ -809,7 +809,7 @@ class node_buffer():
                 del self.archive[self.choose_archive_index[i]-del_archive_num]
                 del_archive_num += 1
             elif self.eval_score[i] < self.Rmin:
-                if len(self.archive) > self.archive_initial_length:
+                if len(self.archive) >= self.buffer_length:
                     del self.archive[self.choose_archive_index[i]-del_archive_num]
                     del_archive_num += 1
         self.parent_all += self.parent

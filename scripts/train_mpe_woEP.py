@@ -206,8 +206,7 @@ def main():
     random.seed(args.seed)
     np.random.seed(args.seed)
     node = node_buffer(args=args,
-                        phase_num_agents=num_agents,
-                        archive_initial_length=args.n_rollout_threads)
+                        phase_num_agents=num_agents)
     
     # run
     begin = time.time()
@@ -227,7 +226,7 @@ def main():
 
         # reproduction
         node.archive += node.Sample_gradient(node.parent, current_timestep, use_gradient_noise=True)
-        
+
         # reset env 
         starts, active_length, starts_length = node.sample_tasks(N_active,N_parent)
         node.eval_score = np.zeros(shape=active_length)
