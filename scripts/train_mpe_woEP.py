@@ -224,7 +224,7 @@ def main():
     np.random.seed(args.seed)
     node = node_buffer( args=args,
                         phase_num_agents=num_agents,
-                        archive_initial_length=args.buffer_length)
+                        archive_initial_length=args.n_rollout_threads)
     
     # run
     begin = time.time()
