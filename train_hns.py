@@ -162,6 +162,7 @@ def main():
         actor_critic = Policy(all_obs_space[0], 
                     all_action_space[0],
                     num_agents = num_seekers,
+                    with_PC = False,
                     base_kwargs={'naive_recurrent': args.naive_recurrent_policy,
                                  'recurrent': args.recurrent_policy,
                                  'hidden_size': args.hidden_size,
@@ -277,12 +278,11 @@ def main():
     save_node_interval = args.save_node_interval
     save_node = args.save_node
     historical_length = args.historical_length
-    eval_frequency = 3
+    eval_frequency = 1
     random.seed(args.seed)
     np.random.seed(args.seed)
     node = node_buffer( args=args,
-                        phase_num_agents=num_agents,
-                        archive_initial_length=args.n_rollout_threads)
+                        phase_num_agents=num_agents)
 
     # run
     start = time.time()
@@ -531,10 +531,11 @@ def main():
 
         # move nodes
         node.eval_score = node.eval_score / eval_frequency
-        archive_length, parent_length, drop_num = node.update_buffer(active_length, current_timestep)
+        archive_length, parent_length, del_easy_num, del_hard_num = node.update_buffer(active_length, current_timestep)
         train_infos['archive_length'] = archive_length
         train_infos['parent_length'] = parent_length
-        train_infos['drop_num'] = drop_num
+        train_infos['del_easy_num'] = del_easy_num
+        train_infos['del_hard_num'] = del_hard_num
         if (episode+1) % save_node_interval ==0 and save_node:
             node.save_node(save_node_dir, episode)
 

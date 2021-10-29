@@ -135,8 +135,9 @@ def get_config():
     parser.add_argument('--Rmin', type=int, default=0.5, help="the lower bound of V")
     parser.add_argument('--Rmax', type=int, default=0.95, help="the upper bound of V")
     parser.add_argument('--fixed_interval', type=int, default=3, help='fixed episodes for training tasks')
-    parser.add_argument('--save_node',action='store_false', default=True)
+    parser.add_argument('--save_node',action='store_true', default=False)
     parser.add_argument('--save_node_interval', type=int, default=10)
+    parser.add_argument('--archive_initial_length', type=int, default=1000)
 
     # wandb
     parser.add_argument('--use_wandb',action='store_true', default=False)

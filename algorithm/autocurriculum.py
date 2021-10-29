@@ -14,7 +14,7 @@ from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
 from utils.storage import RolloutStorage, RolloutStorage_share
 
 class node_buffer():
-    def __init__(self, args, phase_num_agents, archive_initial_length):
+    def __init__(self, args, phase_num_agents):
         self.args = args
         self.num_agents = phase_num_agents
         self.buffer_length = args.buffer_length
@@ -25,7 +25,6 @@ class node_buffer():
         self.Rmin = args.Rmin
         self.Rmax = args.Rmax
         self.del_switch = args.del_switch
-        # self.archive_initial_length = args.buffer_length
         if args.env_name == 'MPE' and args.scenario_name == 'simple_spread':
             self.legal_region = {'agent':{'x':[[-3,3]],'y': [[-3,3]]},'landmark':{'x':[[-3,3]],'y': [[-3,3]]}}
         elif args.env_name == 'MPE' and args.scenario_name == 'push_ball':
@@ -34,7 +33,7 @@ class node_buffer():
             # agent means seeker, landmark means ramp
             self.legal_region = {'agent':{'x':[[1,13],[1,13],[15,28]],'y':[[1,13],[15,28],[15,28]]},
                                 'landmark':{'x':[[1,11],[1,11],[15,26]],'y':[[1,11],[15,26],[15,26]]}}
-        self.archive = self.initial_tasks(archive_initial_length, self.num_agents)
+        self.archive = self.initial_tasks(args.archive_initial_length, self.num_agents)
         # self.archive_score = np.zeros(len(self.archive))
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
         self.archive, self.archive_novelty = self.novelty_sort(self.archive, self.archive_novelty)
@@ -317,11 +316,13 @@ class node_buffer():
                         st = copy.deepcopy(parent[parent_of_entity_id])
                         # execute gradient step
                         if not parent_gradient_zero:
-                            st[0] += int(parent_gradient[parent_of_entity_id * 2] * self.epsilon)
-                            st[1] += int(parent_gradient[parent_of_entity_id * 2 + 1] * self.epsilon)
+                            # st[0] += int(parent_gradient[parent_of_entity_id * 2] * self.epsilon)
+                            # st[1] += int(parent_gradient[parent_of_entity_id * 2 + 1] * self.epsilon)
+                            st[0] += parent_gradient[parent_of_entity_id * 2] * self.epsilon
+                            st[1] += parent_gradient[parent_of_entity_id * 2 + 1] * self.epsilon
                         else:
-                            stepsizex = random.sample([-1,0,1],1)[0] * self.epsilon
-                            stepsizey = random.sample([-1,0,1],1)[0] * self.epsilon
+                            stepsizex = random.sample([-1,0,1],1)[0] * random.randint(1,int(self.epsilon))
+                            stepsizey = random.sample([-1,0,1],1)[0] * random.randint(1,int(self.epsilon))
                             st[0] += stepsizex
                             st[1] += stepsizey
                         # clip
@@ -337,8 +338,8 @@ class node_buffer():
                             num_tries = 100
                             num_try = 0
                             while num_try <= num_tries:
-                                epsilon_x = random.sample([-1,0,1],1)[0] * self.delta
-                                epsilon_y = random.sample([-1,0,1],1)[0] * self.delta
+                                epsilon_x = random.sample([-1,0,1],1)[0] * random.randint(1,int(self.delta))
+                                epsilon_y = random.sample([-1,0,1],1)[0] * random.randint(1,int(self.delta))
                                 tmp_x = st[0] + epsilon_x
                                 tmp_y = st[1] + epsilon_y
                                 is_legal = self.is_legal([tmp_x,tmp_y],boundary_x,boundary_y)
@@ -433,17 +434,19 @@ class node_buffer():
     def update_buffer(self, active_length, timestep):
         del_archive_num = 0
         del_easy_num = 0
-        add_hard_num = 0
+        del_hard_num = 0
         self.parent = []
         for i in range(active_length):
             if self.eval_score[i] > self.Rmax:
                 self.parent.append(copy.deepcopy(self.archive[self.choose_archive_index[i]-del_archive_num]))
                 del self.archive[self.choose_archive_index[i]-del_archive_num]
                 del_archive_num += 1
+                del_easy_num += 1
             elif self.eval_score[i] < self.Rmin:
                 if len(self.archive) >= self.buffer_length:
                     del self.archive[self.choose_archive_index[i]-del_archive_num]
                     del_archive_num += 1
+                    del_hard_num += 1
         self.parent_all += self.parent
         if len(self.archive) > self.buffer_length:
             if self.del_switch=='novelty' : # novelty del
@@ -463,7 +466,7 @@ class node_buffer():
                 self.archive = self.archive[len(self.archive)-self.buffer_length:]
         if len(self.parent_all) > self.buffer_length:
             self.parent_all = self.parent_all[len(self.parent_all)-self.buffer_length:]
-        return len(self.archive), len(self.parent), del_archive_num
+        return len(self.archive), len(self.parent), del_easy_num, del_hard_num
 
     def save_node(self, dir_path, episode):
         if self.num_agents!=0:

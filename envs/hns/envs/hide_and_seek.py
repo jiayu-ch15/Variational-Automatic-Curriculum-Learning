@@ -545,7 +545,7 @@ def HideAndSeekEnv(args, n_substeps=15, horizon=60, deterministic_mode=True,
         env = ConcatenateObsWrapper(env, {'agent_qpos_qvel': ['agent_qpos_qvel', 'hider', 'prep_obs']})
     env = SelectKeysWrapper(env, keys_self=keys_self,
                             keys_external=keys_external,
-                            n_agents=n_seekers, # 只放入seeker的数量
+                            n_agents=n_seekers, # only seeker for fixed hider
                             n_boxes=n_boxes,
                             n_ramps=n_ramps,
                             n_seekers=n_seekers,
