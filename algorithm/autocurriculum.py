@@ -25,10 +25,13 @@ class node_buffer():
         self.Rmin = args.Rmin
         self.Rmax = args.Rmax
         self.del_switch = args.del_switch
-        if args.env_name == 'MPE' and args.scenario_name == 'simple_spread':
-            self.legal_region = {'agent':{'x':[[-3,3]],'y': [[-3,3]]},'landmark':{'x':[[-3,3]],'y': [[-3,3]]}}
-        elif args.env_name == 'MPE' and args.scenario_name == 'push_ball':
-            self.legal_region = {'agent':{'x':[[-2,2]],'y': [[-2,2]]},'landmark':{'x':[[-2,2]],'y': [[-2,2]]}}
+        if args.env_name == 'MPE':
+            if args.scenario_name == 'simple_spread':
+                self.legal_region = {'agent':{'x':[[-3,3]],'y': [[-3,3]]},'landmark':{'x':[[-3,3]],'y': [[-3,3]]}}
+            elif args.scenario_name == 'push_ball':
+                self.legal_region = {'agent':{'x':[[-2,2]],'y': [[-2,2]]},'landmark':{'x':[[-2,2]],'y': [[-2,2]]}}
+            elif args.scenario_name == 'hard_spread':
+                
         elif args.env_name == 'hidenseek' and args.scenario_name == 'quadrant':
             # agent means seeker, landmark means ramp
             self.legal_region = {'agent':{'x':[[1,13],[1,13],[15,28]],'y':[[1,13],[15,28],[15,28]]},
