@@ -55,11 +55,15 @@ class Scenario(BaseScenario):
 
         # set random initial states
         for agent in world.agents:
-            agent.state.p_pos = np.random.uniform(-3, +3, world.dim_p)
+            x_pos = np.random.uniform(-4.9,-3.1)
+            y_pos = np.random.uniform(-0.9,0.9)
+            agent.state.p_pos = np.array([x_pos,y_pos])
             agent.state.p_vel = np.zeros(world.dim_p)
             agent.state.c = np.zeros(world.dim_c)
         for i, landmark in enumerate(world.landmarks):
-            landmark.state.p_pos = np.random.uniform(-3, +3, world.dim_p)
+            x_pos = np.random.uniform(3.1,4.9)
+            y_pos = np.random.uniform(-0.9,0.9)
+            landmark.state.p_pos = np.array([x_pos,y_pos])
             landmark.state.p_vel = np.zeros(world.dim_p)
     
     def landmark_cover_state(self, world):

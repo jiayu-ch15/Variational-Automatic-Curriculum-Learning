@@ -31,6 +31,9 @@ class node_buffer():
             elif args.scenario_name == 'push_ball':
                 self.legal_region = {'agent':{'x':[[-2,2]],'y': [[-2,2]]},'landmark':{'x':[[-2,2]],'y': [[-2,2]]}}
             elif args.scenario_name == 'hard_spread':
+                self.legal_region = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
+                                    'y': [[-0.9,0.9],[0.45,0.75],[-0.9,0.9],[-0.75,-0.45],[-0.9,0.9]]},
+                                    'landmark':{'x':[[3.1,4.9]],'y':[[-0.9,0.9]]}} # legal region for samplenearby
                 
         elif args.env_name == 'hidenseek' and args.scenario_name == 'quadrant':
             # agent means seeker, landmark means ramp
@@ -181,6 +184,28 @@ class node_buffer():
                 one_starts_landmark = []
                 one_starts_box = []
                 one_starts_box_grid = []
+            return archive
+        elif self.args.env_name == 'MPE' and self.args.scenario_name == 'hard_spread':
+            start_boundary = {'x':[[3.7,4.3]],'y':[[-0.3,0.3]]} # easy tasks
+            one_starts_landmark = []
+            one_starts_agent = []
+            archive = [] 
+            start_boundary_x = start_boundary['x']
+            start_boundary_y = start_boundary['y']
+            for j in range(num_case):
+                for i in range(now_agent_num):
+                    location_id = np.random.randint(len(start_boundary_x))
+                    landmark_location_x = np.random.uniform(start_boundary_x[location_id][0],start_boundary_x[location_id][1])
+                    landmark_location_y = np.random.uniform(start_boundary_y[location_id][0],start_boundary_y[location_id][1])
+                    landmark_location = np.array([landmark_location_x,landmark_location_y])
+                    one_starts_landmark.append(copy.deepcopy(landmark_location))
+                indices = random.sample(range(now_agent_num), now_agent_num)
+                for k in indices:
+                    epsilon = -2 * 0.01 * random.random() + 0.01
+                    one_starts_agent.append(copy.deepcopy(one_starts_landmark[k]+epsilon))
+                archive.append(one_starts_agent+one_starts_landmark)
+                one_starts_agent = []
+                one_starts_landmark = []
             return archive
         elif self.args.env_name == 'hidenseek' and self.args.scenario_name == 'quadrant':
             now_seeker_num = 1

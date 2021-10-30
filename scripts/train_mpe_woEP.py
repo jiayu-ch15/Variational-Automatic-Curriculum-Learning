@@ -53,7 +53,7 @@ def make_parallel_env(args):
 def main():
     args = get_config()
     if args.use_wandb:
-        run = wandb.init(project='curriculum',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+        run = wandb.init(project='pb_tricks',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
@@ -248,10 +248,11 @@ def main():
         starts, active_length, starts_length = node.sample_tasks(N_active,N_parent)
         node.eval_score = np.zeros(shape=active_length)
 
-        if args.env_name == 'MPE' and args.scenario_name == 'simple_spread':
-            obs = envs.set_initial_tasks_sp(starts, node.num_agents, starts_length)
-        elif args.env_name == 'MPE' and args.scenario_name == 'push_ball':
-            obs = envs.set_initial_tasks_pb(starts, node.num_agents, starts_length)
+        if args.env_name == 'MPE':
+            if args.scenario_name == 'simple_spread' or args.scenario_name == 'hard_spread':
+                obs = envs.set_initial_tasks_sp(starts, node.num_agents, starts_length)
+            elif args.scenario_name == 'push_ball':
+                obs = envs.set_initial_tasks_pb(starts, node.num_agents, starts_length)
         #replay buffer
         rollouts = RolloutStorage(num_agents,
                     args.episode_length, 
