@@ -278,7 +278,7 @@ def main():
     save_node_interval = args.save_node_interval
     save_node = args.save_node
     historical_length = args.historical_length
-    eval_frequency = 1
+    eval_number = args.eval_number
     random.seed(args.seed)
     np.random.seed(args.seed)
     node = node_buffer( args=args,
@@ -311,7 +311,7 @@ def main():
         starts, active_length, starts_length = node.sample_tasks(N_active,N_parent)
         node.eval_score = np.zeros(shape=active_length)
 
-        for times in range(eval_frequency):
+        for times in range(eval_number):
             dict_obs = envs.init_hidenseek(starts,starts_length)
             obs = []
             share_obs = []  
@@ -530,7 +530,7 @@ def main():
             rollouts.after_update()
 
         # move nodes
-        node.eval_score = node.eval_score / eval_frequency
+        node.eval_score = node.eval_score / eval_number
         archive_length, parent_length, del_easy_num, del_hard_num = node.update_buffer(active_length, current_timestep)
         train_infos['archive_length'] = archive_length
         train_infos['parent_length'] = parent_length

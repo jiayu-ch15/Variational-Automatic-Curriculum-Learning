@@ -138,6 +138,7 @@ def get_config():
     parser.add_argument('--save_node',action='store_true', default=False)
     parser.add_argument('--save_node_interval', type=int, default=10)
     parser.add_argument('--archive_initial_length', type=int, default=1000)
+    parser.add_argument('--eval_number', type=int, default=1)
 
     # wandb
     parser.add_argument('--use_wandb',action='store_true', default=False)

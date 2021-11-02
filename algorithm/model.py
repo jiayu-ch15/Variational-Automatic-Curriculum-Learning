@@ -1311,7 +1311,7 @@ class ATTBase_actor(NNBase):
                                constant_(x, 0), np.sqrt(2))
 
         self.agent_num = agent_num
-        if model_name == 'simple_spread':
+        if model_name == 'simple_spread' or 'hard_spread':
             self.actor = ObsEncoder_sp(hidden_size=hidden_size)
         elif model_name == 'push_ball':
             self.actor = ObsEncoder_pb(hidden_size=hidden_size)
@@ -1337,7 +1337,7 @@ class ATTBase_critic(NNBase):
                                constant_(x, 0), np.sqrt(2))
 
         self.agent_num = agent_num
-        if model_name == 'simple_spread':
+        if model_name == 'simple_spread' or 'hard_spread':
             self.encoder = ObsEncoder_sp(hidden_size=hidden_size)
         elif model_name == 'push_ball':
             self.encoder = ObsEncoder_pb(hidden_size=hidden_size)

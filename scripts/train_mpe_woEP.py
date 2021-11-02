@@ -30,7 +30,6 @@ from scipy.spatial.distance import cdist
 import random
 import copy
 import wandb
-import pdb
 np.set_printoptions(linewidth=1000)
 
 def make_parallel_env(args):
@@ -53,7 +52,7 @@ def make_parallel_env(args):
 def main():
     args = get_config()
     if args.use_wandb:
-        run = wandb.init(project='pb_tricks',name=str(args.algorithm_name) + "_seed" + str(args.seed))
+        run = wandb.init(project='sp3_rooms',name=str(args.algorithm_name) + "_seed" + str(args.seed))
     
     assert (args.share_policy == True and args.scenario_name == 'simple_speaker_listener') == False, ("The simple_speaker_listener scenario can not use shared policy. Please check the config.py.")
 
