@@ -342,6 +342,7 @@ def main():
 
             step_lock_rate = np.zeros(shape=(active_length, args.episode_length))
             step_return_rate = np.zeros(shape=(active_length, args.episode_length))
+            step_success_rate = np.zeros(shape=(active_length, args.episode_length))
 
             for step in range(args.episode_length):
                 # Sample actions
@@ -399,6 +400,10 @@ def main():
                 for env_id in range(step_lock_rate.shape[0]):
                     step_lock_rate[env_id,step] = infos[env_id]['lock_rate']
                     step_return_rate[env_id,step] = infos[env_id]['return_rate']
+                    if step_lock_rate[env_id,step] == 1:
+                        step_success_rate[env_id,step] = step_return_rate[env_id,step]
+                    else:
+                        step_success_rate[env_id,step] = 0
 
                 rewards=rewards[:,:,np.newaxis]            
 
@@ -458,8 +463,9 @@ def main():
                                 masks)
             train_infos['training_lock_rate'] = np.mean(step_lock_rate[:, -historical_length:])
             train_infos['training_return_rate'] = np.mean(step_return_rate[:, -historical_length:])
+            train_infos['training_success_rate'] = np.mean(step_success_rate[:, -historical_length:])
             current_timestep += args.episode_length * starts_length
-            node.eval_score += np.mean(step_return_rate[:,-historical_length:], axis=1)
+            node.eval_score += np.mean(step_success_rate[:,-historical_length:], axis=1)
 
             # get value and compute return
             with torch.no_grad(): 
@@ -543,27 +549,6 @@ def main():
                                 }, 
                                 str(save_dir) + "/agent%i_model" % agent_id + ".pt")
 
-        # log information
-        if episode % args.log_interval == 0:
-            end = time.time()
-            log_infos(args, train_infos, current_timestep ,logger)
-            print("\n Scenario {} Algo {} updates {}/{} episodes, total num timesteps {}/{}, FPS {}.\n"
-                .format(args.scenario_name,
-                        args.algorithm_name,
-                        episode, 
-                        episodes,
-                        total_num_steps,
-                        args.num_env_steps,
-                        int(total_num_steps / (end - start))))
-            if args.share_policy:
-                print("[value loss of agent]: %.3f"%(value_loss))
-                print("[reward of agent]: %.2f"%(np.mean(rollouts.rewards)))
-            else:
-                for agent_id in range(num_agents):
-                    print("[value loss of agent]:%i: " % agent_id + str(value_losses[agent_id])) 
-            
-            train_infos['discard_episode'] = discard_episode         
-
         # eval 
         if episode % args.eval_interval == 0 and args.eval:
             dict_obs = eval_env.reset()
@@ -609,6 +594,7 @@ def main():
 
             test_lock_rate = np.zeros(shape=(eval_num, eval_episode_length))
             test_return_rate = np.zeros(shape=(eval_num, eval_episode_length))
+            test_success_rate = np.zeros(shape=(eval_num, eval_episode_length))
             for step in range(eval_episode_length):
                 # Sample actions
                 values = []
@@ -667,6 +653,10 @@ def main():
                 for env_id in range(test_lock_rate.shape[0]):
                     test_lock_rate[env_id, step] = infos[env_id]['lock_rate']
                     test_return_rate[env_id, step] = infos[env_id]['return_rate']
+                    if test_lock_rate[env_id, step] == 1:
+                        test_success_rate[env_id, step] = test_return_rate[env_id, step]
+                    else:
+                        test_success_rate[env_id, step] = 0
 
                 rewards=rewards[:,:,np.newaxis]            
 
@@ -723,12 +713,31 @@ def main():
                                 np.array(values).transpose(1,0,2),
                                 rewards, 
                                 masks)  
-                
-            test_lock_rate_mean =  np.mean(test_lock_rate[:, -historical_length:])
-            test_return_rate_mean = np.mean(test_return_rate[:, -historical_length:])
-            train_infos['test_lock_rate'] = test_lock_rate_mean
-            train_infos['test_return_rate'] = test_return_rate_mean
-            print("[test_lock_rate]: %.2f [test_return_rate]: %.2f"%(test_lock_rate_mean, test_return_rate_mean))
+
+            train_infos['eval_lock_rate'] = np.mean(test_lock_rate[:, -historical_length:])
+            train_infos['eval_return_rate'] = np.mean(test_return_rate[:, -historical_length:])
+            train_infos['eval_success_rate'] = np.mean(test_success_rate[:, -historical_length:])
+
+        # log information
+        if episode % args.log_interval == 0:
+            end = time.time()
+            log_infos(args, train_infos, current_timestep ,logger)
+            print("\n Scenario {} Algo {} updates {}/{} episodes, total num timesteps {}/{}, FPS {}.\n"
+                .format(args.scenario_name,
+                        args.algorithm_name,
+                        episode, 
+                        episodes,
+                        total_num_steps,
+                        args.num_env_steps,
+                        int(total_num_steps / (end - start))))
+            if args.share_policy:
+                print("[value loss of agent]: %.3f"%(value_loss))
+                print("[reward of agent]: %.2f"%(np.mean(rollouts.rewards)))
+            else:
+                for agent_id in range(num_agents):
+                    print("[value loss of agent]:%i: " % agent_id + str(value_losses[agent_id])) 
+            
+            train_infos['discard_episode'] = discard_episode         
             
         
     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
