@@ -203,15 +203,7 @@ def main():
                    huber_delta=args.huber_delta,
                    use_popart=args.use_popart,
                    device=device)
-                   
-        #replay buffer
-        # rollouts = RolloutStorage(num_agents,
-        #             args.episode_length, 
-        #             args.n_rollout_threads,
-        #             all_obs_space[0], 
-        #             all_action_space[0],
-        #             args.hidden_size,
-        #             use_same_dim=True)        
+                           
     else:
         actor_critic = []
         agents = []
@@ -735,8 +727,7 @@ def main():
                     print("value loss of agent%i: " % agent_id + str(value_losses[agent_id])) 
 
             train_infos['discard_episode'] = discard_episode          
-
-                
+        
     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
     logger.close()
     envs.close()

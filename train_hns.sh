@@ -7,10 +7,8 @@ num_boxes=1
 num_ramps=1
 floor_size=6.0
 task_type='all-return'
-# algo="Hidenseek_2agent_1box_1ramp_floor6_env300_step60_minibatch2"
 algo='hns_h1_woPC_eval3_step3_wointclip_middlestep_init500_Bexp200'
-# algo='check'
-seed=4
+seed=1
 
 ulimit -n 4096
 
