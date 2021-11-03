@@ -33,12 +33,21 @@ class node_buffer():
             elif args.scenario_name == 'hard_spread':
                 self.legal_region = {'agent':{'x':[[-4.9,-3.1],[-3,-1],[-0.9,0.9],[1,3],[3.1,4.9]],
                                     'y': [[-0.9,0.9],[0.45,0.75],[-0.9,0.9],[-0.75,-0.45],[-0.9,0.9]]},
-                                    'landmark':{'x':[[3.1,4.9]],'y':[[-0.9,0.9]]}} # legal region for samplenearby
-                
+                                    'landmark':{'x':[[3.1,4.9]],'y':[[-0.9,0.9]]}}
         elif args.env_name == 'hidenseek' and args.scenario_name == 'quadrant':
+            grid_size = args.grid_size
             # agent means seeker, landmark means ramp
-            self.legal_region = {'agent':{'x':[[1,13],[1,13],[15,28]],'y':[[1,13],[15,28],[15,28]]},
-                                'landmark':{'x':[[1,11],[1,11],[15,26]],'y':[[1,11],[15,26],[15,26]]}}
+            self.legal_region = {'agent':{'x':[[1,round(grid_size / 2)-2],[1,round(grid_size / 2)-2],[round(grid_size / 2),grid_size-2]],
+                                            'y':[[1,round(grid_size / 2)-2],[round(grid_size / 2),grid_size-2],[round(grid_size / 2),grid_size-2]]},
+                                'landmark':{'x':[[1,round(grid_size / 2)-4],[1,round(grid_size / 2)-4],[round(grid_size / 2),grid_size-4]],
+                                            'y':[[1,round(grid_size / 2)-4],[round(grid_size / 2),grid_size-4],[round(grid_size / 2),grid_size-4]]}}
+        elif args.env_name == 'BoxLocking' and args.scenario_name == 'empty':
+            # landmark means box
+            # agent quadrant, box uniform
+            grid_size = args.grid_size
+            self.legal_region = {'agent':{'x':[[round(grid_size / 2),grid_size-3]],'y':[[1,round(grid_size/2)-3]]},
+                                'landmark':{'x':[[1,grid_size-2]],'y':[[1,grid_size-2]]}}
+
         self.archive = self.initial_tasks(args.archive_initial_length, self.num_agents)
         # self.archive_score = np.zeros(len(self.archive))
         self.archive_novelty = self.get_novelty(self.archive,self.archive)
@@ -213,7 +222,8 @@ class node_buffer():
             one_starts_seeker = []
             one_starts_ramp = []
             archive = [] 
-            start_boundary_quadrant = [[18,26,16],[12,1,11]] 
+            start_boundary_quadrant = [[round(self.args.grid_size / 2) + 3, self.args.grid_size - 4,round(self.args.grid_size / 2) + 1],
+                                        [round(self.args.grid_size / 2) - 3,1, round(self.args.grid_size / 2) - 4]] 
             for j in range(num_case):
                 # ramp next to the wall 
                 for i in range(now_ramp_num):
@@ -235,7 +245,29 @@ class node_buffer():
                 one_starts_seeker = []
                 one_starts_ramp = []
             return archive
-            
+        elif self.args.env_name == 'BoxLocking' and self.args.scenario_name == 'empty':
+            start_boundary = [round(self.args.grid_size / 2), self.args.grid_size-3, 1, round(self.args.grid_size/2)-3] # x1,x2,y1,y2 qudrant set
+            one_starts_agent = []
+            one_starts_box = []
+            archive = [] 
+            now_box_num = now_agent_num
+            for j in range(num_case):
+                for i in range(now_box_num):
+                    box_location_x = np.random.randint(start_boundary[0], start_boundary[1])
+                    box_location_y = np.random.randint(start_boundary[2], start_boundary[3])
+                    box_location = np.array([box_location_x,box_location_y])
+                    one_starts_box.append(copy.deepcopy(box_location))
+                indices = random.sample(range(now_box_num), now_agent_num)
+                for k in indices:
+                    delta_x = random.sample([-1, 0, 1],1)[0]
+                    delta_y = random.sample([-1, 0, 1],1)[0]
+                    agent_location = np.array([one_starts_box[k][0]+delta_x,one_starts_box[k][1]+delta_y])
+                    one_starts_agent.append(copy.deepcopy(agent_location))
+                archive.append(one_starts_agent+one_starts_box)
+                one_starts_agent = []
+                one_starts_box = []
+            return archive
+    
     def get_novelty(self,list1,list2):
         # list1是需要求novelty的
         topk=5

@@ -105,7 +105,7 @@ class LockObjectsTask(gym.Wrapper):
         self.spawn_pos_dist = 0
         self.next_obj, self.next_obj_dist = self._get_next_obj(obs)
         self.success = False
-        obs['agent_spwan_obs'] = self.spawn_pos  #obs dict增加出生点坐标
+        obs['agent_spwan_obs'] = self.spawn_pos  #add spawn_pos to obs dict
         return obs
 
     def _get_next_obj(self, obs):
@@ -168,7 +168,7 @@ class LockObjectsTask(gym.Wrapper):
                 action[self.act_key][:, self.unlocked_objs[1:]] = 0
 
         obs, rew, done, info = self.env.step(action)
-        obs['agent_spwan_obs'] = self.spawn_pos #obs dict增加出生点坐标
+        obs['agent_spwan_obs'] = self.spawn_pos #add spawn pos to obs dict
         curr_objs_locked = obs[self.lock_key].flatten().astype(np.int8)
 
         # rew += self._get_lock_reward(curr_objs_locked, old_objs_locked=self.objs_locked)
@@ -197,27 +197,11 @@ class LockObjectsTask(gym.Wrapper):
 
         success_lock = False
         success_return = False
-
-        # # lock reward
-        # rew += self.success_reward * (self.n_objs - n_unlocked) / self.n_objs
-        # # return reward
-        # if self.need_return:
-        #     n_return = np.sum(agent_return)
-        #     if self.n_objs - n_unlocked > 0:
-        #         rew += self.success_reward * n_return / self.n_agents
-        #     if agent_return.all():
-        #         success_return = True
-
         if n_unlocked == 0:
             # reward for successfully locking all boxes
             rew += self.success_reward * 0.2
             success_lock = True
             if self.need_return:
-                # shaped return reward
-                # rew += (self.spawn_pos_dist - new_spawn_pos_dist) * self.shaped_reward_scale
-                # self.spawn_pos_dist = new_spawn_pos_dist
-                # # success reward
-                # rew += np.sum(agent_return) * self.shaped_reward_scale
                 n_return = np.sum(agent_return)
                 if agent_return.all():
                     success_return = True

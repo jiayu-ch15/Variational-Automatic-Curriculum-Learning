@@ -597,7 +597,7 @@ class MLPBase(NNBase):
 
 # region amigo
 
-class Policy_teacher(nn.Module): # actor critic分开，把dist放入actor
+class Policy_teacher(nn.Module):
     def __init__(self, base = None, actor_base=None, critic_base=None, base_kwargs=None, device=torch.device("cpu")):
         super(Policy_teacher, self).__init__()
         self.mixed_obs = False
