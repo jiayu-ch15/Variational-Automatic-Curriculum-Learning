@@ -178,6 +178,7 @@ class Policy(nn.Module):
             
             action_out = action
             action_log_probs_out = action_log_probs  
+        
         return value, action_out, action_log_probs_out, rnn_hxs_actor, rnn_hxs_critic
 
     def get_value(self, agent_id, share_inputs, inputs, rnn_hxs_actor, rnn_hxs_critic, masks):

@@ -831,7 +831,7 @@ class PPO():
                         else:
                             value_loss = 0.5 * (return_batch - values).pow(2).mean()               
 
-                if self.use_accumulate_grad: # 几个batch都不optimize，直到batch更新完再step
+                if self.use_accumulate_grad:
                     if count_stop_step >= self.num_mini_batch or count_stop_step==0:
                         self.optimizer_actor.zero_grad()
                         self.optimizer_critic.zero_grad()
@@ -1202,7 +1202,7 @@ class PPO():
                         else:
                             value_loss = 0.5 * (return_batch - values).pow(2).mean()               
 
-                if self.use_accumulate_grad: # 几个batch都不optimize，直到batch更新完再step
+                if self.use_accumulate_grad:
                     if count_stop_step >= self.num_mini_batch or count_stop_step==0:
                         self.optimizer_actor.zero_grad()
                         self.optimizer_critic.zero_grad()
@@ -1837,16 +1837,11 @@ class PPO_teacher(): # teacher
                     self.optimizer_actor = optim.Adam(self.actor_critic.actor_base.parameters(), lr=self.lr, eps=self.eps, weight_decay=self.weight_decay)
                     self.optimizer_critic = optim.Adam(self.actor_critic.critic_base.parameters(), lr=self.lr, eps=self.eps, weight_decay=self.weight_decay)
 
-                if self.use_accumulate_grad: # 几个batch都不optimize，直到batch更新完再step
+                if self.use_accumulate_grad:
                     if count_stop_step >= self.num_mini_batch or count_stop_step==0:
                         self.optimizer_actor.zero_grad()
                         self.optimizer_critic.zero_grad()
                         count_stop_step = 0
-
-                    # if self.use_grad_average:
-                    #     value_loss = value_loss / self.num_mini_batch
-                    #     action_loss = action_loss / self.num_mini_batch
-                    #     dist_entropy = dist_entropy / self.num_mini_batch
 
                     (value_loss * self.value_loss_coef).backward()
                     if warm_up == False:
@@ -2048,7 +2043,7 @@ class PPO_teacher(): # teacher
                                 value_loss = 0.5 * (return_batch - values).pow(2).mean()               
 
                     # optimizer step
-                    if self.use_accumulate_grad: # 几个batch都不optimize，直到batch更新完再step
+                    if self.use_accumulate_grad:
                         if count_stop_step >= self.num_mini_batch or count_stop_step==0:
                             if actor_update:
                                 self.optimizer_actor.zero_grad()
