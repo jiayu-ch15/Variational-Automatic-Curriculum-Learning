@@ -460,7 +460,7 @@ class node_buffer():
                     elif pos[1] > boundary_y[boundary_id][1]:
                         pos[1] = boundary_y[boundary_id][1] - random.random()*0.01
             return pos
-        elif self.args.env_name == 'hidenseek':
+        elif self.args.env_name == 'hidenseek' or self.args.env_name == 'BoxLocking':
             pos[0] = min(boundary_x[-1][1],max(boundary_x[0][0],pos[0]))
             pos[1] = min(boundary_y[-1][1],max(boundary_y[0][0],pos[1]))
             for boundary_id in range(len(boundary_x)):
