@@ -119,7 +119,7 @@ def main():
 
     # env
     envs = make_parallel_env(args)
-    eval_num = 300
+    eval_num = 2
     eval_env = make_eval_env(args,eval_num)
     
     num_hiders = args.num_hiders
@@ -376,6 +376,7 @@ def main():
                         recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
                         recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
                 
+                pdb.set_trace()
                 # rearrange action        
                 actions_env = []
                 for n_rollout_thread in range(starts_length):
