@@ -424,7 +424,7 @@ def main():
         # update the network
         if args.share_policy:
             actor_critic.train()
-            value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(node.num_agents, rollouts, current_timestep,False) 
+            value_loss, action_loss, dist_entropy = agents.update_share(node.num_agents, rollouts,False) 
             rew = []
             for i in range(rollouts.rewards.shape[1]):
                 rew.append(np.sum(rollouts.rewards[:,i]))
@@ -439,7 +439,7 @@ def main():
             
             for agent_id in range(num_agents):
                 actor_critic[agent_id].train()
-                value_loss, action_loss, dist_entropy = agents[agent_id].update_single(agent_id, rollouts[agent_id])
+                value_loss, action_loss, dist_entropy = agents[agent_id].update(agent_id, rollouts[agent_id])
                 value_losses.append(value_loss)
                 action_losses.append(action_loss)
                 dist_entropies.append(dist_entropy)

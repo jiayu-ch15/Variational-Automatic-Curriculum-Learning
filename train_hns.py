@@ -119,8 +119,9 @@ def main():
 
     # env
     envs = make_parallel_env(args)
-    eval_num = 300
-    eval_env = make_eval_env(args,eval_num)
+    if args.eval:
+        eval_num = 2
+        eval_env = make_eval_env(args,eval_num)
     
     num_hiders = args.num_hiders
     num_seekers = args.num_seekers
@@ -184,7 +185,7 @@ def main():
         actor_critic.to(device)
         
         # algorithm
-        agents = PPO_merge(actor_critic,
+        agents = PPO(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
@@ -731,7 +732,6 @@ def main():
     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
     logger.close()
     envs.close()
-    eval_env.close()
     if args.eval:
         eval_env.close()
 if __name__ == "__main__":
