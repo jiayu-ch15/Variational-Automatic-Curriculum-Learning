@@ -120,7 +120,7 @@ def main():
     # env
     envs = make_parallel_env(args)
     if args.eval:
-        eval_num = 2
+        eval_num = 100
         eval_env = make_eval_env(args,eval_num)
     
     num_hiders = args.num_hiders
@@ -203,8 +203,7 @@ def main():
                    use_huber_loss=args.use_huber_loss,
                    huber_delta=args.huber_delta,
                    use_popart=args.use_popart,
-                   device=device)
-                           
+                   device=device)                       
     else:
         actor_critic = []
         agents = []
@@ -376,7 +375,7 @@ def main():
                         action_log_probs.append(action_log_prob.detach().cpu().numpy())
                         recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
                         recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
-                
+
                 # rearrange action        
                 actions_env = []
                 for n_rollout_thread in range(starts_length):

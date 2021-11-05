@@ -117,8 +117,9 @@ def main():
     os.makedirs(str(save_dir))
     logger = SummaryWriter(str(log_dir)) 
     envs = make_parallel_env(args)
-    eval_num = 300
-    eval_env = make_eval_env(args, eval_num)
+    if args.eval:
+        eval_num = 100
+        eval_env = make_eval_env(args, eval_num)
 
     num_agents = args.num_agents
     num_boxes = args.num_boxes
@@ -179,7 +180,7 @@ def main():
                     device = device)
         actor_critic.to(device)
         # algorithm
-        agents = PPO_merge(actor_critic,
+        agents = PPO(actor_critic,
                    args.clip_param,
                    args.ppo_epoch,
                    args.num_mini_batch,
@@ -743,7 +744,8 @@ def main():
     logger.export_scalars_to_json(str(log_dir / 'summary.json'))
     logger.close()
     envs.close()
-    eval_env.close()
+    if args.eval:
+        eval_env.close()
     
     
     

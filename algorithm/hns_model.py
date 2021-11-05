@@ -33,9 +33,16 @@ class Policy(nn.Module):
         super(Policy, self).__init__()
         self.mixed_obs = False
         self.mixed_action = False
-        self.multi_discrete = False
+        if action_space.__class__.__name__ == "MultiDiscrete":
+            self.multi_discrete = True
+            self.discrete_N = action_space.shape
+        else:
+            self.multi_discrete = False
         self.with_PC = with_PC
         self.device = device
+        self.num_agents = num_agents
+        self.is_recurrent = base_kwargs['recurrent']
+        self.is_naive_recurrent = base_kwargs['naive_recurrent']
         if base_kwargs is None:
             base_kwargs = {}
         
@@ -529,8 +536,9 @@ class Actor(nn.Module):
                 dist[i] = self.dist[i](hidden_actor, available_actions)
             
         elif self.multi_discrete:
+            dist = []
             for i in range(self.discrete_N):
-                dist = self.dists[i](hidden_actor)
+                dist.append(self.dists[i](hidden_actor))
             
         else:
             dist = self.dist(hidden_actor, available_actions)
