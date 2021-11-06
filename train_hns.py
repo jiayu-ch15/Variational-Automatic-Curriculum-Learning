@@ -68,6 +68,33 @@ def make_eval_env(args, num_thread):
         return init_env
     return SimplifySubprocVecEnv([get_env_fn(i) for i in range(num_thread)])
 
+def handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders):
+    obs = []
+    share_obs = []  
+    for d_o in dict_obs:
+        for i, key in enumerate(order_obs):
+            if key in envs.observation_space.spaces.keys():             
+                if mask_order_obs[i] == None:
+                    temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
+                    temp_obs = temp_share_obs.copy()
+                else:
+                    temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
+                    temp_mask = d_o[mask_order_obs[i]].copy()
+                    temp_obs = d_o[key].copy()
+                    mins_temp_mask = ~temp_mask
+                    temp_obs[mins_temp_mask]=np.zeros((mins_temp_mask.sum(),temp_obs.shape[2]))                       
+                    temp_obs = temp_obs.reshape(num_agents,-1) 
+                if i == 0:
+                    reshape_obs = temp_obs.copy()
+                    reshape_share_obs = temp_share_obs.copy()
+                else:
+                    reshape_obs = np.concatenate((reshape_obs,temp_obs),axis=1) 
+                    reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
+        obs.append(reshape_obs)
+        share_obs.append(reshape_share_obs)   
+    obs = np.array(obs)[:,num_hiders:]
+    share_obs = np.array(share_obs)[:,num_hiders:]
+
 def main():
     args = get_config()
     if args.use_wandb:
@@ -273,8 +300,7 @@ def main():
     eval_number = args.eval_number
     random.seed(args.seed)
     np.random.seed(args.seed)
-    node = node_buffer( args=args,
-                        phase_num_agents=num_agents)
+    node = node_buffer( args=args, phase_num_agents=num_agents)
 
     # run
     start = time.time()
@@ -305,31 +331,7 @@ def main():
 
         for times in range(eval_number):
             dict_obs = envs.init_hidenseek(starts,starts_length)
-            obs = []
-            share_obs = []  
-            for d_o in dict_obs:
-                for i, key in enumerate(order_obs):
-                    if key in envs.observation_space.spaces.keys():             
-                        if mask_order_obs[i] == None:
-                            temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                            temp_obs = temp_share_obs.copy()
-                        else:
-                            temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                            temp_mask = d_o[mask_order_obs[i]].copy()
-                            temp_obs = d_o[key].copy()
-                            mins_temp_mask = ~temp_mask
-                            temp_obs[mins_temp_mask]=np.zeros((mins_temp_mask.sum(),temp_obs.shape[2]))                       
-                            temp_obs = temp_obs.reshape(num_agents,-1) 
-                        if i == 0:
-                            reshape_obs = temp_obs.copy()
-                            reshape_share_obs = temp_share_obs.copy()
-                        else:
-                            reshape_obs = np.concatenate((reshape_obs,temp_obs),axis=1) 
-                            reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
-                obs.append(reshape_obs)
-                share_obs.append(reshape_share_obs)   
-            obs = np.array(obs)[:,num_hiders:]
-            share_obs = np.array(share_obs)[:,num_hiders:]
+            obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders)
             rollouts = RolloutStorage(num_seekers,
                         args.episode_length, 
                         starts_length,
@@ -421,31 +423,7 @@ def main():
                             mask.append([1.0])
                     masks.append(mask)                            
 
-                obs = []
-                share_obs = []   
-                for d_o in dict_obs:
-                    for i, key in enumerate(order_obs):
-                        if key in envs.observation_space.spaces.keys():             
-                            if mask_order_obs[i] == None:
-                                temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                                temp_obs = temp_share_obs.copy()
-                            else:
-                                temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                                temp_mask = d_o[mask_order_obs[i]].copy()
-                                temp_obs = d_o[key].copy()
-                                mins_temp_mask = ~temp_mask
-                                temp_obs[mins_temp_mask]=np.zeros((mins_temp_mask.sum(),temp_obs.shape[2]))                       
-                                temp_obs = temp_obs.reshape(num_agents,-1) 
-                            if i == 0:
-                                reshape_obs = temp_obs.copy()
-                                reshape_share_obs = temp_share_obs.copy()
-                            else:
-                                reshape_obs = np.concatenate((reshape_obs,temp_obs),axis=1) 
-                                reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
-                    obs.append(reshape_obs)
-                    share_obs.append(reshape_share_obs)   
-                obs = np.array(obs)[:,num_hiders:]
-                share_obs = np.array(share_obs)[:,num_hiders:]
+                obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders)
         
                 rollouts.insert(share_obs, 
                                 obs, 
@@ -535,31 +513,7 @@ def main():
         if episode % args.eval_interval == 0 and args.eval:
             dict_obs = eval_env.reset()
             episode_length = args.env_horizon
-            obs = []
-            share_obs = []   
-            for d_o in dict_obs:
-                for i, key in enumerate(order_obs):
-                    if key in eval_env.observation_space.spaces.keys():             
-                        if mask_order_obs[i] == None:
-                            temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                            temp_obs = temp_share_obs.copy()
-                        else:
-                            temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                            temp_mask = d_o[mask_order_obs[i]].copy()
-                            temp_obs = d_o[key].copy()
-                            mins_temp_mask = ~temp_mask
-                            temp_obs[mins_temp_mask]=np.zeros((mins_temp_mask.sum(),temp_obs.shape[2]))                       
-                            temp_obs = temp_obs.reshape(num_agents,-1) 
-                        if i == 0:
-                            reshape_obs = temp_obs.copy()
-                            reshape_share_obs = temp_share_obs.copy()
-                        else:
-                            reshape_obs = np.concatenate((reshape_obs,temp_obs),axis=1) 
-                            reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
-                obs.append(reshape_obs)
-                share_obs.append(reshape_share_obs)   
-            obs = np.array(obs)[:,num_hiders:]
-            share_obs = np.array(share_obs)[:,num_hiders:]
+            obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders)
             rollouts = RolloutStorage(num_seekers,
                         episode_length, 
                         eval_num,
@@ -628,8 +582,6 @@ def main():
                         
                 # Obser reward and next obs
                 dict_obs, rewards, dones, infos = eval_env.step(actions_env)
-                # print("reward", rewards[0])
-                # print("success_rate", infos[0]['success_rate'])
                 rewards=rewards[:, num_hiders:, np.newaxis]          
 
                 # If done then clean the history of observations.
@@ -648,33 +600,9 @@ def main():
                             mask.append([0.0])                        
                         else:
                             mask.append([1.0])
-                    masks.append(mask)                            
-
-                obs = []
-                share_obs = []   
-                for d_o in dict_obs:
-                    for i, key in enumerate(order_obs):
-                        if key in eval_env.observation_space.spaces.keys():             
-                            if mask_order_obs[i] == None:
-                                temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                                temp_obs = temp_share_obs.copy()
-                            else:
-                                temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                                temp_mask = d_o[mask_order_obs[i]].copy()
-                                temp_obs = d_o[key].copy()
-                                mins_temp_mask = ~temp_mask
-                                temp_obs[mins_temp_mask]=np.zeros((mins_temp_mask.sum(),temp_obs.shape[2]))                       
-                                temp_obs = temp_obs.reshape(num_agents,-1) 
-                            if i == 0:
-                                reshape_obs = temp_obs.copy()
-                                reshape_share_obs = temp_share_obs.copy()
-                            else:
-                                reshape_obs = np.concatenate((reshape_obs,temp_obs),axis=1) 
-                                reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
-                    obs.append(reshape_obs)
-                    share_obs.append(reshape_share_obs)   
-                obs = np.array(obs)[:,num_hiders:] 
-                share_obs = np.array(share_obs)[:,num_hiders:]
+                    masks.append(mask) 
+                                               
+                obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders)
         
                 rollouts.insert(share_obs, 
                                 obs, 

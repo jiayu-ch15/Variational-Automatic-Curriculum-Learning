@@ -68,6 +68,36 @@ def make_eval_env(args, num_thread):
         return init_env
     return SimplifySubprocVecEnv([get_env_fn(i) for i in range(num_thread)])
 
+def handle_dict_obs(order_obs, mask_order_obs, dict_obs):
+    obs = []
+    share_obs = [] 
+    for d_o in dict_obs:
+        for i, key in enumerate(order_obs):
+            if key in envs.observation_space.spaces.keys():             
+                if mask_order_obs[i] == None:
+                    temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
+                    temp_obs = temp_share_obs.copy()
+                else:
+                    temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
+                    temp_mask = d_o[mask_order_obs[i]].copy()
+                    temp_obs = d_o[key].copy()
+                    mins_temp_mask = ~temp_mask
+                    temp_obs[mins_temp_mask]=np.zeros((mins_temp_mask.sum(),temp_obs.shape[2]))                       
+                    temp_obs = temp_obs.reshape(num_agents,-1) 
+                if i == 0:
+                    reshape_obs = temp_obs.copy()
+                    reshape_share_obs = temp_share_obs.copy()
+                else:
+                    reshape_obs = np.concatenate((reshape_obs,temp_obs),axis=1) 
+                    reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
+        obs.append(reshape_obs)
+        share_obs.append(reshape_share_obs) 
+    # spawn obs - > 0 in obs but non-zero in share_obs  
+    obs = np.array(obs) 
+    obs[:,-3:-1] = 0
+    share_obs = np.array(share_obs)
+    return obs, share_obs
+
 def main():
     args = get_config()
     if args.use_wandb:
@@ -302,31 +332,7 @@ def main():
 
         for times in range(eval_number):
             dict_obs = envs.init_box_locking(starts,starts_length)
-            obs = []
-            share_obs = []   
-            for d_o in dict_obs:
-                for i, key in enumerate(order_obs):
-                    if key in envs.observation_space.spaces.keys():             
-                        if mask_order_obs[i] == None:
-                            temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                            temp_obs = temp_share_obs.copy()
-                        else:
-                            temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                            temp_mask = d_o[mask_order_obs[i]].copy()
-                            temp_obs = d_o[key].copy()
-                            mins_temp_mask = ~temp_mask
-                            temp_obs[mins_temp_mask]=np.zeros((mins_temp_mask.sum(),temp_obs.shape[2]))                       
-                            temp_obs = temp_obs.reshape(num_agents,-1) 
-                        if i == 0:
-                            reshape_obs = temp_obs.copy()
-                            reshape_share_obs = temp_share_obs.copy()
-                        else:
-                            reshape_obs = np.concatenate((reshape_obs,temp_obs),axis=1) 
-                            reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
-                obs.append(reshape_obs)
-                share_obs.append(reshape_share_obs)   
-            obs = np.array(obs) 
-            share_obs = np.array(share_obs)
+            obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs)
             rollouts = RolloutStorage(num_agents,
                         args.episode_length, 
                         starts_length,
@@ -427,32 +433,7 @@ def main():
                             mask.append([1.0])
                     masks.append(mask)                            
 
-                obs = []
-                share_obs = []   
-                for d_o in dict_obs:
-                    for i, key in enumerate(order_obs):
-                        if key in envs.observation_space.spaces.keys():             
-                            if mask_order_obs[i] == None:
-                                temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                                temp_obs = temp_share_obs.copy()
-                            else:
-                                temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                                temp_mask = d_o[mask_order_obs[i]].copy()
-                                temp_obs = d_o[key].copy()
-                                mins_temp_mask = ~temp_mask
-                                temp_obs[mins_temp_mask]=np.zeros((mins_temp_mask.sum(),temp_obs.shape[2]))                       
-                                temp_obs = temp_obs.reshape(num_agents,-1) 
-                            if i == 0:
-                                reshape_obs = temp_obs.copy()
-                                reshape_share_obs = temp_share_obs.copy()
-                            else:
-                                reshape_obs = np.concatenate((reshape_obs,temp_obs),axis=1) 
-                                reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
-                    obs.append(reshape_obs)
-                    share_obs.append(reshape_share_obs)   
-                obs = np.array(obs) 
-                share_obs = np.array(share_obs)
-        
+                obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs)
                 rollouts.insert(share_obs, 
                                 obs, 
                                 np.array(recurrent_hidden_statess).transpose(1,0,2), 
@@ -554,32 +535,7 @@ def main():
         if episode % args.eval_interval == 0 and args.eval:
             dict_obs = eval_env.reset()
             eval_episode_length = args.episode_length
-            obs = []
-            share_obs = []   
-            
-            for d_o in dict_obs:
-                for i, key in enumerate(order_obs):
-                    if key in eval_env.observation_space.spaces.keys():             
-                        if mask_order_obs[i] == None:
-                            temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                            temp_obs = temp_share_obs.copy()
-                        else:
-                            temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                            temp_mask = d_o[mask_order_obs[i]].copy()
-                            temp_obs = d_o[key].copy()
-                            mins_temp_mask = ~temp_mask
-                            temp_obs[mins_temp_mask]=np.zeros((mins_temp_mask.sum(),temp_obs.shape[2]))                       
-                            temp_obs = temp_obs.reshape(num_agents,-1) 
-                        if i == 0:
-                            reshape_obs = temp_obs.copy()
-                            reshape_share_obs = temp_share_obs.copy()
-                        else:
-                            reshape_obs = np.concatenate((reshape_obs,temp_obs),axis=1) 
-                            reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
-                obs.append(reshape_obs)
-                share_obs.append(reshape_share_obs)   
-            obs = np.array(obs) 
-            share_obs = np.array(share_obs) 
+            obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs)
             rollouts = RolloutStorage(num_agents,
                         eval_episode_length, 
                         eval_num,
@@ -679,31 +635,7 @@ def main():
                             mask.append([1.0])
                     masks.append(mask)                            
 
-                obs = []
-                share_obs = []   
-                for d_o in dict_obs:
-                    for i, key in enumerate(order_obs):
-                        if key in eval_env.observation_space.spaces.keys():             
-                            if mask_order_obs[i] == None:
-                                temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                                temp_obs = temp_share_obs.copy()
-                            else:
-                                temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
-                                temp_mask = d_o[mask_order_obs[i]].copy()
-                                temp_obs = d_o[key].copy()
-                                mins_temp_mask = ~temp_mask
-                                temp_obs[mins_temp_mask]=np.zeros((mins_temp_mask.sum(),temp_obs.shape[2]))                       
-                                temp_obs = temp_obs.reshape(num_agents,-1) 
-                            if i == 0:
-                                reshape_obs = temp_obs.copy()
-                                reshape_share_obs = temp_share_obs.copy()
-                            else:
-                                reshape_obs = np.concatenate((reshape_obs,temp_obs),axis=1) 
-                                reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
-                    obs.append(reshape_obs)
-                    share_obs.append(reshape_share_obs)   
-                obs = np.array(obs) 
-                share_obs = np.array(share_obs)
+                obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs)
         
                 rollouts.insert(share_obs, 
                                 obs, 
