@@ -9,7 +9,6 @@ import copy
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from envs import MPEEnv
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
 from utils.storage import RolloutStorage, RolloutStorage_share
 
