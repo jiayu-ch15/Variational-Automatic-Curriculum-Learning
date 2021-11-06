@@ -13,7 +13,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
-from envs import BlueprintConstructionEnv, BoxLockingEnv, ShelterConstructionEnv, HideAndSeekEnv
+from envs.hns import BlueprintConstructionEnv, BoxLockingEnv, ShelterConstructionEnv, HideAndSeekEnv
 from algorithm.autocurriculum import node_buffer, log_infos
 from algorithm.ppo import PPO, PPO_merge
 from algorithm.hns_model import Policy
@@ -68,12 +68,12 @@ def make_eval_env(args, num_thread):
         return init_env
     return SimplifySubprocVecEnv([get_env_fn(i) for i in range(num_thread)])
 
-def handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders):
+def handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents, num_hiders):
     obs = []
     share_obs = []  
     for d_o in dict_obs:
         for i, key in enumerate(order_obs):
-            if key in envs.observation_space.spaces.keys():             
+            if key in keys:             
                 if mask_order_obs[i] == None:
                     temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
                     temp_obs = temp_share_obs.copy()
@@ -94,6 +94,7 @@ def handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders):
         share_obs.append(reshape_share_obs)   
     obs = np.array(obs)[:,num_hiders:]
     share_obs = np.array(share_obs)[:,num_hiders:]
+    return obs, share_obs
 
 def main():
     args = get_config()
@@ -162,6 +163,7 @@ def main():
     # handle dict_obs
     order_obs = ['agent_qpos_qvel', 'box_obs','ramp_obs','construction_site_obs', 'observation_self']    
     mask_order_obs = [None, None, None, None, None]
+    keys = envs.observation_space.spaces.keys()
     for agent_id in range(num_agents):
         # deal with dict action space
         action_movement = envs.action_space['action_movement'][agent_id].nvec
@@ -331,7 +333,7 @@ def main():
 
         for times in range(eval_number):
             dict_obs = envs.init_hidenseek(starts,starts_length)
-            obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders)
+            obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents, num_hiders)
             rollouts = RolloutStorage(num_seekers,
                         args.episode_length, 
                         starts_length,
@@ -423,7 +425,7 @@ def main():
                             mask.append([1.0])
                     masks.append(mask)                            
 
-                obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders)
+                obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents, num_hiders)
         
                 rollouts.insert(share_obs, 
                                 obs, 
@@ -513,7 +515,7 @@ def main():
         if episode % args.eval_interval == 0 and args.eval:
             dict_obs = eval_env.reset()
             episode_length = args.env_horizon
-            obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders)
+            obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents, num_hiders)
             rollouts = RolloutStorage(num_seekers,
                         episode_length, 
                         eval_num,
@@ -602,7 +604,7 @@ def main():
                             mask.append([1.0])
                     masks.append(mask) 
                                                
-                obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs, num_hiders)
+                obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents, num_hiders)
         
                 rollouts.insert(share_obs, 
                                 obs, 

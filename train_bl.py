@@ -13,7 +13,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
-from envs import BlueprintConstructionEnv, BoxLockingEnv, ShelterConstructionEnv
+from envs.hns import BlueprintConstructionEnv, BoxLockingEnv, ShelterConstructionEnv
 from algorithm.autocurriculum import node_buffer, log_infos
 from algorithm.ppo import PPO_merge, PPO
 from algorithm.hns_model import Policy
@@ -68,12 +68,12 @@ def make_eval_env(args, num_thread):
         return init_env
     return SimplifySubprocVecEnv([get_env_fn(i) for i in range(num_thread)])
 
-def handle_dict_obs(order_obs, mask_order_obs, dict_obs):
+def handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents):
     obs = []
     share_obs = [] 
     for d_o in dict_obs:
         for i, key in enumerate(order_obs):
-            if key in envs.observation_space.spaces.keys():             
+            if key in keys:             
                 if mask_order_obs[i] == None:
                     temp_share_obs = d_o[key].reshape(num_agents,-1).copy()
                     temp_obs = temp_share_obs.copy()
@@ -163,6 +163,7 @@ def main():
     # handle dict_obs
     order_obs = ['agent_qpos_qvel', 'box_obs', 'ramp_obs', 'construction_site_obs', 'observation_self']    
     mask_order_obs = [None, None, None, None, None]
+    keys = envs.observation_space.spaces.keys()
     for agent_id in range(num_agents):
         # deal with dict action space
         action_movement = envs.action_space['action_movement'][agent_id].nvec
@@ -332,7 +333,7 @@ def main():
 
         for times in range(eval_number):
             dict_obs = envs.init_box_locking(starts,starts_length)
-            obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs)
+            obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents)
             rollouts = RolloutStorage(num_agents,
                         args.episode_length, 
                         starts_length,
@@ -433,7 +434,7 @@ def main():
                             mask.append([1.0])
                     masks.append(mask)                            
 
-                obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs)
+                obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents)
                 rollouts.insert(share_obs, 
                                 obs, 
                                 np.array(recurrent_hidden_statess).transpose(1,0,2), 
@@ -535,7 +536,7 @@ def main():
         if episode % args.eval_interval == 0 and args.eval:
             dict_obs = eval_env.reset()
             eval_episode_length = args.episode_length
-            obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs)
+            obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents)
             rollouts = RolloutStorage(num_agents,
                         eval_episode_length, 
                         eval_num,
@@ -635,7 +636,7 @@ def main():
                             mask.append([1.0])
                     masks.append(mask)                            
 
-                obs, share_obs = handle_dict_obs(order_obs, mask_order_obs, dict_obs)
+                obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents)
         
                 rollouts.insert(share_obs, 
                                 obs, 
