@@ -738,7 +738,7 @@ class PPO():
             self.optimizer_actor = checkpoints['optimizer_actor']
             self.optimizer_critic = checkpoints['optimizer_critic']
     
-    def update_share_asynchronous(self, num_agents, rollouts, timesteps, warm_up=False):
+    def update_share(self, num_agents, rollouts, timesteps, warm_up=False):
         advantages = []
         for agent_id in range(num_agents):
             if self.use_popart:
@@ -1025,10 +1025,6 @@ class PPO():
                 
                 actor_norm, actor_grad_norm = get_p_and_g_mean_norm(self.actor_critic.actor_base.parameters())
                 critic_norm, critic_grad_norm = get_p_and_g_mean_norm(self.actor_critic.critic_base.parameters())
-                wandb.log({'actor_weight':actor_norm}, timesteps)
-                wandb.log({'critic_weight':critic_norm}, timesteps)
-                wandb.log({'actor_grad':actor_grad_norm}, timesteps)
-                wandb.log({'critic_grad':critic_grad_norm}, timesteps)
                        
                 if self.use_max_grad_norm:
                     nn.utils.clip_grad_norm_(self.actor_critic.parameters(), self.max_grad_norm)

@@ -123,7 +123,7 @@ def main():
         ratio_current = 0.1
         if decay:
             ratio_last = (1.0 - ratio_current) * 2
-        target_num = args.eval_num_agents
+        target_num = args.target_num
         last_box_num = 0
         last_agent_num = last_box_num
         now_box_num = 4
