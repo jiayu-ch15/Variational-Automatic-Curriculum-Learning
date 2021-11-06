@@ -15,7 +15,7 @@ from tensorboardX import SummaryWriter
 
 from envs import BlueprintConstructionEnv, BoxLockingEnv, ShelterConstructionEnv
 from algorithm.autocurriculum import node_buffer, log_infos
-from algorithm.ppo import PPO_merge
+from algorithm.ppo import PPO_merge, PPO
 from algorithm.hns_model import Policy
 
 from config import get_config
