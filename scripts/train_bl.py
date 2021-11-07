@@ -69,7 +69,7 @@ def make_eval_env(args, num_thread):
         return init_env
     return SimplifySubprocVecEnv([get_env_fn(i) for i in range(num_thread)])
 
-def handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents):
+def handle_dict_obs(args, keys, order_obs, mask_order_obs, dict_obs, num_agents):
     obs = []
     share_obs = [] 
     for d_o in dict_obs:
@@ -93,9 +93,10 @@ def handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents):
                     reshape_share_obs = np.concatenate((reshape_share_obs,temp_share_obs),axis=1)                    
         obs.append(reshape_obs)
         share_obs.append(reshape_share_obs) 
+    obs = np.array(obs)
     # spawn obs - > 0 in obs but non-zero in share_obs  
-    obs = np.array(obs) 
-    obs[:,-3:-1] = 0
+    if args.spawn_obs:
+        obs[:,-3:-1] = 0
     share_obs = np.array(share_obs)
     return obs, share_obs
 
@@ -336,7 +337,7 @@ def main():
 
         for times in range(eval_number):
             dict_obs = envs.init_box_locking(starts,starts_length)
-            obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents)
+            obs, share_obs = handle_dict_obs(args, keys, order_obs, mask_order_obs, dict_obs, num_agents)
             rollouts = RolloutStorage(num_agents,
                         args.episode_length, 
                         starts_length,
@@ -437,7 +438,7 @@ def main():
                             mask.append([1.0])
                     masks.append(mask)                            
 
-                obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents)
+                obs, share_obs = handle_dict_obs(args, keys, order_obs, mask_order_obs, dict_obs, num_agents)
                 rollouts.insert(share_obs, 
                                 obs, 
                                 np.array(recurrent_hidden_statess).transpose(1,0,2), 
@@ -539,7 +540,7 @@ def main():
         if episode % args.eval_interval == 0 and args.eval:
             dict_obs = eval_env.reset()
             eval_episode_length = args.episode_length
-            obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents)
+            obs, share_obs = handle_dict_obs(args, keys, order_obs, mask_order_obs, dict_obs, num_agents)
             rollouts = RolloutStorage(num_agents,
                         eval_episode_length, 
                         eval_num,
@@ -639,7 +640,7 @@ def main():
                             mask.append([1.0])
                     masks.append(mask)                            
 
-                obs, share_obs = handle_dict_obs(keys, order_obs, mask_order_obs, dict_obs, num_agents)
+                obs, share_obs = handle_dict_obs(args, keys, order_obs, mask_order_obs, dict_obs, num_agents)
         
                 rollouts.insert(share_obs, 
                                 obs, 

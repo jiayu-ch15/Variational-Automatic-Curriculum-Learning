@@ -43,7 +43,7 @@ def get_config():
     parser.add_argument("--floor_size", type=float, default=6.0)
     parser.add_argument("--grid_size", type=int, default=30)
     parser.add_argument("--fixed_door", action='store_false', default=True)
-    parser.add_argument("--spwan_obs", action='store_true', default=False)
+    parser.add_argument("--spawn_obs", action='store_true', default=False)
     parser.add_argument("--env_horizon", type=int, default=30)
     
     # network

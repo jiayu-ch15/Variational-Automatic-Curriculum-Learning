@@ -85,7 +85,6 @@ class Policy(nn.Module):
         dist, rnn_hxs_actor = self.actor_base(inputs, rnn_hxs_actor, masks, available_actions)
         value, rnn_hxs_critic  = self.critic_base(agent_id, share_inputs, rnn_hxs_critic, masks)
 
-            
         if self.multi_discrete:
             action_out = []
             action_log_probs_out = []

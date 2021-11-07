@@ -91,7 +91,7 @@ class LockObjectsTask(gym.Wrapper):
         self.next_obj = None
         self.next_obj_dist = 0
         self.unlocked_objs = []
-        self.observation_space = update_obs_space(self.env, {'agent_spwan_obs': (self.n_agents, 2)}) #
+        self.observation_space = update_obs_space(self.env, {'agent_spawn_obs': (self.n_agents, 2)}) #
 
     def reset(self):
         if not self.fixed_order:
@@ -105,7 +105,7 @@ class LockObjectsTask(gym.Wrapper):
         self.spawn_pos_dist = 0
         self.next_obj, self.next_obj_dist = self._get_next_obj(obs)
         self.success = False
-        obs['agent_spwan_obs'] = self.spawn_pos  #add spawn_pos to obs dict
+        obs['agent_spawn_obs'] = self.spawn_pos  #add spawn_pos to obs dict
         return obs
 
     def _get_next_obj(self, obs):
@@ -168,7 +168,7 @@ class LockObjectsTask(gym.Wrapper):
                 action[self.act_key][:, self.unlocked_objs[1:]] = 0
 
         obs, rew, done, info = self.env.step(action)
-        obs['agent_spwan_obs'] = self.spawn_pos #add spawn pos to obs dict
+        obs['agent_spawn_obs'] = self.spawn_pos #add spawn pos to obs dict
         curr_objs_locked = obs[self.lock_key].flatten().astype(np.int8)
 
         # rew += self._get_lock_reward(curr_objs_locked, old_objs_locked=self.objs_locked)
@@ -285,7 +285,7 @@ def BoxLockingEnv(args, n_substeps=15, horizon=60, deterministic_mode=True,
     floor_size = args.floor_size
     grid_size = args.grid_size
     fixed_door = args.fixed_door
-    spwan_obs = args.spwan_obs
+    spawn_obs = args.spawn_obs
     horizon = args.env_horizon
     #assert n_agents==1, ("only 1 agents is supported, check the config.py.")
     
@@ -365,8 +365,8 @@ def BoxLockingEnv(args, n_substeps=15, horizon=60, deterministic_mode=True,
     else:
         keys_self = ['agent_qpos_qvel','current_step','vector_door_obs']
 
-    if args.spwan_obs:
-        keys_self += ['agent_spwan_obs']
+    if args.spawn_obs:
+        keys_self += ['agent_spawn_obs']
 
     keys_mask_self = ['mask_aa_obs']
     keys_external = ['agent_qpos_qvel']
