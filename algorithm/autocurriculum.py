@@ -580,6 +580,7 @@ def log_infos(args, infos, timestep, logger=None):
         for keys,values in infos.items():
             logger.add_scalars(keys, {keys: values}, timestep)
 
+# only for entity progression, inefficient for make envs
 def evaluation(envs, actor_critic, args, eval_num_agents, timestep):
     # update envs
     envs.close()
@@ -728,6 +729,7 @@ def evaluation(envs, actor_critic, args, eval_num_agents, timestep):
     envs.close()
     return mean_cover_rate, average_episode_reward
 
+# only for entity progression, inefficient for make envs
 def collect_data(envs, agents, actor_critic, args, node, starts, starts_length, active_length, timestep, train_infos):
     # update envs
     envs.close()

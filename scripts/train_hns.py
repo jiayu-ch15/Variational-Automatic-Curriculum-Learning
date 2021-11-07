@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+import sys
+sys.path.append("..")
 import copy
 import glob
 import os
@@ -15,7 +16,7 @@ from tensorboardX import SummaryWriter
 
 from envs.hns import BlueprintConstructionEnv, BoxLockingEnv, ShelterConstructionEnv, HideAndSeekEnv
 from algorithm.autocurriculum import node_buffer, log_infos
-from algorithm.ppo import PPO, PPO_merge
+from algorithm.ppo import PPO
 from algorithm.hns_model import Policy
 
 from config import get_config
@@ -478,8 +479,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share(num_seekers, rollouts)
-                # value_loss, action_loss, dist_entropy = agents.update_share_asynchronous(num_seekers, rollouts, warm_up = False)
+                value_loss, action_loss, dist_entropy = agents.update_share(num_seekers, rollouts, warm_up = False)
                 train_infos['value_loss'] = value_loss
                 train_infos['train_reward'] = np.mean(rollouts.rewards)
             else:

@@ -15,7 +15,7 @@ from tensorboardX import SummaryWriter
 
 from algorithm.autocurriculum import node_buffer, log_infos, make_parallel_env_mpe, evaluation, collect_data, save
 from algorithm.ppo import PPO
-from algorithm.model import Policy, ATTBase_actor, ATTBase_critic
+from algorithm.mpe_model import Policy, ATTBase_actor, ATTBase_critic
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -280,7 +280,7 @@ def main():
             actor_critic.train()
             if mix:
                 train_infos['Type of agents'] = 2
-                value_loss, action_loss, dist_entropy = agents.update_double_share(node_last.num_agents, node_current.num_agents, rollouts_last, rollouts_current, current_timestep)
+                value_loss, action_loss, dist_entropy = agents.update_double_share(node_last.num_agents, node_current.num_agents, rollouts_last, rollouts_current)
                 rew = []
                 for i in range(rollouts_last.rewards.shape[1]):
                     rew.append(np.sum(rollouts_last.rewards[:,i]))
@@ -289,7 +289,7 @@ def main():
                 rollouts_last.after_update()
             else:
                 train_infos['Type of agents'] = 1
-                value_loss, action_loss, dist_entropy = agents.update_share(node_current.num_agents, rollouts_current, current_timestep, warm_up=False)
+                value_loss, action_loss, dist_entropy = agents.update_share(node_current.num_agents, rollouts_current, warm_up=False)
             rew = []
             for i in range(rollouts_current.rewards.shape[1]):
                 rew.append(np.sum(rollouts_current.rewards[:,i]))

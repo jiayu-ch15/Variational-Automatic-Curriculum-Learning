@@ -16,7 +16,7 @@ from tensorboardX import SummaryWriter
 from envs.mpe import MPEEnv
 from algorithm.autocurriculum import node_buffer, log_infos, make_parallel_env_mpe
 from algorithm.ppo import PPO
-from algorithm.model import Policy, ATTBase_actor, ATTBase_critic
+from algorithm.mpe_model import Policy, ATTBase_actor, ATTBase_critic
 
 from config import get_config
 from utils.env_wrappers import SubprocVecEnv, DummyVecEnv
@@ -409,7 +409,7 @@ def main():
         # update the network
         if args.share_policy:
             actor_critic.train()
-            value_loss, action_loss, dist_entropy = agents.update_share(node.num_agents, rollouts,False) 
+            value_loss, action_loss, dist_entropy = agents.update_share(node.num_agents, rollouts,warm_up=False) 
             rew = []
             for i in range(rollouts.rewards.shape[1]):
                 rew.append(np.sum(rollouts.rewards[:,i]))

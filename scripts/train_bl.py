@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-
+import sys
+sys.path.append("..")
 import copy
 import glob
 import os
@@ -15,7 +16,7 @@ from tensorboardX import SummaryWriter
 
 from envs.hns import BlueprintConstructionEnv, BoxLockingEnv, ShelterConstructionEnv
 from algorithm.autocurriculum import node_buffer, log_infos
-from algorithm.ppo import PPO_merge, PPO
+from algorithm.ppo import PPO
 from algorithm.hns_model import Policy
 
 from config import get_config
@@ -146,6 +147,8 @@ def main():
     os.makedirs(str(log_dir))
     os.makedirs(str(save_dir))
     logger = SummaryWriter(str(log_dir)) 
+
+    # env
     envs = make_parallel_env(args)
     if args.eval:
         eval_num = 100
@@ -491,7 +494,7 @@ def main():
             # update the network
             if args.share_policy:
                 actor_critic.train()
-                value_loss, action_loss, dist_entropy = agents.update_share(num_agents, rollouts)
+                value_loss, action_loss, dist_entropy = agents.update_share(num_agents, rollouts, warm_up=False)
                 train_infos['value_loss'] = value_loss
                 train_infos['train_reward'] = np.mean(rollouts.rewards)
             else:
