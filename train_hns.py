@@ -379,7 +379,6 @@ def main():
                         action_log_probs.append(action_log_prob.detach().cpu().numpy())
                         recurrent_hidden_statess.append(recurrent_hidden_states.detach().cpu().numpy())
                         recurrent_hidden_statess_critic.append(recurrent_hidden_states_critic.detach().cpu().numpy())
-
                 # rearrange action        
                 actions_env = []
                 for n_rollout_thread in range(starts_length):

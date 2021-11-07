@@ -13,8 +13,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 from tensorboardX import SummaryWriter
 
-from envs import MPEEnv
-from algorithm.autocurriculum import node_buffer, log_infos
+from envs.mpe import MPEEnv
+from algorithm.autocurriculum import node_buffer, log_infos, make_parallel_env_mpe
 from algorithm.ppo import PPO
 from algorithm.model import Policy, ATTBase_actor, ATTBase_critic
 
@@ -30,24 +30,9 @@ from scipy.spatial.distance import cdist
 import random
 import copy
 import wandb
+import warnings
 np.set_printoptions(linewidth=1000)
-
-def make_parallel_env(args):
-    def get_env_fn(rank):
-        def init_env():
-            if args.env_name == "MPE":
-                env = MPEEnv(args)
-            else:
-                print("Can not support the " + args.env_name + "environment." )
-                raise NotImplementedError
-            env.seed(args.seed + rank * 1000)
-            # np.random.seed(args.seed + rank * 1000)
-            return env
-        return init_env
-    if args.n_rollout_threads == 1:
-        return DummyVecEnv([get_env_fn(0)])
-    else:
-        return SubprocVecEnv([get_env_fn(i) for i in range(args.n_rollout_threads)])
+warnings.filterwarnings('ignore')
 
 def main():
     args = get_config()
@@ -100,7 +85,7 @@ def main():
     logger = SummaryWriter(str(log_dir)) 
 
     # env
-    envs = make_parallel_env(args)
+    envs = make_parallel_env_mpe(args)
     num_agents = args.num_agents
     #Policy network
     if args.share_policy:

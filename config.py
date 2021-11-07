@@ -19,7 +19,6 @@ def get_config():
     parser.add_argument("--load_num_agents", type=int, default=3)
     parser.add_argument("--num_agents", type=int, default=3)
     parser.add_argument("--share_reward", action='store_false', default=True)
-    parser.add_argument("--eval_num_agents", type=int, default=3)
     
     # hanabi
     parser.add_argument("--hanabi_name", type=str, default='Hanabi-Full-Minimal')
@@ -139,6 +138,11 @@ def get_config():
     parser.add_argument('--save_node_interval', type=int, default=10)
     parser.add_argument('--archive_initial_length', type=int, default=1000)
     parser.add_argument('--eval_number', type=int, default=1)
+
+    # entity progression
+    parser.add_argument('--threshold_next', type=float, default=0.9, help='theshold for next phase')
+    parser.add_argument('--decay_interval', type=int, default=30, help='decay the raito of the last phase')
+    parser.add_argument("--num_target", type=int, default=8, help='num_agents of the final phase')
 
     # wandb
     parser.add_argument('--use_wandb',action='store_true', default=False)
