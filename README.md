@@ -71,15 +71,10 @@ Cooperative scenarios:
 
 ``` Bash
    conda activate VACL
-   # boxlocking task, if u want to train simplified task, need to change hyper-parameters in box_locking.py first.
    cd scripts
-   chmod +x train_boxlocking.sh
-   ./train_boxlocking.sh
-   # blueprint_construction task
-   chmod +x train_bpc.sh
-   ./train_bpc.sh
+   # box locking task
+   sh train_bl.sh
    # hide and seek task
-   chmod +x train_hns.sh
-   ./train_hns.sh
+   sh train_hns.sh
 ```
 
