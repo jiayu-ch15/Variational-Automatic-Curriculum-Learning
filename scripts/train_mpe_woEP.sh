@@ -1,13 +1,10 @@
 #!/bin/sh
 ulimit -n 32768
 env="MPE"
-# scenario="push_ball"
-scenario="hard_spread"
+scenario="simple_spread"
 num_landmarks=4
 num_agents=4
-# algo="woparentsampling_sp_4agents"
-algo="check"
-# algo='VACL_hs_final'
+algo="debug"
 seed=1
 
 echo "env is ${env}, scenario is ${scenario}, algo is ${algo}, seed is ${seed}"
