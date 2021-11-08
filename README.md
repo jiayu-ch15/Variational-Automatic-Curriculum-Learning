@@ -1,5 +1,11 @@
 # Variational Automatic Curriculum Learning
 
+Jiayu Chen, Yuanxin Zhang, Yuanfan Xu, Huimin Ma, Huazhong Yang, Jiaming Song, Yu Wang, Yi Wu.
+
+Website: https://sites.google.com/view/vacl-neurips-2021
+
+This repository implements a curriculum learning algorithm, Variational Automatic Curriculum Learning (VACL), for solving challenging goal-conditioned cooperative multi-agent reinforcement learning problems. The implementation in this repositorory is used in the paper "Variational Automatic Curriculum Learning for Sparse-Reward Cooperative Multi-Agent Problems" (). This repository is heavily based on https://github.com/marlbenchmark/on-policy.git.
+
 ## 1.Install
 
 test on CUDA == 10.0
@@ -76,5 +82,12 @@ Cooperative scenarios:
    sh train_bl.sh
    # hide and seek task
    sh train_hns.sh
+```
+
+## 4. Publication
+If you find this repository useful, please cite our paper:
+
+``` Bash
+   
 ```
 
