@@ -6,8 +6,8 @@ Website: https://sites.google.com/view/vacl-neurips-2021
 
 This repository implements a curriculum learning algorithm, Variational Automatic Curriculum Learning (VACL), for solving challenging goal-conditioned cooperative multi-agent reinforcement learning problems. The implementation in this repositorory is used in the paper "Variational Automatic Curriculum Learning for Sparse-Reward Cooperative Multi-Agent Problems" (). This repository is heavily based on https://github.com/marlbenchmark/on-policy.git.
 
-![avatar](figure/VACL_framework.png)
-![avatar](figure/diversified_novelty_parentsampling.gif)
+![avatar](https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/VACL_framework.png)
+![avatar](https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/diversified_novelty_parentsampling.gif)
 <!-- <figure class="half">
     <img src="figure/VACL_framework.png">
     <img src="figure/diversified_novelty_parentsampling.gif">
