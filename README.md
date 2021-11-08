@@ -8,8 +8,8 @@ This repository implements a curriculum learning algorithm, Variational Automati
 
 <!-- ![alt-text-1](https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/VACL_framework.png)![alt-text-2](https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/diversified_novelty_parentsampling.gif) -->
 <figure class="half">
-    <img src="https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/VACL_framework.png">
-    <img src="https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/diversified_novelty_parentsampling.gif">
+    <img src="https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/VACL_framework.png" width="200"/>
+    <img src="https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/diversified_novelty_parentsampling.gif" width="200"/>
 </figure>
 
 ## 1.Install
