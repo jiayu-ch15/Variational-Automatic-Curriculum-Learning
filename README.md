@@ -4,9 +4,8 @@ Jiayu Chen, Yuanxin Zhang, Yuanfan Xu, Huimin Ma, Huazhong Yang, Jiaming Song, Y
 
 Website: https://sites.google.com/view/vacl-neurips-2021
 
-This repository implements a curriculum learning algorithm, Variational Automatic Curriculum Learning (VACL), for solving challenging goal-conditioned cooperative multi-agent reinforcement learning problems. The implementation in this repositorory is used in the paper "Variational Automatic Curriculum Learning for Sparse-Reward Cooperative Multi-Agent Problems" (). This repository is heavily based on https://github.com/marlbenchmark/on-policy.git.
+This repository implements a curriculum learning algorithm, Variational Automatic Curriculum Learning (VACL), for solving challenging goal-conditioned cooperative multi-agent reinforcement learning problems. The implementation in this repositorory is used in the paper "Variational Automatic Curriculum Learning for Sparse-Reward Cooperative Multi-Agent Problems" (https://arxiv.org/abs/2111.04613). This repository is heavily based on https://github.com/marlbenchmark/on-policy.git.
 
-<!-- ![alt-text-1](https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/VACL_framework.png)![alt-text-2](https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/diversified_novelty_parentsampling.gif) -->
 <div align=center>
 <img src="https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/VACL_framework.png" width="350"/> <img src="https://github.com/jiayu-ch15/Variational-Automatic-Curriculum-Learning/blob/master/figure/diversified_novelty_parentsampling.gif" width="250"/>
 </div>
@@ -90,9 +89,16 @@ Cooperative scenarios:
 ```
 
 ## 4. Publication
-If you find this repository useful, please cite our [paper]():
+If you find this repository useful, please cite our [paper](https://arxiv.org/abs/2111.04613):
 
 ``` Bash
-   
+   @misc{chen2021variational,
+      title={Variational Automatic Curriculum Learning for Sparse-Reward Cooperative Multi-Agent Problems}, 
+      author={Jiayu Chen and Yuanxin Zhang and Yuanfan Xu and Huimin Ma and Huazhong Yang and Jiaming Song and Yu Wang and Yi Wu},
+      year={2021},
+      eprint={2111.04613},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG}
+}
 ```
 
