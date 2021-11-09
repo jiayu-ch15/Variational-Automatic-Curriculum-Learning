@@ -98,7 +98,6 @@ If you find this repository useful, please cite our [paper](https://arxiv.org/ab
       year={2021},
       eprint={2111.04613},
       archivePrefix={arXiv},
-      primaryClass={cs.LG}
-}
+      primaryClass={cs.LG}}
 ```
 
