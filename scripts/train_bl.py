@@ -152,7 +152,7 @@ def main():
     # env
     envs = make_parallel_env(args)
     if args.eval:
-        eval_num = 100
+        eval_num = 300
         eval_env = make_eval_env(args, eval_num)
 
     num_agents = args.num_agents
