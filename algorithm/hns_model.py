@@ -152,12 +152,12 @@ class Policy(nn.Module):
             for i in range(self.discrete_N):
                 action_log_probs.append(dist[i].log_probs(action[i]))
                 if high_masks is not None:
-                    dist_entropy.append( (dist[i].entropy()*high_masks.squeeze(-1)).sum()/high_masks.sum() )
+                    dist_entropy.append((dist[i].entropy()*high_masks.squeeze(-1)).sum()/high_masks.sum() )
                 else:
                     dist_entropy.append(dist[i].entropy().mean())
                     
             action_log_probs_out = torch.sum(torch.cat(action_log_probs, -1), -1, keepdim = True)
-            dist_entropy_out = torch.tensor(dist_entropy).mean()
+            dist_entropy_out = sum(dist_entropy)
         else:
             action_log_probs = dist.log_probs(action)
             dist_entropy = (dist.entropy()*high_masks.squeeze(-1)).sum()/high_masks.sum()
