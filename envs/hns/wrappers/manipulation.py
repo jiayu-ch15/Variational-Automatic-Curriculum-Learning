@@ -240,7 +240,6 @@ class LockObjWrapper(gym.Wrapper):
                                                         f'{ac_obs_prefix}you_lock': (self.n_agents, self.n_obj, 1),
                                                         f'{ac_obs_prefix}team_lock': (self.n_agents, self.n_obj, 1)})
         self.lock_radius = radius_multiplier*self.metadata['box_size']
-        print('self.metadata', self.metadata['box_size'])
         self.obj_locked = np.zeros((self.n_obj,), dtype=int)
 
     def observation(self, obs):
