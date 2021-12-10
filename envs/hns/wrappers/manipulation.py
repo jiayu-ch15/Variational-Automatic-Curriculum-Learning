@@ -180,7 +180,6 @@ class GrabObjWrapper(gym.Wrapper):
         obs, rew, done, info = self.env.step(action)
         return self.observation(obs), rew, done, info
 
-
 class GrabClosestWrapper(gym.ActionWrapper):
     '''
         Convert the action_pull (either grab or pull) to a binary action rather than having the
@@ -198,7 +197,6 @@ class GrabClosestWrapper(gym.ActionWrapper):
         action = deepcopy(action)
         action['action_pull'] = np.repeat(action['action_pull'][:, None], self.n_obj, -1)
         return action
-
 
 class LockObjWrapper(gym.Wrapper):
     '''
@@ -242,6 +240,7 @@ class LockObjWrapper(gym.Wrapper):
                                                         f'{ac_obs_prefix}you_lock': (self.n_agents, self.n_obj, 1),
                                                         f'{ac_obs_prefix}team_lock': (self.n_agents, self.n_obj, 1)})
         self.lock_radius = radius_multiplier*self.metadata['box_size']
+        print('self.metadata', self.metadata['box_size'])
         self.obj_locked = np.zeros((self.n_obj,), dtype=int)
 
     def observation(self, obs):
@@ -384,7 +383,6 @@ class LockObjWrapper(gym.Wrapper):
             self.agent_allowed_to_lock_mask = np.ones((self.n_agents, self.n_obj))
 
         return self.observation(obs), rew, done, info
-
 
 class LockAllWrapper(gym.ActionWrapper):
     '''

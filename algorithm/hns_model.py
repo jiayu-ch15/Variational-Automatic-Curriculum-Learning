@@ -157,7 +157,7 @@ class Policy(nn.Module):
                     dist_entropy.append(dist[i].entropy().mean())
                     
             action_log_probs_out = torch.sum(torch.cat(action_log_probs, -1), -1, keepdim = True)
-            dist_entropy_out = sum(dist_entropy)
+            dist_entropy_out = sum(dist_entropy) / len(dist_entropy)
         else:
             action_log_probs = dist.log_probs(action)
             dist_entropy = (dist.entropy()*high_masks.squeeze(-1)).sum()/high_masks.sum()
