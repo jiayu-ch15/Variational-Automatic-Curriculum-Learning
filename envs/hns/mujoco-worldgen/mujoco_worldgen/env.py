@@ -313,7 +313,6 @@ class Env(gym.Env):
         self.sim.forward()
         self.t = 0
         self.sim.data.time = 0.0
-        print('test reset')
         return self._reset_sim_and_spaces()
 
     def seed(self, seed=None):

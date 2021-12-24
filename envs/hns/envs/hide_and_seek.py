@@ -338,6 +338,7 @@ def HideAndSeekEnv(args, n_substeps=15, horizon=60, deterministic_mode=True,
     n_ramps = args.num_ramps
     n_food = args.num_food
 
+
     if args.share_reward:
         rew_type = 'joint_zero_sum'
       
@@ -437,7 +438,6 @@ def HideAndSeekEnv(args, n_substeps=15, horizon=60, deterministic_mode=True,
         else:
             food_placement = first_food_placement
         env.add_module(Food(n_food, placement_fn=food_placement))
-
     env.add_module(AgentManipulation())
     if box_floor_friction is not None:
         env.add_module(FloorAttributes(friction=box_floor_friction))
