@@ -350,7 +350,7 @@ def main():
         if mean_cover_rate_current >= threshold_next and node_current.num_agents < num_target:
             mean_cover_rate_current = 0
             num_last = node_current.num_agents
-            num_current = min(num_last * 2,num_target)
+            num_agents_current = min(num_last * 2,num_target)
             add_num = num_current - num_last
             if add_num!=0:
                 if args.share_policy:
