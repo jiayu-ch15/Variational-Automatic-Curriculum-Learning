@@ -206,46 +206,34 @@ class PPO():
                 surr2 = torch.clamp(ratio, 1.0 - self.clip_param, 1.0 + self.clip_param) * adv_targ
                 action_loss = (-torch.min(surr1, surr2)* high_masks_batch).sum() / high_masks_batch.sum()
 
-                if self.use_clipped_value_loss:
-                    if self.use_huber_loss:
-                        if self.use_popart:
-                            value_pred_clipped = value_preds_batch + (values - value_preds_batch).clamp(-self.clip_param, self.clip_param)
-                            error_clipped = self.value_normalizer(return_batch) - value_pred_clipped
-                            value_losses_clipped = huber_loss(error_clipped, self.huber_delta)
-                            error = self.value_normalizer(return_batch) - values
-                            value_losses = huber_loss(error,self.huber_delta)
-                            value_loss = torch.max(value_losses, value_losses_clipped).mean()
-                        else:
-                            value_pred_clipped = value_preds_batch + (values - value_preds_batch).clamp(-self.clip_param, self.clip_param)
-                            error_clipped = (return_batch) - value_pred_clipped
-                            value_losses_clipped = huber_loss(error_clipped, self.huber_delta)
-                            error = (return_batch) - values
-                            value_losses = huber_loss(error,self.huber_delta)
-                            value_loss = torch.max(value_losses, value_losses_clipped).mean()
+                if self.use_huber_loss:
+                    if self.use_popart:
+                        value_pred_clipped = value_preds_batch + (values - value_preds_batch).clamp(-self.clip_param, self.clip_param)
+                        error_clipped = self.value_normalizer(return_batch) - value_pred_clipped
+                        value_losses_clipped = huber_loss(error_clipped, self.huber_delta)
+                        error = self.value_normalizer(return_batch) - values
+                        value_losses = huber_loss(error,self.huber_delta)
+                        value_loss = torch.max(value_losses, value_losses_clipped).mean()
+                        import pdb; pdb.set_trace()
                     else:
-                        if self.use_popart:
-                            value_pred_clipped = value_preds_batch + (values - value_preds_batch).clamp(-self.clip_param, self.clip_param)
-                            value_losses = (values - self.value_normalizer(return_batch)).pow(2)
-                            value_losses_clipped = (value_pred_clipped - self.value_normalizer(return_batch)).pow(2)
-                            value_loss = 0.5 * torch.max(value_losses, value_losses_clipped).mean()
-                        else:
-                            value_pred_clipped = value_preds_batch + (values - value_preds_batch).clamp(-self.clip_param, self.clip_param)
-                            value_losses = (values - (return_batch)).pow(2)
-                            value_losses_clipped = (value_pred_clipped - (return_batch)).pow(2)
-                            value_loss = 0.5 * torch.max(value_losses, value_losses_clipped).mean()
-                    
+                        value_pred_clipped = value_preds_batch + (values - value_preds_batch).clamp(-self.clip_param, self.clip_param)
+                        error_clipped = (return_batch) - value_pred_clipped
+                        value_losses_clipped = huber_loss(error_clipped, self.huber_delta)
+                        error = (return_batch) - values
+                        value_losses = huber_loss(error,self.huber_delta)
+                        value_loss = torch.max(value_losses, value_losses_clipped).mean()
                 else:
-                    if self.use_huber_loss:
-                        if self.use_popart:
-                            error = self.value_normalizer(return_batch) - values
-                        else:
-                            error = return_batch - values
-                        value_loss = huber_loss(error,self.huber_delta).mean()
+                    if self.use_popart:
+                        value_pred_clipped = value_preds_batch + (values - value_preds_batch).clamp(-self.clip_param, self.clip_param)
+                        value_losses = (values - self.value_normalizer(return_batch)).pow(2)
+                        value_losses_clipped = (value_pred_clipped - self.value_normalizer(return_batch)).pow(2)
+                        value_loss = 0.5 * torch.max(value_losses, value_losses_clipped).mean()
                     else:
-                        if self.use_popart:
-                            value_loss = 0.5 * (self.value_normalizer(return_batch) - values).pow(2).mean()
-                        else:
-                            value_loss = 0.5 * (return_batch - values).pow(2).mean()               
+                        value_pred_clipped = value_preds_batch + (values - value_preds_batch).clamp(-self.clip_param, self.clip_param)
+                        value_losses = (values - (return_batch)).pow(2)
+                        value_losses_clipped = (value_pred_clipped - (return_batch)).pow(2)
+                        value_loss = 0.5 * torch.max(value_losses, value_losses_clipped).mean()
+                    
 
                 if self.use_accumulate_grad:
                     if count_stop_step >= self.num_mini_batch or count_stop_step==0:

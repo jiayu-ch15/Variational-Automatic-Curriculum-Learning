@@ -410,7 +410,6 @@ def main():
         if args.share_policy:
             actor_critic.train()
             value_loss, action_loss, dist_entropy = agents.update_share(node.num_agents, rollouts,warm_up=False) 
-            import pdb; pdb.set_trace()
             rew = []
             for i in range(rollouts.rewards.shape[1]):
                 rew.append(np.sum(rollouts.rewards[:,i]))
