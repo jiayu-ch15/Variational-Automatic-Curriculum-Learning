@@ -281,6 +281,7 @@ def main():
                             torch.FloatTensor(rollouts.recurrent_hidden_states[step,:,agent_id]), 
                             torch.FloatTensor(rollouts.recurrent_hidden_states_critic[step,:,agent_id]),
                             torch.FloatTensor(rollouts.masks[step,:,agent_id]))
+                        import pdb; pdb.set_trace()
                     else:
                         actor_critic[agent_id].eval()
                         value, action, action_log_prob, recurrent_hidden_states, recurrent_hidden_states_critic = actor_critic[agent_id].act(agent_id,

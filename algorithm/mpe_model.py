@@ -200,7 +200,6 @@ class ATTBase_critic(nn.Module):
         f_ii = self.encoder(inputs, agent_num)
         obs_beta_ij = torch.matmul(f_ii.view(batch_size,1,-1), self.correlation_mat) # (batch,1,hidden_size)
         
-        # 矩阵f_ij
         f_ij = self.encoder(share_inputs.reshape(-1,obs_dim),agent_num)
         obs_encoder = f_ij.reshape(batch_size,agent_num,-1) # (batch_size, nagents, hidden_size)
         

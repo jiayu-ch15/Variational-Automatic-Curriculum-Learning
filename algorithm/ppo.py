@@ -214,7 +214,6 @@ class PPO():
                         error = self.value_normalizer(return_batch) - values
                         value_losses = huber_loss(error,self.huber_delta)
                         value_loss = torch.max(value_losses, value_losses_clipped).mean()
-                        import pdb; pdb.set_trace()
                     else:
                         value_pred_clipped = value_preds_batch + (values - value_preds_batch).clamp(-self.clip_param, self.clip_param)
                         error_clipped = (return_batch) - value_pred_clipped
